@@ -12,6 +12,7 @@
     "**/.*",
     "node_modules",
     "bower_components",
+    "material-design-icons",
     "test",
     "tests"
   ],
@@ -23,6 +24,9 @@
     "font-awesome": "~4.5.0",
     "angular-route": "~1.4.8",
     "angular-material": "~0.11.4",
-    "angular-resource": "~1.4.8"
+    "angular-resource": "~1.4.8",
+    "angular-sanitize": "~1.4.8",
+    "angular-messages": "~1.4.8",
+    "material-design-icons": "~2.1.1"
   }
 }

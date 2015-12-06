@@ -1,33 +1,96 @@
 @import "app/bower/font-awesome/scss/font-awesome";
 @import "app/bower/angular-material/angular-material.scss";
+@import "material-icons.scss";
+
+$tealBackground: #00BFA5;
+$bodyBackground: #fafafa;
 
 /* app css stylesheet */
 
-.menu {
-    list-style: none;
-    border-bottom: 0.1em solid black;
-    margin-bottom: 2em;
-    padding: 0 0 0.5em;
+body {
+    background-color: $bodyBackground;
+    md-content {
+        background-color: rgba(0 ,0 ,0 ,0);
+    }
 }
 
-.menu:before {
-    content: "[";
+.menuBtn {
+    background-color: transparent;
+    border: none;
 }
 
-.menu:after {
-    content: "]";
+.custom-error {
+    -webkit-font-smoothing: antialiased;
+    color: rgb(244, 67, 54);
+    display: block;
+    font-family: Roboto, 'Helvetica Neue', sans-serif;
+    font-size: 12px;
+    line-height: 14px;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    padding-right: 50px;
+    padding-top: 5px;
 }
 
-.menu > li {
-    display: inline;
+md-card md-card-title {
+    padding: 24px 16px 16px;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+    -webkit-flex-direction: row;
+    -ms-flex-direction: row;
+    flex-direction: row;
 }
 
-.menu > li:before {
-    content: "|";
-    padding-right: 0.3em;
+md-card md-card-title md-card-title-text {
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
 }
 
-.menu > li:nth-child(1):before {
-    content: "";
-    padding: 0;
+.header-theme-auth {
+    background-color: $tealBackground;
+    color: white;
+    md-toolbar {
+        background-color: $tealBackground;
+        color: white;
+    }
+}
+
+.login-card {
+    background-color: $tealBackground;
+    color: white;
+    md-content {
+        background-color: $tealBackground;
+        color: white;
+        label {
+            color: rgb(255, 255, 255) !important;
+        }
+        input {
+            color: white;
+            border-color: white;
+        }
+        md-input-container {
+            &.md-input-invalid {
+                label {
+                    color: rgb(244, 67, 54) !important;
+                }
+                input {
+                    color: rgb(244, 67, 54) !important;
+                }
+            }
+            &.md-input-focused .md-input {
+                border-color: white;
+            }
+        }
+    }
 }
