@@ -48,7 +48,7 @@ gulp.task('js', function() {
     ])
     .pipe(concat('app.js'))
     .pipe(rename({ suffix: '.min' }))
-    //.pipe(uglify())
+    .pipe(uglify())
     .pipe(gulp.dest(paths.dest.js))
     .pipe(notify({ message: 'JS minified' }));
 });
