@@ -1,0 +1,28 @@
+{
+  "name": "tfg-recetarium-angularjs",
+  "description": "Front-end for recetarium API",
+  "main": "index.js",
+  "authors": [
+    "Josrom <jvortsromero@gmail.com>"
+  ],
+  "license": "ISC",
+  "moduleType": [],
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.4.8",
+    "angular-ui-router": "~0.2.15",
+    "jquery": "~2.1.4",
+    "bootstrap-sass": "bootstrap-sass-official#~3.3.6",
+    "font-awesome": "~4.5.0",
+    "angular-route": "~1.4.8",
+    "angular-material": "~0.11.4",
+    "angular-resource": "~1.4.8"
+  }
+}

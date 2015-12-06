@@ -1,0 +1,7 @@
+<div class="row">
+    <form name="form" role="form" ng-submit="login()">
+        <input type="email" name="email" ng-model="email" required>
+        <input type="password" name="password" ng-model="password" required>
+        <button type="submit" ng-disabled="form.$invalid || dataLoading">Login</button>
+    </form>
+</div>
