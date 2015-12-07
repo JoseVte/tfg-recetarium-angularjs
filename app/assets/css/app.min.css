@@ -13952,14 +13952,52 @@ md-tooltip {
   color: rgba(255, 255, 255, 0.3); }
 
 /* app css stylesheet */
-body {
+html, body {
   background-color: #fafafa; }
-  body md-content {
+  html md-content, body md-content {
     background-color: transparent; }
 
 .menuBtn {
   background-color: transparent;
   border: none; }
+
+[md-header-picture] {
+  position: absolute;
+  top: 0;
+  height: 128px;
+  width: inherit;
+  overflow: hidden;
+  background: url(../img/header-logo.png);
+  background-size: auto 128px;
+  background-repeat: no-repeat;
+  background-position: 50px; }
+
+.sidebar-left {
+  padding: 0; }
+  .sidebar-left a {
+    display: block;
+    padding: 0 16px 0 32px;
+    text-rendering: optimizeLegibility;
+    font-weight: 500;
+    -webkit-border-radius: 0;
+            border-radius: 0;
+    color: black;
+    cursor: pointer;
+    -webkit-box-align: inherit;
+    -webkit-align-items: inherit;
+        -ms-flex-align: inherit;
+            align-items: inherit;
+    line-height: 40px;
+    margin: 0;
+    max-height: 40px;
+    overflow: hidden;
+    text-align: left;
+    text-decoration: none;
+    white-space: normal;
+    width: 100%; }
+  .sidebar-left .active a {
+    background-color: black;
+    color: white; }
 
 .custom-error {
   -webkit-font-smoothing: antialiased;
@@ -14009,6 +14047,23 @@ md-card md-card-title md-card-title-text {
   color: white; }
   .header-theme-auth md-toolbar {
     background-color: #00BFA5;
+    color: white; }
+  .header-theme-auth .sidebar-left a {
+    color: #00BFA5; }
+  .header-theme-auth .sidebar-left .active a {
+    background-color: #00BFA5;
+    color: white; }
+
+.default-theme-auth {
+  background-color: #DD2C00;
+  color: white; }
+  .default-theme-auth md-toolbar {
+    background-color: #DD2C00;
+    color: white; }
+  .default-theme-auth .sidebar-left a {
+    color: #DD2C00; }
+  .default-theme-auth .sidebar-left .active a {
+    background-color: #DD2C00;
     color: white; }
 
 .login-card {

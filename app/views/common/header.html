@@ -1,21 +1,12 @@
 <section layout="row" ng-controller="Header" class="{{ headerTheme }}">
-    <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left">
-        <md-toolbar class="md-theme-indigo">
-            <h1 class="md-toolbar-tools">Menu</h1>
-        </md-toolbar>
-        <md-content>
-            <ul>
-                <li>Home</li>
-            </ul>
-        </md-content>
-    </md-sidenav>
+    <div ng-include="'views/common/sidenav-left.html'"></div>
 
     <md-toolbar layout="row" flex class="md-whiteframe-z1">
         <div class="md-toolbar-tools">
             <button type="button" ng-click="toggleLeft()" aria-label="Toogle menu" class="menuBtn">
                 <i class="material-icons md-light">menu</i>
             </button>
-            <h1 layout-margin-gt-sm="center">Recetarium</h1>
+            <h1 layout-margin-gt-sm="center">{{ headerTitle }}</h1>
             <span flex></span>
             <div ng-if="IsAuthed">
                 <md-button ng-href="#/logout">Logout</md-button>

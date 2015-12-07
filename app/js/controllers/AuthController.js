@@ -3,6 +3,8 @@ var authController = angular.module('AuthController', []);
 authController.controller('Login',
     ['$scope', '$rootScope', '$location', 'AuthService',
     function ($scope, $rootScope, $location, AuthService) {
+        $rootScope.headerTitle = 'Login';
+
         $scope.login = function () {
             $scope.dataLoading = true;
             AuthService.Login($scope.email, $scope.password, function (response) {

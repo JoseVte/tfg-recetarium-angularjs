@@ -18,6 +18,7 @@ var paths = {
         'sass': 'app/sass',
         'css': 'app/css',
         'js': 'app/js',
+        'img': 'app/img',
         'bower': 'app/bower'
     },
     'dest': {
@@ -86,7 +87,10 @@ gulp.task('fonts', function() {
 
 // Imagen
 gulp.task('img', function() {
-    //
+    return gulp.src([
+        paths.src.img + '/**/*.*'
+    ])
+    .pipe(gulp.dest(paths.dest.img));
 });
 
 // Watch folders

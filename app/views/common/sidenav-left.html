@@ -1,0 +1,24 @@
+<md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left">
+    <div ng-if="IsHome">
+        <md-toolbar flex class="md-whiteframe-z1 md-tall">
+            <span flex></span>
+            <div class="md-toolbar-tools md-toolbar-tools-bottom md-hue-3">
+                <h1><i class="material-icons md-light">home</i> Recetarium</h1>
+            </div>
+        </md-toolbar>
+    </div>
+    <div ng-if="!IsHome">
+        <md-toolbar flex class="md-whiteframe-z1">
+            <div class="md-toolbar-tools">
+                <h1><i class="material-icons md-light">home</i> Recetarium</h1>
+            </div>
+        </md-toolbar>
+    </div>
+    <md-content>
+        <ul class="sidebar-left">
+            <li ng-repeat="navLink in navLinks" ng-class="getClassActive(navLink.url)">
+                <a class="md-button" ng-click="navTo($event, navLink.url)">{{ navLink.title }}</a>
+            </li>
+        </ul>
+    </md-content>
+</md-sidenav>

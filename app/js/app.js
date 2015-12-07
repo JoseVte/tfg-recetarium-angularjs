@@ -41,23 +41,27 @@ recetarium.run(function ($rootScope, $location, $http, AuthService) {
         $rootScope.globals = {};
     }
 
-    $rootScope.IsAuthed = AuthService.IsAuthed();
-    console.log($rootScope.IsAuthed);
-
     $rootScope.$on('$locationChangeStart', function (ev, next, current) {
+        $rootScope.IsAuthed = AuthService.IsAuthed();
+        $rootScope.IsHome = ($location.path() == '/');
+
         var token = $rootScope.globals.token;
 
-        if (token && $location.path() === '/login') {
+        if (token && $location.path() === '/login' && $location.path() === '/register') {
             //Redirect to home if logged in
             $location.path('/');
         } else if (($location.path() !== '/login' && $location.path() !== '/register' && $location.path() !== '/') && !token) {
             //Redirect if not logged in
             $location.path('/login');
         }
-    });
 
-    $rootScope.headerTheme = 'header-theme-default';
-    if ($location.path() === '/login' || $location.path() === '/register') {
-        $rootScope.headerTheme ='header-theme-auth';
-    }
+        switch ($location.path()) {
+            case '/login':
+            case '/register':
+                $rootScope.headerTheme ='header-theme-auth';
+                break;
+            default:
+                $rootScope.headerTheme ='default-theme-auth';
+        }
+    });
 });

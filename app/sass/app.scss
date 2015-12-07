@@ -3,11 +3,12 @@
 @import "material-icons.scss";
 
 $tealBackground: #00BFA5;
+$darkOrangeBackground: #DD2C00;
 $bodyBackground: #fafafa;
 
 /* app css stylesheet */
 
-body {
+html, body {
     background-color: $bodyBackground;
     md-content {
         background-color: rgba(0 ,0 ,0 ,0);
@@ -17,6 +18,44 @@ body {
 .menuBtn {
     background-color: transparent;
     border: none;
+}
+
+[md-header-picture] {
+    position: absolute;
+    top: 0;
+    height: 128px;
+    width: inherit;
+    overflow: hidden;
+    background: url(../img/header-logo.png);
+    background-size: auto 128px;
+    background-repeat: no-repeat;
+    background-position: 50px;
+}
+
+.sidebar-left {
+    padding: 0;
+    a {
+        display: block;
+        padding: 0 16px 0 32px;
+        text-rendering: optimizeLegibility;
+        font-weight: 500;
+        border-radius: 0;
+        color: black;
+        cursor: pointer;
+        align-items: inherit;
+        line-height: 40px;
+        margin: 0;
+        max-height: 40px;
+        overflow: hidden;
+        text-align: left;
+        text-decoration: none;
+        white-space: normal;
+        width: 100%;
+    }
+    .active a {
+        background-color: black;
+        color: white;
+    }
 }
 
 .custom-error {
@@ -57,12 +96,41 @@ md-card md-card-title md-card-title-text {
     display: flex;
 }
 
+//*** Custom Themes ***//
+
 .header-theme-auth {
     background-color: $tealBackground;
     color: white;
     md-toolbar {
         background-color: $tealBackground;
         color: white;
+    }
+    .sidebar-left {
+        a {
+            color: $tealBackground;
+        }
+        .active a {
+            background-color: $tealBackground;
+            color: white;
+        }
+    }
+}
+
+.default-theme-auth {
+    background-color: $darkOrangeBackground;
+    color: white;
+    md-toolbar {
+        background-color: $darkOrangeBackground;
+        color: white;
+    }
+    .sidebar-left {
+        a {
+            color: $darkOrangeBackground;
+        }
+        .active a {
+            background-color: $darkOrangeBackground;
+            color: white;
+        }
     }
 }
 
