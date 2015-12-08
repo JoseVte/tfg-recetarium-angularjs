@@ -2,7 +2,6 @@
     "name": "tfg-recetarium-angularjs",
     "version": "0.0.1",
     "description": "Front-end for recetarium API",
-    "main": "index.js",
     "scripts": {
         "postinstall": "bower install",
         "prestart": "npm install",
@@ -33,6 +32,9 @@
         "gulp-util": "^3.0.7",
         "http-server": "^0.8.5",
         "yargs": "^3.31.0"
+    },
+    "dependencies" : {
+        "bower": "^1.7.0"
     },
     "engines": {
         "node": "0.12.7"
