@@ -17,6 +17,7 @@ recetarium.config(['$routeProvider', '$locationProvider', function($routeProvide
         .when('/', { templateUrl: 'views/home.html', controller: ''})
         .when('/login', { templateUrl: 'views/auth/login.html', controller: 'Login' })
         .when('/logout', { template: '', controller: 'Logout' })
+        .when('/register', { templateUrl: 'views/auth/register.html', controller: 'Register' })
         .otherwise({ redirectTo: '/' });
 }]);
 
