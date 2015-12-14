@@ -1,7 +1,41 @@
-<div class="row">
-    <form name="form" role="form" ng-submit="login()">
-        <input type="email" name="email" ng-model="email" required>
-        <input type="password" name="password" ng-model="password" required>
-        <button type="submit" ng-disabled="form.$invalid || dataLoading">Login</button>
-    </form>
-</div>
+<md-content class="md-padding" layout="row" layout-wrap layout-align="center start">
+    <div flex-gt-md="75" flex-gt-lg="50" flex="grow" layout="column">
+        <md-card class="login-card md-whiteframe-z3">
+            <md-card-title>
+                <md-card-title-text>
+                    <span class="md-headline">Login</span>
+                </md-card-title-text>
+            </md-card-title>
+            <md-card-content>
+                <form name="form" role="form">
+                    <md-content>
+                        <md-input-container class="md-block">
+                            <label>Email</label>
+                            <input required type="email" name="email" ng-model="email" />
+                            <div ng-messages="form.email.$error" role="alert" multiple>
+                                <div ng-message="required">
+                                    Your email must be between 10 and 100 characters long and look like an e-mail address.
+                                </div>
+                                <div class="custom-error hide" id="customErrorLoginEmail">{{ customErrorLoginEmail }}</div>
+                            </div>
+                            <div class="custom-error hide" id="customErrorLogin">{{ customErrorLogin }}</div>
+                        </md-input-container>
+                        <md-input-container class="md-block">
+                            <label>Password</label>
+                            <input type="password" name="password" ng-model="password" required>
+                            <div ng-messages="form.password.$error" role="alert" multiple>
+                                <div ng-message="required">
+                                    This field is obligatory
+                                </div>
+                                <div class="custom-error hide" id="customErrorLoginPassword">{{ customErrorLoginPassword }}</div>
+                            </div>
+                        </md-input-container>
+                    </md-content>
+                </form>
+            </md-card-content>
+            <md-card-actions layout="column" layout-align="center center">
+                <md-button ng-click="login()" ng-disabled="form.$invalid || dataLoading">Login</md-button>
+            </md-card-actions>
+        </md-card>
+    </div>
+</md-content>

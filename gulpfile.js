@@ -8,7 +8,9 @@ notify     = require('gulp-notify'),
 concat     = require('gulp-concat'),
 rename     = require('gulp-rename'),
 uglify     = require('gulp-uglify'),
-del        = require('del');
+del        = require('del'),
+argv       = require('yargs'),
+gulpif    = require('gulp-if');
 
 // Paths variables
 var paths = {
@@ -16,6 +18,7 @@ var paths = {
         'sass': 'app/sass',
         'css': 'app/css',
         'js': 'app/js',
+        'img': 'app/img',
         'bower': 'app/bower'
     },
     'dest': {
@@ -23,20 +26,22 @@ var paths = {
         'css': 'app/assets/css',
         'js': 'app/assets/js',
         'fonts': 'app/assets/fonts',
-        'jsLib': 'app/assets/js/lib'
+        'jsLib': 'app/assets/js/lib',
+        'img': 'app/assets/img',
+        'icons': 'app/assets/img/icons',
     }
 };
 
 // SCSS Task
 gulp.task('sass', function() {
     return gulp.src([
-        paths.src.sass + '/**/*.scss'
+        paths.src.sass + '/app.scss'
     ])
     .pipe(sass({ style: 'compressed' }).on('error', sass.logError))
     .pipe(autoprefix('last 10 version'))
     .pipe(concat('app.css'))
     .pipe(rename({ suffix: '.min' }))
-    .pipe(minify())
+    .pipe(gulpif(argv.production, minify()))
     .pipe(gulp.dest(paths.dest.css))
     .pipe(notify({ message: 'CSS minified' }));
 });
@@ -48,7 +53,7 @@ gulp.task('js', function() {
     ])
     .pipe(concat('app.js'))
     .pipe(rename({ suffix: '.min' }))
-    //.pipe(uglify())
+    .pipe(gulpif(argv.production, uglify()))
     .pipe(gulp.dest(paths.dest.js))
     .pipe(notify({ message: 'JS minified' }));
 });
@@ -63,6 +68,8 @@ gulp.task('lib-js', function() {
         paths.src.bower + '/angular-animate/angular-animate.min.js',
         paths.src.bower + '/angular-aria/angular-aria.min.js',
         paths.src.bower + '/angular-material/angular-material.min.js',
+        paths.src.bower + '/angular-sanitize/angular-sanitize.min.js',
+        paths.src.bower + '/angular-messages/angular-messages.min.js',
         paths.src.bower + '/angular-ui-router/release/angular-ui-router.min.js'
     ])
     .pipe(gulp.dest(paths.dest.jsLib))
@@ -71,8 +78,19 @@ gulp.task('lib-js', function() {
 
 // Fonts
 gulp.task('fonts', function() {
-    return gulp.src(paths.src.bower + '/font-awesome/fonts/**.*') 
+    return gulp.src([
+        paths.src.bower + '/font-awesome/fonts/**.*',
+        paths.src.bower + '/material-design-icons/iconfont/*.*'
+    ]) 
     .pipe(gulp.dest(paths.dest.fonts));
+});
+
+// Imagen
+gulp.task('img', function() {
+    return gulp.src([
+        paths.src.img + '/**/*.*'
+    ])
+    .pipe(gulp.dest(paths.dest.img));
 });
 
 // Watch folders
@@ -83,7 +101,10 @@ gulp.task('watch', function() {
 
 // Clean public folder Task
 gulp.task('clean', function() {
-    return del([paths.dest.assets + '/**/*.*']);
+    return del([
+        paths.dest.assets + '/**/*.*',
+        paths.dest.assets + '/**/**/*.*'
+    ]);
 });
 
 // Run Default
@@ -93,5 +114,6 @@ gulp.task('default', [
     'js',
     'lib-js',
     'fonts',
+    'img',
     'watch'
 ]);

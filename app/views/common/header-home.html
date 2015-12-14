@@ -1,0 +1,22 @@
+<section layout="row" ng-controller="Header" class="{{ headerTheme }}">
+    <div ng-include="'views/common/sidenav-left.html'"></div>
+
+    <header md-page-header>
+        <md-toolbar flex class="md-whiteframe-z1 md-tall" layout-align="center">
+            <div class="md-toolbar-tools">
+                <button type="button" ng-click="toggleLeft()" aria-label="Toogle menu" class="menuBtn">
+                    <i class="material-icons md-light">menu</i>
+                </button>
+                <div md-header-picture></div>
+                <span flex></span>
+                <div ng-if="IsAuthed">
+                    <md-button ng-href="#/logout">Logout</md-button>
+                </div>
+                <div ng-if="!IsAuthed">
+                    <md-button ng-href="#/login">Login</md-button>
+                    <md-button ng-href="#/">Register</md-button>
+                </div>
+            </div>
+        </md-toolbar>
+    </header>
+</section>
