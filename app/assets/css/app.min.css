@@ -11996,8 +11996,11 @@ md-card md-card-title md-card-title-text {
       color: white;
       border-color: white; }
     .login-card md-content md-input-container.md-input-invalid label {
-      color: #f44336 !important; }
+      color: #B22222 !important; }
     .login-card md-content md-input-container.md-input-invalid input {
-      color: #f44336 !important; }
+      border-color: #B22222;
+      color: #B22222 !important; }
     .login-card md-content md-input-container.md-input-focused .md-input {
       border-color: white; }
+    .login-card md-content md-input-container [ng-messages] > div {
+      color: #B22222 !important; }

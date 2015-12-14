@@ -34,7 +34,7 @@
                 </form>
             </md-card-content>
             <md-card-actions layout="column" layout-align="center center">
-                <md-button ng-click="login()" ng-disabled="dataLoading">Login</md-button>
+                <md-button ng-click="login()" ng-disabled="form.$invalid || dataLoading">Login</md-button>
             </md-card-actions>
         </md-card>
     </div>

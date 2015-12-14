@@ -4,6 +4,7 @@
 $tealBackground: #00BFA5;
 $darkOrangeBackground: #DD2C00;
 $bodyBackground: #fafafa;
+$errorColor: #B22222;
 
 /* app css stylesheet */
 
@@ -149,14 +150,19 @@ md-card md-card-title md-card-title-text {
         md-input-container {
             &.md-input-invalid {
                 label {
-                    color: rgb(244, 67, 54) !important;
+                    color: $errorColor !important;
                 }
                 input {
-                    color: rgb(244, 67, 54) !important;
+                    border-color: $errorColor;
+                    color: $errorColor !important;
                 }
             }
             &.md-input-focused .md-input {
                 border-color: white;
+            }
+
+            [ng-messages] > div {
+                color: $errorColor !important;
             }
         }
     }
