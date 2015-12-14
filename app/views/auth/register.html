@@ -1,0 +1,62 @@
+<md-content class="md-padding" layout="row" layout-wrap layout-align="center start">
+    <div flex-gt-md="75" flex-gt-lg="50" flex="grow" layout="column">
+        <md-card class="register-card md-whiteframe-z3">
+            <md-card-title>
+                <md-card-title-text>
+                    <span class="md-headline">Registro</span>
+                </md-card-title-text>
+            </md-card-title>
+            <md-card-content>
+                <form name="form" role="form">
+                    <md-content>
+                        <md-input-container class="md-block">
+                            <label>Nombre del usuario</label>
+                            <input required type="text" name="username" ng-model="username" />
+                            <div ng-messages="form.username.$error" role="alert" multiple>
+                                <div ng-message="required">El nombre de usuario es requerido.</div>
+                                <div class="custom-error hide" id="customErrorRegisterUsername">{{ customErrorRegisterUsername }}</div>
+                            </div>
+                            <div class="custom-error hide" id="customErrorRegister">{{ customErrorRegister }}</div>
+                        </md-input-container>
+                        <md-input-container class="md-block">
+                            <label>Email</label>
+                            <input required type="email" name="email" ng-model="email" />
+                            <div ng-messages="form.email.$error" role="alert" multiple>
+                                <div ng-message="required">Tu email debe ser un email valido.</div>
+                                <div class="custom-error hide" id="customErrorRegisterEmail">{{ customErrorRegisterEmail }}</div>
+                            </div>
+                            <div class="custom-error hide" id="customErrorRegister">{{ customErrorRegister }}</div>
+                        </md-input-container>
+                        <md-input-container class="md-block">
+                            <label>Contraseña</label>
+                            <input type="password" name="password" ng-model="password" required>
+                            <div ng-messages="form.password.$error" role="alert" multiple>
+                                <div ng-message="required">Este campo es obligatorio.</div>
+                                <div class="custom-error hide" id="customErrorRegisterPassword">{{ customErrorRegisterPassword }}</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container class="md-block">
+                            <label>Confirmar contraseña</label>
+                            <input type="password" name="passwordRepeat" ng-model="passwordRepeat" required>
+                            <div ng-messages="form.passwordRepeat.$error" role="alert" multiple>
+                                <div ng-message="required">Este campo es obligatorio.</div>
+                                <div class="custom-error hide" id="customErrorRegisterPasswordRepeat">{{ customErrorRegisterPasswordRepeat }}</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container class="md-block">
+                            <label>Nombre completo</label>
+                            <input  type="text" name="first_name" ng-model="first_name" />
+                        </md-input-container>
+                        <md-input-container class="md-block">
+                            <label>Apellidos</label>
+                            <input  type="text" name="last_name" ng-model="last_name" />
+                        </md-input-container>
+                    </md-content>
+                </form>
+            </md-card-content>
+            <md-card-actions layout="column" layout-align="center center">
+                <md-button ng-click="register()" ng-disabled="form.$invalid || dataLoading">Registro</md-button>
+            </md-card-actions>
+        </md-card>
+    </div>
+</md-content>

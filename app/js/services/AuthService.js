@@ -17,6 +17,17 @@ authServices.factory('AuthService',
             });
         };
 
+        service.Register = function (user, callbackOk, callbackError) {
+            $http.post(
+                'https://recetarium.herokuapp.com/auth/register',
+                user, { headers: {'Accept': 'application/json', 'Content-Type': 'application/json'} }
+            ).then(function (response) {
+                callbackOk(response);
+            }, function (response) {
+                callbackError(response);
+            });
+        };
+
         service.SaveCredentials = function (token, user) {
             $rootScope.globals = {
                 token: token,

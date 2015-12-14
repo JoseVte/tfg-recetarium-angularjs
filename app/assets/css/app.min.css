@@ -11984,23 +11984,23 @@ md-card md-card-title md-card-title-text {
     background-color: #DD2C00;
     color: white; }
 
-.login-card {
+.login-card, .register-card {
   background-color: #00BFA5;
   color: white; }
-  .login-card md-content {
+  .login-card md-content, .register-card md-content {
     background-color: #00BFA5;
     color: white; }
-    .login-card md-content label {
+    .login-card md-content label, .register-card md-content label {
       color: white !important; }
-    .login-card md-content input {
+    .login-card md-content input, .register-card md-content input {
       color: white;
       border-color: white; }
-    .login-card md-content md-input-container.md-input-invalid label {
+    .login-card md-content md-input-container.md-input-invalid label, .register-card md-content md-input-container.md-input-invalid label {
       color: #B22222 !important; }
-    .login-card md-content md-input-container.md-input-invalid input {
+    .login-card md-content md-input-container.md-input-invalid input, .register-card md-content md-input-container.md-input-invalid input {
       border-color: #B22222;
       color: #B22222 !important; }
-    .login-card md-content md-input-container.md-input-focused .md-input {
+    .login-card md-content md-input-container.md-input-focused .md-input, .register-card md-content md-input-container.md-input-focused .md-input {
       border-color: white; }
-    .login-card md-content md-input-container [ng-messages] > div {
+    .login-card md-content md-input-container [ng-messages] > div, .register-card md-content md-input-container [ng-messages] > div {
       color: #B22222 !important; }
