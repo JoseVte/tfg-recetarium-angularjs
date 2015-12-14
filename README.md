@@ -48,7 +48,11 @@ http-server -a localhost -p 8000
 
 ## Changelog
 
-#### [![0.0.1](/app/doc/rocket-blue.png) 0.0.1](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.0.1)
+#### [![0.0.2](/app/doc/rocket-blue.png) 0.0.2](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.0.2)
+
+- Añadida la página de Registro
+
+###### [![0.0.1](/app/doc/release.png) 0.0.1](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.0.1)
 
 - Añadida la base del proyecto en AngularJS
 - Añadida la página de Home
