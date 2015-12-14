@@ -1,9 +1,9 @@
 [![Issue Stats](http://issuestats.com/github/JoseVte/tfg-recetarium-angularjs/badge/pr?style=flat)](http://issuestats.com/github/JoseVte/tfg-recetarium-angularjs)
 [![Issue Stats](http://issuestats.com/github/JoseVte/tfg-recetarium-angularjs/badge/issue?style=flat)](http://issuestats.com/github/JoseVte/tfg-recetarium-angularjs)
 
-[![npm version](https://badge.fury.io/js/gulp.svg)](https://badge.fury.io/js/gulp)
-[![npm version](https://badge.fury.io/js/bower.svg)](https://badge.fury.io/js/bower)
-[![npm version](https://badge.fury.io/js/http-server.svg)](https://badge.fury.io/js/http-server)
+[Gulp ![npm version](https://badge.fury.io/js/gulp.svg)](https://badge.fury.io/js/gulp)
+[Bower ![npm version](https://badge.fury.io/js/bower.svg)](https://badge.fury.io/js/bower)
+[Http-Server ![npm version](https://badge.fury.io/js/http-server.svg)](https://badge.fury.io/js/http-server)
 
 ![logo](app/img/header-logo-light.png)
 
@@ -48,14 +48,14 @@ http-server -a localhost -p 8000
 
 ## Changelog
 
-#### [![0.0.1](/doc/rocket-blue.png) 0.0.1](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.0.1)
+#### [![0.0.1](/app/doc/rocket-blue.png) 0.0.1](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.0.1)
 
 - Añadida la base del proyecto en AngularJS
 - Añadida la página de Home
 - Añadido la página de Login
 - Favicon
 
-###### [![0.0.0](/doc/release.png) 0.0.0](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.0.0)
+###### [![0.0.0](/app/doc/release.png) 0.0.0](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.0.0)
 
 - App base
 
