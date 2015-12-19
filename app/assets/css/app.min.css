@@ -11889,6 +11889,16 @@ html, body {
   background-size: auto 128px;
   background-repeat: no-repeat;
   background-position: 50px; }
+  @media (max-width: 960px) {
+    [md-header-picture] {
+      background-size: auto 64px;
+      height: 64px; } }
+
+@media (max-width: 960px) {
+  md-sidenav md-toolbar.md-tall, header md-toolbar.md-tall {
+    height: 64px;
+    max-height: 64px;
+    min-height: 64px; } }
 
 .sidebar-left {
   padding: 0; }
@@ -11994,6 +12004,8 @@ md-card md-card-title md-card-title-text {
   .header-theme-auth md-toolbar {
     background-color: #00BFA5;
     color: white; }
+  .header-theme-auth .sidebar-left hr {
+    border-color: #00BFA5; }
   .header-theme-auth .sidebar-left a {
     color: #00BFA5; }
   .header-theme-auth .sidebar-left .active a {
@@ -12006,6 +12018,8 @@ md-card md-card-title md-card-title-text {
   .default-theme-auth md-toolbar {
     background-color: #DD2C00;
     color: white; }
+  .default-theme-auth .sidebar-left hr {
+    border-color: #DD2C00; }
   .default-theme-auth .sidebar-left a {
     color: #DD2C00; }
   .default-theme-auth .sidebar-left .active a {

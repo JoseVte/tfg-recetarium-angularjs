@@ -19,6 +19,21 @@
             <li ng-repeat="navLink in navLinks" ng-class="getClassActive(navLink.url)">
                 <a class="md-button" ng-click="navTo($event, navLink.url)">{{ navLink.title }}</a>
             </li>
+            <hr show-xs show-sm hide-gt-sm />
+            <div ng-if="IsAuthed" show-xs show-sm hide-gt-sm>
+                <li ng-class="getClassActive('/logout')">
+                    <a class="md-button" ng-click="navTo($event, '/logout')">Logout</a>
+                <li>
+            </div>
+            <div ng-if="!IsAuthed" show-xs show-sm hide-gt-sm>
+                <li ng-class="getClassActive('/login')">
+                    <a class="md-button" ng-click="navTo($event, '/login')">Login</a>
+                </li>
+                <li ng-class="getClassActive('/register')">
+                    <a class="md-button" ng-click="navTo($event, '/register')">Register</a>
+                </li>
+            </div>
         </ul>
+
     </md-content>
 </md-sidenav>

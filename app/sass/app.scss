@@ -30,6 +30,17 @@ html, body {
     background-size: auto 128px;
     background-repeat: no-repeat;
     background-position: 50px;
+    @media (max-width: $layout-breakpoint-md) {
+        background-size: auto 64px;
+        height: 64px;
+    }
+}
+@media (max-width: $layout-breakpoint-md){
+    md-sidenav md-toolbar.md-tall, header md-toolbar.md-tall{
+        height: 64px;
+        max-height: 64px;
+        min-height: 64px;
+    }
 }
 
 .sidebar-left {
@@ -143,6 +154,9 @@ md-card md-card-title md-card-title-text {
         color: white;
     }
     .sidebar-left {
+        hr {
+            border-color: $tealBackground;
+        }
         a {
             color: $tealBackground;
         }
@@ -161,6 +175,9 @@ md-card md-card-title md-card-title-text {
         color: white;
     }
     .sidebar-left {
+        hr {
+            border-color: $darkOrangeBackground;
+        }
         a {
             color: $darkOrangeBackground;
         }

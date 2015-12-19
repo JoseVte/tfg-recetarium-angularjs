@@ -9,10 +9,10 @@
                 </button>
                 <div md-header-picture></div>
                 <span flex></span>
-                <div ng-if="IsAuthed">
+                <div ng-if="IsAuthed" hide-xs hide-sm show-gt-sm>
                     <md-button ng-href="#/logout">Logout</md-button>
                 </div>
-                <div ng-if="!IsAuthed">
+                <div ng-if="!IsAuthed" hide-xs hide-sm show-gt-sm>
                     <md-button ng-href="#/login">Login</md-button>
                     <md-button ng-href="#/register">Register</md-button>
                 </div>
