@@ -1,6 +1,7 @@
 'use strict';
 
 var recetarium = angular.module('recetariumApp', [
+    'environment',
     'ngRoute',
     'ngMaterial',
     'ngMessages',
@@ -8,6 +9,8 @@ var recetarium = angular.module('recetariumApp', [
     'HomeController',
     'AuthServices',
     'AuthController',
+    'RecipeServices',
+    'RecipeController'
 ]);
 
 // Routes
@@ -18,6 +21,7 @@ recetarium.config(['$routeProvider', '$locationProvider', function($routeProvide
         .when('/login', { templateUrl: 'views/auth/login.html', controller: 'Login' })
         .when('/logout', { template: '', controller: 'Logout' })
         .when('/register', { templateUrl: 'views/auth/register.html', controller: 'Register' })
+        .when('/recipes', { templateUrl: 'views/recipe/index.html', controller: 'RecipeAll' })
         .otherwise({ redirectTo: '/' });
 }]);
 
@@ -30,6 +34,25 @@ recetarium.config(['$httpProvider', function($httpProvider) {
 // Themes
 recetarium.config(['$mdThemingProvider', function($mdThemingProvider) {
     //
+}]);
+
+// Environment configuration
+recetarium.config(['envServiceProvider', function (envServiceProvider) {
+    envServiceProvider.config({
+        domains: {
+            development: ['localhost', '127.0.0.1'],
+            production: ['recetarium-angular.herokuapp.com']
+        },
+        vars: {
+            development: {
+                apiUrl: 'http://localhost:9000'
+            },
+            production: {
+                apiUrl: 'https://recetarium.herokuapp.com'
+            }
+        }
+    });
+    envServiceProvider.check();
 }]);
 
 //
@@ -51,7 +74,7 @@ recetarium.run(function ($rootScope, $location, $http, AuthService) {
         if (token && $location.path() === '/login' && $location.path() === '/register') {
             //Redirect to home if logged in
             $location.path('/');
-        } else if (($location.path() !== '/login' && $location.path() !== '/register' && $location.path() !== '/') && !token) {
+        } else if (($location.path() !== '/login' && $location.path() !== '/register' && $location.path() !== '/' && $location.path() !== '/recipes') && !token) {
             //Redirect if not logged in
             $location.path('/login');
         }

@@ -1,0 +1,19 @@
+<input type="search" ng-model="recipeSearch" placeholder="Buscar..." aria-label="Buscar recetas" />
+<md-content class="md-padding" layout="row" layout-wrap layout-align="center start">
+    <md-card ng-repeat="recipe in recipes | filter:recipeSearch as result">
+        <md-card-title>
+          <md-card-title-text>
+            <span class="md-headline">{{ recipe.title }}</span>
+          </md-card-title-text>
+          <md-card-title-media>
+            <div class="md-media-md card-media"></div>
+          </md-card-title-media>
+        </md-card-title>
+        <md-card-content>
+          <p>{{ recipe.description }}</p>
+        </md-card-content>
+  </md-card>
+  <div class="animate-repeat" ng-if="results.length == 0">
+      <strong>No resultados encontrados...</strong>
+  </div>
+</md-content>

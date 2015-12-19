@@ -63,6 +63,7 @@ gulp.task('lib-js', function() {
     return gulp.src([
         paths.src.bower + '/jquery/dist/jquery.min.js',
         paths.src.bower + '/angular/angular.min.js',
+        paths.src.bower + '/angular-environment/dist/angular-environment.min.js',
         paths.src.bower + '/angular-route/angular-route.min.js',
         paths.src.bower + '/angular-resource/angular-resource.min.js',
         paths.src.bower + '/angular-animate/angular-animate.min.js',
