@@ -3,7 +3,7 @@
 
 $tealBackground: #00BFA5;
 $darkOrangeBackground: #DD2C00;
-$bodyBackground: #fafafa;
+$bodyBackground: rgb(224,224,224);
 $errorColor: #B22222;
 
 /* app css stylesheet */
@@ -94,6 +94,43 @@ md-card md-card-title md-card-title-text {
     display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
+}
+
+.card-recipe-main {
+    height: 200px;
+    md-card-title-text {
+        padding: 0 10px;
+        @media (max-width: $layout-breakpoint-sm) {
+            .md-headline {
+                font-size: 20px;
+                line-height: inherit;
+            }
+            .md-subhead {
+                margin-top: 5px;
+                font-size: 14px;
+                line-height: inherit;
+            }
+        }
+    }
+    .recipe-photo-main {
+        max-height: 150px;
+        max-width: 150px;
+        @media (max-width: $layout-breakpoint-md) {
+            max-height: 100px;
+            max-width: 100px;
+        }
+    }
+}
+
+.md-select-menu-container {
+    background-color: white;
+}
+
+.search-block {
+    padding-bottom: 0;
+    md-input-container {
+        padding-bottom: 2px;
+    }
 }
 
 //*** Custom Themes ***//

@@ -11871,7 +11871,7 @@ md-tooltip {
 
 /* app css stylesheet */
 html, body {
-  background-color: #fafafa; }
+  background-color: #e0e0e0; }
   html md-content, body md-content {
     background-color: transparent; }
 
@@ -11959,6 +11959,34 @@ md-card md-card-title md-card-title-text {
   display: -ms-flexbox;
   display: -webkit-box;
   display: flex; }
+
+.card-recipe-main {
+  height: 200px; }
+  .card-recipe-main md-card-title-text {
+    padding: 0 10px; }
+    @media (max-width: 600px) {
+      .card-recipe-main md-card-title-text .md-headline {
+        font-size: 20px;
+        line-height: inherit; }
+      .card-recipe-main md-card-title-text .md-subhead {
+        margin-top: 5px;
+        font-size: 14px;
+        line-height: inherit; } }
+  .card-recipe-main .recipe-photo-main {
+    max-height: 150px;
+    max-width: 150px; }
+    @media (max-width: 960px) {
+      .card-recipe-main .recipe-photo-main {
+        max-height: 100px;
+        max-width: 100px; } }
+
+.md-select-menu-container {
+  background-color: white; }
+
+.search-block {
+  padding-bottom: 0; }
+  .search-block md-input-container {
+    padding-bottom: 2px; }
 
 .header-theme-auth {
   background-color: #00BFA5;

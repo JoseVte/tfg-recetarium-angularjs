@@ -7,7 +7,7 @@ recipeService.factory('RecipeService',
             apiUrl: envService.read('apiUrl')
         };
 
-        service.all = function (page, size, callbackOk, callbackError) {
+        service.all = function (pagination, callbackOk, callbackError) {
             $http.get(
                 service.apiUrl + '/recipes',
                 {
@@ -15,10 +15,7 @@ recipeService.factory('RecipeService',
                         'Accept': 'application/json',
                         'Content-Type': 'application/json'
                     },
-                    params: {
-                        page: page,
-                        size: size
-                    }
+                    params: pagination
                 }
             ).then(function (response) {
                 callbackOk(response);

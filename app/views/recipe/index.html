@@ -1,19 +1,46 @@
-<input type="search" ng-model="recipeSearch" placeholder="Buscar..." aria-label="Buscar recetas" />
-<md-content class="md-padding" layout="row" layout-wrap layout-align="center start">
-    <md-card ng-repeat="recipe in recipes | filter:recipeSearch as result">
-        <md-card-title>
-          <md-card-title-text>
-            <span class="md-headline">{{ recipe.title }}</span>
-          </md-card-title-text>
-          <md-card-title-media>
-            <div class="md-media-md card-media"></div>
-          </md-card-title-media>
-        </md-card-title>
-        <md-card-content>
-          <p>{{ recipe.description }}</p>
-        </md-card-content>
-  </md-card>
-  <div class="animate-repeat" ng-if="results.length == 0">
-      <strong>No resultados encontrados...</strong>
-  </div>
+<md-content class="md-padding search-block" layout="row" layout-wrap layout-align="space-between center">
+    <md-input-container md-no-float class="md-block" flex="100" flex-gt-md="30">
+        <md-icon class="material-icons md-dark">search</md-icon>
+        <input type="search" ng-model="recipeSearch" placeholder="Buscar..." aria-label="Buscar recetas" />
+    </md-input-container>
+    <md-input-container md-no-float class="md-block layout-col layout-align-start-stretch" layout-wrap flex="100"
+        layout-align-gt-md="end center" layout-gt-md="row" flex-gt-md="30">
+        <div class="md-padding">Recetas por página:</div>
+        <md-select class="md-padding" ng-model="pagination.size" aria-label="Recetas por página" ng-change="selectSize()">
+            <md-option ng-repeat="size in sizes" value="{{ size }}">{{ size }}</md-option>
+        </md-select>
+    </md-input-container>
 </md-content>
+
+<md-content class="md-padding" layout="row" layout-wrap layout-align="space-around start">
+    <div ng-repeat="recipe in recipes | filter:recipeSearch as result" flex="100" flex-gt-lg="50">
+        <md-card ng-click="" class="card-recipe-main">
+            <md-card-title>
+                <md-card-title-media>
+                    <div class="md-media-md card-media">
+                        <img class="recipe-photo-main" src="http://placehold.it/250x250" />
+                    </div>
+                </md-card-title-media>
+                <md-card-title-text>
+                    <span class="md-headline">{{ recipe.title }}</span>
+                    <span class="md-subhead">
+                        <div ng-bind-html="description(recipe.description)"></div>
+                    </span>
+                    <md-content layout="row" layout-wrap layout-align="end end">
+                        <i class="material-icons">account_circle</i>
+                        <i>{{ recipe.user.username }}</i>
+                    </md-content>
+                </md-card-title-text>
+            </md-card-title>
+        </md-card>
+    </div>
+</md-content>
+<section layout="row" layout-align="center center" layout-wrap>
+    <md-button class="md-icon-button md-mini" ng-disabled="prev == undefined" ng-href="#{{ prev }}">
+        <md-icon class="material-icons md-dark">chevron_left</md-icon>
+    </md-button>
+    <md-button class="md-icon-button md-mini" ng-href="#{{ current }}">{{ pagination.page }}</md-button>
+    <md-button class="md-icon-button md-mini" ng-disabled="next == undefined" ng-href="#{{ next }}">
+        <md-icon class="material-icons md-dark">chevron_right</md-icon>
+    </md-button>
+</section>

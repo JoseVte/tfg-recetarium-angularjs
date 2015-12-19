@@ -6,7 +6,8 @@ homeController.controller('Header',
         $scope.toggleLeft = buildDelayedToggler('left');
 
         $scope.navLinks = [
-            { title: 'Home', url: '/'}
+            { title: 'Home', url: '/'},
+            { title: 'Recetas', url: '/recipes'}
         ];
 
         $scope.navTo = function (ev, url) {
