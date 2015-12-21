@@ -1,5 +1,9 @@
 @import "app/bower/angular-material/angular-material.scss";
 @import "material-icons.scss";
+//@import "animation.scss";
+@import "app/bower/pnotify/src/pnotify.core.min";
+@import "app/bower/pnotify/src/pnotify.buttons.min";
+@import "app/bower/pnotify/src/pnotify.picon.min";
 
 $tealBackground: #00BFA5;
 $darkOrangeBackground: #DD2C00;
@@ -31,10 +35,21 @@ html, body {
     background-repeat: no-repeat;
     background-position: 50px;
     @media (max-width: $layout-breakpoint-md) {
+        background-position: 10px;
         background-size: auto 64px;
         height: 64px;
     }
 }
+
+
+@media (max-width: $layout-breakpoint-sm){
+    md-sidenav {
+        width: 250px;
+        min-width: 250px;
+        max-width: 250px;
+    }
+}
+
 @media (max-width: $layout-breakpoint-md){
     md-sidenav md-toolbar.md-tall, header md-toolbar.md-tall{
         height: 64px;
@@ -108,7 +123,11 @@ md-card md-card-title md-card-title-text {
 }
 
 .card-recipe-main {
-    height: 200px;
+    @media (max-width: $layout-breakpoint-sm){
+        md-card-title {
+            padding: 16px;
+        }
+    }
     md-card-title-text {
         padding: 0 10px;
         @media (max-width: $layout-breakpoint-sm) {
@@ -146,44 +165,25 @@ md-card md-card-title md-card-title-text {
 
 //*** Custom Themes ***//
 
-.header-theme-auth {
-    background-color: $tealBackground;
-    color: white;
-    md-toolbar {
-        background-color: $tealBackground;
+@each $theme, $color in (default, $darkOrangeBackground), (auth, $tealBackground) {
+    .header-theme-#{$theme} {
+        background-color: $color;
         color: white;
-    }
-    .sidebar-left {
-        hr {
-            border-color: $tealBackground;
-        }
-        a {
-            color: $tealBackground;
-        }
-        .active a {
-            background-color: $tealBackground;
+        md-toolbar {
+            background-color: $color;
             color: white;
         }
-    }
-}
-
-.default-theme-auth {
-    background-color: $darkOrangeBackground;
-    color: white;
-    md-toolbar {
-        background-color: $darkOrangeBackground;
-        color: white;
-    }
-    .sidebar-left {
-        hr {
-            border-color: $darkOrangeBackground;
-        }
-        a {
-            color: $darkOrangeBackground;
-        }
-        .active a {
-            background-color: $darkOrangeBackground;
-            color: white;
+        .sidebar-left {
+            hr {
+                border-color: $color;
+            }
+            a {
+                color: $color;
+            }
+            .active a {
+                background-color: $color;
+                color: white;
+            }
         }
     }
 }
@@ -220,4 +220,23 @@ md-card md-card-title md-card-title-text {
             }
         }
     }
+}
+
+.ui-pnotify.custom-error .ui-pnotify-container {
+    background-color: $errorColor !important;
+    background-image: none !important;
+    border: none !important;
+}
+.ui-pnotify.custom-error .ui-pnotify-title, .ui-pnotify.custom-error .ui-pnotify-text {
+    font-size: 10pt !important;
+    color: #FFF !important;
+    padding-left: 40px !important;
+    line-height: 1 !important;
+    text-rendering: geometricPrecision !important;
+}
+.ui-pnotify.custom-error .ui-pnotify-title {
+    font-weight: bold;
+}
+.ui-pnotify.custom-error .ui-pnotify-icon {
+    float: left;
 }

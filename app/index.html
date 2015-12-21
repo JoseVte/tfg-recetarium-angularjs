@@ -9,6 +9,12 @@
     <title>Recetarium</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Chrome, Firefox OS and Opera -->
+    <meta name="theme-color" content="{{ tabColor }}">
+    <!-- Windows Phone -->
+    <meta name="msapplication-navbutton-color" content="{{ tabColor }}">
+    <!-- iOS Safari -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="{{ tabColor }}">
     <link rel="stylesheet" href="assets/css/app.min.css">
     <link rel="icon" type="image/png" href="assets/img/favicon.png">
 </head>
@@ -25,6 +31,10 @@
             <div ng-include="'views/common/header.html'"></div>
         </div>
 
+        <div class="container" ng-class="{'hide': !progressBarActivated}">
+            <md-progress-linear md-mode="indeterminate" class="md-warn"></md-progress-linear>
+        </div>
+
         <div layout="row" layout-wrap>
             <div flex-offset-gt-sm="10" flex-offset-sm="5"></div>
             <div ng-view flex></div>
@@ -33,6 +43,13 @@
     </div>
 
     <script src="bower/jquery/dist/jquery.min.js"></script>
+    <script src="bower/pnotify/src/pnotify.core.min.js"></script>
+    <script src="bower/pnotify/src/pnotify.buttons.min.js"></script>
+    <script src="bower/pnotify/src/pnotify.callbacks.min.js"></script>
+    <script src="bower/pnotify/src/pnotify.confirm.min.js"></script>
+    <script src="bower/pnotify/src/pnotify.desktop.min.js"></script>
+    <script src="bower/pnotify/src/pnotify.history.min.js"></script>
+    <script src="bower/pnotify/src/pnotify.nonblock.min.js"></script>
     <script src="bower/angular/angular.min.js"></script>
     <script src="bower/angular-environment/dist/angular-environment.min.js"></script>
     <script src="bower/angular-route/angular-route.min.js"></script>

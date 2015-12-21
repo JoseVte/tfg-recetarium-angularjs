@@ -1,0 +1,63 @@
+.animation-card-recipes.ng-enter, .animation-card-recipes.ng-move {
+    -webkit-transition: 1s zoomIn all;
+    -moz-transition: 1s zoomIn all;
+    -o-transition: 1s zoomIn all;
+    transition: 1s zoomIn all;
+    opacity: 0;
+}
+
+.animation-card-recipes.ng-enter.ng-enter-active,
+.animation-card-recipes.ng-move.ng-move-active {
+    opacity:1;
+}
+
+.animation-card-recipes.ng-leave {
+    -webkit-animation: 1s zoomOut;
+    -moz-animation: 1s zoomOut;
+    -o-animation: 1s zoomOut;
+    animation: 1s zoomOut;
+}
+
+@keyframes zoomIn {
+    from { opacity: 0; transform: scale3d(.3, .3, .3); }
+    50% { opacity: 1; }
+}
+
+@-webkit-keyframes zoomIn {
+    from { opacity: 0; transform: scale3d(.3, .3, .3); }
+    50% { opacity: 1; }
+}
+
+@-moz-keyframes zoomIn {
+    from { opacity: 0; transform: scale3d(.3, .3, .3); }
+    50% { opacity: 1; }
+}
+
+@-o-keyframes zoomIn {
+    from { opacity: 0; transform: scale3d(.3, .3, .3); }
+    50% { opacity: 1; }
+}
+
+@keyframes zoomOut {
+    from { opacity: 1; }
+    50% { opacity: 0; transform: scale3d(.3, .3, .3); }
+    to { opacity: 0; }
+}
+
+@-webkit-keyframes zoomOut {
+    from { opacity: 1; }
+    50% { opacity: 0; transform: scale3d(.3, .3, .3); }
+    to { opacity: 0; }
+}
+
+@-moz-keyframes zoomOut {
+    from { opacity: 1; }
+    50% { opacity: 0; transform: scale3d(.3, .3, .3); }
+    to { opacity: 0; }
+}
+
+@-o-keyframes zoomOut {
+    from { opacity: 1; }
+    50% { opacity: 0; transform: scale3d(.3, .3, .3); }
+    to { opacity: 0; }
+}

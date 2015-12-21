@@ -11869,6 +11869,66 @@ md-tooltip {
 .material-icons.md-light.md-inactive {
   color: rgba(255, 255, 255, 0.3); }
 
+.ui-pnotify {
+  top: 25px;
+  right: 25px;
+  position: absolute;
+  height: auto;
+  z-index: 9999; }
+
+html > body > .ui-pnotify {
+  position: fixed; }
+
+.ui-pnotify .ui-pnotify-shadow {
+  -webkit-box-shadow: 0 2px 10px rgba(50, 50, 50, 0.5);
+  box-shadow: 0 2px 10px rgba(50, 50, 50, 0.5); }
+
+.ui-pnotify-container {
+  background-position: 0 0;
+  padding: .8em;
+  height: 100%;
+  margin: 0; }
+
+.ui-pnotify-container.ui-pnotify-sharp {
+  -webkit-border-radius: 0;
+  border-radius: 0; }
+
+.ui-pnotify-title {
+  display: block;
+  margin-bottom: .4em;
+  margin-top: 0; }
+
+.ui-pnotify-text {
+  display: block; }
+
+.ui-pnotify-icon, .ui-pnotify-icon span {
+  display: block;
+  float: left;
+  margin-right: .2em; }
+
+.ui-pnotify.stack-bottomleft, .ui-pnotify.stack-topleft {
+  left: 25px;
+  right: auto; }
+
+.ui-pnotify.stack-bottomleft, .ui-pnotify.stack-bottomright {
+  bottom: 25px;
+  top: auto; }
+
+.ui-pnotify-closer, .ui-pnotify-sticker {
+  float: right;
+  margin-left: .2em; }
+
+.ui-pnotify .picon {
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-position: center center;
+  width: 17px;
+  height: 17px; }
+
+.ui-pnotify-title {
+  line-height: 17px;
+  min-height: 17px; }
+
 /* app css stylesheet */
 html, body {
   background-color: #e0e0e0; }
@@ -11891,8 +11951,15 @@ html, body {
   background-position: 50px; }
   @media (max-width: 960px) {
     [md-header-picture] {
+      background-position: 10px;
       background-size: auto 64px;
       height: 64px; } }
+
+@media (max-width: 600px) {
+  md-sidenav {
+    width: 250px;
+    min-width: 250px;
+    max-width: 250px; } }
 
 @media (max-width: 960px) {
   md-sidenav md-toolbar.md-tall, header md-toolbar.md-tall {
@@ -11970,25 +12037,28 @@ md-card md-card-title md-card-title-text {
   display: -webkit-box;
   display: flex; }
 
-.card-recipe-main {
-  height: 200px; }
-  .card-recipe-main md-card-title-text {
-    padding: 0 10px; }
-    @media (max-width: 600px) {
-      .card-recipe-main md-card-title-text .md-headline {
-        font-size: 20px;
-        line-height: inherit; }
-      .card-recipe-main md-card-title-text .md-subhead {
-        margin-top: 5px;
-        font-size: 14px;
-        line-height: inherit; } }
-  .card-recipe-main .recipe-photo-main {
-    max-height: 150px;
-    max-width: 150px; }
-    @media (max-width: 960px) {
-      .card-recipe-main .recipe-photo-main {
-        max-height: 100px;
-        max-width: 100px; } }
+@media (max-width: 600px) {
+  .card-recipe-main md-card-title {
+    padding: 16px; } }
+
+.card-recipe-main md-card-title-text {
+  padding: 0 10px; }
+  @media (max-width: 600px) {
+    .card-recipe-main md-card-title-text .md-headline {
+      font-size: 20px;
+      line-height: inherit; }
+    .card-recipe-main md-card-title-text .md-subhead {
+      margin-top: 5px;
+      font-size: 14px;
+      line-height: inherit; } }
+
+.card-recipe-main .recipe-photo-main {
+  max-height: 150px;
+  max-width: 150px; }
+  @media (max-width: 960px) {
+    .card-recipe-main .recipe-photo-main {
+      max-height: 100px;
+      max-width: 100px; } }
 
 .md-select-menu-container {
   background-color: white; }
@@ -11997,6 +12067,20 @@ md-card md-card-title md-card-title-text {
   padding-bottom: 0; }
   .search-block md-input-container {
     padding-bottom: 2px; }
+
+.header-theme-default {
+  background-color: #DD2C00;
+  color: white; }
+  .header-theme-default md-toolbar {
+    background-color: #DD2C00;
+    color: white; }
+  .header-theme-default .sidebar-left hr {
+    border-color: #DD2C00; }
+  .header-theme-default .sidebar-left a {
+    color: #DD2C00; }
+  .header-theme-default .sidebar-left .active a {
+    background-color: #DD2C00;
+    color: white; }
 
 .header-theme-auth {
   background-color: #00BFA5;
@@ -12010,20 +12094,6 @@ md-card md-card-title md-card-title-text {
     color: #00BFA5; }
   .header-theme-auth .sidebar-left .active a {
     background-color: #00BFA5;
-    color: white; }
-
-.default-theme-auth {
-  background-color: #DD2C00;
-  color: white; }
-  .default-theme-auth md-toolbar {
-    background-color: #DD2C00;
-    color: white; }
-  .default-theme-auth .sidebar-left hr {
-    border-color: #DD2C00; }
-  .default-theme-auth .sidebar-left a {
-    color: #DD2C00; }
-  .default-theme-auth .sidebar-left .active a {
-    background-color: #DD2C00;
     color: white; }
 
 .login-card, .register-card {
@@ -12046,3 +12116,21 @@ md-card md-card-title md-card-title-text {
       border-color: white; }
     .login-card md-content md-input-container [ng-messages] > div, .register-card md-content md-input-container [ng-messages] > div {
       color: #B22222 !important; }
+
+.ui-pnotify.custom-error .ui-pnotify-container {
+  background-color: #B22222 !important;
+  background-image: none !important;
+  border: none !important; }
+
+.ui-pnotify.custom-error .ui-pnotify-title, .ui-pnotify.custom-error .ui-pnotify-text {
+  font-size: 10pt !important;
+  color: #FFF !important;
+  padding-left: 40px !important;
+  line-height: 1 !important;
+  text-rendering: geometricPrecision !important; }
+
+.ui-pnotify.custom-error .ui-pnotify-title {
+  font-weight: bold; }
+
+.ui-pnotify.custom-error .ui-pnotify-icon {
+  float: left; }

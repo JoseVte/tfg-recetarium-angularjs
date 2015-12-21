@@ -26,6 +26,8 @@
     "angular-sanitize": "~1.4.8",
     "angular-messages": "~1.4.8",
     "material-design-icons": "~2.1.1",
-    "angular-environment": "~1.0.3"
+    "angular-environment": "~1.0.3",
+    "animate.css": "~3.5.0",
+    "pnotify": "~2.1.0"
   }
 }

@@ -6,7 +6,10 @@ var recetarium = angular.module('recetariumApp', [
     'ngMaterial',
     'ngMessages',
     'ngSanitize',
+    'ngAnimate',
     'ui.router',
+    'Animations',
+    'NotificationProviders',
     'HomeController',
     'AuthServices',
     'AuthController',
@@ -83,10 +86,14 @@ recetarium.run(function ($rootScope, $location, $http, AuthService) {
         switch ($location.path()) {
             case '/login':
             case '/register':
-                $rootScope.headerTheme ='header-theme-auth';
+                $rootScope.tabColor = '#00BFA5';
+                $rootScope.headerTheme = 'header-theme-auth';
+                $rootScope.bodyTheme = 'body-theme-auth';
                 break;
             default:
-                $rootScope.headerTheme ='default-theme-auth';
+                $rootScope.tabColor = '#DD2C00';
+                $rootScope.headerTheme ='header-theme-default';
+                $rootScope.bodyTheme = 'body-theme-default';
         }
     });
 });
