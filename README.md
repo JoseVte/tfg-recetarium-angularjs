@@ -54,7 +54,7 @@ http-server -a localhost -p 8000
 - Arreglado header en moviles
 - Color a las tabs del navegador mobile
 
-###### [![0.0.2](/app/doc/release.png) 0.0.2](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.0.2)
+###### [![0.1.0](/app/doc/release.png) 0.1.0](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.1.0)
 
 - Añadida la página de Registro
 
