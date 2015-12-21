@@ -1,6 +1,6 @@
 var recipeController = angular.module('RecipeController', []);
 
-recipeController .controller('RecipeAll',
+recipeController.controller('RecipeAll',
     ['$scope', '$rootScope', '$location', '$sce', 'RecipeService', 'NotificationProvider',
     function ($scope, $rootScope, $location, $sce, RecipeService, NotificationProvider) {
         $rootScope.headerTitle = 'Recetas';
@@ -51,5 +51,44 @@ recipeController .controller('RecipeAll',
         $scope.description = function(recipeDescription) {
             if (recipeDescription) return $sce.trustAsHtml(recipeDescription.splitRecipe().steps.trunc(80, true));
         }
+
+        $scope.show = function(slug) {
+            $location.path('/recipes/' + slug);
+        }
+    }]
+);
+
+recipeController.controller('RecipeShow',
+    ['$scope', '$rootScope', '$location', '$routeParams', '$sce', 'RecipeService', 'NotificationProvider',
+    function ($scope, $rootScope, $location, $routeParams, $sce, RecipeService, NotificationProvider) {
+        $rootScope.headerTitle = 'Cargando...';
+        $rootScope.progressBarActivated = true;
+        $rootScope.errorMsg = false;
+
+        RecipeService.get($routeParams.slug, function (response) {
+            $scope.recipe = response.data;
+            $rootScope.headerTitle = response.data.title;
+            $rootScope.progressBarActivated = false;
+        }, function (response) {
+            if (response.status == 404) {
+                $scope.error = {
+                    title: 'Error 404',
+                    msg: 'La receta \'' + $routeParams.slug + '\' no existe.'
+                }
+                $rootScope.errorMsg = true;
+            } else {
+                NotificationProvider.notify({
+                    title: 'Un error ha ocurrido',
+                    text: 'Ha ocurrido un error mientras se cargaba la receta. Por favor, intentelo mas tarde.',
+                    type: 'error',
+                    addclass: 'custom-error',
+                    icon: 'material-icons md-light',
+                    styling: 'fontawesome',
+                });
+                $('.ui-pnotify-icon .material-icons').html('warning');
+            }
+            $rootScope.headerTitle = 'Error';
+            $rootScope.progressBarActivated = false;
+        });
     }]
 );

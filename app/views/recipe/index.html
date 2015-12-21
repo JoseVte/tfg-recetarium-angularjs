@@ -17,7 +17,7 @@
         <md-progress-circular md-mode="indeterminate" class="md-warn" md-diameter="70"></md-progress-circular>
     </div>
     <div class="animation-card-recipes" ng-repeat="recipe in recipes | filter:recipeSearch as result" flex="100" flex-gt-lg="50">
-        <md-card ng-click="" class="card-recipe-main">
+        <md-card ng-click="show(recipe.slug)" class="card-recipe-main">
             <md-card-title>
                 <md-card-title-media>
                     <div class="md-media-md card-media">

@@ -26,6 +26,8 @@ recetarium.config(['$routeProvider', '$locationProvider', function($routeProvide
         .when('/logout', { template: '', controller: 'Logout' })
         .when('/register', { templateUrl: 'views/auth/register.html', controller: 'Register' })
         .when('/recipes', { templateUrl: 'views/recipe/index.html', controller: 'RecipeAll' })
+        .when('/recipes/:slug', { templateUrl: 'views/recipe/show.html', controller: 'RecipeShow' })
+        .when('/unauthorized', { templateUrl: 'views/error/401.html', controller: '' })
         .otherwise({ redirectTo: '/' });
 }]);
 
@@ -35,14 +37,18 @@ recetarium.config(['$httpProvider', function($httpProvider) {
     delete $httpProvider.defaults.headers.common['X-Requested-With'];
 
     // Middleware
-    $httpProvider.interceptors.push(function ($q, $location) {
+    $httpProvider.interceptors.push(function ($q, $location, $rootScope) {
         return {
             response: function (response) {
                 return response;
             },
             responseError: function (response) {
                 if (response.status === 401) {
-                    $location.path('/login');
+                    if ($rootScope.globals.token) {
+                        $location.path('/unauthorized')
+                    } else {
+                        $location.path('/login');
+                    }
                 }
                 return $q.reject(response);
             }
@@ -95,6 +101,10 @@ recetarium.run(function ($rootScope, $location, $http, AuthService) {
             $location.path('/');
         }
 
+        if ($location.path() !== '/recipes') {
+            $location.url($location.path());
+        }
+
         switch ($location.path()) {
             case '/login':
             case '/register':
@@ -111,7 +121,7 @@ recetarium.run(function ($rootScope, $location, $http, AuthService) {
 });
 
 // Function extras
-String.prototype.trunc = function( n, useWordBoundary ){
+String.prototype.trunc = function(n, useWordBoundary){
     var isTooLong = this.length > n,
     s_ = isTooLong ? this.substr(0,n-1) : this;
     s_ = (useWordBoundary && isTooLong) ? s_.substr(0,s_.lastIndexOf(' ')) : s_;
