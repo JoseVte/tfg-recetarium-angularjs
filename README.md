@@ -48,7 +48,9 @@ http-server -a localhost -p 8000
 
 ## Changelog
 
-#### [![0.1.1](/app/doc/rocket-blue.png) 0.1.1](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.1.1)
+#### [![0.1.2](/app/doc/rocket-blue.png) 0.1.2](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.1.2)
+
+###### [![0.1.1](/app/doc/release.png) 0.1.1](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.1.1)
 
 - Lista de recetas responsive
 - Arreglado header en moviles

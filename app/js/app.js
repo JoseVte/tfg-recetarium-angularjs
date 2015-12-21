@@ -14,6 +14,7 @@ var recetarium = angular.module('recetariumApp', [
     'AuthServices',
     'AuthController',
     'RecipeServices',
+    'RecipeFilters',
     'RecipeController'
 ]);
 
@@ -32,6 +33,21 @@ recetarium.config(['$routeProvider', '$locationProvider', function($routeProvide
 recetarium.config(['$httpProvider', function($httpProvider) {
     $httpProvider.defaults.useXDomain = true;
     delete $httpProvider.defaults.headers.common['X-Requested-With'];
+
+    // Middleware
+    $httpProvider.interceptors.push(function ($q, $location) {
+        return {
+            response: function (response) {
+                return response;
+            },
+            responseError: function (response) {
+                if (response.status === 401) {
+                    $location.path('/login');
+                }
+                return $q.reject(response);
+            }
+        }
+    })
 }]);
 
 // Themes
@@ -77,9 +93,6 @@ recetarium.run(function ($rootScope, $location, $http, AuthService) {
         if (token && $location.path() === '/login' && $location.path() === '/register') {
             //Redirect to home if logged in
             $location.path('/');
-        } else if (($location.path() !== '/login' && $location.path() !== '/register' && $location.path() !== '/' && $location.path() !== '/recipes') && !token) {
-            //Redirect if not logged in
-            $location.path('/login');
         }
 
         switch ($location.path()) {
@@ -104,3 +117,10 @@ String.prototype.trunc = function( n, useWordBoundary ){
     s_ = (useWordBoundary && isTooLong) ? s_.substr(0,s_.lastIndexOf(' ')) : s_;
     return  isTooLong ? s_ + '&hellip;' : s_;
 };
+
+String.prototype.splitRecipe = function() {
+    return {
+        ingredients: $($(this)[0]).html(),
+        steps: $($(this)[1]).html()
+    };
+}

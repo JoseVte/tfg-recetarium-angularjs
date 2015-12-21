@@ -49,7 +49,7 @@ recipeController .controller('RecipeAll',
         }
 
         $scope.description = function(recipeDescription) {
-            if (recipeDescription) return $sce.trustAsHtml(recipeDescription.trunc(80, true));
+            if (recipeDescription) return $sce.trustAsHtml(recipeDescription.splitRecipe().steps.trunc(80, true));
         }
     }]
 );
