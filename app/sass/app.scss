@@ -1,9 +1,13 @@
 @import "app/bower/angular-material/angular-material.scss";
 @import "material-icons.scss";
+//@import "animation.scss";
+@import "app/bower/pnotify/src/pnotify.core.min";
+@import "app/bower/pnotify/src/pnotify.buttons.min";
+@import "app/bower/pnotify/src/pnotify.picon.min";
 
 $tealBackground: #00BFA5;
 $darkOrangeBackground: #DD2C00;
-$bodyBackground: #fafafa;
+$bodyBackground: rgb(224,224,224);
 $errorColor: #B22222;
 
 /* app css stylesheet */
@@ -30,6 +34,28 @@ html, body {
     background-size: auto 128px;
     background-repeat: no-repeat;
     background-position: 50px;
+    @media (max-width: $layout-breakpoint-md) {
+        background-position: 10px;
+        background-size: auto 64px;
+        height: 64px;
+    }
+}
+
+
+@media (max-width: $layout-breakpoint-sm){
+    md-sidenav {
+        width: 250px;
+        min-width: 250px;
+        max-width: 250px;
+    }
+}
+
+@media (max-width: $layout-breakpoint-md){
+    md-sidenav md-toolbar.md-tall, header md-toolbar.md-tall{
+        height: 64px;
+        max-height: 64px;
+        min-height: 64px;
+    }
 }
 
 .sidebar-left {
@@ -96,40 +122,68 @@ md-card md-card-title md-card-title-text {
     display: flex;
 }
 
-//*** Custom Themes ***//
-
-.header-theme-auth {
-    background-color: $tealBackground;
-    color: white;
-    md-toolbar {
-        background-color: $tealBackground;
-        color: white;
-    }
-    .sidebar-left {
-        a {
-            color: $tealBackground;
+.card-recipe-main {
+    @media (max-width: $layout-breakpoint-sm){
+        md-card-title {
+            padding: 16px;
         }
-        .active a {
-            background-color: $tealBackground;
-            color: white;
+    }
+    md-card-title-text {
+        padding: 0 10px;
+        @media (max-width: $layout-breakpoint-sm) {
+            .md-headline {
+                font-size: 20px;
+                line-height: inherit;
+            }
+            .md-subhead {
+                margin-top: 5px;
+                font-size: 14px;
+                line-height: inherit;
+            }
+        }
+    }
+    .recipe-photo-main {
+        max-height: 150px;
+        max-width: 150px;
+        @media (max-width: $layout-breakpoint-md) {
+            max-height: 100px;
+            max-width: 100px;
         }
     }
 }
 
-.default-theme-auth {
-    background-color: $darkOrangeBackground;
-    color: white;
-    md-toolbar {
-        background-color: $darkOrangeBackground;
-        color: white;
+.md-select-menu-container {
+    background-color: white;
+}
+
+.search-block {
+    padding-bottom: 0;
+    md-input-container {
+        padding-bottom: 2px;
     }
-    .sidebar-left {
-        a {
-            color: $darkOrangeBackground;
-        }
-        .active a {
-            background-color: $darkOrangeBackground;
+}
+
+//*** Custom Themes ***//
+
+@each $theme, $color in (default, $darkOrangeBackground), (auth, $tealBackground) {
+    .header-theme-#{$theme} {
+        background-color: $color;
+        color: white;
+        md-toolbar {
+            background-color: $color;
             color: white;
+        }
+        .sidebar-left {
+            hr {
+                border-color: $color;
+            }
+            a {
+                color: $color;
+            }
+            .active a {
+                background-color: $color;
+                color: white;
+            }
         }
     }
 }
@@ -166,4 +220,23 @@ md-card md-card-title md-card-title-text {
             }
         }
     }
+}
+
+.ui-pnotify.custom-error .ui-pnotify-container {
+    background-color: $errorColor !important;
+    background-image: none !important;
+    border: none !important;
+}
+.ui-pnotify.custom-error .ui-pnotify-title, .ui-pnotify.custom-error .ui-pnotify-text {
+    font-size: 10pt !important;
+    color: #FFF !important;
+    padding-left: 40px !important;
+    line-height: 1 !important;
+    text-rendering: geometricPrecision !important;
+}
+.ui-pnotify.custom-error .ui-pnotify-title {
+    font-weight: bold;
+}
+.ui-pnotify.custom-error .ui-pnotify-icon {
+    float: left;
 }
