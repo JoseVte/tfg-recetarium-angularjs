@@ -4,6 +4,7 @@
 @import "app/bower/pnotify/src/pnotify.core.min";
 @import "app/bower/pnotify/src/pnotify.buttons.min";
 @import "app/bower/pnotify/src/pnotify.picon.min";
+@import "app/bower/fancybox/source/jquery.fancybox";
 
 $tealBackground: #00BFA5;
 $darkOrangeBackground: #DD2C00;
@@ -148,6 +149,33 @@ md-card md-card-title md-card-title-text {
         @media (max-width: $layout-breakpoint-md) {
             max-height: 100px;
             max-width: 100px;
+        }
+    }
+}
+
+.card-recipe-show {
+    width: 100%;
+    .ingredients {
+        padding: 0;
+        .material-icons {
+            margin-left: 0;
+        }
+        [md-inset] {
+            left: 56px;
+            width: -webkit-calc(100% - 56px);
+            width: calc(100% - 56px);
+        }
+    }
+    .image-recipe-main{
+        @media (max-width: $layout-breakpoint-sm) {
+            width: auto;
+        }
+    }
+    .image-recipe-zoomable {
+        text-decoration: none;
+        img {
+            max-width: 100px;
+            max-height: 100px;
         }
     }
 }

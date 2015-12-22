@@ -129,8 +129,13 @@ String.prototype.trunc = function(n, useWordBoundary){
 };
 
 String.prototype.splitRecipe = function() {
+    var description = JSON.parse(this);
     return {
-        ingredients: $($(this)[0]).html(),
-        steps: $($(this)[1]).html()
+        ingredients: description.ingredients,
+        steps: description.steps
     };
 }
+
+$(document).ready(function () {
+    $('.fancybox').fancybox();
+});

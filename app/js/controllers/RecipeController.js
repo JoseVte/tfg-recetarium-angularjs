@@ -67,6 +67,10 @@ recipeController.controller('RecipeShow',
 
         RecipeService.get($routeParams.slug, function (response) {
             $scope.recipe = response.data;
+            $scope.ingredients = response.data.description.splitRecipe().ingredients
+            $scope.images = RecipeService.getImages(response.data);
+            $scope.tags = response.data.tags;
+
             $rootScope.headerTitle = response.data.title;
             $rootScope.progressBarActivated = false;
         }, function (response) {

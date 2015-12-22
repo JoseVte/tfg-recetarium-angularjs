@@ -62,7 +62,10 @@ gulp.task('js', function() {
 gulp.task('lib-js', function() {
     return gulp.src([
         paths.src.bower + '/jquery/dist/jquery.min.js',
+        paths.src.bower + '/jquery/dist/jquery.min.map',
+        paths.src.bower + '/fancybox/source/jquery.fancybox.pack.js',
         paths.src.bower + '/angular/angular.min.js',
+        paths.src.bower + '/angular/angular.min.js.map',
         paths.src.bower + '/pnotify/src/pnotify.core.min.js',
         paths.src.bower + '/pnotify/src/pnotify.buttons.min.js',
         paths.src.bower + '/pnotify/src/pnotify.callbacks.min.js',
@@ -72,22 +75,26 @@ gulp.task('lib-js', function() {
         paths.src.bower + '/pnotify/src/pnotify.nonblock.min.js',
         paths.src.bower + '/angular-environment/dist/angular-environment.min.js',
         paths.src.bower + '/angular-route/angular-route.min.js',
+        paths.src.bower + '/angular-route/angular-route.min.js.map',
         paths.src.bower + '/angular-resource/angular-resource.min.js',
+        paths.src.bower + '/angular-resource/angular-resource.min.js.map',
         paths.src.bower + '/angular-animate/angular-animate.min.js',
+        paths.src.bower + '/angular-animate/angular-animate.min.js.map',
         paths.src.bower + '/angular-aria/angular-aria.min.js',
+        paths.src.bower + '/angular-aria/angular-aria.min.js.map',
         paths.src.bower + '/angular-material/angular-material.min.js',
         paths.src.bower + '/angular-sanitize/angular-sanitize.min.js',
+        paths.src.bower + '/angular-sanitize/angular-sanitize.min.js.map',
         paths.src.bower + '/angular-messages/angular-messages.min.js',
+        paths.src.bower + '/angular-messages/angular-messages.min.js.map',
         paths.src.bower + '/angular-ui-router/release/angular-ui-router.min.js'
     ])
-    .pipe(gulp.dest(paths.dest.jsLib))
-    .pipe(notify({ message: 'Library JS minified: <%= file.relative %>' }));
+    .pipe(gulp.dest(paths.dest.jsLib));
 });
 
 // Fonts
 gulp.task('fonts', function() {
     return gulp.src([
-        paths.src.bower + '/font-awesome/fonts/**.*',
         paths.src.bower + '/material-design-icons/iconfont/*.*'
     ]) 
     .pipe(gulp.dest(paths.dest.fonts));
@@ -95,10 +102,16 @@ gulp.task('fonts', function() {
 
 // Imagen
 gulp.task('img', function() {
-    return gulp.src([
+    gulp.src([
         paths.src.img + '/**/*.*'
     ])
     .pipe(gulp.dest(paths.dest.img));
+
+    gulp.src([
+        paths.src.bower + '/fancybox/source/**.png',
+        paths.src.bower + '/fancybox/source/**.gif'
+    ])
+    .pipe(gulp.dest(paths.dest.css));
 });
 
 // Watch folders
