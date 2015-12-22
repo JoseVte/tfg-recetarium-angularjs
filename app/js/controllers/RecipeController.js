@@ -77,6 +77,7 @@ recipeController.controller('RecipeShow',
                 $scope.description = JSON.parse(response.data.description);
                 $scope.images = RecipeService.getImages(response.data);
                 $scope.tags = response.data.tags;
+                $scope.comments = response.data.comments;
 
                 $rootScope.headerTitle = response.data.title;
                 $rootScope.progressBarActivated = false;
