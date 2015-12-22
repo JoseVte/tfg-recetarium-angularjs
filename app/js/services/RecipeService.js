@@ -45,14 +45,15 @@ recipeService.factory('RecipeService',
             var mainImage = recipe.media.filter(function(obj) {
                 return service.regexMainImage.exec(obj.filename) !== null;
             })[0];
+            var main = mainImage ? { href: service.apiUrl + '/media/' + recipe.id + '/' + mainImage.filename } : { href: 'http://lorempixel.com/g/480/480/food/Placeholder'};
             var gallery = [];
 
             for (var image of recipe.media) {
-                gallery.push({ title: 'Imagen ' + image.id, href: service.apiUrl + '/media/' + recipe.id + '/' + image.filename });
+                if (image !== mainImage) gallery.push({ title: 'Imagen ' + image.id, href: service.apiUrl + '/media/' + recipe.id + '/' + image.filename });
             }
 
             return {
-                main: { href: service.apiUrl + '/media/' + recipe.id + '/' + mainImage.filename },
+                main: main,
                 gallery: gallery
             };
         }

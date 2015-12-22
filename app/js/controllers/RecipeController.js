@@ -49,7 +49,7 @@ recipeController.controller('RecipeAll',
         }
 
         $scope.description = function(recipeDescription) {
-            if (recipeDescription) return $sce.trustAsHtml(recipeDescription.splitRecipe().steps.trunc(80, true));
+            if (recipeDescription) return $sce.trustAsHtml(JSON.parse(recipeDescription).steps.trunc(80, true));
         }
 
         $scope.show = function(slug) {
@@ -61,21 +61,40 @@ recipeController.controller('RecipeAll',
 recipeController.controller('RecipeShow',
     ['$scope', '$rootScope', '$location', '$routeParams', '$sce', 'RecipeService', 'NotificationProvider',
     function ($scope, $rootScope, $location, $routeParams, $sce, RecipeService, NotificationProvider) {
-        $rootScope.headerTitle = 'Cargando...';
+        $rootScope.headerTitle = 'Cargando';
         $rootScope.progressBarActivated = true;
         $rootScope.errorMsg = false;
 
-        RecipeService.get($routeParams.slug, function (response) {
-            $scope.recipe = response.data;
-            $scope.ingredients = response.data.description.splitRecipe().ingredients
-            $scope.images = RecipeService.getImages(response.data);
-            $scope.tags = response.data.tags;
+        var diffs = {
+            'fácil': 'md-green',
+            'media': 'md-yellow',
+            'difícil': 'md-red'
+        };
 
-            $rootScope.headerTitle = response.data.title;
-            $rootScope.progressBarActivated = false;
+        RecipeService.get($routeParams.slug, function (response) {
+            try {
+                $scope.recipe = response.data;
+                $scope.description = JSON.parse(response.data.description);
+                $scope.images = RecipeService.getImages(response.data);
+                $scope.tags = response.data.tags;
+
+                $rootScope.headerTitle = response.data.title;
+                $rootScope.progressBarActivated = false;
+            } catch (err) {
+                console.error(err);
+                $scope.error = {
+                    icon: 'error_outline',
+                    title: 'Algo ha ido mal',
+                    msg: 'Ha ocurrido un error mientras se cargaba la receta.'
+                }
+                $rootScope.errorMsg = true;
+                $rootScope.headerTitle = 'Error';
+                $rootScope.progressBarActivated = false;
+            }
         }, function (response) {
             if (response.status == 404) {
                 $scope.error = {
+                    icon: 'error_outline',
                     title: 'Error 404',
                     msg: 'La receta \'' + $routeParams.slug + '\' no existe.'
                 }
@@ -90,9 +109,17 @@ recipeController.controller('RecipeShow',
                     styling: 'fontawesome',
                 });
                 $('.ui-pnotify-icon .material-icons').html('warning');
+                $scope.error = {
+                    icon: 'error_outline',
+                    title: 'Algo ha ido mal',
+                    msg: 'Ha ocurrido un error mientras se cargaba la receta.'
+                }
+                $rootScope.errorMsg = true;
             }
             $rootScope.headerTitle = 'Error';
             $rootScope.progressBarActivated = false;
         });
+
+        $scope.getDifficulty = function (dif) { return diffs[dif]; }
     }]
 );

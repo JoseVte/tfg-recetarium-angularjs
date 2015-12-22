@@ -6,7 +6,7 @@
             <button type="button" ng-click="toggleLeft()" aria-label="Toogle menu" class="menuBtn">
                 <i class="material-icons md-light">menu</i>
             </button>
-            <h1 layout-margin-gt-sm="center">{{ headerTitle }}</h1>
+            <h1 layout-margin-gt-sm="center" ng-class="{'loading': progressBarActivated}">{{ headerTitle }}</h1>
             <span flex></span>
             <div ng-if="IsAuthed" hide-xs hide-sm show-gt-sm>
                 <md-button ng-href="#/logout">Logout</md-button>

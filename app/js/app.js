@@ -128,14 +128,6 @@ String.prototype.trunc = function(n, useWordBoundary){
     return  isTooLong ? s_ + '&hellip;' : s_;
 };
 
-String.prototype.splitRecipe = function() {
-    var description = JSON.parse(this);
-    return {
-        ingredients: description.ingredients,
-        steps: description.steps
-    };
-}
-
 $(document).ready(function () {
     $('.fancybox').fancybox();
 });

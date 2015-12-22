@@ -3,32 +3,47 @@
         <md-progress-circular md-mode="indeterminate" class="md-warn" md-diameter="70"></md-progress-circular>
     </div>
     <div class="container" ng-class="{'hide': !errorMsg}">
-        <h2>{{ error.title}}</h2>
+        <h2><i class="material-icons md-dark">{{ error.icon }}</i> {{ error.title}}</h2>
         <div>{{ error.msg }}</div>
     </div>
 </md-content>
 
-<md-content class="md-padding" layout="column" layout-wrap layout-align="center start" ng-class="{'hide': progressBarActivated}">
+<md-content class="md-padding" layout="column" layout-wrap layout-align="center start" ng-class="{'hide': progressBarActivated || errorMsg}">
     <md-card flex class="card-recipe-show">
         <div layout="column" layout-wrap layout-gt-sm="row">
-            <div flex flex-order="1" flex-order-gt-sm="2" flex-gt-sm="40" class="md-padding" layout="row" layout-wrap layout-align="center center" layout-align-gt-sm="end start">
-                <a class="fancybox" title="Foto del plato principal" href="{{ images.main.href }}">
-                    <img class="image-recipe-main" src="{{ images.main.href }}" />
-                </a>
+            <div flex flex-order="1" flex-order-gt-sm="2" flex-gt-sm="40" flex-gt-md="30"
+            class="md-padding" layout="row" layout-wrap layout-align="center center"
+            layout-align-gt-sm="end start">
+                <div layout="column" layout-gt-md="row" layout-wrap flex>
+                    <a class="fancybox" title="Foto del plato principal" href="{{ images.main.href }}">
+                        <img class="image-recipe-main" src="{{ images.main.href }}" />
+                    </a>
+                    <md-content flex class="md-padding">
+                        <h4>
+                            <md-icon class="material-icons">timelapse</md-icon> Duración: {{ description.time }}
+                        </h4>
+                        <h4 ng-if="description.num_persons > 0">
+                            <md-icon class="material-icons">people</md-icon> Núm de personas: {{ description.num_persons }}
+                        </h4>
+                        <h4>
+                            <md-icon class="material-icons" ng-class="getDifficulty(description.difficulty)">stars</md-icon> Dificultad: {{ description.difficulty }}
+                        </h4>
+                    </md-content>
+                </div>
             </div>
-            <div flex flex-order="2" flex-order-gt-sm="1" flex-gt-sm="60">
+            <div flex flex-order="2" flex-order-gt-sm="1" flex-gt-sm="60" flex-gt-md="70">
                 <md-card-title>
                     <md-card-title-text>
-                        <span class="md-headline">Ingredientes</span>
+                        <span class="md-headline"><md-icon class="material-icons">kitchen</md-icon>Ingredientes</span>
                     </md-card-title-text>
                 </md-card-title>
                 <md-card-content>
                     <md-list class="ingredients" flex>
-                        <md-list-item ng-repeat="ingredient in ingredients">
+                        <md-list-item ng-repeat="ingredient in description.ingredients">
                             <md-icon class="material-icons md-dark">label</md-icon>
-                            <div class="ingredient" layout="row" layout-align="space-between center" flex>
-                                <div class="name">{{ ingredient.name }}</div>
-                                <div class="count">{{ ingredient.count}}</div>
+                            <div class="ingredient" flex layout="row">
+                                <div class="name" flex="70">{{ ingredient.name | capitalize }}</div>
+                                <div class="count" flex>{{ ingredient.count }}</div>
                             </div>
                             <md-divider md-inset ng-if="!$last"></md-divider>
                         </md-list-item>
@@ -42,7 +57,7 @@
             </md-card-title-text>
         </md-card-title>
         <md-card-content>
-            {{ recipe.description.splitRecipe().steps }}
+            {{ description.steps }}
         </md-card-content>
         <md-card-title>
             <md-card-title-text>
@@ -55,9 +70,7 @@
             </a>
         </md-card-content>
         <md-card-content>
-            <md-chips>
-                <md-chip ng-repeat="tag in tags" ng-click="">{{ tag.text }}</md-chip>
-            </md-chips>
+            <div class="tag" ng-repeat="tag in tags" ng-click="">{{ tag.text }}</div>
         </md-card-content>
         <md-card-actions layout="row" layout-align="space-between center" flex>
             <md-button>0 Comentarios</md-button>
