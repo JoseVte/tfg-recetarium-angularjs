@@ -1,9 +1,10 @@
 @import "app/bower/angular-material/angular-material.scss";
 @import "material-icons.scss";
-//@import "animation.scss";
+@import "animation.scss";
 @import "app/bower/pnotify/src/pnotify.core.min";
 @import "app/bower/pnotify/src/pnotify.buttons.min";
 @import "app/bower/pnotify/src/pnotify.picon.min";
+@import "app/bower/fancybox/source/jquery.fancybox";
 
 $tealBackground: #00BFA5;
 $darkOrangeBackground: #DD2C00;
@@ -123,6 +124,7 @@ md-card md-card-title md-card-title-text {
 }
 
 .card-recipe-main {
+    min-height: 190px;
     @media (max-width: $layout-breakpoint-sm){
         md-card-title {
             padding: 16px;
@@ -149,6 +151,52 @@ md-card md-card-title md-card-title-text {
             max-height: 100px;
             max-width: 100px;
         }
+    }
+}
+
+.card-recipe-show {
+    width: 100%;
+    .ingredients {
+        padding: 0;
+        .material-icons {
+            margin-left: 0;
+        }
+        .count {
+            text-align: right;
+        }
+        [md-inset] {
+            left: 56px;
+            width: -webkit-calc(100% - 56px);
+            width: calc(100% - 56px);
+        }
+    }
+    .image-recipe-main{
+        @media (max-width: $layout-breakpoint-sm) {
+            width: auto;
+            max-width: 100%;
+        }
+    }
+    .image-recipe-zoomable {
+        text-decoration: none;
+        img {
+            max-width: 100px;
+            max-height: 100px;
+        }
+    }
+    .tag {
+        cursor: pointer;
+        border-radius: 16px;
+        display: block;
+        height: 32px;
+        line-height: 32px;
+        margin: 8px 8px 0 0;
+        padding: 0 12px;
+        float: left;
+        box-sizing: border-box;
+        max-width: 100%;
+        position: relative;
+        background: $darkOrangeBackground;
+        color: white;
     }
 }
 

@@ -48,7 +48,14 @@ http-server -a localhost -p 8000
 
 ## Changelog
 
-#### [![0.1.1](/app/doc/rocket-blue.png) 0.1.1](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.1.1)
+#### [![0.1.2](/app/doc/rocket-blue.png) 0.1.2](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.1.2)
+
+- Vista en detalle de una receta responsive
+- Chequeo de credenciales desde el servidor
+- Pequeñas animaciones añadidas
+- Todas las librerias minimizadas en un [archivo](/app/assets/js/lib/app.min.js)
+
+###### [![0.1.1](/app/doc/release.png) 0.1.1](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.1.1)
 
 - Lista de recetas responsive
 - Arreglado header en moviles

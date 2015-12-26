@@ -1,3 +1,5 @@
+moment.locale('es');
+
 'use strict';
 
 var recetarium = angular.module('recetariumApp', [
@@ -14,6 +16,7 @@ var recetarium = angular.module('recetariumApp', [
     'AuthServices',
     'AuthController',
     'RecipeServices',
+    'RecipeFilters',
     'RecipeController'
 ]);
 
@@ -25,6 +28,8 @@ recetarium.config(['$routeProvider', '$locationProvider', function($routeProvide
         .when('/logout', { template: '', controller: 'Logout' })
         .when('/register', { templateUrl: 'views/auth/register.html', controller: 'Register' })
         .when('/recipes', { templateUrl: 'views/recipe/index.html', controller: 'RecipeAll' })
+        .when('/recipes/:slug', { templateUrl: 'views/recipe/show.html', controller: 'RecipeShow' })
+        .when('/unauthorized', { templateUrl: 'views/error/401.html', controller: '' })
         .otherwise({ redirectTo: '/' });
 }]);
 
@@ -32,6 +37,25 @@ recetarium.config(['$routeProvider', '$locationProvider', function($routeProvide
 recetarium.config(['$httpProvider', function($httpProvider) {
     $httpProvider.defaults.useXDomain = true;
     delete $httpProvider.defaults.headers.common['X-Requested-With'];
+
+    // Middleware
+    $httpProvider.interceptors.push(function ($q, $location, $rootScope) {
+        return {
+            response: function (response) {
+                return response;
+            },
+            responseError: function (response) {
+                if (response.status === 401) {
+                    if ($rootScope.globals.token) {
+                        $location.path('/unauthorized')
+                    } else {
+                        $location.path('/login');
+                    }
+                }
+                return $q.reject(response);
+            }
+        }
+    })
 }]);
 
 // Themes
@@ -77,9 +101,10 @@ recetarium.run(function ($rootScope, $location, $http, AuthService) {
         if (token && $location.path() === '/login' && $location.path() === '/register') {
             //Redirect to home if logged in
             $location.path('/');
-        } else if (($location.path() !== '/login' && $location.path() !== '/register' && $location.path() !== '/' && $location.path() !== '/recipes') && !token) {
-            //Redirect if not logged in
-            $location.path('/login');
+        }
+
+        if ($location.path() !== '/recipes') {
+            $location.url($location.path());
         }
 
         switch ($location.path()) {
@@ -98,9 +123,13 @@ recetarium.run(function ($rootScope, $location, $http, AuthService) {
 });
 
 // Function extras
-String.prototype.trunc = function( n, useWordBoundary ){
+String.prototype.trunc = function(n, useWordBoundary){
     var isTooLong = this.length > n,
     s_ = isTooLong ? this.substr(0,n-1) : this;
     s_ = (useWordBoundary && isTooLong) ? s_.substr(0,s_.lastIndexOf(' ')) : s_;
     return  isTooLong ? s_ + '&hellip;' : s_;
 };
+
+$(document).ready(function () {
+    $('.fancybox').fancybox();
+});
