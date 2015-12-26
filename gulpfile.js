@@ -63,11 +63,12 @@ gulp.task('lib-js', function() {
     gulp.src([
         paths.src.bower + '/angular-messages/angular-messages.min.js.map',
     ])
-    .pipe(gulp.dest(paths.dest.jsLib))
+    .pipe(gulp.dest(paths.dest.jsLib));
     return gulp.src([
         paths.src.bower + '/jquery/dist/jquery.min.js',
         paths.src.bower + '/fancybox/source/jquery.fancybox.pack.js',
         paths.src.bower + '/angular/angular.min.js',
+        paths.src.bower + '/moment/min/moment-with-locales.min.js',
         paths.src.bower + '/pnotify/src/pnotify.core.min.js',
         paths.src.bower + '/pnotify/src/pnotify.buttons.min.js',
         paths.src.bower + '/pnotify/src/pnotify.callbacks.min.js',

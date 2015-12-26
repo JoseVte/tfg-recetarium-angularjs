@@ -20,13 +20,13 @@
                     </a>
                     <md-content flex class="md-padding">
                         <h4>
-                            <md-icon class="material-icons">timelapse</md-icon> Duración: {{ description.time }}
+                            <md-icon class="material-icons">timelapse</md-icon> Duración: {{ recipe.duration | duration }}
                         </h4>
-                        <h4 ng-if="description.num_persons > 0">
-                            <md-icon class="material-icons">people</md-icon> Núm de personas: {{ description.num_persons }}
+                        <h4 ng-if="recipe.num_persons > 0">
+                            <md-icon class="material-icons">people</md-icon> Núm de personas: {{ recipe.num_persons }}
                         </h4>
                         <h4>
-                            <md-icon class="material-icons" ng-class="getDifficulty(description.difficulty)">stars</md-icon> Dificultad: {{ description.difficulty }}
+                            <md-icon class="material-icons" ng-class="getDifficulty(recipe.difficulty)">stars</md-icon> Dificultad: {{ recipe.difficulty | humanized }}
                         </h4>
                     </md-content>
                 </div>
@@ -39,7 +39,7 @@
                 </md-card-title>
                 <md-card-content>
                     <md-list class="ingredients" flex>
-                        <md-list-item ng-repeat="ingredient in description.ingredients">
+                        <md-list-item ng-repeat="ingredient in recipe.ingredients">
                             <md-icon class="material-icons md-dark">label</md-icon>
                             <div class="ingredient" flex layout="row">
                                 <div class="name" flex="70">{{ ingredient.name | capitalize }}</div>
@@ -57,7 +57,7 @@
             </md-card-title-text>
         </md-card-title>
         <md-card-content>
-            {{ description.steps }}
+            {{ recipe.steps }}
         </md-card-content>
         <md-card-title>
             <md-card-title-text>

@@ -29,6 +29,7 @@
     "angular-environment": "~1.0.3",
     "animate.css": "~3.5.0",
     "pnotify": "~2.1.0",
-    "fancybox": "~2.1.5"
+    "fancybox": "~2.1.5",
+    "moment": "~2.10.6"
   }
 }

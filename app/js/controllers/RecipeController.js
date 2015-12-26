@@ -48,8 +48,8 @@ recipeController.controller('RecipeAll',
             });
         }
 
-        $scope.description = function(recipeDescription) {
-            if (recipeDescription) return $sce.trustAsHtml(JSON.parse(recipeDescription).steps.trunc(80, true));
+        $scope.description = function(steps) {
+            if (steps) return $sce.trustAsHtml(steps.trunc(80, true));
         }
 
         $scope.show = function(slug) {
@@ -66,15 +66,14 @@ recipeController.controller('RecipeShow',
         $rootScope.errorMsg = false;
 
         var diffs = {
-            'fácil': 'md-green',
-            'media': 'md-yellow',
-            'difícil': 'md-red'
+            'EASY': 'md-green',
+            'MEDIUM': 'md-yellow',
+            'HARD': 'md-red'
         };
 
         RecipeService.get($routeParams.slug, function (response) {
             try {
                 $scope.recipe = response.data;
-                $scope.description = JSON.parse(response.data.description);
                 $scope.images = RecipeService.getImages(response.data);
                 $scope.tags = response.data.tags;
                 $scope.comments = response.data.comments;

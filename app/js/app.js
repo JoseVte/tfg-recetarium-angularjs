@@ -1,3 +1,5 @@
+moment.locale('es');
+
 'use strict';
 
 var recetarium = angular.module('recetariumApp', [
