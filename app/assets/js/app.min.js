@@ -22,6 +22,7 @@ var recetarium = angular.module('recetariumApp', [
 
 // Routes
 recetarium.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
+    $locationProvider.html5Mode(true);
     $routeProvider
         .when('/', { templateUrl: 'views/home.html', controller: ''})
         .when('/login', { templateUrl: 'views/auth/login.html', controller: 'Login' })
