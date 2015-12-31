@@ -1,13 +1,15 @@
 var authServices = angular.module('AuthServices', ['ngResource']);
 
 authServices.factory('AuthService',
-    ['$http', '$rootScope', '$timeout',
-    function ($http, $rootScope, $timeout) {
-        var service = {};
+    ['$http', '$rootScope', '$timeout', 'envService',
+    function ($http, $rootScope, $timeout, envService) {
+        var service = {
+            apiUrl: envService.read('apiUrl')
+        };
 
         service.Login = function (email, password, callbackOk, callbackError) {
             $http.post(
-                'https://recetarium.herokuapp.com/auth/login',
+                service.apiUrl + '/auth/login',
                 { email: email, password: password },
                 { headers: {'Accept': 'application/json', 'Content-Type': 'application/json'} }
             ).then(function (response) {
@@ -19,7 +21,7 @@ authServices.factory('AuthService',
 
         service.Register = function (user, callbackOk, callbackError) {
             $http.post(
-                'https://recetarium.herokuapp.com/auth/register',
+                service.apiUrl + '/auth/register',
                 user, { headers: {'Accept': 'application/json', 'Content-Type': 'application/json'} }
             ).then(function (response) {
                 callbackOk(response);

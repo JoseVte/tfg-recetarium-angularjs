@@ -38,6 +38,10 @@ notificationProvider.provider('NotificationProvider',
                     return this.notify(hash);
                 },
                 notify: function(hash) {
+                    hash.mobile = {
+                        swipe_dismiss: true,
+                        styling: true
+                    };
                     return new PNotify(hash);
                 }
             };

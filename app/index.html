@@ -32,8 +32,8 @@
             <div ng-include="'views/common/header.html'"></div>
         </div>
 
-        <div class="container" ng-class="{'hide': !progressBarActivated}">
-            <md-progress-linear md-mode="indeterminate" class="md-warn"></md-progress-linear>
+        <div class="container" ng-show="progressBarActivated">
+            <md-progress-linear md-mode="indeterminate" class="{{ loaderTheme }}"></md-progress-linear>
         </div>
 
         <div layout="row" layout-wrap>

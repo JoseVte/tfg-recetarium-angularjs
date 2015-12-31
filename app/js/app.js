@@ -86,6 +86,11 @@ recetarium.config(['envServiceProvider', function (envServiceProvider) {
 //
 recetarium.run(function ($rootScope, $location, $http, AuthService) {
     $rootScope.location = $location;
+    $rootScope.lastSearchParams = [];
+    $rootScope.lastSearchParams['/recipes'] = {
+        page: 1,
+        size: 10
+    };
 
     if (localStorage.globals) {
         $rootScope.globals = JSON.parse(localStorage.globals);
@@ -96,6 +101,11 @@ recetarium.run(function ($rootScope, $location, $http, AuthService) {
     $rootScope.$on('$locationChangeStart', function (ev, next, current) {
         $rootScope.IsAuthed = AuthService.IsAuthed();
         $rootScope.IsHome = ($location.path() == '/');
+        $rootScope.HasBack = false;
+
+        if ($rootScope.lastSearchParams[$location.path()]) {
+            $location.search($rootScope.lastSearchParams[$location.path()]);
+        }
 
         var token = $rootScope.globals.token;
 
@@ -104,8 +114,9 @@ recetarium.run(function ($rootScope, $location, $http, AuthService) {
             $location.path('/');
         }
 
+        // Remove the params into URI
         if ($location.path() !== '/recipes') {
-            $location.url($location.path());
+            $location.search({});
         }
 
         switch ($location.path()) {
@@ -113,11 +124,13 @@ recetarium.run(function ($rootScope, $location, $http, AuthService) {
             case '/register':
                 $rootScope.tabColor = '#00BFA5';
                 $rootScope.headerTheme = 'header-theme-auth';
+                $rootScope.loaderTheme = 'md-auth';
                 $rootScope.bodyTheme = 'body-theme-auth';
                 break;
             default:
                 $rootScope.tabColor = '#DD2C00';
                 $rootScope.headerTheme ='header-theme-default';
+                $rootScope.loaderTheme = 'md-default';
                 $rootScope.bodyTheme = 'body-theme-default';
         }
     });

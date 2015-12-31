@@ -1,12 +1,28 @@
 var authController = angular.module('AuthController', []);
 
 authController.controller('Login',
-    ['$scope', '$rootScope', '$location', 'AuthService',
-    function ($scope, $rootScope, $location, AuthService) {
+    ['$scope', '$rootScope', '$location', 'AuthService', '$timeout', 'NotificationProvider',
+    function ($scope, $rootScope, $location, AuthService, $timeout, NotificationProvider) {
         $rootScope.headerTitle = 'Login';
+        $rootScope.progressBarActivated = false;
+
+        $scope.setDelay1 = function(){
+            $scope.delay1 = true;
+            $scope.delay2 = true;
+            $timeout(function(){
+                $scope.delay1 = false;
+            }, 1000);
+        };
+
+        $scope.setDelay2 = function(){
+            $timeout(function(){
+                $scope.delay2 = false;
+            }, 1000);
+        };
 
         $scope.login = function () {
-            $scope.dataLoading = true;
+            $rootScope.progressBarActivated = true;
+            $scope.setDelay1();
             AuthService.Login($scope.email, $scope.password, function (response) {
                 AuthService.SaveCredentials(response.data.auth_token,
                     JSON.parse(AuthService.ParseJwt(response.data.auth_token).sub));
@@ -31,20 +47,47 @@ authController.controller('Login',
                         $scope.customErrorLoginPassword = password;
                         $('#customErrorLoginPassword').removeClass('hide');
                     }
+                } else {
+                    NotificationProvider.notify({
+                        title: 'Un error ha ocurrido',
+                        text: 'Ha ocurrido un error mientras se cargaban las recetas. Por favor, intentelo mas tarde.',
+                        type: 'error',
+                        addclass: 'custom-error-notify',
+                        icon: 'material-icons md-light',
+                        styling: 'fontawesome',
+                    });
+                    $('.ui-pnotify-icon .material-icons').html('warning');
                 }
-                $scope.dataLoading = false;
+                $rootScope.progressBarActivated = false;
+                $scope.setDelay2();
             });
         };
     }]
 );
 
 authController.controller('Register',
-    ['$scope', '$rootScope','$location', 'AuthService',
-    function ($scope, $rootScope, $location, AuthService) {
+    ['$scope', '$rootScope','$location', 'AuthService', '$timeout', 'NotificationProvider',
+    function ($scope, $rootScope, $location, AuthService, $timeout, NotificationProvider) {
         $rootScope.headerTitle = 'Registro';
+        $rootScope.progressBarActivated = false;
+
+        $scope.setDelay1 = function(){
+            $scope.delay1 = true;
+            $scope.delay2 = true;
+            $timeout(function(){
+                $scope.delay1 = false;
+            }, 1000);
+        };
+
+        $scope.setDelay2 = function(){
+            $timeout(function(){
+                $scope.delay2 = false;
+            }, 1000);
+        };
 
         $scope.register = function () {
-            $scope.dataLoading = true;
+            $rootScope.progressBarActivated = true;
+            $scope.setDelay1();
             var user = {
                 username: $scope.username,
                 email: $scope.email,
@@ -104,7 +147,8 @@ authController.controller('Register',
                     $scope.customErrorRegister = response.data.error;
                     $('#customErrorRegister').removeClass('hide');
                 }
-                $scope.dataLoading = false;
+                $rootScope.progressBarActivated = false;
+                $scope.setDelay2();
             });
         }
     }]

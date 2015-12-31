@@ -9,8 +9,9 @@ concat     = require('gulp-concat'),
 rename     = require('gulp-rename'),
 uglify     = require('gulp-uglify'),
 del        = require('del'),
-argv       = require('yargs'),
-gulpif    = require('gulp-if');
+argv       = require('yargs').argv,
+gulpif     = require('gulp-if'),
+beautify   = require('gulp-beautify');
 
 // Paths variables
 var paths = {
@@ -53,7 +54,7 @@ gulp.task('js', function() {
     ])
     .pipe(concat('app.js'))
     .pipe(rename({ suffix: '.min' }))
-    .pipe(gulpif(argv.production, uglify()))
+    .pipe(gulpif(argv.production, uglify(), beautify({indentSize: 2})))
     .pipe(gulp.dest(paths.dest.js))
     .pipe(notify({ message: 'JS minified' }));
 });
@@ -69,13 +70,15 @@ gulp.task('lib-js', function() {
         paths.src.bower + '/fancybox/source/jquery.fancybox.pack.js',
         paths.src.bower + '/angular/angular.min.js',
         paths.src.bower + '/moment/min/moment-with-locales.min.js',
-        paths.src.bower + '/pnotify/src/pnotify.core.min.js',
-        paths.src.bower + '/pnotify/src/pnotify.buttons.min.js',
-        paths.src.bower + '/pnotify/src/pnotify.callbacks.min.js',
-        paths.src.bower + '/pnotify/src/pnotify.confirm.min.js',
-        paths.src.bower + '/pnotify/src/pnotify.desktop.min.js',
-        paths.src.bower + '/pnotify/src/pnotify.history.min.js',
-        paths.src.bower + '/pnotify/src/pnotify.nonblock.min.js',
+        paths.src.bower + '/pnotify/dist/pnotify.js',
+        paths.src.bower + '/pnotify/dist/pnotify.animate.js',
+        paths.src.bower + '/pnotify/dist/pnotify.buttons.js',
+        paths.src.bower + '/pnotify/dist/pnotify.callbacks.js',
+        paths.src.bower + '/pnotify/dist/pnotify.confirm.js',
+        paths.src.bower + '/pnotify/dist/pnotify.desktop.js',
+        paths.src.bower + '/pnotify/dist/pnotify.history.js',
+        paths.src.bower + '/pnotify/dist/pnotify.mobile.js',
+        paths.src.bower + '/pnotify/dist/pnotify.nonblock.js',
         paths.src.bower + '/angular-environment/dist/angular-environment.min.js',
         paths.src.bower + '/angular-route/angular-route.min.js',
         paths.src.bower + '/angular-resource/angular-resource.min.js',
@@ -88,7 +91,7 @@ gulp.task('lib-js', function() {
     ])
     .pipe(concat('app-lib.js'))
     .pipe(rename({ suffix: '.min' }))
-    .pipe(gulpif(argv.production, uglify()))
+    .pipe(gulpif(argv.production, uglify(), beautify({indentSize: 2})))
     .pipe(gulp.dest(paths.dest.jsLib))
     .pipe(notify({ message: 'JS lib minified' }));
 });

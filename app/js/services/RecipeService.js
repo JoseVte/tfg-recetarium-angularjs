@@ -49,7 +49,8 @@ recipeService.factory('RecipeService',
             var gallery = [];
 
             for (var image of recipe.media) {
-                if (image !== mainImage) gallery.push({ title: 'Imagen ' + image.id, href: service.apiUrl + '/media/' + recipe.id + '/' + image.filename });
+                var filename = image.filename.substr(0, image.filename.lastIndexOf('.'));
+                if (image !== mainImage) gallery.push({ title: filename, href: service.apiUrl + '/media/' + recipe.id + '/' + image.filename });
             }
 
             return {

@@ -17,7 +17,10 @@ recipeController.controller('RecipeAll',
             if (!newVal.page) newVal.page = 1;
             if (!newVal.size) newVal.size = 10;
             $scope.pagination = newVal;
-            $scope.getRecipes();
+            if ($location.path() == '/recipes') {
+                $rootScope.lastSearchParams['/recipes'] = $scope.pagination;
+                $scope.getRecipes();
+            }
         });
 
         $scope.selectSize = function () {
@@ -39,7 +42,7 @@ recipeController.controller('RecipeAll',
                     title: 'Un error ha ocurrido',
                     text: 'Ha ocurrido un error mientras se cargaban las recetas. Por favor, intentelo mas tarde.',
                     type: 'error',
-                    addclass: 'custom-error',
+                    addclass: 'custom-error-notify',
                     icon: 'material-icons md-light',
                     styling: 'fontawesome',
                 });
@@ -64,6 +67,10 @@ recipeController.controller('RecipeShow',
         $rootScope.headerTitle = 'Cargando';
         $rootScope.progressBarActivated = true;
         $rootScope.errorMsg = false;
+        $rootScope.HasBack = true;
+        $rootScope.back = function () {
+            $location.path('/recipes');
+        };
 
         var diffs = {
             'EASY': 'md-green',
@@ -104,7 +111,7 @@ recipeController.controller('RecipeShow',
                     title: 'Un error ha ocurrido',
                     text: 'Ha ocurrido un error mientras se cargaba la receta. Por favor, intentelo mas tarde.',
                     type: 'error',
-                    addclass: 'custom-error',
+                    addclass: 'custom-error-notify',
                     icon: 'material-icons md-light',
                     styling: 'fontawesome',
                 });

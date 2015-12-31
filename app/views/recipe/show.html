@@ -1,14 +1,14 @@
 <md-content class="md-padding" layout="row" layout-wrap layout-align="space-around start">
-    <div class="container" ng-class="{'hide': !progressBarActivated}">
-        <md-progress-circular md-mode="indeterminate" class="md-warn" md-diameter="70"></md-progress-circular>
+    <div class="container" ng-show="progressBarActivated">
+        <md-progress-circular md-mode="indeterminate" class="{{ loaderTheme }}" md-diameter="70"></md-progress-circular>
     </div>
-    <div class="container" ng-class="{'hide': !errorMsg}">
+    <div class="container" ng-show="errorMsg">
         <h2><i class="material-icons md-dark">{{ error.icon }}</i> {{ error.title}}</h2>
         <div>{{ error.msg }}</div>
     </div>
 </md-content>
 
-<md-content class="md-padding" layout="column" layout-wrap layout-align="center start" ng-class="{'hide': progressBarActivated || errorMsg}">
+<md-content class="md-padding" layout="column" layout-wrap layout-align="center start" ng-hide="progressBarActivated || errorMsg">
     <md-card flex class="card-recipe-show">
         <div layout="column" layout-wrap layout-gt-sm="row">
             <div flex flex-order="1" flex-order-gt-sm="2" flex-gt-sm="40" flex-gt-md="30"

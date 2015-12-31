@@ -1,30 +1,31 @@
 @import "app/bower/angular-material/angular-material.scss";
 @import "material-icons.scss";
 @import "animation.scss";
-@import "app/bower/pnotify/src/pnotify.core.min";
-@import "app/bower/pnotify/src/pnotify.buttons.min";
-@import "app/bower/pnotify/src/pnotify.picon.min";
+@import "app/bower/pnotify/dist/pnotify";
+@import "app/bower/pnotify/dist/pnotify.buttons";
+@import "app/bower/pnotify/dist/pnotify.mobile";
+@import "app/bower/pnotify/dist/pnotify.history";
+@import "app/bower/pnotify/dist/pnotify.brighttheme";
 @import "app/bower/fancybox/source/jquery.fancybox";
-
 $tealBackground: #00BFA5;
+$tealBackgroundDisabled: rgba(0, 191, 165, .12);
+$tealColorDisabled: rgba(0, 191, 165, .26);
 $darkOrangeBackground: #DD2C00;
-$bodyBackground: rgb(224,224,224);
+$bodyBackground: #e0e0e0;
 $errorColor: #B22222;
 
 /* app css stylesheet */
-
-html, body {
+html,
+body {
     background-color: $bodyBackground;
     md-content {
-        background-color: rgba(0 ,0 ,0 ,0);
+        background-color: transparent;
     }
 }
-
 .menuBtn {
     background-color: transparent;
     border: none;
 }
-
 [md-header-picture] {
     position: absolute;
     top: 0;
@@ -41,24 +42,21 @@ html, body {
         height: 64px;
     }
 }
-
-
-@media (max-width: $layout-breakpoint-sm){
+@media (max-width: $layout-breakpoint-sm) {
     md-sidenav {
         width: 250px;
         min-width: 250px;
         max-width: 250px;
     }
 }
-
-@media (max-width: $layout-breakpoint-md){
-    md-sidenav md-toolbar.md-tall, header md-toolbar.md-tall{
+@media (max-width: $layout-breakpoint-md) {
+    md-sidenav md-toolbar.md-tall,
+    header md-toolbar.md-tall {
         height: 64px;
         max-height: 64px;
         min-height: 64px;
     }
 }
-
 .sidebar-left {
     padding: 0;
     a {
@@ -84,7 +82,6 @@ html, body {
         color: white;
     }
 }
-
 .custom-error {
     -webkit-font-smoothing: antialiased;
     color: rgb(244, 67, 54);
@@ -97,7 +94,6 @@ html, body {
     padding-right: 50px;
     padding-top: 5px;
 }
-
 md-card md-card-title {
     padding: 24px 16px 16px;
     display: -webkit-flex;
@@ -110,7 +106,6 @@ md-card md-card-title {
     -ms-flex-direction: row;
     flex-direction: row;
 }
-
 md-card md-card-title md-card-title-text {
     -webkit-flex: 1;
     -ms-flex: 1;
@@ -122,10 +117,9 @@ md-card md-card-title md-card-title-text {
     display: -ms-flexbox;
     display: flex;
 }
-
 .card-recipe-main {
     min-height: 190px;
-    @media (max-width: $layout-breakpoint-sm){
+    @media (max-width: $layout-breakpoint-sm) {
         md-card-title {
             padding: 16px;
         }
@@ -153,7 +147,6 @@ md-card md-card-title md-card-title-text {
         }
     }
 }
-
 .card-recipe-show {
     width: 100%;
     .ingredients {
@@ -170,7 +163,7 @@ md-card md-card-title md-card-title-text {
             width: calc(100% - 56px);
         }
     }
-    .image-recipe-main{
+    .image-recipe-main {
         @media (max-width: $layout-breakpoint-sm) {
             width: auto;
             max-width: 100%;
@@ -199,11 +192,9 @@ md-card md-card-title md-card-title-text {
         color: white;
     }
 }
-
 .md-select-menu-container {
     background-color: white;
 }
-
 .search-block {
     padding-bottom: 0;
     md-input-container {
@@ -212,8 +203,9 @@ md-card md-card-title md-card-title-text {
 }
 
 //*** Custom Themes ***//
-
-@each $theme, $color in (default, $darkOrangeBackground), (auth, $tealBackground) {
+@each $theme,
+$color in (default, $darkOrangeBackground),
+(auth, $tealBackground) {
     .header-theme-#{$theme} {
         background-color: $color;
         color: white;
@@ -234,20 +226,45 @@ md-card md-card-title md-card-title-text {
             }
         }
     }
-}
+    md-progress-circular.md-#{$theme} .md-inner {
+        .md-gap {
+            border-top-color: $color;
+            border-bottom-color: $color;
+        }
+        .md-left .md-half-circle {
+            border-top-color: $color;
+            border-left-color: $color;
+        }
+        .md-right .md-half-circle {
+            border-top-color: $color;
+            border-right-color: $color;
+        }
+    }
+    md-progress-linear.md-#{$theme} .md-bar {
+        background-color: $color;
+    }
 
-.login-card,.register-card {
+}
+.login-card,
+.register-card {
     background-color: $tealBackground;
     color: white;
+    md-card-content {
+        background-color: white;
+        padding: 0;
+        form {
+            padding: 16px;
+        }
+    }
     md-content {
-        background-color: $tealBackground;
-        color: white;
+        background-color: white;
+        color: $tealBackground;
         label {
-            color: rgb(255, 255, 255) !important;
+            color: $tealBackground !important;
         }
         input {
-            color: white;
-            border-color: white;
+            color: $tealBackground;
+            border-color: $tealBackground;
         }
         md-input-container {
             &.md-input-invalid {
@@ -260,31 +277,59 @@ md-card md-card-title md-card-title-text {
                 }
             }
             &.md-input-focused .md-input {
-                border-color: white;
+                border-color: $tealBackground;
             }
-
             [ng-messages] > div {
                 color: $errorColor !important;
             }
         }
     }
+    md-card-actions {
+        height: 132px;
+        background-color: white;
+        color: $tealBackground;
+        .md-button {
+            max-height: 40px;
+            line-height: 24px;
+            &.md-raised.md-auth-button {
+                margin: 12px 0;
+                background-color: $tealBackground;
+                color: white;
+                width: 100%;
+                &:hover, &:focus, &:visited {
+                    background-color: $tealBackground;
+                }
+                &[disabled] {
+                    background-color: $tealBackgroundDisabled;
+                    color: $tealColorDisabled;
+                }
+            }
+        }
+        div.layout-row {
+            padding: 0;
+            a {
+                font-size: 2.7vw;
+                padding: 0;
+            }
+        }
+    }
 }
-
-.ui-pnotify.custom-error .ui-pnotify-container {
+.ui-pnotify.custom-error-notify .ui-pnotify-container {
     background-color: $errorColor !important;
     background-image: none !important;
     border: none !important;
 }
-.ui-pnotify.custom-error .ui-pnotify-title, .ui-pnotify.custom-error .ui-pnotify-text {
+.ui-pnotify.custom-error-notify .ui-pnotify-title,
+.ui-pnotify.custom-error-notify .ui-pnotify-text {
     font-size: 10pt !important;
-    color: #FFF !important;
+    color: white !important;
     padding-left: 40px !important;
     line-height: 1 !important;
     text-rendering: geometricPrecision !important;
 }
-.ui-pnotify.custom-error .ui-pnotify-title {
+.ui-pnotify.custom-error-notify .ui-pnotify-title {
     font-weight: bold;
 }
-.ui-pnotify.custom-error .ui-pnotify-icon {
+.ui-pnotify.custom-error-notify .ui-pnotify-icon {
     float: left;
 }

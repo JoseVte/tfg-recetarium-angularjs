@@ -3,7 +3,7 @@
         <md-card class="register-card md-whiteframe-z3">
             <md-card-title>
                 <md-card-title-text>
-                    <span class="md-headline">Registro</span>
+                    <span class="md-headline">Registrate</span>
                 </md-card-title-text>
             </md-card-title>
             <md-card-content>
@@ -54,8 +54,11 @@
                     </md-content>
                 </form>
             </md-card-content>
-            <md-card-actions layout="column" layout-align="center center">
-                <md-button ng-click="register()" ng-disabled="form.$invalid || dataLoading">Registro</md-button>
+
+            <md-card-actions layout="column" layout-align="center center" layout-padding>
+                <md-button flex class="md-raised md-auth-button zoomAnimation" ng-click="register()" ng-disabled="form.$invalid" ng-hide="progressBarActivated || delay2">Registro</md-button>
+                <md-button flex class="zoomAnimation" ng-href="/login" ng-hide="progressBarActivated || delay2">¿Tienes cuenta? Logueate</md-button>
+                <md-progress-circular md-mode="indeterminate" ng-show="progressBarActivated && !delay1" class="md-auth zoomAnimation" md-diameter="36"></md-progress-circular>
             </md-card-actions>
         </md-card>
     </div>
