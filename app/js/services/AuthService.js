@@ -62,7 +62,12 @@ authServices.factory('AuthService',
             var token = service.GetJwt();
             if (token) {
                 var params = service.ParseJwt(token);
-                return Math.round(new Date().getTime() / 1000) <= params.exp;
+                if (Math.round(new Date().getTime() / 1000) <= params.exp) {
+                    return true;
+                }else {
+                    service.ClearCredentials();
+                    return false;
+                }
             } else {
                 return false;
             }

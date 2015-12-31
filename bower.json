@@ -30,6 +30,7 @@
     "animate.css": "~3.5.0",
     "pnotify": "~3.0.0",
     "fancybox": "~2.1.5",
-    "moment": "~2.10.6"
+    "moment": "~2.10.6",
+    "textAngular": "~1.4.6"
   }
 }

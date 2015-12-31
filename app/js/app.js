@@ -9,8 +9,10 @@ var recetarium = angular.module('recetariumApp', [
     'ngMessages',
     'ngSanitize',
     'ngAnimate',
+    'textAngular',
     'ui.router',
     'Animations',
+    'TextEditor',
     'NotificationProviders',
     'HomeController',
     'AuthServices',
@@ -87,7 +89,7 @@ recetarium.config(['envServiceProvider', function (envServiceProvider) {
 }]);
 
 //
-recetarium.run(function ($rootScope, $location, $http, AuthService) {
+recetarium.run(function ($rootScope, $location, $http, AuthService, ICONS) {
     $rootScope.location = $location;
     $rootScope.lastSearchParams = [];
     $rootScope.lastSearchParams['/recipes'] = {
@@ -138,6 +140,16 @@ recetarium.run(function ($rootScope, $location, $http, AuthService) {
                 $rootScope.bodyTheme = 'body-theme-default';
         }
     });
+
+    $rootScope.$on('$viewContentLoaded', function () {
+        $('.md-editor-toolbar').exists(function() {
+            $('.md-editor-toolbar button').each(function() {
+                var $this = $(this);
+                $this.append('<div class="md-ripple-container"></div>');
+                $this.children('.material-icons').replaceWith('<md-icon class="material-icons md-dark">'+ICONS[$this.attr('name')]+'</md-icon>');
+            });
+        });
+    });
 });
 
 // Function extras
@@ -146,6 +158,14 @@ String.prototype.trunc = function(n, useWordBoundary){
     s_ = isTooLong ? this.substr(0,n-1) : this;
     s_ = (useWordBoundary && isTooLong) ? s_.substr(0,s_.lastIndexOf(' ')) : s_;
     return  isTooLong ? s_ + '&hellip;' : s_;
+};
+
+$.fn.exists = function(callback) {
+    var args = [].slice.call(arguments, 1);
+    if (this.length) {
+        callback.call(this, args);
+    }
+    return this;
 };
 
 $(document).ready(function () {

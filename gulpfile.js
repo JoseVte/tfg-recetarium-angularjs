@@ -70,6 +70,9 @@ gulp.task('lib-js', function() {
         paths.src.bower + '/fancybox/source/jquery.fancybox.pack.js',
         paths.src.bower + '/angular/angular.min.js',
         paths.src.bower + '/moment/min/moment-with-locales.min.js',
+        paths.src.bower + '/textAngular/dist/textAngular-rangy.min.js',
+        paths.src.bower + '/textAngular/dist/textAngular-sanitize.min.js',
+        paths.src.bower + '/textAngular/dist/textAngular.min.js',
         paths.src.bower + '/pnotify/dist/pnotify.js',
         paths.src.bower + '/pnotify/dist/pnotify.animate.js',
         paths.src.bower + '/pnotify/dist/pnotify.buttons.js',
@@ -85,7 +88,6 @@ gulp.task('lib-js', function() {
         paths.src.bower + '/angular-animate/angular-animate.min.js',
         paths.src.bower + '/angular-aria/angular-aria.min.js',
         paths.src.bower + '/angular-material/angular-material.min.js',
-        paths.src.bower + '/angular-sanitize/angular-sanitize.min.js',
         paths.src.bower + '/angular-messages/angular-messages.min.js',
         paths.src.bower + '/angular-ui-router/release/angular-ui-router.min.js'
     ])

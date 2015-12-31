@@ -1,5 +1,11 @@
 var recipeController = angular.module('RecipeController', []);
 
+recipeController.constant('DIFF', {
+    'EASY': 'md-green',
+    'MEDIUM': 'md-yellow',
+    'HARD': 'md-red'
+});
+
 recipeController.controller('RecipeAll',
     ['$scope', '$rootScope', '$location', '$sce', 'RecipeService', 'NotificationProvider',
     function ($scope, $rootScope, $location, $sce, RecipeService, NotificationProvider) {
@@ -62,20 +68,14 @@ recipeController.controller('RecipeAll',
 );
 
 recipeController.controller('RecipeShow',
-    ['$scope', '$rootScope', '$location', '$routeParams', '$sce', 'RecipeService', 'NotificationProvider',
-    function ($scope, $rootScope, $location, $routeParams, $sce, RecipeService, NotificationProvider) {
+    ['$scope', '$rootScope', '$location', '$routeParams', '$sce', 'RecipeService', 'NotificationProvider', 'DIFF',
+    function ($scope, $rootScope, $location, $routeParams, $sce, RecipeService, NotificationProvider, DIFF) {
         $rootScope.headerTitle = 'Cargando';
         $rootScope.progressBarActivated = true;
         $rootScope.errorMsg = false;
         $rootScope.HasBack = true;
         $rootScope.back = function () {
             $location.path('/recipes');
-        };
-
-        var diffs = {
-            'EASY': 'md-green',
-            'MEDIUM': 'md-yellow',
-            'HARD': 'md-red'
         };
 
         RecipeService.get($routeParams.slug, function (response) {
@@ -127,6 +127,24 @@ recipeController.controller('RecipeShow',
             $rootScope.progressBarActivated = false;
         });
 
-        $scope.getDifficulty = function (dif) { return diffs[dif]; }
+        $scope.getDifficulty = function (dif) { return DIFF[dif]; }
+    }]
+);
+
+recipeController.controller('RecipeCreate',
+    ['$scope', '$rootScope', '$location', '$sce', 'RecipeService', 'NotificationProvider', 'DIFF',
+    function ($scope, $rootScope, $location, $sce, RecipeService, NotificationProvider, DIFF) {
+        $rootScope.headerTitle = 'Nueva receta';
+        $rootScope.errorMsg = false;
+        $rootScope.progressBarActivated = false;
+        $rootScope.HasBack = true;
+        $rootScope.back = function () {
+            $location.path('/recipes');
+        };
+
+        $scope.diffs = DIFF;
+        $scope.create = function() {
+            console.log('created');
+        };
     }]
 );
