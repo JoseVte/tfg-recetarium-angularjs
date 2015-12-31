@@ -23,14 +23,17 @@ var recetarium = angular.module('recetariumApp', [
 // Routes
 recetarium.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
     $locationProvider.html5Mode(true);
+
     $routeProvider
-        .when('/', { templateUrl: 'views/home.html', controller: ''})
-        .when('/login', { templateUrl: 'views/auth/login.html', controller: 'Login' })
-        .when('/logout', { template: '', controller: 'Logout' })
-        .when('/register', { templateUrl: 'views/auth/register.html', controller: 'Register' })
+        .when('/', { templateUrl: 'views/home.html', controller: '' })
+        .when('/login', { templateUrl: 'views/auth/login.html', controller: 'Login', resolve: { access: ["AuthService", function (AuthService) { return AuthService.IsAnonymous(); }],}})
+        .when('/logout', { template: '', controller: 'Logout', resolve: { access: ["AuthService", function (AuthService) { return AuthService.IsAuthenticathed(); }],}})
+        .when('/register', { templateUrl: 'views/auth/register.html', controller: 'Register', resolve: { access: ["AuthService", function (AuthService) { return AuthService.IsAnonymous(); }],}})
         .when('/recipes', { templateUrl: 'views/recipe/index.html', controller: 'RecipeAll' })
         .when('/recipes/:slug', { templateUrl: 'views/recipe/show.html', controller: 'RecipeShow' })
+        .when('/new-recipe', { templateUrl: 'views/recipe/create.html', controller: 'RecipeCreate', resolve: { access: ["AuthService", function (AuthService) { return AuthService.IsAuthenticathed(); }],}})
         .when('/unauthorized', { templateUrl: 'views/error/401.html', controller: '' })
+        .when('/forbidden', { templateUrl: 'views/error/403.html', controller: '' })
         .otherwise({ redirectTo: '/' });
 }]);
 
@@ -98,20 +101,21 @@ recetarium.run(function ($rootScope, $location, $http, AuthService) {
         $rootScope.globals = {};
     }
 
-    $rootScope.$on('$locationChangeStart', function (ev, next, current) {
+    $rootScope.$on('$routeChangeError', function (ev, next, current, rejection) {
+        if (rejection == AuthService.UNAUTHORIZED) {
+            $location.path("/login");
+        } else if (rejection == AuthService.FORBIDDEN) {
+            $location.path("/forbidden");
+        }
+    });
+
+    $rootScope.$on('$locationChangeStart', function (ev, next, current, rejection) {
         $rootScope.IsAuthed = AuthService.IsAuthed();
         $rootScope.IsHome = ($location.path() == '/');
         $rootScope.HasBack = false;
 
         if ($rootScope.lastSearchParams[$location.path()]) {
             $location.search($rootScope.lastSearchParams[$location.path()]);
-        }
-
-        var token = $rootScope.globals.token;
-
-        if (token && $location.path() === '/login' && $location.path() === '/register') {
-            //Redirect to home if logged in
-            $location.path('/');
         }
 
         // Remove the params into URI

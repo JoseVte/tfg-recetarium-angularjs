@@ -48,7 +48,8 @@ recipeService.factory('RecipeService',
             var main = mainImage ? { href: service.apiUrl + '/media/' + recipe.id + '/' + mainImage.filename } : { href: 'http://lorempixel.com/g/480/480/food/Placeholder'};
             var gallery = [];
 
-            for (var image in recipe.media) {
+            for (var i = 0; i < recipe.media.length; i++) {
+                var image = recipe.media[i];
                 var filename = image.filename.substr(0, image.filename.lastIndexOf('.'));
                 if (image !== mainImage) gallery.push({ title: filename, href: service.apiUrl + '/media/' + recipe.id + '/' + image.filename });
             }

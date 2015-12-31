@@ -1,10 +1,13 @@
 var authServices = angular.module('AuthServices', ['ngResource']);
 
 authServices.factory('AuthService',
-    ['$http', '$rootScope', '$timeout', 'envService',
-    function ($http, $rootScope, $timeout, envService) {
+    ['$http', '$rootScope', '$timeout', 'envService', '$q',
+    function ($http, $rootScope, $timeout, envService, $q) {
         var service = {
-            apiUrl: envService.read('apiUrl')
+            apiUrl: envService.read('apiUrl'),
+            OK: 200,
+            UNAUTHORIZED: 401,
+            FORBIDDEN: 403
         };
 
         service.Login = function (email, password, callbackOk, callbackError) {
@@ -63,6 +66,20 @@ authServices.factory('AuthService',
             } else {
                 return false;
             }
+        };
+
+        service.IsAnonymous = function() {
+            var deferred = $q.defer();
+            if (service.GetJwt() == null) deferred.resolve(service.OK);
+            else deferred.reject(service.FORBIDDEN);
+            return deferred.promise;
+        }
+
+        service.IsAuthenticathed = function() {
+            var deferred = $q.defer();
+            if (service.IsAuthed()) deferred.resolve(service.OK);
+            else deferred.reject(service.UNAUTHORIZED);
+            return deferred.promise;
         };
 
         return service;

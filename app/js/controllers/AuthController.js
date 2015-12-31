@@ -26,6 +26,7 @@ authController.controller('Login',
             AuthService.Login($scope.email, $scope.password, function (response) {
                 AuthService.SaveCredentials(response.data.auth_token,
                     JSON.parse(AuthService.ParseJwt(response.data.auth_token).sub));
+                $rootScope.progressBarActivated = false;
                 $location.path('/');
             }, function (response) {
                 $('#customErrorLogin').addClass('hide');
@@ -99,6 +100,7 @@ authController.controller('Register',
             AuthService.Register(user, function (response) {
                 AuthService.SaveCredentials(response.data.auth_token,
                     JSON.parse(AuthService.ParseJwt(response.data.auth_token).sub));
+                $rootScope.progressBarActivated = false;
                 $location.path('/');
             }, function (response) {
                 $('#customErrorRegister').addClass('hide');

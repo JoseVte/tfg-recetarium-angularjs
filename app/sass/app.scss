@@ -1,18 +1,16 @@
 @import "app/bower/angular-material/angular-material.scss";
+@import "variables.scss";
 @import "material-icons.scss";
 @import "animation.scss";
+@import "header.scss";
+@import "auth.scss";
+@import "recipe.scss";
 @import "app/bower/pnotify/dist/pnotify";
 @import "app/bower/pnotify/dist/pnotify.buttons";
 @import "app/bower/pnotify/dist/pnotify.mobile";
 @import "app/bower/pnotify/dist/pnotify.history";
 @import "app/bower/pnotify/dist/pnotify.brighttheme";
 @import "app/bower/fancybox/source/jquery.fancybox";
-$tealBackground: #00BFA5;
-$tealBackgroundDisabled: rgba(0, 191, 165, .12);
-$tealColorDisabled: rgba(0, 191, 165, .26);
-$darkOrangeBackground: #DD2C00;
-$bodyBackground: #e0e0e0;
-$errorColor: #B22222;
 
 /* app css stylesheet */
 html,
@@ -21,78 +19,6 @@ body {
     md-content {
         background-color: transparent;
     }
-}
-.menuBtn {
-    background-color: transparent;
-    border: none;
-}
-[md-header-picture] {
-    position: absolute;
-    top: 0;
-    height: 128px;
-    width: inherit;
-    overflow: hidden;
-    background: url(../img/header-logo.png);
-    background-size: auto 128px;
-    background-repeat: no-repeat;
-    background-position: 50px;
-    @media (max-width: $layout-breakpoint-md) {
-        background-position: 10px;
-        background-size: auto 64px;
-        height: 64px;
-    }
-}
-@media (max-width: $layout-breakpoint-sm) {
-    md-sidenav {
-        width: 250px;
-        min-width: 250px;
-        max-width: 250px;
-    }
-}
-@media (max-width: $layout-breakpoint-md) {
-    md-sidenav md-toolbar.md-tall,
-    header md-toolbar.md-tall {
-        height: 64px;
-        max-height: 64px;
-        min-height: 64px;
-    }
-}
-.sidebar-left {
-    padding: 0;
-    a {
-        display: block;
-        padding: 0 16px 0 32px;
-        text-rendering: optimizeLegibility;
-        font-weight: 500;
-        border-radius: 0;
-        color: black;
-        cursor: pointer;
-        align-items: inherit;
-        line-height: 40px;
-        margin: 0;
-        max-height: 40px;
-        overflow: hidden;
-        text-align: left;
-        text-decoration: none;
-        white-space: normal;
-        width: 100%;
-    }
-    .active a {
-        background-color: black;
-        color: white;
-    }
-}
-.custom-error {
-    -webkit-font-smoothing: antialiased;
-    color: rgb(244, 67, 54);
-    display: block;
-    font-family: Roboto, 'Helvetica Neue', sans-serif;
-    font-size: 12px;
-    line-height: 14px;
-    overflow-x: hidden;
-    overflow-y: hidden;
-    padding-right: 50px;
-    padding-top: 5px;
 }
 md-card md-card-title {
     padding: 24px 16px 16px;
@@ -116,90 +42,6 @@ md-card md-card-title md-card-title-text {
     display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-}
-.card-recipe-main {
-    min-height: 190px;
-    @media (max-width: $layout-breakpoint-sm) {
-        md-card-title {
-            padding: 16px;
-        }
-    }
-    md-card-title-text {
-        padding: 0 10px;
-        @media (max-width: $layout-breakpoint-sm) {
-            .md-headline {
-                font-size: 20px;
-                line-height: inherit;
-            }
-            .md-subhead {
-                margin-top: 5px;
-                font-size: 14px;
-                line-height: inherit;
-            }
-        }
-    }
-    .recipe-photo-main {
-        max-height: 150px;
-        max-width: 150px;
-        @media (max-width: $layout-breakpoint-md) {
-            max-height: 100px;
-            max-width: 100px;
-        }
-    }
-}
-.card-recipe-show {
-    width: 100%;
-    .ingredients {
-        padding: 0;
-        .material-icons {
-            margin-left: 0;
-        }
-        .count {
-            text-align: right;
-        }
-        [md-inset] {
-            left: 56px;
-            width: -webkit-calc(100% - 56px);
-            width: calc(100% - 56px);
-        }
-    }
-    .image-recipe-main {
-        @media (max-width: $layout-breakpoint-sm) {
-            width: auto;
-            max-width: 100%;
-        }
-    }
-    .image-recipe-zoomable {
-        text-decoration: none;
-        img {
-            max-width: 100px;
-            max-height: 100px;
-        }
-    }
-    .tag {
-        cursor: pointer;
-        border-radius: 16px;
-        display: block;
-        height: 32px;
-        line-height: 32px;
-        margin: 8px 8px 0 0;
-        padding: 0 12px;
-        float: left;
-        box-sizing: border-box;
-        max-width: 100%;
-        position: relative;
-        background: $darkOrangeBackground;
-        color: white;
-    }
-}
-.md-select-menu-container {
-    background-color: white;
-}
-.search-block {
-    padding-bottom: 0;
-    md-input-container {
-        padding-bottom: 2px;
-    }
 }
 
 //*** Custom Themes ***//
@@ -243,74 +85,14 @@ $color in (default, $darkOrangeBackground),
     md-progress-linear.md-#{$theme} .md-bar {
         background-color: $color;
     }
-
-}
-.login-card,
-.register-card {
-    background-color: $tealBackground;
-    color: white;
-    md-card-content {
-        background-color: white;
-        padding: 0;
-        form {
-            padding: 16px;
-        }
-    }
-    md-content {
-        background-color: white;
-        color: $tealBackground;
-        label {
-            color: $tealBackground !important;
-        }
-        input {
-            color: $tealBackground;
-            border-color: $tealBackground;
-        }
-        md-input-container {
-            &.md-input-invalid {
-                label {
-                    color: $errorColor !important;
-                }
-                input {
-                    border-color: $errorColor;
-                    color: $errorColor !important;
-                }
-            }
-            &.md-input-focused .md-input {
-                border-color: $tealBackground;
-            }
-            [ng-messages] > div {
-                color: $errorColor !important;
-            }
-        }
-    }
-    md-card-actions {
-        height: 132px;
-        background-color: white;
-        color: $tealBackground;
-        .md-button {
-            max-height: 40px;
-            line-height: 24px;
-            &.md-raised.md-auth-button {
-                margin: 12px 0;
-                background-color: $tealBackground;
-                color: white;
-                width: 100%;
-                &:hover, &:focus, &:visited {
-                    background-color: $tealBackground;
-                }
-                &[disabled] {
-                    background-color: $tealBackgroundDisabled;
-                    color: $tealColorDisabled;
-                }
-            }
-        }
-        div.layout-row {
-            padding: 0;
-            a {
-                font-size: 2.7vw;
-                padding: 0;
-            }
+    a.md-button.md-fab.md-fixed-bottom-#{$theme} {
+        bottom:45px;
+        background-color: $color;
+        position:fixed;
+        right:24px;
+        z-index:998;
+        &:hover, &:focus, &:visited, &.active, {
+            @extend .md-button.md-fab.md-fixed-bottom-#{$theme};
         }
     }
 }
