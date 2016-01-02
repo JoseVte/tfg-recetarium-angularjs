@@ -57,7 +57,7 @@
             </md-card-title-text>
         </md-card-title>
         <md-card-content>
-            {{ recipe.steps }}
+            <div ng-bind-html="recipe.steps"></div>
         </md-card-content>
         <md-card-title>
             <md-card-title-text>

@@ -121,7 +121,15 @@ recipeService.factory('RecipeService',
         };
 
         service.create = function(recipe, callbackOk, callbackError) {
-            console.log(recipe);
+            $http.post(
+                service.apiUrl + '/recipes',
+                recipe,
+                { headers: {'Accept': 'application/json', 'Content-Type': 'application/json'} }
+            ).then(function (response) {
+                callbackOk(response);
+            }, function (response) {
+                callbackError(response);
+            });
         };
 
         return service;

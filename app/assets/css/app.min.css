@@ -12201,8 +12201,19 @@ md-tooltip {
 
 .card-recipe-create {
   width: 100%; }
+  .card-recipe-create .group-input-right md-input-container {
+    padding-bottom: 2px; }
+    .card-recipe-create .group-input-right md-input-container h4 {
+      margin: 5px 0; }
   .card-recipe-create .group-input-right md-select {
-    margin: 0; }
+    margin: 0;
+    max-width: 85px;
+    min-width: 85px; }
+    .card-recipe-create .group-input-right md-select md-select-value span {
+      font-weight: normal; }
+  .card-recipe-create .group-input-right input {
+    max-width: 80px;
+    min-width: 80px; }
   .card-recipe-create .md-editor-toolbar {
     min-height: 96px;
     float: left;

@@ -135,8 +135,8 @@ recipeController.controller('RecipeShow',
 );
 
 recipeController.controller('RecipeCreate',
-    ['$scope', '$rootScope', '$location', '$sce', 'RecipeService', 'NotificationProvider', 'DIFF', '$timeout',
-    function ($scope, $rootScope, $location, $sce, RecipeService, NotificationProvider, DIFF, $timeout) {
+    ['$scope', '$rootScope', '$location', 'RecipeService', 'NotificationProvider', 'DIFF', '$timeout',
+    function ($scope, $rootScope, $location, RecipeService, NotificationProvider, DIFF, $timeout) {
         $rootScope.headerTitle = 'Nueva receta';
         $rootScope.errorMsg = false;
         $rootScope.progressBarActivated = false;
@@ -175,7 +175,7 @@ recipeController.controller('RecipeCreate',
         }, function (newVal, oldVal) {
             $scope.newRecipe.slug.$error = {};
             $scope.abortSlugRequest();
-            if (newVal.length > 0) {
+            if (newVal && newVal.length > 0) {
                 $scope.loadingSlug = true;
                 $scope.validSlugIcon = 'autorenew';
                 $timeout(function() {
@@ -215,6 +215,10 @@ recipeController.controller('RecipeCreate',
             }
         }
 
+        $scope.removeIngredient = function(index) {
+            $scope.recipe.ingredients.splice(index, 1);
+        }
+
         // Abort the check slug request
         $scope.abortSlugRequest = function () {
             return ($scope.requestSlug && $scope.requestSlug.abort());
@@ -223,7 +227,39 @@ recipeController.controller('RecipeCreate',
         $scope.getDifficulty = function (diff) { return DIFF.class[diff]; }
 
         $scope.create = function() {
-            RecipeService.create($scope.recipe, function () {}, function () {});
+            $rootScope.progressBarActivated = true;
+            $rootScope.errorMsg = false;
+            var time = $scope.recipe.duration.getHours() + ':' + $scope.recipe.duration.getMinutes() + ':' + $scope.recipe.duration.getSeconds();
+            $scope.recipe.duration = time;
+            RecipeService.create($scope.recipe, function (response) {
+                $rootScope.progressBarActivated = false;
+                $location.path('/recipes/' + response.data.slug);
+            }, function (response) {
+                if (response.status == 404) {
+                    $scope.error = {
+                        icon: 'error_outline',
+                        title: 'Datos incorrectos',
+                        msg: response.data
+                    }
+                } else {
+                    NotificationProvider.notify({
+                        title: 'Un error ha ocurrido',
+                        text: 'Ha ocurrido un error mientras se creaba la receta. Por favor, intentelo mas tarde.',
+                        type: 'error',
+                        addclass: 'custom-error-notify',
+                        icon: 'material-icons md-light',
+                        styling: 'fontawesome',
+                    });
+                    $('.ui-pnotify-icon .material-icons').html('warning');
+                    $scope.error = {
+                        icon: 'error_outline',
+                        title: 'Algo ha ido mal',
+                        msg: 'Ha ocurrido un error mientras se creaba la receta.'
+                    }
+                }
+                $rootScope.errorMsg = true;
+                $rootScope.progressBarActivated = false;
+            });
         };
     }]
 );
