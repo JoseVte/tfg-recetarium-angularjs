@@ -61,10 +61,6 @@ gulp.task('js', function() {
 
 // JS bower
 gulp.task('lib-js', function() {
-    gulp.src([
-        paths.src.bower + '/angular-messages/angular-messages.min.js.map',
-    ])
-    .pipe(gulp.dest(paths.dest.jsLib));
     return gulp.src([
         paths.src.bower + '/jquery/dist/jquery.min.js',
         paths.src.bower + '/fancybox/source/jquery.fancybox.pack.js',

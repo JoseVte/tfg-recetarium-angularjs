@@ -1,9 +1,12 @@
 var recipeController = angular.module('RecipeController', []);
 
 recipeController.constant('DIFF', {
-    'EASY': 'md-green',
-    'MEDIUM': 'md-yellow',
-    'HARD': 'md-red'
+    'class': {
+        'EASY': 'md-green',
+        'MEDIUM': 'md-yellow',
+        'HARD': 'md-red'
+    },
+    'name': ['EASY', 'MEDIUM', 'HARD']
 });
 
 recipeController.controller('RecipeAll',
@@ -127,13 +130,13 @@ recipeController.controller('RecipeShow',
             $rootScope.progressBarActivated = false;
         });
 
-        $scope.getDifficulty = function (dif) { return DIFF[dif]; }
+        $scope.getDifficulty = function (diff) { return DIFF.class[diff]; }
     }]
 );
 
 recipeController.controller('RecipeCreate',
-    ['$scope', '$rootScope', '$location', '$sce', 'RecipeService', 'NotificationProvider', 'DIFF',
-    function ($scope, $rootScope, $location, $sce, RecipeService, NotificationProvider, DIFF) {
+    ['$scope', '$rootScope', '$location', '$sce', 'RecipeService', 'NotificationProvider', 'DIFF', '$timeout',
+    function ($scope, $rootScope, $location, $sce, RecipeService, NotificationProvider, DIFF, $timeout) {
         $rootScope.headerTitle = 'Nueva receta';
         $rootScope.errorMsg = false;
         $rootScope.progressBarActivated = false;
@@ -142,9 +145,79 @@ recipeController.controller('RecipeCreate',
             $location.path('/recipes');
         };
 
-        $scope.diffs = DIFF;
+        $scope.requestSlug = null;
+        $scope.validSlug = true;
+        $scope.loadingSlug = false;
+        $scope.diffs = DIFF.name;
+        $scope.recipe = { ingredients: [] };
         $scope.create = function() {
             console.log('created');
         };
+
+        $scope.$watch(function() {
+            return $scope.recipe.newIngredient ?
+                $scope.recipe.newIngredient.name:
+                $scope.recipe.newIngredient;
+        }, function (newVal, oldVal) {
+            $scope.newRecipe.newIngredientName.$error = {};
+        });
+
+        $scope.$watch(function() {
+            return $scope.recipe.title;
+        }, function (newVal, oldVal) {
+            $scope.recipe.slug = RecipeService.getSlug(newVal);
+        });
+
+        $scope.$watch(function() {
+            return $scope.recipe.slug;
+        }, function (newVal, oldVal) {
+            $scope.newRecipe.slug.$error = {};
+            $scope.abortSlugRequest();
+            if (newVal.length > 0) {
+                $scope.loadingSlug = true;
+                $scope.validSlugIcon = 'autorenew';
+                $timeout(function() {
+                    requestSlug = RecipeService.checkSlug(newVal).then(
+                        function (response) {
+                            $scope.loadingSlug = false;
+                            if (response.status == 200) {
+                                $scope.validSlugIcon = 'done';
+                            } else {
+                                $scope.newRecipe.slug.$error.validSlug = true;
+                                $scope.validSlugIcon = 'error';
+                            }
+                        },
+                        function (response) {
+                            $scope.loadingSlug = false;
+                            $scope.newRecipe.slug.$error.validSlug = true;
+                            $scope.validSlugIcon = 'error';
+                        }
+                    );
+                }, 500);
+            } else {
+                $scope.validSlugIcon = 'error';
+            }
+        });
+
+        $scope.addIngredient = function() {
+            if ($scope.recipe.newIngredient != null && $scope.recipe.newIngredient.name != null) {
+                $scope.newRecipe.newIngredientName.$error = {};
+                $scope.recipe.ingredients.push({
+                    name: $scope.recipe.newIngredient.name,
+                    count: $scope.recipe.newIngredient.count,
+                });
+                $scope.recipe.newIngredient.name = null;
+                $scope.recipe.newIngredient.count = null;
+            } else {
+                $scope.newRecipe.newIngredientName.$error.customRequired = true;
+            }
+        }
+
+        // Abort the check slug request
+        $scope.abortSlugRequest = function () {
+            return ($scope.requestSlug && $scope.requestSlug.abort());
+        }
+
+        $scope.getDifficulty = function (diff) { return DIFF.class[diff]; }
     }]
 );

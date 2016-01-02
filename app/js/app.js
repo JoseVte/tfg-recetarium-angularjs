@@ -112,6 +112,9 @@ recetarium.run(function ($rootScope, $location, $http, AuthService, ICONS) {
     });
 
     $rootScope.$on('$locationChangeStart', function (ev, next, current, rejection) {
+        // Auth header
+        $http.defaults.headers.common['X-Auth-Token'] = $rootScope.globals.token;
+
         $rootScope.IsAuthed = AuthService.IsAuthed();
         $rootScope.IsHome = ($location.path() == '/');
         $rootScope.HasBack = false;
@@ -149,6 +152,11 @@ recetarium.run(function ($rootScope, $location, $http, AuthService, ICONS) {
                 $this.children('.material-icons').replaceWith('<md-icon class="material-icons md-dark">'+ICONS[$this.attr('name')]+'</md-icon>');
             });
         });
+
+        $('.fancybox').fancybox();
+        $('.lolliclock-duration').lolliclock({
+            hour24: true
+        });
     });
 });
 
@@ -167,7 +175,3 @@ $.fn.exists = function(callback) {
     }
     return this;
 };
-
-$(document).ready(function () {
-    $('.fancybox').fancybox();
-});

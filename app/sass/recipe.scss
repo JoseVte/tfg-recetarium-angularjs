@@ -84,6 +84,11 @@
 }
 .card-recipe-create {
     width: 100%;
+    .group-input-right {
+        md-select {
+            margin: 0;
+        }
+    }
     .md-editor-toolbar {
         min-height: 96px;
         float:left;

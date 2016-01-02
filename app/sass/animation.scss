@@ -5,12 +5,10 @@
     animation: 1s zoomIn all;
     opacity: 0;
 }
-
 .animation-card-recipes.ng-enter.ng-enter-active,
 .animation-card-recipes.ng-move.ng-move-active {
     opacity:1;
 }
-
 .animation-card-recipes.ng-leave {
     -webkit-animation: 1s zoomOut;
     -moz-animation: 1s zoomOut;
@@ -187,5 +185,30 @@
         text-shadow:
         .25em 0 0 white,
         .5em 0 0 white;
+    }
+}
+
+.loaderIcon {
+    -webkit-animation: rotation 1s infinite linear;
+    animation: rotation 1s infinite linear;
+}
+@-webkit-keyframes rotation {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+@keyframes rotation {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
     }
 }
