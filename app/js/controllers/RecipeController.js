@@ -135,8 +135,8 @@ recipeController.controller('RecipeShow',
 );
 
 recipeController.controller('RecipeCreate',
-    ['$scope', '$rootScope', '$location', 'RecipeService', 'NotificationProvider', 'DIFF', '$timeout',
-    function ($scope, $rootScope, $location, RecipeService, NotificationProvider, DIFF, $timeout) {
+    ['$scope', '$rootScope', '$location', 'RecipeService', 'CategoryService', 'NotificationProvider', 'DIFF', '$timeout',
+    function ($scope, $rootScope, $location, RecipeService, CategoryService, NotificationProvider, DIFF, $timeout) {
         $rootScope.headerTitle = 'Nueva receta';
         $rootScope.errorMsg = false;
         $rootScope.progressBarActivated = false;
@@ -201,6 +201,13 @@ recipeController.controller('RecipeCreate',
             }
         });
 
+        $scope.$watch(function() {
+            return $scope.recipe.category_id;
+        }, function (newVal, oldVal) {
+            console.log(newVal);
+            if (newVal == null) $scope.recipe.category_id = undefined;
+        });
+
         $scope.addIngredient = function() {
             if ($scope.recipe.newIngredient != null && $scope.recipe.newIngredient.name != null) {
                 $scope.newRecipe.newIngredientName.$error = {};
@@ -225,6 +232,23 @@ recipeController.controller('RecipeCreate',
         }
 
         $scope.getDifficulty = function (diff) { return DIFF.class[diff]; }
+
+        $scope.loadCategories = function() {
+            CategoryService.all(function (response) {
+                $scope.categories = response.data;
+                $scope.categories.unshift({ id: null, text: 'Ninguna'});
+            }, function (response) {
+                NotificationProvider.notify({
+                    title: 'Un error ha ocurrido',
+                    text: 'Ha ocurrido un error mientras se creaba la receta. Por favor, intentelo mas tarde.',
+                    type: 'error',
+                    addclass: 'custom-error-notify',
+                    icon: 'material-icons md-light',
+                    styling: 'fontawesome',
+                });
+                $('.ui-pnotify-icon .material-icons').html('warning');
+            });
+        }
 
         $scope.create = function() {
             $rootScope.progressBarActivated = true;

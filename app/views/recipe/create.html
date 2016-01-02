@@ -52,8 +52,18 @@
                             </md-input-container>
                             <md-input-container>
                                 <h4 layout="row" layout-wrap layout-align="center center">
-                                    <span flex><md-icon class="material-icons" ng-class="getDifficulty(recipe.difficulty)">stars</md-icon> Dificultad:</span>
-                                    <md-select flex ng-model="recipe.difficulty" aria-label="difficulty"><md-option ng-value="diff" ng-repeat="diff in diffs">{{ diff | humanized }}</md-option></md-select>
+                                    <span flex="100" flex-gt-md="60"><md-icon class="material-icons" ng-class="getDifficulty(recipe.difficulty)">stars</md-icon> Dificultad:</span>
+                                    <md-select flex="100" flex-gt-md="40" flex ng-model="recipe.difficulty" aria-label="difficulty">
+                                        <md-option ng-value="diff" ng-repeat="diff in diffs">{{ diff | humanized }}</md-option>
+                                    </md-select>
+                                </h4>
+                            </md-input-container>
+                            <md-input-container>
+                                <h4 layout="row" layout-wrap layout-align="center center">
+                                    <span flex="100" flex-gt-md="40"><md-icon class="material-icons">bookmark</md-icon> Categoría:</span>
+                                    <md-select flex="100" flex-gt-md="60" ng-model="recipe.category_id" aria-label="Category" placeholder="Selecciona una categoría"md-on-open="loadCategories()">
+                                        <md-option ng-value="category.id" ng-repeat="category in categories">{{ category.text }}</md-option>
+                                    </md-select>
                                 </h4>
                             </md-input-container>
                         </md-content>

@@ -93,7 +93,7 @@ authController.controller('Register',
                 username: $scope.username,
                 email: $scope.email,
                 password: $scope.password,
-                passwordRepeat: $scope.passwordRepeat,
+                password_repeat: $scope.passwordRepeat,
                 first_name: $scope.first_name,
                 last_name: $scope.last_name
             };

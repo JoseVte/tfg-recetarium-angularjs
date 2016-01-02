@@ -11,15 +11,12 @@ var recetarium = angular.module('recetariumApp', [
     'ngAnimate',
     'textAngular',
     'ui.router',
-    'Animations',
-    'TextEditor',
-    'NotificationProviders',
+    // My Javascript
+    'Animations', 'TextEditor', 'NotificationProviders',
     'HomeController',
-    'AuthServices',
-    'AuthController',
-    'RecipeServices',
-    'RecipeFilters',
-    'RecipeController'
+    'AuthServices', 'AuthController',
+    'RecipeServices', 'RecipeFilters', 'RecipeController',
+    'CategoryServices', 'CategoryController'
 ]);
 
 // Routes

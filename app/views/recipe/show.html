@@ -28,6 +28,9 @@
                         <h4>
                             <md-icon class="material-icons" ng-class="getDifficulty(recipe.difficulty)">stars</md-icon> Dificultad: {{ recipe.difficulty | humanized }}
                         </h4>
+                        <h4 ng-if="recipe.category">
+                            <md-icon class="material-icons">bookmark</md-icon> Categoría: {{ recipe.category.text }}
+                        </h4>
                     </md-content>
                 </div>
             </div>
