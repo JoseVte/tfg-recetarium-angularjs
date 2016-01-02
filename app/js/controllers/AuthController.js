@@ -23,7 +23,7 @@ authController.controller('Login',
         $scope.login = function () {
             $rootScope.progressBarActivated = true;
             $scope.setDelay1();
-            AuthService.Login($scope.email, $scope.password, $scope.expiration, function (response) {
+            AuthService.Login($scope.email, $scope.password, !$scope.expiration, function (response) {
                 AuthService.SaveCredentials(response.data.auth_token,
                     JSON.parse(AuthService.ParseJwt(response.data.auth_token).sub));
                 $rootScope.progressBarActivated = false;
@@ -51,7 +51,7 @@ authController.controller('Login',
                 } else {
                     NotificationProvider.notify({
                         title: 'Un error ha ocurrido',
-                        text: 'Ha ocurrido un error mientras se cargaban las recetas. Por favor, intentelo mas tarde.',
+                        text: 'Ha ocurrido un error mientras se logueaba. Por favor, intentelo mas tarde.',
                         type: 'error',
                         addclass: 'custom-error-notify',
                         icon: 'material-icons md-light',
