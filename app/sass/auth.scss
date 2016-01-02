@@ -12,6 +12,7 @@
     md-content {
         background-color: white;
         color: $tealBackground;
+        overflow: inherit;
         label {
             color: $tealBackground !important;
         }

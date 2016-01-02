@@ -23,7 +23,7 @@ authController.controller('Login',
         $scope.login = function () {
             $rootScope.progressBarActivated = true;
             $scope.setDelay1();
-            AuthService.Login($scope.email, $scope.password, function (response) {
+            AuthService.Login($scope.email, $scope.password, $scope.expiration, function (response) {
                 AuthService.SaveCredentials(response.data.auth_token,
                     JSON.parse(AuthService.ParseJwt(response.data.auth_token).sub));
                 $rootScope.progressBarActivated = false;

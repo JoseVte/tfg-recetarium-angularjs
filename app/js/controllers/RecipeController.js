@@ -149,9 +149,11 @@ recipeController.controller('RecipeCreate',
         $scope.validSlug = true;
         $scope.loadingSlug = false;
         $scope.diffs = DIFF.name;
-        $scope.recipe = { ingredients: [] };
-        $scope.create = function() {
-            console.log('created');
+        $scope.recipe = {
+            ingredients: [],
+            num_persons: 0,
+            difficulty: 'EASY',
+            duration: new Date(0, 0, 0, 0, 0, 0)
         };
 
         $scope.$watch(function() {
@@ -219,5 +221,9 @@ recipeController.controller('RecipeCreate',
         }
 
         $scope.getDifficulty = function (diff) { return DIFF.class[diff]; }
+
+        $scope.create = function() {
+            RecipeService.create($scope.recipe, function () {}, function () {});
+        };
     }]
 );

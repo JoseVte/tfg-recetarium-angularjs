@@ -44,7 +44,7 @@
                             <md-input-container>
                                 <h4 layout="row" layout-wrap>
                                     <span flex><md-icon class="material-icons">timelapse</md-icon> Duración:</span>
-                                    <input flex class="lolliclock-duration" type="time" value="00:00" ng-model="recipe.duration" aria-label="duration"/>
+                                    <input required flex class="lolliclock-duration" type="time" ng-model="recipe.duration" aria-label="duration"/>
                                 </h4>
                             </md-input-container>
                             <md-input-container>
@@ -114,6 +114,10 @@
                     ta-toolbar-class="md-editor-toolbar" ta-toolbar-group-class="md-editor-toolbar-group"
                     ta-toolbar-button-class="md-button md-icon-button" ta-toolbar-button-active-class="active"></div>
             </div>
+
+            <md-card-actions layout="row" layout-align="end">
+                <md-button class="md-primary md-raised" ng-click="create()" ng-disabled="newRecipe.$invalid">crear la receta</md-button>
+            </md-card-actions>
         </md-card>
     </form>
 </md-content>

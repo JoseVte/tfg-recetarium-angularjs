@@ -47,9 +47,9 @@ md-card md-card-title md-card-title-text {
 }
 
 //*** Custom Themes ***//
-@each $theme,
-$color in (default, $darkOrangeBackground),
-(auth, $tealBackground) {
+@each $theme, $color, $backgroundDisabled, $colorDisabled in
+(default, $darkOrangeBackground, $darkOrangeBackgroundDisabled, $darkOrangeColorDisabled),
+(auth, $tealBackground, $tealBackgroundDisabled, $tealColorDisabled) {
     .header-theme-#{$theme} {
         background-color: $color;
         color: white;
@@ -95,6 +95,35 @@ $color in (default, $darkOrangeBackground),
         z-index:998;
         &:hover, &:focus, &:visited, &.active, {
             @extend .md-button.md-fab.md-fixed-bottom-#{$theme};
+        }
+    }
+    .body-theme-#{$theme} {
+        md-card-actions {
+            background-color: white;
+            color: $color;
+            .md-button {
+                &.md-raised.md-primary {
+                    background-color: $color;
+                    color: white;
+                    &:hover, &:focus, &:visited {
+                        background-color: $color;
+                    }
+                    &[disabled] {
+                        background-color: $backgroundDisabled;
+                        color: $colorDisabled;
+                    }
+                }
+            }
+        }
+        md-checkbox {
+            &.md-checked {
+                .md-icon {
+                    background-color: $color;
+                }
+                .md-ink-ripple {
+                    color: $color;
+                }
+            }
         }
     }
 }

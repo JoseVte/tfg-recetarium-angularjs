@@ -10,10 +10,10 @@ authServices.factory('AuthService',
             FORBIDDEN: 403
         };
 
-        service.Login = function (email, password, callbackOk, callbackError) {
+        service.Login = function (email, password, expiration, callbackOk, callbackError) {
             $http.post(
                 service.apiUrl + '/auth/login',
-                { email: email, password: password },
+                { email: email, password: password, setExpiration: expiration },
                 { headers: {'Accept': 'application/json', 'Content-Type': 'application/json'} }
             ).then(function (response) {
                 callbackOk(response);
@@ -61,10 +61,11 @@ authServices.factory('AuthService',
         service.IsAuthed = function() {
             var token = service.GetJwt();
             if (token) {
+                if (!$rootScope.globals.user.setExpiration) return true;
                 var params = service.ParseJwt(token);
                 if (Math.round(new Date().getTime() / 1000) <= params.exp) {
                     return true;
-                }else {
+                } else {
                     service.ClearCredentials();
                     return false;
                 }

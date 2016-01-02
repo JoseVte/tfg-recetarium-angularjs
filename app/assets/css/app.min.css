@@ -12076,7 +12076,8 @@ md-tooltip {
   .login-card md-content,
   .register-card md-content {
     background-color: white;
-    color: #00BFA5; }
+    color: #00BFA5;
+    overflow: inherit; }
     .login-card md-content label,
     .register-card md-content label {
       color: #00BFA5 !important; }
@@ -13464,6 +13465,24 @@ a.md-button.md-fab.md-fixed-bottom-default, a.md-button.md-fab.md-fixed-bottom-d
   right: 24px;
   z-index: 998; }
 
+.body-theme-default md-card-actions {
+  background-color: white;
+  color: #DD2C00; }
+  .body-theme-default md-card-actions .md-button.md-raised.md-primary {
+    background-color: #DD2C00;
+    color: white; }
+    .body-theme-default md-card-actions .md-button.md-raised.md-primary:hover, .body-theme-default md-card-actions .md-button.md-raised.md-primary:focus, .body-theme-default md-card-actions .md-button.md-raised.md-primary:visited {
+      background-color: #DD2C00; }
+    .body-theme-default md-card-actions .md-button.md-raised.md-primary[disabled] {
+      background-color: rgba(221, 44, 0, 0.5);
+      color: rgba(255, 255, 255, 0.5); }
+
+.body-theme-default md-checkbox.md-checked .md-icon {
+  background-color: #DD2C00; }
+
+.body-theme-default md-checkbox.md-checked .md-ink-ripple {
+  color: #DD2C00; }
+
 .header-theme-auth {
   background-color: #00BFA5;
   color: white; }
@@ -13499,6 +13518,24 @@ a.md-button.md-fab.md-fixed-bottom-auth, a.md-button.md-fab.md-fixed-bottom-auth
   position: fixed;
   right: 24px;
   z-index: 998; }
+
+.body-theme-auth md-card-actions {
+  background-color: white;
+  color: #00BFA5; }
+  .body-theme-auth md-card-actions .md-button.md-raised.md-primary {
+    background-color: #00BFA5;
+    color: white; }
+    .body-theme-auth md-card-actions .md-button.md-raised.md-primary:hover, .body-theme-auth md-card-actions .md-button.md-raised.md-primary:focus, .body-theme-auth md-card-actions .md-button.md-raised.md-primary:visited {
+      background-color: #00BFA5; }
+    .body-theme-auth md-card-actions .md-button.md-raised.md-primary[disabled] {
+      background-color: rgba(0, 191, 165, 0.5);
+      color: rgba(255, 255, 255, 0.5); }
+
+.body-theme-auth md-checkbox.md-checked .md-icon {
+  background-color: #00BFA5; }
+
+.body-theme-auth md-checkbox.md-checked .md-ink-ripple {
+  color: #00BFA5; }
 
 .ui-pnotify.custom-error-notify .ui-pnotify-container {
   background-color: #B22222 !important;
