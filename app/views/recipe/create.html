@@ -124,6 +124,17 @@
                     ta-toolbar-button-class="md-button md-icon-button" ta-toolbar-button-active-class="active"></div>
             </div>
 
+            <div layout="row" layout-wrap layout-padding>
+                <md-chips ng-model="recipe.tags" md-autocomplete-snap md-require-match="true">
+                    <md-autocomplete md-selected-item="selectedTag" md-item-text="tag.text"
+                        md-search-text="searchText" md-items="tag in tagSearch(searchText)"
+                        placeholder="Busca una etiqueta">
+                        <span md-highlight-text="searchText">{{ tag.text }}</span>
+                    </md-autocomplete>
+                    <md-chip-template><span>{{ $chip.text }}</span></md-chip-template>
+                </md-chips>
+            </div>
+
             <md-card-actions layout="row" layout-align="end">
                 <md-button class="md-primary md-raised" ng-click="create()" ng-disabled="newRecipe.$invalid || progressBarActivated">crear la receta</md-button>
             </md-card-actions>

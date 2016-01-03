@@ -135,8 +135,8 @@ recipeController.controller('RecipeShow',
 );
 
 recipeController.controller('RecipeCreate',
-    ['$scope', '$rootScope', '$location', 'RecipeService', 'CategoryService', 'NotificationProvider', 'DIFF', '$timeout',
-    function ($scope, $rootScope, $location, RecipeService, CategoryService, NotificationProvider, DIFF, $timeout) {
+    ['$scope', '$rootScope', '$location', 'RecipeService', 'CategoryService', 'TagService', 'NotificationProvider', 'DIFF', '$timeout',
+    function ($scope, $rootScope, $location, RecipeService, CategoryService, TagService, NotificationProvider, DIFF, $timeout) {
         $rootScope.headerTitle = 'Nueva receta';
         $rootScope.errorMsg = false;
         $rootScope.progressBarActivated = false;
@@ -149,11 +149,13 @@ recipeController.controller('RecipeCreate',
         $scope.validSlug = true;
         $scope.loadingSlug = false;
         $scope.diffs = DIFF.name;
+        $scope.tags = [];
         $scope.recipe = {
             ingredients: [],
             num_persons: 0,
             difficulty: 'EASY',
-            duration: new Date(0, 0, 0, 0, 0, 0)
+            duration: new Date(0, 0, 0, 0, 0, 0),
+            tags: []
         };
 
         $scope.$watch(function() {
@@ -204,7 +206,6 @@ recipeController.controller('RecipeCreate',
         $scope.$watch(function() {
             return $scope.recipe.category_id;
         }, function (newVal, oldVal) {
-            console.log(newVal);
             if (newVal == null) $scope.recipe.category_id = undefined;
         });
 
@@ -240,7 +241,7 @@ recipeController.controller('RecipeCreate',
             }, function (response) {
                 NotificationProvider.notify({
                     title: 'Un error ha ocurrido',
-                    text: 'Ha ocurrido un error mientras se creaba la receta. Por favor, intentelo mas tarde.',
+                    text: 'Ha ocurrido un error mientras se cargaban las categorias. Por favor, intentelo mas tarde.',
                     type: 'error',
                     addclass: 'custom-error-notify',
                     icon: 'material-icons md-light',
@@ -250,12 +251,43 @@ recipeController.controller('RecipeCreate',
             });
         }
 
+        $scope.loadTags = function(search) {
+            return TagService.all(search, function (response) {
+                return response.data;
+            }, function (response) {
+                NotificationProvider.notify({
+                    title: 'Un error ha ocurrido',
+                    text: 'Ha ocurrido un error mientras se cargaban las etiquetas. Por favor, intentelo mas tarde.',
+                    type: 'error',
+                    addclass: 'custom-error-notify',
+                    icon: 'material-icons md-light',
+                    styling: 'fontawesome',
+                });
+                $('.ui-pnotify-icon .material-icons').html('warning');
+                return [];
+            });
+        }
+
+        $scope.tagSearch = function(search) {
+            if(search) {
+                return $scope.loadTags(search).then(function(response) {
+                    $scope.tags = response.filter(function (el) {
+                        return !$.containsId(el, $scope.recipe.tags);
+                    });
+                    return $scope.tags;
+                });
+            }
+            return [];
+        }
+
         $scope.create = function() {
             $rootScope.progressBarActivated = true;
             $rootScope.errorMsg = false;
+            var recipeObj = $scope.recipe;
             var time = $scope.recipe.duration.getHours() + ':' + $scope.recipe.duration.getMinutes() + ':' + $scope.recipe.duration.getSeconds();
-            $scope.recipe.duration = time;
-            RecipeService.create($scope.recipe, function (response) {
+            recipeObj.duration = time;
+            recipeObj.tags = $.getArrayId($scope.recipe.tags);
+            RecipeService.create(recipeObj, function (response) {
                 $rootScope.progressBarActivated = false;
                 $location.path('/recipes/' + response.data.slug);
             }, function (response) {

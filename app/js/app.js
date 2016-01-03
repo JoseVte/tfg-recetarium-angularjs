@@ -16,7 +16,8 @@ var recetarium = angular.module('recetariumApp', [
     'HomeController',
     'AuthServices', 'AuthController',
     'RecipeServices', 'RecipeFilters', 'RecipeController',
-    'CategoryServices', 'CategoryController'
+    'CategoryServices', 'CategoryController',
+    'TagServices'
 ]);
 
 // Routes
@@ -172,3 +173,19 @@ $.fn.exists = function(callback) {
     }
     return this;
 };
+
+$.containsId = function(el, array) {
+    var i = array.length;
+    while (i--) {
+       if (array[i].id === el.id) { return true; }
+    }
+    return false;
+};
+
+$.getArrayId = function(array) {
+    var a = [];
+    for (var el in array) {
+        a.push(array[el].id);
+    }
+    return a;
+}

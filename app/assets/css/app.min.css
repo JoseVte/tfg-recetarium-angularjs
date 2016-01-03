@@ -12237,6 +12237,23 @@ md-tooltip {
   .card-recipe-create .ta-editor {
     float: left;
     min-width: 100%; }
+  .card-recipe-create md-input-container.md-input-invalid .md-input {
+    border-color: #B22222; }
+  .card-recipe-create md-input-container.md-input-invalid md-icon {
+    color: #B22222; }
+  .card-recipe-create md-input-container:not(md-input-invalid).md-input-focused md-icon, .card-recipe-create md-input-container:not(md-input-invalid).md-input-focused label {
+    color: #DD2C00; }
+  .card-recipe-create md-input-container:not(md-input-invalid).md-input-focused .md-input, .card-recipe-create md-input-container:not(md-input-invalid).md-input-focused md-select {
+    border-color: #DD2C00; }
+  .card-recipe-create md-select-menu md-option[selected] {
+    color: #DD2C00; }
+  .card-recipe-create md-select:not([disabled]):focus .md-select-value {
+    border-color: #DD2C00; }
+  .card-recipe-create md-chips .md-chips.md-focused {
+    -webkit-box-shadow: 0 2px #DD2C00;
+            box-shadow: 0 2px #DD2C00; }
+  .card-recipe-create md-chips .md-chip.md-focused {
+    background: #DD2C00; }
 
 .lolliclock-popover {
   position: absolute;
