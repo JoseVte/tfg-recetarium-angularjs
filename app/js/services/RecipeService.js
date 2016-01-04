@@ -132,6 +132,21 @@ recipeService.factory('RecipeService',
             });
         };
 
+        service.uploadFile = function(file, id, isMain, callbackOk, callbackError) {
+            var fd = new FormData();
+            fd.append('file', file);
+            fd.append('is_main', isMain);
+            $http.post(
+                service.apiUrl + '/media/' + id,
+                fd,
+                { transformRequest: angular.identity, headers: {'Content-Type': undefined} }
+            ).then(function (response) {
+                callbackOk(response);
+            }, function (response) {
+                callbackError(response);
+            });
+        }
+
         return service;
     }]
 );

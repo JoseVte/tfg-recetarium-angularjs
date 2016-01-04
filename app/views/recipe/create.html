@@ -6,7 +6,7 @@
 </md-content>
 
 <md-content class="md-padding" layout="column" layout-wrap layout-align="center start">
-    <form name="newRecipe" role="form" novalidate>
+    <form name="newRecipe" role="form">
         <md-card flex class="card-recipe-create">
             <md-card-title>
                 <md-card-title-text>
@@ -34,9 +34,9 @@
                     class="md-padding" layout="row" layout-wrap layout-align="center center"
                     layout-align-gt-sm="end start">
                     <div layout="column" layout-wrap flex class="group-input-right">
-                        <a class="fancybox" title="Foto del plato principal" href="">
-                            <img class="image-recipe-main" src="" />
-                        </a>
+                        <input type="file" name="mainImage" required accept="image/*" file-model="images.main"
+                        data-progress-bar-target="main" file-thumbnail="image-main" />
+                        <img src="" id="image-main" class="image-recipe-main" />
                         <md-content flex class="md-padding">
                             <md-input-container>
                                 <h4 layout="row" layout-wrap layout-align="center center">

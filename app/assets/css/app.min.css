@@ -12211,7 +12211,7 @@ md-tooltip {
     margin: 0; }
     .card-recipe-create .group-input-right md-select md-select-value span {
       font-weight: normal; }
-  .card-recipe-create .group-input-right input {
+  .card-recipe-create .group-input-right input:not([type='file']) {
     max-width: 80px;
     min-width: 80px; }
   .card-recipe-create .md-editor-toolbar {
@@ -12237,6 +12237,10 @@ md-tooltip {
   .card-recipe-create .ta-editor {
     float: left;
     min-width: 100%; }
+  @media (max-width: 600px) {
+    .card-recipe-create .image-recipe-main {
+      width: auto;
+      max-width: 100%; } }
   .card-recipe-create md-input-container.md-input-invalid .md-input {
     border-color: #B22222; }
   .card-recipe-create md-input-container.md-input-invalid md-icon {

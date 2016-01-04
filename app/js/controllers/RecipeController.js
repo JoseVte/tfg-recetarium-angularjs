@@ -135,8 +135,10 @@ recipeController.controller('RecipeShow',
 );
 
 recipeController.controller('RecipeCreate',
-    ['$scope', '$rootScope', '$location', 'RecipeService', 'CategoryService', 'TagService', 'NotificationProvider', 'DIFF', '$timeout',
-    function ($scope, $rootScope, $location, RecipeService, CategoryService, TagService, NotificationProvider, DIFF, $timeout) {
+    ['$scope', '$rootScope', '$location', 'RecipeService', 'CategoryService', 'TagService',
+    'NotificationProvider', 'DIFF', '$timeout',
+    function ($scope, $rootScope, $location, RecipeService, CategoryService, TagService,
+        NotificationProvider, DIFF, $timeout) {
         $rootScope.headerTitle = 'Nueva receta';
         $rootScope.errorMsg = false;
         $rootScope.progressBarActivated = false;
@@ -157,6 +159,9 @@ recipeController.controller('RecipeCreate',
             duration: new Date(0, 0, 0, 0, 0, 0),
             tags: []
         };
+        $scope.images = {};
+        $scope.imagesLink = {};
+        $scope.thumbnail = $scope.progressBar = new Array();
 
         $scope.$watch(function() {
             return $scope.recipe.newIngredient ?
@@ -284,14 +289,44 @@ recipeController.controller('RecipeCreate',
             $rootScope.progressBarActivated = true;
             $rootScope.errorMsg = false;
             var recipeObj = $scope.recipe;
-            var time = $scope.recipe.duration.getHours() + ':' + $scope.recipe.duration.getMinutes() + ':' + $scope.recipe.duration.getSeconds();
-            recipeObj.duration = time;
-            recipeObj.tags = $.getArrayId($scope.recipe.tags);
+            var auxDuration = recipeObj.duration;
+            recipeObj.duration = auxDuration.getHours() + ':' + auxDuration.getMinutes() + ':' + auxDuration.getSeconds();
+            recipeObj.tags = $.getArrayId(recipeObj.tags);
             RecipeService.create(recipeObj, function (response) {
-                $rootScope.progressBarActivated = false;
-                $location.path('/recipes/' + response.data.slug);
+                var mainFile = $scope.images.main;
+                var slug = response.data.slug;
+                RecipeService.uploadFile(mainFile, response.data.id, true,
+                function(response) {
+                    $rootScope.progressBarActivated = false;
+                    $location.path('/recipes/' + slug);
+                }, function (response) {
+                    if (response.status == 400) {
+                        $scope.error = {
+                            icon: 'error_outline',
+                            title: 'Datos incorrectos',
+                            msg: response.data
+                        }
+                    } else {
+                        NotificationProvider.notify({
+                            title: 'Un error ha ocurrido',
+                            text: 'Ha ocurrido un error mientras se guardaban las imagenes. Por favor, intentelo mas tarde.',
+                            type: 'error',
+                            addclass: 'custom-error-notify',
+                            icon: 'material-icons md-light',
+                            styling: 'fontawesome',
+                        });
+                        $('.ui-pnotify-icon .material-icons').html('warning');
+                        $scope.error = {
+                            icon: 'error_outline',
+                            title: 'Algo ha ido mal',
+                            msg: 'Ha ocurrido un error mientras se guardaban las imagenes.'
+                        }
+                    }
+                    $rootScope.errorMsg = true;
+                    $rootScope.progressBarActivated = false;
+                });
             }, function (response) {
-                if (response.status == 404) {
+                if (response.status == 400) {
                     $scope.error = {
                         icon: 'error_outline',
                         title: 'Datos incorrectos',
