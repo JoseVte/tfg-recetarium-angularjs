@@ -27,11 +27,11 @@ recetarium.config(['$routeProvider', '$locationProvider', function($routeProvide
     $routeProvider
         .when('/', { templateUrl: 'views/home.html', controller: '' })
         .when('/login', { templateUrl: 'views/auth/login.html', controller: 'Login', resolve: { access: ["AuthService", function (AuthService) { return AuthService.IsAnonymous(); }],}})
-        .when('/logout', { template: '', controller: 'Logout', resolve: { access: ["AuthService", function (AuthService) { return AuthService.IsAuthenticathed(); }],}})
+        .when('/logout', { template: '', controller: 'Logout', resolve: { access: ["AuthService", function (AuthService) { return AuthService.IsAuthenticated(); }],}})
         .when('/register', { templateUrl: 'views/auth/register.html', controller: 'Register', resolve: { access: ["AuthService", function (AuthService) { return AuthService.IsAnonymous(); }],}})
         .when('/recipes', { templateUrl: 'views/recipe/index.html', controller: 'RecipeAll' })
         .when('/recipes/:slug', { templateUrl: 'views/recipe/show.html', controller: 'RecipeShow' })
-        .when('/new-recipe', { templateUrl: 'views/recipe/create.html', controller: 'RecipeCreate', resolve: { access: ["AuthService", function (AuthService) { return AuthService.IsAuthenticathed(); }],}})
+        .when('/new-recipe', { templateUrl: 'views/recipe/create.html', controller: 'RecipeCreate', resolve: { access: ["AuthService", function (AuthService) { return AuthService.IsAuthenticated(); }],}})
         .when('/unauthorized', { templateUrl: 'views/error/401.html', controller: '' })
         .when('/forbidden', { templateUrl: 'views/error/403.html', controller: '' })
         .otherwise({ redirectTo: '/' });
@@ -154,6 +154,12 @@ recetarium.run(function ($rootScope, $location, $http, AuthService, ICONS) {
         $('.fancybox').fancybox();
         $('.lolliclock-duration').lolliclock({
             hour24: true
+        });
+
+        $('.input-file-material').exists(function () {
+            $(document).on('change', '.input-file-material', function () {
+                $('.md-textfield-input').val(this.files[0].name);
+            })
         });
     });
 });

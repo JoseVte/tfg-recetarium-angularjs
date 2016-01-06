@@ -145,7 +145,7 @@ recipeService.factory('RecipeService',
             }, function (response) {
                 callbackError(response);
             });
-        }
+        };
 
         return service;
     }]

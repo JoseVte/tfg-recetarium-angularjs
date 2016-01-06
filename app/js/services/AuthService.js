@@ -79,9 +79,9 @@ authServices.factory('AuthService',
             if (service.GetJwt() == null) deferred.resolve(service.OK);
             else deferred.reject(service.FORBIDDEN);
             return deferred.promise;
-        }
+        };
 
-        service.IsAuthenticathed = function() {
+        service.IsAuthenticated = function() {
             var deferred = $q.defer();
             if (service.IsAuthed()) deferred.resolve(service.OK);
             else deferred.reject(service.UNAUTHORIZED);

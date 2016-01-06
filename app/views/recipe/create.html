@@ -11,12 +11,14 @@
             <md-card-title>
                 <md-card-title-text>
                     <md-input-container>
+                        <label>Título</label>
                         <input required type="text" name="title" class="md-headline" ng-model="recipe.title" aria-label="title">
                         <div ng-messages="newRecipe.title.$error">
                             <div ng-message="required">El título de la receta es obligatorio.</div>
                         </div>
                     </md-input-container>
-                    <md-input-container class="md-icon-float md-icon-right md-block">
+                    <md-input-container class="md-icon-right md-block">
+                        <label>Slug</label>
                         <input required type="text" name="slug" class="md-subhead" ng-model="recipe.slug" aria-label="slug">
                         <md-icon ng-class="{loaderIcon:loadingSlug}" class="material-icons">{{ validSlugIcon }}</md-icon>
                         <div ng-messages="newRecipe.slug.$error">
@@ -34,9 +36,17 @@
                     class="md-padding" layout="row" layout-wrap layout-align="center center"
                     layout-align-gt-sm="end start">
                     <div layout="column" layout-wrap flex class="group-input-right">
-                        <input type="file" name="mainImage" required accept="image/*" file-model="images.main"
-                        data-progress-bar-target="main" file-thumbnail="image-main" />
-                        <img src="" id="image-main" class="image-recipe-main" />
+                        <img src="https://placeholdit.imgix.net/~text?txtsize=61&txt=Foto%20principal&w=450&h=350" id="image-main" class="image-recipe-main" />
+                        <div class="md-file-input">
+                            <md-input-container>
+                                <input type="text" readonly placeholder="Foto principal" class="md-textfield-input" ng-model="images.name">
+                            </md-input-container>
+                            <div class="md-button-file md-button md-button-icon md-button-file">
+                                <md-icon class="material-icons">attach_file</md-icon>
+                                <input type="file" name="mainImage" required accept="image/*" file-model="images.main"
+                                       data-progress-bar-target="main" file-thumbnail="image-main" class="input-file-material" />
+                            </div>
+                        </div>
                         <md-content flex class="md-padding">
                             <md-input-container>
                                 <h4 layout="row" layout-wrap layout-align="center center">
@@ -62,7 +72,7 @@
                                 <h4 layout="row" layout-wrap layout-align="center center">
                                     <span flex="100" flex-gt-md="40"><md-icon class="material-icons">bookmark</md-icon> Categoría:</span>
                                     <md-select flex="100" flex-gt-md="60" ng-model="recipe.category_id" aria-label="Category" placeholder="Selecciona una categoría"md-on-open="loadCategories()">
-                                        <md-option ng-value="category.id" ng-repeat="category in categories">{{ category.text }}</md-option>
+                                        <md-option ng-repeat="category in categories" ng-value="category.id">{{ category.text }}</md-option>
                                     </md-select>
                                 </h4>
                             </md-input-container>
@@ -106,7 +116,7 @@
                                         <div ng-messages="newRecipe.newIngredientName.$error">
                                             <div ng-message="customRequired">El nombre del ingrediente es necesario.</div>
                                         </div>
-                                    </md-input-container class="md-block">
+                                    </md-input-container>
                                     <md-input-container flex>
                                         <label>Cantidad</label>
                                         <input type="text" name="newIngredientCount" ng-model="recipe.newIngredient.count" />

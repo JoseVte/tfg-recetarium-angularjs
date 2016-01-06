@@ -34,7 +34,7 @@ recipeController.controller('RecipeAll',
 
         $scope.selectSize = function () {
             $location.search("size", $scope.pagination.size);
-        }
+        };
 
         $scope.getRecipes = function () {
             $rootScope.progressBarActivated = true;
@@ -58,15 +58,15 @@ recipeController.controller('RecipeAll',
                 $('.ui-pnotify-icon .material-icons').html('warning');
                 $rootScope.progressBarActivated = false;
             });
-        }
+        };
 
         $scope.description = function(steps) {
             if (steps) return $sce.trustAsHtml(steps.trunc(80, true));
-        }
+        };
 
         $scope.show = function(slug) {
             $location.path('/recipes/' + slug);
-        }
+        };
     }]
 );
 
@@ -96,7 +96,7 @@ recipeController.controller('RecipeShow',
                     icon: 'error_outline',
                     title: 'Algo ha ido mal',
                     msg: 'Ha ocurrido un error mientras se cargaba la receta.'
-                }
+                };
                 $rootScope.errorMsg = true;
                 $rootScope.headerTitle = 'Error';
                 $rootScope.progressBarActivated = false;
@@ -107,7 +107,7 @@ recipeController.controller('RecipeShow',
                     icon: 'error_outline',
                     title: 'Error 404',
                     msg: 'La receta \'' + $routeParams.slug + '\' no existe.'
-                }
+                };
                 $rootScope.errorMsg = true;
             } else {
                 NotificationProvider.notify({
@@ -123,7 +123,7 @@ recipeController.controller('RecipeShow',
                     icon: 'error_outline',
                     title: 'Algo ha ido mal',
                     msg: 'Ha ocurrido un error mientras se cargaba la receta.'
-                }
+                };
                 $rootScope.errorMsg = true;
             }
             $rootScope.headerTitle = 'Error';
@@ -226,16 +226,16 @@ recipeController.controller('RecipeCreate',
             } else {
                 $scope.newRecipe.newIngredientName.$error.customRequired = true;
             }
-        }
+        };
 
         $scope.removeIngredient = function(index) {
             $scope.recipe.ingredients.splice(index, 1);
-        }
+        };
 
         // Abort the check slug request
         $scope.abortSlugRequest = function () {
             return ($scope.requestSlug && $scope.requestSlug.abort());
-        }
+        };
 
         $scope.getDifficulty = function (diff) { return DIFF.class[diff]; }
 
@@ -250,11 +250,11 @@ recipeController.controller('RecipeCreate',
                     type: 'error',
                     addclass: 'custom-error-notify',
                     icon: 'material-icons md-light',
-                    styling: 'fontawesome',
+                    styling: 'fontawesome'
                 });
                 $('.ui-pnotify-icon .material-icons').html('warning');
             });
-        }
+        };
 
         $scope.loadTags = function(search) {
             return TagService.all(search, function (response) {
@@ -266,12 +266,12 @@ recipeController.controller('RecipeCreate',
                     type: 'error',
                     addclass: 'custom-error-notify',
                     icon: 'material-icons md-light',
-                    styling: 'fontawesome',
+                    styling: 'fontawesome'
                 });
                 $('.ui-pnotify-icon .material-icons').html('warning');
                 return [];
             });
-        }
+        };
 
         $scope.tagSearch = function(search) {
             if(search) {
@@ -283,11 +283,13 @@ recipeController.controller('RecipeCreate',
                 });
             }
             return [];
-        }
+        };
 
         $scope.create = function() {
             $rootScope.progressBarActivated = true;
             $rootScope.errorMsg = false;
+            $rootScope.headerTitle = 'Creando receta';
+            $("html, body").animate({ scrollTop: 0 }, "slow");
             var recipeObj = $scope.recipe;
             var auxDuration = recipeObj.duration;
             recipeObj.duration = auxDuration.getHours() + ':' + auxDuration.getMinutes() + ':' + auxDuration.getSeconds();
@@ -295,6 +297,7 @@ recipeController.controller('RecipeCreate',
             RecipeService.create(recipeObj, function (response) {
                 var mainFile = $scope.images.main;
                 var slug = response.data.slug;
+                $rootScope.headerTitle = 'Subiendo imagenes';
                 RecipeService.uploadFile(mainFile, response.data.id, true,
                 function(response) {
                     $rootScope.progressBarActivated = false;
@@ -313,7 +316,7 @@ recipeController.controller('RecipeCreate',
                             type: 'error',
                             addclass: 'custom-error-notify',
                             icon: 'material-icons md-light',
-                            styling: 'fontawesome',
+                            styling: 'fontawesome'
                         });
                         $('.ui-pnotify-icon .material-icons').html('warning');
                         $scope.error = {
@@ -324,6 +327,7 @@ recipeController.controller('RecipeCreate',
                     }
                     $rootScope.errorMsg = true;
                     $rootScope.progressBarActivated = false;
+                    $rootScope.headerTitle = 'Nueva receta';
                 });
             }, function (response) {
                 if (response.status == 400) {
@@ -339,7 +343,7 @@ recipeController.controller('RecipeCreate',
                         type: 'error',
                         addclass: 'custom-error-notify',
                         icon: 'material-icons md-light',
-                        styling: 'fontawesome',
+                        styling: 'fontawesome'
                     });
                     $('.ui-pnotify-icon .material-icons').html('warning');
                     $scope.error = {
@@ -350,6 +354,7 @@ recipeController.controller('RecipeCreate',
                 }
                 $rootScope.errorMsg = true;
                 $rootScope.progressBarActivated = false;
+                $rootScope.headerTitle = 'Nueva receta';
             });
         };
     }]

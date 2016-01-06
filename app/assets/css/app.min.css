@@ -12142,9 +12142,9 @@ md-tooltip {
         font-size: 20px;
         line-height: inherit; }
       .card-recipe-main md-card-title-text .md-subhead {
-        margin-top: 5px;
         font-size: 14px;
-        line-height: inherit; } }
+        line-height: inherit;
+        margin-top: 5px; } }
   .card-recipe-main .recipe-photo-main {
     max-height: 150px;
     max-width: 150px; }
@@ -12167,29 +12167,29 @@ md-tooltip {
       width: calc(100% - 56px); }
   @media (max-width: 600px) {
     .card-recipe-show .image-recipe-main {
-      width: auto;
-      max-width: 100%; } }
+      max-width: 100%;
+      width: auto; } }
   .card-recipe-show .image-recipe-zoomable {
     text-decoration: none; }
     .card-recipe-show .image-recipe-zoomable img {
-      max-width: 100px;
-      max-height: 100px; }
+      max-height: 100px;
+      max-width: 100px; }
   .card-recipe-show .tag {
-    cursor: pointer;
+    background: #DD2C00;
     -webkit-border-radius: 16px;
             border-radius: 16px;
+    -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+    color: white;
+    cursor: pointer;
     display: block;
+    float: left;
     height: 32px;
     line-height: 32px;
     margin: 8px 8px 0 0;
-    padding: 0 12px;
-    float: left;
-    -webkit-box-sizing: border-box;
-            box-sizing: border-box;
     max-width: 100%;
-    position: relative;
-    background: #DD2C00;
-    color: white; }
+    padding: 0 12px;
+    position: relative; }
 
 .md-select-menu-container {
   background-color: white; }
@@ -12214,11 +12214,46 @@ md-tooltip {
   .card-recipe-create .group-input-right input:not([type='file']) {
     max-width: 80px;
     min-width: 80px; }
+  .card-recipe-create .group-input-right .md-file-input {
+    margin-top: 20px; }
+    .card-recipe-create .group-input-right .md-file-input input[type='file'] {
+      cursor: pointer;
+      height: 100%;
+      opacity: 0;
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: 100%;
+      z-index: 4; }
+    .card-recipe-create .group-input-right .md-file-input .md-textfield-input {
+      min-width: 100%;
+      max-width: 100%; }
+    .card-recipe-create .group-input-right .md-file-input .md-button-file {
+      right: 0;
+      max-width: 32px;
+      min-width: 32px;
+      max-height: 32px;
+      min-height: 32px;
+      padding: 0;
+      margin: 0;
+      -webkit-border-radius: 50%;
+              border-radius: 50%; }
+    .card-recipe-create .group-input-right .md-file-input md-input-container {
+      float: left;
+      padding: 0;
+      width: -webkit-calc(100% - 32px);
+      width: calc(100% - 32px);
+      min-width: -webkit-calc(100% - 32px);
+      min-width: calc(100% - 32px);
+      max-width: -webkit-calc(100% - 32px);
+      max-width: calc(100% - 32px); }
+      .card-recipe-create .group-input-right .md-file-input md-input-container label {
+        margin-left: 5px; }
   .card-recipe-create .md-editor-toolbar {
-    min-height: 96px;
-    float: left;
     -webkit-box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12);
-            box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12); }
+            box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12);
+    float: left;
+    min-height: 96px; }
     .card-recipe-create .md-editor-toolbar .md-editor-toolbar-group {
       float: left;
       color: rgba(0, 0, 0, 0.54); }
@@ -12226,12 +12261,12 @@ md-tooltip {
       -webkit-border-radius: 10%;
               border-radius: 10%; }
       .card-recipe-create .md-editor-toolbar .md-icon-button.active .md-ripple-container {
+        background-color: rgba(0, 0, 0, 0.15);
         -webkit-border-radius: 10%;
                 border-radius: 10%;
         height: 40px;
-        width: 40px;
         margin: 4px;
-        background-color: rgba(0, 0, 0, 0.15); }
+        width: 40px; }
     .card-recipe-create .md-editor-toolbar .material-icons {
       margin: 12px; }
   .card-recipe-create .ta-editor {
@@ -12239,8 +12274,8 @@ md-tooltip {
     min-width: 100%; }
   @media (max-width: 600px) {
     .card-recipe-create .image-recipe-main {
-      width: auto;
-      max-width: 100%; } }
+      max-width: 100%;
+      width: auto; } }
   .card-recipe-create md-input-container.md-input-invalid .md-input {
     border-color: #B22222; }
   .card-recipe-create md-input-container.md-input-invalid md-icon {

@@ -24,11 +24,10 @@ fileDirective.directive('fileThumbnail',function () {
             element.bind('change', function() {
                 var reader = new FileReader();
                 var file = element[0].files[0];
+                $scope.images.name = file.name;
                 reader.onload = (function (theFile) {
                     return function(event) {
                         var image = document.getElementById(attrs.fileThumbnail);
-                        image.width = 260;
-                        image.height = 220;
                         image.src = event.target.result;
                     };
                 })(file);
