@@ -132,10 +132,17 @@ recipeService.factory('RecipeService',
             });
         };
 
-        service.uploadFile = function(file, id, isMain, callbackOk, callbackError) {
+        service.uploadFile = function(file, id, isMain, isMultiple, callbackOk, callbackError) {
             var fd = new FormData();
-            fd.append('file', file);
+            if (file instanceof Array) {
+                for (var i = 0; i < file.length; i++) {
+                    fd.append('file', file[i]);
+                }
+            } else {
+                fd.append('file', file);
+            }
             fd.append('is_main', isMain);
+            fd.append('is_multiple', isMultiple);
             $http.post(
                 service.apiUrl + '/media/' + id,
                 fd,

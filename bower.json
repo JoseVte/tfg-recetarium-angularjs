@@ -31,6 +31,7 @@
     "pnotify": "~3.0.0",
     "fancybox": "~2.1.5",
     "moment": "momentjs#~2.10.6",
-    "textAngular": "~1.4.6"
+    "textAngular": "~1.4.6",
+    "dropzone": "~4.2.0"
   }
 }

@@ -9,6 +9,34 @@ recipeController.constant('DIFF', {
     'name': ['EASY', 'MEDIUM', 'HARD']
 });
 
+recipeController.constant('FILE_DROPZONE', {
+    FileDragOver: function(e, scope) {
+        e.stopPropagation();
+        e.preventDefault();
+        e.target.className = (e.type == "dragover" ? "hover" : "");
+    },
+    FileHandler: function(e, scope, compile) {
+        this.FileDragOver(e);
+        var files = e.target.files || e.dataTransfer.files;
+        var index = 0;
+        for (var i = 0, f; f = files[i]; i++) {
+            index = scope.images.index;
+            this.ParseFile(f, scope, compile, index);
+            scope.images.index++;
+        }
+    },
+    ParseFile: function(file, scope, compile, index) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            $('.images-recipe-gallery').append(compile('<div class="image-removable" id="image-removable-' + index + '">' +
+                '<img class="img-thumbnail" src="' + e.target.result + '" />' +
+                '<md-button ng-click="removeImage(' + index + ')" class="md-fab md-mini md-remove" aria-label="Close"><md-icon class="material-icons">close</md-icon></md-button></div>')(scope));
+        }
+        reader.readAsDataURL(file);
+        scope.images.recipe[index] = file;
+    }
+});
+
 recipeController.controller('RecipeAll',
     ['$scope', '$rootScope', '$location', '$sce', 'RecipeService', 'NotificationProvider',
     function ($scope, $rootScope, $location, $sce, RecipeService, NotificationProvider) {
@@ -136,9 +164,9 @@ recipeController.controller('RecipeShow',
 
 recipeController.controller('RecipeCreate',
     ['$scope', '$rootScope', '$location', 'RecipeService', 'CategoryService', 'TagService',
-    'NotificationProvider', 'DIFF', '$timeout',
+    'NotificationProvider', 'DIFF', '$timeout', 'FILE_DROPZONE', '$compile',
     function ($scope, $rootScope, $location, RecipeService, CategoryService, TagService,
-        NotificationProvider, DIFF, $timeout) {
+        NotificationProvider, DIFF, $timeout, FILE_DROPZONE, $compile) {
         $rootScope.headerTitle = 'Nueva receta';
         $rootScope.errorMsg = false;
         $rootScope.progressBarActivated = false;
@@ -159,9 +187,11 @@ recipeController.controller('RecipeCreate',
             duration: new Date(0, 0, 0, 0, 0, 0),
             tags: []
         };
-        $scope.images = {};
+        $scope.images = {
+            recipe: [],
+            index: 0,
+        };
         $scope.imagesLink = {};
-        $scope.thumbnail = $scope.progressBar = new Array();
 
         $scope.$watch(function() {
             return $scope.recipe.newIngredient ?
@@ -297,11 +327,41 @@ recipeController.controller('RecipeCreate',
             RecipeService.create(recipeObj, function (response) {
                 var mainFile = $scope.images.main;
                 var slug = response.data.slug;
+                var recipeId = response.data.id;
                 $rootScope.headerTitle = 'Subiendo imagenes';
-                RecipeService.uploadFile(mainFile, response.data.id, true,
+                RecipeService.uploadFile(mainFile, recipeId, true, false,
                 function(response) {
-                    $rootScope.progressBarActivated = false;
-                    $location.path('/recipes/' + slug);
+                    RecipeService.uploadFile($scope.images.recipe, recipeId, false, true,
+                    function(response) {
+                        $rootScope.progressBarActivated = false;
+                        $location.path('/recipes/' + slug);
+                    }, function (response) {
+                        if (response.status == 400) {
+                            $scope.error = {
+                                icon: 'error_outline',
+                                title: 'Datos incorrectos',
+                                msg: response.data
+                            }
+                        } else {
+                            NotificationProvider.notify({
+                                title: 'Un error ha ocurrido',
+                                text: 'Ha ocurrido un error mientras se guardaban las imagenes. Por favor, intentelo mas tarde.',
+                                type: 'error',
+                                addclass: 'custom-error-notify',
+                                icon: 'material-icons md-light',
+                                styling: 'fontawesome'
+                            });
+                            $('.ui-pnotify-icon .material-icons').html('warning');
+                            $scope.error = {
+                                icon: 'error_outline',
+                                title: 'Algo ha ido mal',
+                                msg: 'Ha ocurrido un error mientras se guardaban las imagenes.'
+                            }
+                        }
+                        $rootScope.errorMsg = true;
+                        $rootScope.progressBarActivated = false;
+                        $rootScope.headerTitle = 'Nueva receta';
+                    })
                 }, function (response) {
                     if (response.status == 400) {
                         $scope.error = {
@@ -357,5 +417,28 @@ recipeController.controller('RecipeCreate',
                 $rootScope.headerTitle = 'Nueva receta';
             });
         };
+
+        $scope.removeImage = function(index) {
+            $('#image-removable-' + index).exists(function () {
+                $('#image-removable-' + index).remove();
+                $scope.images.recipe.splice(index, 1);
+            });
+        }
+
+        $scope.$on('$viewContentLoaded', function() {
+            if (window.File && window.FileList && window.FileReader) {
+                var files = document.getElementById('files');
+                var filedrag = document.getElementById('filedrag');
+
+                files.addEventListener("change", function(e) { FILE_DROPZONE.FileHandler(e, $scope, $compile); }, false);
+                var xhr = new XMLHttpRequest();
+                if (xhr.upload) {
+                    filedrag.addEventListener("dragover", function(e) { FILE_DROPZONE.FileDragOver(e, $scope); }, false);
+                    filedrag.addEventListener("dragleave", function(e) { FILE_DROPZONE.FileDragOver(e, $scope); }, false);
+                    filedrag.addEventListener("drop", function(e) { FILE_DROPZONE.FileHandler(e, $scope, $compile); }, false);
+                    filedrag.style.display = "block";
+                }
+            }
+        });
     }]
 );

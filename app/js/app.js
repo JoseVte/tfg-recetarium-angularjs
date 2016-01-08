@@ -12,7 +12,7 @@ var recetarium = angular.module('recetariumApp', [
     'textAngular',
     'ui.router',
     // My Javascript
-    'Animations', 'TextEditor', 'NotificationProviders', 'FileDirectives', 
+    'Animations', 'TextEditor', 'NotificationProviders', 'FileDirectives',
     'HomeController',
     'AuthServices', 'AuthController',
     'RecipeServices', 'RecipeFilters', 'RecipeController',
@@ -159,7 +159,32 @@ recetarium.run(function ($rootScope, $location, $http, AuthService, ICONS) {
         $('.input-file-material').exists(function () {
             $(document).on('change', '.input-file-material', function () {
                 $('.md-textfield-input').val(this.files[0].name);
-            })
+            });
+        });
+
+        $('.md-ink-item').exists(function () {
+            $(document).on('click', '.md-ink-item', function (e) {
+                var $this = $(this);
+                if ($this.find('.md-ink').length == 0) {
+                    $this.prepend('<span class="md-ink"></span>');
+                }
+                var ink = $this.find('.md-ink');
+                ink.removeClass('animate');
+                if (!ink.height() && !ink.width()) {
+                    var d = Math.max($this.outerWidth(), $this.outerHeight());
+                    ink.css({
+                        height: d,
+                        width: d
+                    });
+                }
+
+                var x = e.pageX - $this.offset().left - ink.width() / 2;
+                var y = e.pageY - $this.offset().top - ink.height() / 2;
+                ink.css({
+                    top: y + 'px',
+                    left: x + 'px',
+                }).addClass('animate');
+            });
         });
     });
 });

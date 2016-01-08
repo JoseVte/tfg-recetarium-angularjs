@@ -128,12 +128,6 @@
                 </div>
             </div>
 
-            <div layout="row" layout-padding layout-wrap>
-                <div text-angular ng-model="recipe.steps" class="md-whiteframe-2dp"
-                    ta-toolbar-class="md-editor-toolbar" ta-toolbar-group-class="md-editor-toolbar-group"
-                    ta-toolbar-button-class="md-button md-icon-button" ta-toolbar-button-active-class="active"></div>
-            </div>
-
             <div layout="row" layout-wrap layout-padding>
                 <md-chips ng-model="recipe.tags" md-autocomplete-snap md-require-match="true">
                     <md-autocomplete md-selected-item="selectedTag" md-item-text="tag.text"
@@ -143,6 +137,26 @@
                     </md-autocomplete>
                     <md-chip-template><span>{{ $chip.text }}</span></md-chip-template>
                 </md-chips>
+            </div>
+
+            <div layout="row" layout-padding layout-wrap>
+                <div text-angular ng-model="recipe.steps" class="md-whiteframe-2dp"
+                    ta-toolbar-class="md-editor-toolbar" ta-toolbar-group-class="md-editor-toolbar-group"
+                    ta-toolbar-button-class="md-button md-icon-button" ta-toolbar-button-active-class="active"></div>
+            </div>
+
+            <div layout="row" layout-wrap layout-padding>
+                <div flex layout-align="center" layout="row" layout-wrap>
+                    <div class="images-recipe-input">
+                        <input type="file" name="files[]" id="files"  ng-model="images.recipe"
+                        accept="image/*" multiple="multiple" aria-label="Images">
+                        <label for="files" class="md-ink-item">
+                            <md-icon class="material-icons md-light">file_upload</md-icon> Elige tus imágenes
+                        </label>
+                    </div>
+                    <div id="filedrag">Arrastra y suelta las imágenes aqui</div>
+                    <div class="images-recipe-gallery" layout="row" layout-wrap layout-align="center center" flex></div>
+                </div>
             </div>
 
             <md-card-actions layout="row" layout-align="end">
