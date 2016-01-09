@@ -39,17 +39,18 @@
         }
     }
     md-card-actions {
+        margin: 0;
         height: 132px;
         background-color: white;
         color: $tealBackground;
         .md-button {
             max-height: 42px;
             line-height: 24px;
+            width: 100%;
             &.md-raised.md-auth-button {
                 margin: 12px 0;
                 background-color: $tealBackground;
                 color: white;
-                width: 100%;
                 &:hover, &:focus, &:visited {
                     background-color: $tealBackground;
                 }
@@ -60,7 +61,7 @@
             }
         }
         div.layout-row {
-            padding: 0;
+            padding: 8px 0;
             a {
                 margin: 0;
                 padding: 0;

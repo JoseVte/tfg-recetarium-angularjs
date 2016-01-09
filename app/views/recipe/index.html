@@ -3,8 +3,8 @@
         <md-icon class="material-icons md-dark">search</md-icon>
         <input type="search" ng-model="recipeSearch" placeholder="Buscar..." aria-label="Buscar recetas" />
     </md-input-container>
-    <md-input-container md-no-float class="md-block layout-column layout-align-start-stretch" layout-wrap flex="100"
-        layout-align-gt-md="end center" layout-gt-md="row" flex-gt-md="30">
+    <md-input-container md-no-float layout-wrap flex="100" layout="column"
+        layout-align-gt-md="end center" layout-align="start stretch" layout-gt-md="row" flex-gt-md="30">
         <div class="md-padding">Recetas por página:</div>
         <md-select class="md-padding" ng-model="pagination.size" aria-label="Recetas por página" ng-change="selectSize()">
             <md-option ng-repeat="size in sizes" value="{{ size }}">{{ size }}</md-option>

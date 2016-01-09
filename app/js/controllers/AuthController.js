@@ -20,6 +20,7 @@ authController.controller('Login',
         };
 
         $scope.login = function () {
+            $rootScope.errorMsg = false;
             $rootScope.progressBarActivated = true;
             $scope.setDelay1();
             AuthService.Login($scope.email, $scope.password, !$scope.expiration, function (response) {
@@ -28,24 +29,11 @@ authController.controller('Login',
                 $rootScope.progressBarActivated = false;
                 $location.path('/');
             }, function (response) {
-                $('#customErrorLogin').addClass('hide');
-                $('#customErrorLoginEmail').addClass('hide');
-                $('#customErrorLoginPassword').addClass('hide');
-
-                if (response.status == 401) {
-                    $scope.customErrorLogin = "El email o la contraseña son incorrectos";
-                    $('#customErrorLogin').removeClass('hide');
-                } else if (response.status == 400) {
-                    var email = response.data.email;
-                    if (email) {
-                        $scope.customErrorLoginEmail = email;
-                        $('#customErrorLoginEmail').removeClass('hide');
-                    }
-
-                    var password = response.data.password;
-                    if (password) {
-                        $scope.customErrorLoginPassword = password;
-                        $('#customErrorLoginPassword').removeClass('hide');
+                if (response.status == 400 || response.status == 401) {
+                    $rootScope.error = {
+                        icon: 'error_outline',
+                        title: 'Datos incorrectos',
+                        msg: $.parseError(response.data),
                     }
                 } else {
                     NotificationProvider.notify({
@@ -57,7 +45,13 @@ authController.controller('Login',
                         styling: 'fontawesome',
                     });
                     $('.ui-pnotify-icon .material-icons').html('warning');
+                    $rootScope.error = {
+                        icon: 'error_outline',
+                        title: 'Algo ha ido mal',
+                        msg: 'Ha ocurrido un error mientras se logueaba.'
+                    }
                 }
+                $rootScope.errorMsg = true;
                 $rootScope.progressBarActivated = false;
                 $scope.setDelay2();
             });
@@ -85,6 +79,7 @@ authController.controller('Register',
         };
 
         $scope.register = function () {
+            $rootScope.errorMsg = false;
             $rootScope.progressBarActivated = true;
             $scope.setDelay1();
             var user = {
@@ -101,52 +96,29 @@ authController.controller('Register',
                 $rootScope.progressBarActivated = false;
                 $location.path('/');
             }, function (response) {
-                $('#customErrorRegister').addClass('hide');
-                $('#customErrorRegisterUsername').addClass('hide');
-                $('#customErrorRegisterEmail').addClass('hide');
-                $('#customErrorRegisterPassword').addClass('hide');
-                $('#customErrorRegisterPasswordRepeat').addClass('hide');
-
                 if (response.status == 400) {
-                    var username = response.data.username;
-                    if (username) {
-                        $scope.customErrorRegisterUsername = '';
-                        for (var i = 0; i < username.length; i++) {
-                            $scope.customErrorRegisterUsername += username[i] + '\n'
-                        }
-                        $('#customErrorRegisterUsername').removeClass('hide');
-                    }
-
-                    var email = response.data.email;
-                    if (email) {
-                        $scope.customErrorRegisterEmail = '';
-                        for (var i = 0; i < email.length; i++) {
-                            $scope.customErrorRegisterEmail += email[i] + '\n'
-                        }
-                        $('#customErrorRegisterEmail').removeClass('hide');
-                    }
-
-                    var password = response.data.password;
-                    if (password) {
-                        $scope.customErrorRegisterPassword = '';
-                        for (var i = 0; i < password.length; i++) {
-                            $scope.customErrorRegisterPassword += password[i] + '\n'
-                        }
-                        $('#customErrorRegisterPassword').removeClass('hide');
-                    }
-
-                    var passwordRepeat = response.data.passwordRepeat;
-                    if (passwordRepeat) {
-                        $scope.customErrorRegisterPasswordRepeat = '';
-                        for (var i = 0; i < passwordRepeat.length; i++) {
-                            $scope.customErrorRegisterPasswordRepeat += passwordRepeat[i] + '\n'
-                        }
-                        $('#customErrorRegisterPasswordRepeat').removeClass('hide');
+                    $rootScope.error = {
+                        icon: 'error_outline',
+                        title: 'Datos incorrectos',
+                        msg: $.parseError(response.data),
                     }
                 } else {
-                    $scope.customErrorRegister = response.data.error;
-                    $('#customErrorRegister').removeClass('hide');
+                    NotificationProvider.notify({
+                        title: 'Un error ha ocurrido',
+                        text: 'Ha ocurrido un error mientras se registraba. Por favor, intentelo mas tarde.',
+                        type: 'error',
+                        addclass: 'custom-error-notify',
+                        icon: 'material-icons md-light',
+                        styling: 'fontawesome',
+                    });
+                    $('.ui-pnotify-icon .material-icons').html('warning');
+                    $rootScope.error = {
+                        icon: 'error_outline',
+                        title: 'Algo ha ido mal',
+                        msg: 'Ha ocurrido un error mientras se registraba.'
+                    }
                 }
+                $rootScope.errorMsg = true;
                 $rootScope.progressBarActivated = false;
                 $scope.setDelay2();
             });
@@ -155,8 +127,17 @@ authController.controller('Register',
 );
 
 authController.controller('Logout',
-    ['$scope', '$location', 'AuthService',
-    function ($scope,$location, AuthService) {
+    ['$scope', '$location', 'AuthService', 'NotificationProvider',
+    function ($scope,$location, AuthService, NotificationProvider) {
+        var notify = NotificationProvider.notify({
+            title: 'Adios :)',
+            text: 'Gracias por venir. Vuelve pronto.',
+            type: 'success',
+            addclass: 'custom-success-notify',
+            icon: 'material-icons md-light',
+            styling: 'fontawesome',
+        });
+        $('.ui-pnotify-icon .material-icons').html('cake');
         AuthService.ClearCredentials();
         $location.path('/');
     }]

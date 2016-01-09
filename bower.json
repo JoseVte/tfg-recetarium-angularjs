@@ -19,19 +19,19 @@
   "dependencies": {
     "angular": "~1.4.8",
     "angular-ui-router": "~0.2.15",
-    "jquery": "~2.1.4",
+    "jquery": "~2.2.0",
     "angular-route": "~1.4.8",
-    "angular-material": "~0.11.4",
+    "angular-material": "~1.0.1",
     "angular-resource": "~1.4.8",
     "angular-sanitize": "~1.4.8",
     "angular-messages": "~1.4.8",
-    "material-design-icons": "~2.1.1",
+    "material-design-icons": "~2.1.3",
     "angular-environment": "~1.0.3",
-    "animate.css": "~3.5.0",
+    "animate.css": "~3.5.1",
     "pnotify": "~3.0.0",
     "fancybox": "~2.1.5",
-    "moment": "momentjs#~2.10.6",
     "textAngular": "~1.4.6",
-    "dropzone": "~4.2.0"
+    "dropzone": "~4.2.0",
+    "moment": "2.11.1"
   }
 }

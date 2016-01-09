@@ -1,27 +1,21 @@
-<md-content class="md-padding" layout="row" layout-wrap layout-align="space-around start">
-    <div class="container" ng-show="errorMsg">
-        <h2><i class="material-icons md-dark">{{ error.icon }}</i> {{ error.title}}</h2>
-        <div>{{ error.msg }}</div>
-    </div>
-</md-content>
-
 <md-content class="md-padding" layout="column" layout-wrap layout-align="center center" layout-align-gt-md="center start">
-    <form name="newRecipe" role="form">
+    <form name="newRecipe" novalidate>
         <md-card flex class="card-recipe-create">
             <md-card-title>
                 <md-card-title-text>
+                    <em flex>Los campos con * son <u>requeridos</u>.</em>
                     <md-input-container>
-                        <label>Título</label>
+                        <label>* Título</label>
                         <input required type="text" name="title" class="md-headline" ng-model="recipe.title" aria-label="title">
-                        <div ng-messages="newRecipe.title.$error">
+                        <div ng-messages="newRecipe.title.$error" md-auto-hide="false">
                             <div ng-message="required">El título de la receta es obligatorio.</div>
                         </div>
                     </md-input-container>
-                    <md-input-container class="md-icon-right md-block">
-                        <label>Slug</label>
+                    <md-input-container class="md-icon-right md-block md-has-no-icon-left">
+                        <label>* Slug</label>
                         <input required type="text" name="slug" class="md-subhead" ng-model="recipe.slug" aria-label="slug">
                         <md-icon ng-class="{loaderIcon:loadingSlug}" class="material-icons">{{ validSlugIcon }}</md-icon>
-                        <div ng-messages="newRecipe.slug.$error">
+                        <div ng-messages="newRecipe.slug.$error" md-auto-hide="false">
                             <div ng-message="required">El slug de la receta es obligatorio.</div>
                             <div ng-message="validSlug">El slug ya existe.</div>
                         </div>
@@ -36,12 +30,12 @@
                     class="md-padding" layout="row" layout-wrap layout-align="center center"
                     layout-align-gt-sm="end start">
                     <div layout="column" layout-wrap flex class="group-input-right">
-                        <img src="https://placeholdit.imgix.net/~text?txtsize=61&txt=Foto%20principal&w=400&h=350"
+                        <img src="https://placeholdit.imgix.net/~text?txtsize=61&txt=Foto%20principal&w=900&h=500"
                         id="image-main" class="image-recipe-main" />
                         <div class="md-file-input">
                             <md-input-container>
-                                <input type="text" name="mainImageName" required readonly placeholder="Foto principal" class="md-textfield-input" ng-model="images.name">
-                                <div ng-messages="newRecipe.mainImageName.$error">
+                                <input type="text" ng-required="true" name="mainImageName" required readonly placeholder="* Foto principal" class="md-textfield-input" ng-model="images.name">
+                                <div ng-messages="newRecipe.mainImageName.$error" md-auto-hide="false">
                                     <div ng-message="required">La imagen principal de la receta es obligatoria.</div>
                                 </div>
                             </md-input-container>
@@ -52,27 +46,30 @@
                             </div>
                         </div>
                         <md-content flex class="md-padding">
-                            <md-input-container>
+                            <md-input-container class="md-has-no-icon-left">
                                 <h4 layout="row" layout-wrap layout-align="center center">
-                                    <span flex><md-icon class="material-icons">timelapse</md-icon> Duración:</span>
-                                    <input required flex type="time" ng-model="recipe.duration" str-to-time aria-label="duration"/>
+                                    <span flex><md-icon class="material-icons">timelapse</md-icon> * Duración (H:M):</span>
+                                    <input required flex type="time" min="00:01:00" name="duration" ng-model="recipe.duration" str-to-time aria-label="duration"/>
                                 </h4>
+                                <div ng-messages="newRecipe.duration.$error" md-auto-hide="false">
+                                    <div ng-message="min">La duración debe de ser de mas de 1 min.</div>
+                                </div>
                             </md-input-container>
-                            <md-input-container>
+                            <md-input-container class="md-has-no-icon-left">
                                 <h4 layout="row" layout-wrap layout-align="center center">
                                     <span flex><md-icon class="material-icons">people</md-icon> Núm de personas:</span>
                                     <input flex type="number" step="1" min="0" ng-model="recipe.num_persons" value="0" aria-label="num persons"/>
                                 </h4>
                             </md-input-container>
-                            <md-input-container>
+                            <md-input-container  class="md-has-no-icon-left">
                                 <h4 layout="row" layout-wrap layout-align="center center">
-                                    <span flex="100" flex-gt-md="60"><md-icon class="material-icons" ng-class="getDifficulty(recipe.difficulty)">stars</md-icon> Dificultad:</span>
+                                    <span flex="100" flex-gt-md="60"><md-icon class="material-icons" ng-class="getDifficulty(recipe.difficulty)">stars</md-icon> * Dificultad:</span>
                                     <md-select flex="100" flex-gt-md="40" flex ng-model="recipe.difficulty" aria-label="difficulty">
                                         <md-option ng-value="diff" ng-repeat="diff in diffs">{{ diff | humanized }}</md-option>
                                     </md-select>
                                 </h4>
                             </md-input-container>
-                            <md-input-container>
+                            <md-input-container class="md-has-no-icon-left">
                                 <h4 layout="row" layout-wrap layout-align="center center">
                                     <span flex="100" flex-gt-md="40"><md-icon class="material-icons">bookmark</md-icon> Categoría:</span>
                                     <md-select flex="100" flex-gt-md="60" ng-model="recipe.category_id" aria-label="Category" placeholder="Selecciona una categoría"md-on-open="loadCategories()">
@@ -99,7 +96,7 @@
                                     <md-input-container class="md-block" flex="70" flex-gt-sm>
                                         <label>Nombre</label>
                                         <input required type="text" name="ingredientName{{$index}}" ng-model="ingredient.name" />
-                                        <div ng-messages="newRecipe['ingredientName' + $index].$error">
+                                        <div ng-messages="newRecipe['ingredientName' + $index].$error" md-auto-hide="false">
                                             <div ng-message="required">El nombre del ingrediente es necesario.</div>
                                         </div>
                                     </md-input-container>
@@ -116,10 +113,10 @@
                                 <div class="ingredient" flex layout="row">
                                     <md-input-container class="md-block" flex="70" flex-gt-sm>
                                         <label>Nombre</label>
-                                        <input type="text" name="newIngredientName" ng-model="recipe.newIngredient.name" />
-                                        <div ng-messages="newRecipe.newIngredientName.$error">
-                                            <div ng-message="customRequired">El nombre del ingrediente es necesario.</div>
-                                        </div>
+                                        <input type="text" name="newIngredientName" ng-model="recipe.newIngredient.name" customRequired />
+                                        <ng-messages for="newRecipe.newIngredientName.$error" md-auto-hide="false">
+                                            <ng-message when="customRequired">El nombre del ingrediente es necesario.</ng-message>
+                                        </ng-messages>
                                     </md-input-container>
                                     <md-input-container flex>
                                         <label>Cantidad</label>
@@ -133,13 +130,22 @@
             </div>
 
             <div layout="row" layout-wrap layout-padding>
-                <md-chips ng-model="recipe.tags" md-autocomplete-snap md-require-match="true">
-                    <md-autocomplete md-selected-item="selectedTag" md-item-text="tag.text"
-                        md-search-text="searchText" md-items="tag in tagSearch(searchText)"
+                <md-chips ng-model="recipe.chipTags"
+                    md-autocomplete-snap
+                    readonly="false"
+                    md-transform-chip="transformChip($chip)"
+                    md-require-match="false">
+                    <md-autocomplete
+                        md-selected-item="selectedTag"
+                        md-item-text="tag.text"
+                        md-search-text="searchText"
+                        md-items="tag in tagSearch(searchText)"
                         placeholder="Busca una etiqueta">
                         <span md-highlight-text="searchText">{{ tag.text }}</span>
                     </md-autocomplete>
-                    <md-chip-template><span>{{ $chip.text }}</span></md-chip-template>
+                    <md-chip-template>
+                        <span>{{ $chip.text }}<span ng-if="$chip.type"> (<em>{{ $chip.type }}</em>)</span></span>
+                    </md-chip-template>
                 </md-chips>
             </div>
 
@@ -164,7 +170,7 @@
             </div>
 
             <md-card-actions layout="row" layout-align="end">
-                <md-button class="md-primary md-raised" ng-click="create()" ng-disabled="newRecipe.$invalid || progressBarActivated">crear la receta</md-button>
+                <md-button class="md-primary md-raised" ng-click="create()" ng-disabled="progressBarActivated">crear la receta</md-button>
             </md-card-actions>
         </md-card>
     </form>

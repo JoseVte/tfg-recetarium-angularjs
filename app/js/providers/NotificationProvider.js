@@ -42,7 +42,10 @@ notificationProvider.provider('NotificationProvider',
                         swipe_dismiss: true,
                         styling: true
                     };
-                    return new PNotify(hash);
+                    var notification = new PNotify(hash);
+                    notification.get().click(function () {
+                        notification.remove();
+                    })
                 }
             };
         }];

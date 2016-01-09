@@ -2,7 +2,7 @@
 var gulp   = require('gulp'),
 gutil      = require('gulp-util'),
 sass       = require('gulp-sass'),
-minify     = require('gulp-minify-css'),
+cssnano    = require('gulp-cssnano'),
 autoprefix = require('gulp-autoprefixer'),
 notify     = require('gulp-notify'),
 concat     = require('gulp-concat'),
@@ -43,7 +43,7 @@ gulp.task('sass', function() {
     .pipe(autoprefix('last 10 version'))
     .pipe(concat('app.css'))
     .pipe(rename({ suffix: '.min' }))
-    .pipe(gulpif(argv.production, minify()))
+    .pipe(gulpif(argv.production, cssnano()))
     .pipe(gulp.dest(paths.dest.css))
     .pipe(notify({ message: 'CSS minified' }));
 });

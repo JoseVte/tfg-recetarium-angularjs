@@ -222,3 +222,23 @@ $.getArrayId = function(array) {
     }
     return a;
 }
+
+$.parseError = function(error) {
+    var msg = '';
+    if (angular.isArray(error)) {
+        msg += '<ul>';
+        for (var i in error) {
+            msg += '<li>' + $.parseError(error[i]) + '</li>';
+        }
+        msg += '</ul>';
+    } else if (angular.isObject(error)) {
+        for (var i in error) {
+            msg += '<ul>';
+            msg += '<li>' + i + '</li>' + $.parseError(error[i]);
+            msg += '</ul>';
+        }
+    } else {
+        msg += error;
+    }
+    return msg;
+}

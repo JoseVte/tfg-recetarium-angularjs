@@ -120,6 +120,14 @@ recipeService.factory('RecipeService',
             return promise;
         };
 
+        service.getNewTags = function(array) {
+            var a = [];
+            for (var el in array) {
+                if (array[el].type) a.push(array[el].type);
+            }
+            return a;
+        }
+
         service.create = function(recipe, callbackOk, callbackError) {
             $http.post(
                 service.apiUrl + '/recipes',

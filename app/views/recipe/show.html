@@ -2,10 +2,6 @@
     <div class="container" ng-show="progressBarActivated">
         <md-progress-circular md-mode="indeterminate" class="{{ loaderTheme }}" md-diameter="70"></md-progress-circular>
     </div>
-    <div class="container" ng-show="errorMsg">
-        <h2><i class="material-icons md-dark">{{ error.icon }}</i> {{ error.title}}</h2>
-        <div>{{ error.msg }}</div>
-    </div>
 </md-content>
 
 <md-content class="md-padding" layout="column" layout-wrap layout-align="center start" ng-hide="progressBarActivated || errorMsg">
@@ -60,7 +56,7 @@
             </md-card-title-text>
         </md-card-title>
         <md-card-content>
-            <div ng-bind-html="recipe.steps"></div>
+            <div ng-bind-html="description(recipe.steps)"></div>
         </md-card-content>
         <md-card-title>
             <md-card-title-text>

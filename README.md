@@ -56,6 +56,9 @@ http-server -a localhost -p 8000
     - Añadir y quitar ingredientes
     - Añadir a una categoria existente
     - Añadir y quitar imágenes
+    - Añadir y quitar tags (crear nuevas si no existen)
+- Actualización de las librerias
+- Fix algunos bugs
 
 ###### [![0.1.2-hotfix](/app/doc/release.png) 0.1.2-hotfix](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.1.2-hotfix)
 

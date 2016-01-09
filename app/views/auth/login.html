@@ -16,32 +16,29 @@
                                 <div ng-message="required">
                                     Your email must be between 10 and 100 characters long and look like an e-mail address.
                                 </div>
-                                <div class="custom-error hide" id="customErrorLoginEmail">{{ customErrorLoginEmail }}</div>
                             </div>
-                            <div class="custom-error hide" id="customErrorLogin">{{ customErrorLogin }}</div>
                         </md-input-container>
                         <md-input-container class="md-block">
                             <label>Password</label>
                             <input type="password" name="password" ng-model="password" required>
                             <div ng-messages="form.password.$error" role="alert" multiple>
-                                <div ng-message="required">
-                                    This field is obligatory
-                                </div>
-                                <div class="custom-error hide" id="customErrorLoginPassword">{{ customErrorLoginPassword }}</div>
+                                <div ng-message="required">Este campo es obligatorio.</div>
                             </div>
                         </md-input-container>
                         <md-checkbox ng-model="expiration" arial-label="Expiration">Recordar sesión</md-checkbox>
                     </md-content>
                 </form>
             </md-card-content>
-            <md-card-actions layout="column" class="layout-align-space-around-stretch" layout-padding>
-                <md-button flex class="md-raised md-auth-button zoomAnimation" ng-click="login()" ng-disabled="form.$invalid" ng-hide="progressBarActivated || delay2">Login</md-button>
-                <div flex layout="row" layout-align="space-around center">
-                    <md-button flex class="zoomAnimation" ng-href="register" ng-hide="progressBarActivated || delay2">¿No tienes cuenta?<br>Registrate</md-button>
-                    <md-button flex class="zoomAnimation" ng-href="reset/password" ng-hide="progressBarActivated || delay2">¿Has olvidado<br>tu contraseña?</md-button>
-                </div>
-                <div flex layout="row" layout-align="center center">
-                    <md-progress-circular md-mode="indeterminate" ng-show="progressBarActivated && !delay1" class="md-auth zoomAnimation" md-diameter="36"></md-progress-circular>
+            <md-card-actions layout="column" layout-align="space-around stretch" layout-padding>
+                <div layout="column" layout-align="space-around stretch" layout-wrap>
+                    <md-button flex class="md-raised md-auth-button zoomAnimation" ng-click="login()" ng-disabled="form.$invalid" ng-hide="progressBarActivated || delay2">Login</md-button>
+                    <div flex layout="row" layout-align="space-between center" layout-padding layout-wrap>
+                        <md-button flex class="zoomAnimation" ng-href="register" ng-hide="progressBarActivated || delay2">¿No tienes cuenta?<br>Registrate</md-button>
+                        <md-button flex class="zoomAnimation" ng-href="reset/password" ng-hide="progressBarActivated || delay2">¿Has olvidado<br>tu contraseña?</md-button>
+                    </div>
+                    <div flex layout="row" layout-align="center center">
+                        <md-progress-circular md-mode="indeterminate" ng-show="progressBarActivated && !delay1" class="md-auth zoomAnimation" md-diameter="100"></md-progress-circular>
+                    </div>
                 </div>
             </md-card-actions>
         </md-card>

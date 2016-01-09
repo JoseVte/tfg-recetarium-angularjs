@@ -22,47 +22,40 @@ body {
         background-color: transparent;
     }
 }
-md-card md-card-title {
-    padding: 24px 16px 16px;
-    display: -webkit-flex;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-flex: 1;
-    -ms-flex: 1;
-    flex: 1;
-    -webkit-flex-direction: row;
-    -ms-flex-direction: row;
-    flex-direction: row;
+md-card md-card-title md-card-title-text md-input-container {
+    margin-top: 15px;
+    margin-bottom: 0px;
 }
-md-card md-card-title md-card-title-text {
-    -webkit-flex: 1;
-    -ms-flex: 1;
-    flex: 1;
-    -webkit-flex-direction: column;
-    -ms-flex-direction: column;
-    flex-direction: column;
-    display: -webkit-flex;
-    display: -ms-flexbox;
-    display: flex;
+md-input-container.md-has-no-icon-left {
+    padding-left: 0;
+    label {
+        left:auto;
+    }
 }
-.ui-pnotify.custom-error-notify .ui-pnotify-container {
-    background-color: $errorColor !important;
-    background-image: none !important;
-    border: none !important;
-}
-.ui-pnotify.custom-error-notify .ui-pnotify-title,
-.ui-pnotify.custom-error-notify .ui-pnotify-text {
-    font-size: 10pt !important;
-    color: white !important;
-    padding-left: 40px !important;
-    line-height: 1 !important;
-    text-rendering: geometricPrecision !important;
-}
-.ui-pnotify.custom-error-notify .ui-pnotify-title {
-    font-weight: bold;
-}
-.ui-pnotify.custom-error-notify .ui-pnotify-icon {
-    float: left;
+
+//*** Custom notification ***//
+@each $type, $color in (error, $errorColor), (success, $successColor) {
+    .ui-pnotify{
+        &.custom-#{$type}-notify {
+            background-color: $color !important;
+            background-image: none !important;
+            border: none !important;
+            .ui-pnotify-title,
+            .ui-pnotify-text {
+                font-size: 10pt !important;
+                color: white !important;
+                padding-left: 40px !important;
+                line-height: 1 !important;
+                text-rendering: geometricPrecision !important;
+            }
+            .ui-pnotify-title {
+                font-weight: bold;
+            }
+            .ui-pnotify-icon {
+                float: left;
+            }
+        }
+    }
 }
 
 //*** Custom Themes ***//

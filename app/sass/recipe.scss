@@ -90,7 +90,9 @@
             overflow: inherit;
         }
         md-input-container {
+            margin: 0;
             padding-bottom: 2px;
+            width: 100%;
             h4 {
                 margin: 5px 0;
             }
@@ -156,18 +158,16 @@
         }
         .md-icon-button {
             border-radius: 10%;
+            padding: 8px;
+            margin: 4px;
             &.active {
                 .md-ripple-container{
                     background-color: rgba(0, 0, 0, 0.15);
                     border-radius: 10%;
                     height: 40px;
-                    margin: 4px;
                     width: 40px;
                 }
             }
-        }
-        .material-icons {
-            margin: 12px;
         }
     }
     .ta-editor {
@@ -180,12 +180,15 @@
             width: auto;
         }
     }
-    md-input-container.md-input-invalid {
-        .md-input {
-            border-color: $errorColor;
-        }
-        md-icon {
-            color: $errorColor;
+    md-input-container{
+        margin-bottom: 0;
+        &.md-input-invalid {
+            .md-input {
+                border-color: $errorColor;
+            }
+            md-icon {
+                color: $errorColor;
+            }
         }
     }
     md-input-container:not(md-input-invalid).md-input-focused {
