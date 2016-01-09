@@ -52,9 +52,10 @@ http-server -a localhost -p 8000
 
 - Crear una receta
     - Editor WYSIWYG
-    - Slug automático
+    - Slug automático y checkeo de existencia
     - Añadir y quitar ingredientes
     - Añadir a una categoria existente
+    - Añadir y quitar imágenes
 
 ###### [![0.1.2-hotfix](/app/doc/release.png) 0.1.2-hotfix](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.1.2-hotfix)
 
