@@ -16,11 +16,11 @@ recipeFilter.filter('humanized', function() {
     return function(input) {
         switch (input) {
             case 'EASY':
-                return 'fácil';
+                return 'Fácil';
             case 'MEDIUM':
-                return 'media';
+                return 'Media';
             case 'HARD':
-                return 'difícil';
+                return 'Difícil';
             default:
                 return '';
         }

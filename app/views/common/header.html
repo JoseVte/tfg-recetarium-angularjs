@@ -3,8 +3,11 @@
 
     <md-toolbar layout="row" flex class="md-whiteframe-z1" md-scroll-shrink>
         <div class="md-toolbar-tools">
-            <button type="button" ng-click="toggleLeft()" aria-label="Toogle menu" class="menuBtn">
+            <button ng-if="!HasBack" type="button" ng-click="toggleLeft()" aria-label="Toogle menu" class="menuBtn">
                 <i class="material-icons md-light">menu</i>
+            </button>
+            <button ng-if="HasBack" type="button" ng-click="back()" aria-label="Toogle menu" class="menuBtn">
+                <i class="material-icons md-light">arrow_back</i>
             </button>
             <h1 layout-margin-gt-sm="center" ng-class="{'loading': progressBarActivated}">{{ headerTitle }}</h1>
             <span flex></span>

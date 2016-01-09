@@ -48,7 +48,19 @@ http-server -a localhost -p 8000
 
 ## Changelog
 
-#### [![0.1.2-hotfix](/app/doc/rocket-blue.png) 0.1.2-hotfix](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.1.2-hotfix)
+#### [![0.1.3](/app/doc/rocket-blue.png) 0.1.3](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.1.3)
+
+- Crear una receta
+    - Editor WYSIWYG
+    - Slug automático y checkeo de existencia
+    - Añadir y quitar ingredientes
+    - Añadir a una categoria existente
+    - Añadir y quitar imágenes
+    - Añadir y quitar tags (crear nuevas si no existen)
+- Actualización de las librerias
+- Fix algunos bugs
+
+###### [![0.1.2-hotfix](/app/doc/release.png) 0.1.2-hotfix](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.1.2-hotfix)
 
 - Arreglada la rua de Heroku para no mostrar nada: [recetarium-angular.herokuapp.com](https://recetarium-angular.herokuapp.com/)
 

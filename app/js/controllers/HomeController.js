@@ -42,7 +42,7 @@ homeController.controller('Header',
         function buildDelayedToggler(navID) {
             return debounce(function() {
                 $mdSidenav(navID).toggle().then(function () {});
-            }, 200);
+            }, 0);
         };
 
         function closeSideNav(navID) {

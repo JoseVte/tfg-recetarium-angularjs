@@ -1,16 +1,14 @@
 .animation-card-recipes.ng-enter, .animation-card-recipes.ng-move {
-    -webkit-transition: 1s zoomIn all;
-    -moz-transition: 1s zoomIn all;
-    -o-transition: 1s zoomIn all;
-    transition: 1s zoomIn all;
+    -webkit-animation: 1s zoomIn all;
+    -moz-animation: 1s zoomIn all;
+    -o-animation: 1s zoomIn all;
+    animation: 1s zoomIn all;
     opacity: 0;
 }
-
 .animation-card-recipes.ng-enter.ng-enter-active,
 .animation-card-recipes.ng-move.ng-move-active {
     opacity:1;
 }
-
 .animation-card-recipes.ng-leave {
     -webkit-animation: 1s zoomOut;
     -moz-animation: 1s zoomOut;
@@ -18,24 +16,44 @@
     animation: 1s zoomOut;
 }
 
+.zoomAnimation {
+    &.ng-hide-add {
+        -webkit-animation: zoomOut 1s;
+        -moz-animation: zoomOut 1s;
+        -o-animation: zoomOut 1s;
+        animation: zoomOut 1s;
+    }
+    &.ng-hide-remove {
+        -webkit-animation: zoomIn 1s;
+        -moz-animation: zoomIn 1s;
+        -o-animation: zoomIn 1s;
+        animation: zoomIn 1s;
+        opacity: 0;
+    }
+}
+
 @keyframes zoomIn {
     from { opacity: 0; transform: scale3d(.3, .3, .3); }
     50% { opacity: 1; }
+    to { opacity: 1; }
 }
 
 @-webkit-keyframes zoomIn {
     from { opacity: 0; transform: scale3d(.3, .3, .3); }
     50% { opacity: 1; }
+    to { opacity: 1; }
 }
 
 @-moz-keyframes zoomIn {
     from { opacity: 0; transform: scale3d(.3, .3, .3); }
     50% { opacity: 1; }
+    to { opacity: 1; }
 }
 
 @-o-keyframes zoomIn {
     from { opacity: 0; transform: scale3d(.3, .3, .3); }
     50% { opacity: 1; }
+    to { opacity: 1; }
 }
 
 @keyframes zoomOut {
@@ -166,5 +184,47 @@
         text-shadow:
         .25em 0 0 white,
         .5em 0 0 white;
+    }
+}
+
+.loaderIcon {
+    -webkit-animation: rotation 1s infinite linear;
+    animation: rotation 1s infinite linear;
+}
+@-webkit-keyframes rotation {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+@keyframes rotation {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+.md-ink {
+    display: block;
+    position:absolute;
+    background: hsl(180, 40%, 80%);
+    border-radius: 100%;
+    transform: scale(0);
+    &.animate {
+        animation: ripple 0.65s linear;
+    }
+}
+@keyframes ripple {
+    100% {
+        opacity: 0;
+        transform: scale(2,5);
     }
 }

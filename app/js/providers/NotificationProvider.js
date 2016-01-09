@@ -38,7 +38,14 @@ notificationProvider.provider('NotificationProvider',
                     return this.notify(hash);
                 },
                 notify: function(hash) {
-                    return new PNotify(hash);
+                    hash.mobile = {
+                        swipe_dismiss: true,
+                        styling: true
+                    };
+                    var notification = new PNotify(hash);
+                    notification.get().click(function () {
+                        notification.remove();
+                    })
                 }
             };
         }];

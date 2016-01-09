@@ -32,13 +32,21 @@
             <div ng-include="'views/common/header.html'"></div>
         </div>
 
-        <div class="container" ng-class="{'hide': !progressBarActivated}">
-            <md-progress-linear md-mode="indeterminate" class="md-warn"></md-progress-linear>
+        <div class="container" ng-show="progressBarActivated">
+            <md-progress-linear md-mode="indeterminate" class="{{ loaderTheme }}"></md-progress-linear>
         </div>
+
+        <md-content class="md-padding" layout="row" layout-wrap layout-align="space-around start">
+            <div class="container" ng-show="errorMsg">
+                <h2><i class="material-icons md-dark">{{ error.icon }}</i> {{ error.title}}</h2>
+                <div ng-bind-html="error.msg"></div>
+            </div>
+        </md-content>
+
 
         <div layout="row" layout-wrap>
             <div flex-offset-gt-sm="10" flex-offset-sm="5"></div>
-            <div ng-view flex></div>
+            <div ng-view  class="{{ bodyTheme }} flex"></div>
             <div flex-offset-gt-sm="10" flex-offset-sm="5"></div>
         </div>
     </div>
