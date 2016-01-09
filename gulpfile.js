@@ -11,7 +11,8 @@ uglify     = require('gulp-uglify'),
 del        = require('del'),
 argv       = require('yargs').argv,
 gulpif     = require('gulp-if'),
-beautify   = require('gulp-beautify');
+beautify   = require('gulp-beautify'),
+ngAnnotate = require('gulp-ng-annotate');
 
 // Paths variables
 var paths = {
@@ -54,7 +55,8 @@ gulp.task('js', function() {
     ])
     .pipe(concat('app.js'))
     .pipe(rename({ suffix: '.min' }))
-    .pipe(gulpif(argv.production, uglify(), beautify({indentSize: 2})))
+    .pipe(ngAnnotate({single_quotes: true}))
+    .pipe(gulpif(argv.production, uglify({mangle: false}), beautify({indentSize: 2})))
     .pipe(gulp.dest(paths.dest.js))
     .pipe(notify({ message: 'JS minified' }));
 });

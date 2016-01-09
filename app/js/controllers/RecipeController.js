@@ -184,7 +184,7 @@ recipeController.controller('RecipeCreate',
             ingredients: [],
             num_persons: 0,
             difficulty: 'EASY',
-            duration: new Date(0, 0, 0, 0, 0, 0),
+            duration: '00:00',
             tags: []
         };
         $scope.images = {
@@ -321,8 +321,7 @@ recipeController.controller('RecipeCreate',
             $rootScope.headerTitle = 'Creando receta';
             $("html, body").animate({ scrollTop: 0 }, "slow");
             var recipeObj = $scope.recipe;
-            var auxDuration = recipeObj.duration;
-            recipeObj.duration = auxDuration.getHours() + ':' + auxDuration.getMinutes() + ':' + auxDuration.getSeconds();
+            recipeObj.duration += ':00';
             recipeObj.tags = $.getArrayId(recipeObj.tags);
             RecipeService.create(recipeObj, function (response) {
                 var mainFile = $scope.images.main;

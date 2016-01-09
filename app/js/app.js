@@ -12,7 +12,7 @@ var recetarium = angular.module('recetariumApp', [
     'textAngular',
     'ui.router',
     // My Javascript
-    'Animations', 'TextEditor', 'NotificationProviders', 'FileDirectives',
+    'Animations', 'TextEditor', 'NotificationProviders', 'FileDirectives', 'TimeDirectives',
     'HomeController',
     'AuthServices', 'AuthController',
     'RecipeServices', 'RecipeFilters', 'RecipeController',

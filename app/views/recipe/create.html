@@ -5,7 +5,7 @@
     </div>
 </md-content>
 
-<md-content class="md-padding" layout="column" layout-wrap layout-align="center start">
+<md-content class="md-padding" layout="column" layout-wrap layout-align="center center" layout-align-gt-md="center start">
     <form name="newRecipe" role="form">
         <md-card flex class="card-recipe-create">
             <md-card-title>
@@ -36,10 +36,14 @@
                     class="md-padding" layout="row" layout-wrap layout-align="center center"
                     layout-align-gt-sm="end start">
                     <div layout="column" layout-wrap flex class="group-input-right">
-                        <img src="https://placeholdit.imgix.net/~text?txtsize=61&txt=Foto%20principal&w=450&h=350" id="image-main" class="image-recipe-main" />
+                        <img src="https://placeholdit.imgix.net/~text?txtsize=61&txt=Foto%20principal&w=400&h=350"
+                        id="image-main" class="image-recipe-main" />
                         <div class="md-file-input">
                             <md-input-container>
-                                <input type="text" readonly placeholder="Foto principal" class="md-textfield-input" ng-model="images.name">
+                                <input type="text" name="mainImageName" required readonly placeholder="Foto principal" class="md-textfield-input" ng-model="images.name">
+                                <div ng-messages="newRecipe.mainImageName.$error">
+                                    <div ng-message="required">La imagen principal de la receta es obligatoria.</div>
+                                </div>
                             </md-input-container>
                             <div class="md-button-file md-button md-button-icon md-button-file">
                                 <md-icon class="material-icons">attach_file</md-icon>
@@ -51,7 +55,7 @@
                             <md-input-container>
                                 <h4 layout="row" layout-wrap layout-align="center center">
                                     <span flex><md-icon class="material-icons">timelapse</md-icon> Duración:</span>
-                                    <input required flex class="lolliclock-duration" type="time" ng-model="recipe.duration" aria-label="duration"/>
+                                    <input required flex type="time" ng-model="recipe.duration" str-to-time aria-label="duration"/>
                                 </h4>
                             </md-input-container>
                             <md-input-container>
