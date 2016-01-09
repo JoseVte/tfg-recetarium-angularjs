@@ -39,11 +39,11 @@
     </div>
 </md-content>
 <section layout="row" layout-align="center center" layout-wrap>
-    <md-button class="md-icon-button md-mini" ng-disabled="prev == undefined" ng-href="#{{ prev }}">
+    <md-button class="md-icon-button md-mini" ng-disabled="prev == undefined" ng-href="{{ prev }}">
         <md-icon class="material-icons md-dark">chevron_left</md-icon>
     </md-button>
-    <md-button class="md-icon-button md-mini" ng-href="#{{ current }}">{{ pagination.page }}</md-button>
-    <md-button class="md-icon-button md-mini" ng-disabled="next == undefined" ng-href="#{{ next }}">
+    <md-button class="md-icon-button md-mini" ng-href="{{ current }}">{{ pagination.page }}</md-button>
+    <md-button class="md-icon-button md-mini" ng-disabled="next == undefined" ng-href="{{ next }}">
         <md-icon class="material-icons md-dark">chevron_right</md-icon>
     </md-button>
 </section>

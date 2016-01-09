@@ -116,6 +116,8 @@ recetarium.run(function ($rootScope, $location, $http, AuthService, ICONS) {
         $rootScope.IsAuthed = AuthService.IsAuthed();
         $rootScope.IsHome = ($location.path() == '/');
         $rootScope.HasBack = false;
+        $rootScope.errorMsg = false;
+        $rootScope.progressBarActivated = false;
 
         if ($rootScope.lastSearchParams[$location.path()]) {
             $location.search($rootScope.lastSearchParams[$location.path()]);

@@ -4,7 +4,6 @@ authController.controller('Login',
     ['$scope', '$rootScope', '$location', 'AuthService', '$timeout', 'NotificationProvider',
     function ($scope, $rootScope, $location, AuthService, $timeout, NotificationProvider) {
         $rootScope.headerTitle = 'Login';
-        $rootScope.progressBarActivated = false;
 
         $scope.setDelay1 = function(){
             $scope.delay1 = true;
@@ -70,7 +69,6 @@ authController.controller('Register',
     ['$scope', '$rootScope','$location', 'AuthService', '$timeout', 'NotificationProvider',
     function ($scope, $rootScope, $location, AuthService, $timeout, NotificationProvider) {
         $rootScope.headerTitle = 'Registro';
-        $rootScope.progressBarActivated = false;
 
         $scope.setDelay1 = function(){
             $scope.delay1 = true;

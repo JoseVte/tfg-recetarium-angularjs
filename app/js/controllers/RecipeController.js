@@ -103,7 +103,6 @@ recipeController.controller('RecipeShow',
     function ($scope, $rootScope, $location, $routeParams, $sce, RecipeService, NotificationProvider, DIFF) {
         $rootScope.headerTitle = 'Cargando';
         $rootScope.progressBarActivated = true;
-        $rootScope.errorMsg = false;
         $rootScope.HasBack = true;
         $rootScope.back = function () {
             $location.path('/recipes');
@@ -168,8 +167,6 @@ recipeController.controller('RecipeCreate',
     function ($scope, $rootScope, $location, RecipeService, CategoryService, TagService,
         NotificationProvider, DIFF, $timeout, FILE_DROPZONE, $compile) {
         $rootScope.headerTitle = 'Nueva receta';
-        $rootScope.errorMsg = false;
-        $rootScope.progressBarActivated = false;
         $rootScope.HasBack = true;
         $rootScope.back = function () {
             $location.path('/recipes');
