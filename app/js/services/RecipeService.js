@@ -52,12 +52,7 @@ recipeService.factory('RecipeService',
         service.get = function (slug, callbackOk, callbackError) {
             $http.get(
                 service.apiUrl + '/recipes/' + slug,
-                {
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    }
-                }
+                { headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' } }
             ).then(function (response) {
                 callbackOk(response);
             }, function (response) {
@@ -120,6 +115,27 @@ recipeService.factory('RecipeService',
             return promise;
         };
 
+        service.checkSlugWithId = function(slug, id) {
+            var deferredAbort = $q.defer();
+            var request = $http({
+                method: "HEAD",
+                url: service.apiUrl + '/recipes/' + slug + '/check/' + id,
+                timeout: deferredAbort.promise,
+            });
+            var promise = request.then(
+                function(response) { return response; },
+                function(response) { return response; }
+            );
+
+            promise.abort = function() { deferredAbort.resolve(); };
+            promise.finally(function() {
+                promise.abort = angular.noop;
+                deferredAbort = request = promise = null;
+            });
+
+            return promise;
+        };
+
         service.getNewTags = function(array) {
             var a = [];
             for (var el in array) {
@@ -158,6 +174,17 @@ recipeService.factory('RecipeService',
             ).then(function (response) {
                 callbackOk(response);
             }, function (response) {
+                callbackError(response);
+            });
+        };
+
+        service.delete = function(id, callbackOk, callbackError) {
+            $http.delete(
+                service.apiUrl + '/recipes/' + id,
+                { headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' } }
+            ).then(function(response) {
+                callbackOk(response);
+            }, function(response) {
                 callbackError(response);
             });
         };
