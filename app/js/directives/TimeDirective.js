@@ -6,7 +6,7 @@ timeDirective.directive('strToTime', function() {
         link: function ($scope, element, attrs, ngModelController) {
             ngModelController.$parsers.push(function (data) {
                 if (!data) return "";
-                return ('0' + data.getHours().toString()).slice(-2) + ':' + ('0' + data.getMinutes().toString().slice(-2));
+                return ('0' + data.getHours().toString()).slice(-2) + ':' + ('0' + data.getMinutes().toString()).slice(-2);
             });
 
             ngModelController.$formatters.push(function (data) {

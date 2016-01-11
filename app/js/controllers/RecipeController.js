@@ -861,39 +861,44 @@ recipeController.controller('RecipeEdit',
             RecipeService.edit(recipeObj, function (response) {
                 var mainFile = $scope.images.main;
                 var slug = response.data.slug;
-                var recipeId = response.data.id;
-                $rootScope.headerTitle = 'Subiendo imágenes';
-                RecipeService.uploadFile(mainFile, recipeId, true, false,
-                function(response) {
+                if (mainFile) {
+                    var recipeId = response.data.id;
+                    $rootScope.headerTitle = 'Subiendo imágenes';
+                    RecipeService.uploadFile(mainFile, recipeId, true, false,
+                    function(response) {
+                        $rootScope.progressBarActivated = false;
+                        $location.path('/recipes/' + slug);
+                    }, function (response) {
+                        if (response.status == 400) {
+                            $rootScope.error = {
+                                icon: 'error_outline',
+                                title: 'Datos incorrectos',
+                                msg: $.parseError(response.data),
+                            }
+                        } else {
+                            NotificationProvider.notify({
+                                title: 'Un error ha ocurrido',
+                                text: 'Ha ocurrido un error mientras se guardaban las imágenes. Por favor, intentelo más tarde.',
+                                type: 'error',
+                                addclass: 'custom-error-notify',
+                                icon: 'material-icons md-light',
+                                styling: 'fontawesome'
+                            });
+                            $('.ui-pnotify.custom-error-notify .material-icons').html('warning');
+                            $rootScope.error = {
+                                icon: 'error_outline',
+                                title: 'Algo ha ido mal',
+                                msg: 'Ha ocurrido un error mientras se guardaban las imágenes.'
+                            }
+                        }
+                        $rootScope.errorMsg = true;
+                        $rootScope.progressBarActivated = false;
+                        $rootScope.headerTitle = 'Editar receta';
+                    });
+                } else {
                     $rootScope.progressBarActivated = false;
                     $location.path('/recipes/' + slug);
-                }, function (response) {
-                    if (response.status == 400) {
-                        $rootScope.error = {
-                            icon: 'error_outline',
-                            title: 'Datos incorrectos',
-                            msg: $.parseError(response.data),
-                        }
-                    } else {
-                        NotificationProvider.notify({
-                            title: 'Un error ha ocurrido',
-                            text: 'Ha ocurrido un error mientras se guardaban las imágenes. Por favor, intentelo más tarde.',
-                            type: 'error',
-                            addclass: 'custom-error-notify',
-                            icon: 'material-icons md-light',
-                            styling: 'fontawesome'
-                        });
-                        $('.ui-pnotify.custom-error-notify .material-icons').html('warning');
-                        $rootScope.error = {
-                            icon: 'error_outline',
-                            title: 'Algo ha ido mal',
-                            msg: 'Ha ocurrido un error mientras se guardaban las imágenes.'
-                        }
-                    }
-                    $rootScope.errorMsg = true;
-                    $rootScope.progressBarActivated = false;
-                    $rootScope.headerTitle = 'Editar receta';
-                });
+                }
             }, function (response) {
                 if (response.status == 400) {
                     $rootScope.error = {

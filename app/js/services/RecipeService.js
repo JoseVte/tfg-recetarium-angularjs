@@ -156,6 +156,18 @@ recipeService.factory('RecipeService',
             });
         };
 
+        service.edit = function(recipe, callbackOk, callbackError) {
+            $http.put(
+                service.apiUrl + '/recipes/' + recipe.id,
+                recipe,
+                { headers: {'Accept': 'application/json', 'Content-Type': 'application/json'} }
+            ).then(function (response) {
+                callbackOk(response);
+            }, function (response) {
+                callbackError(response);
+            });
+        };
+
         service.uploadFile = function(file, id, isMain, isMultiple, callbackOk, callbackError) {
             var fd = new FormData();
             if (file instanceof Array) {

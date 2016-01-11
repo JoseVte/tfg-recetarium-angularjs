@@ -173,7 +173,7 @@
             </div>
 
             <md-card-actions layout="row" layout-align="end">
-                <md-button class="md-primary md-raised" ng-click="edit()" ng-disabled="progressBarActivated">editar la receta</md-button>
+                <md-button class="md-primary md-raised" ng-click="edit()" ng-disabled="editRecipe.$invalid || progressBarActivated">editar la receta</md-button>
             </md-card-actions>
         </md-card>
     </form>
