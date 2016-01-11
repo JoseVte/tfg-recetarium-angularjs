@@ -17,7 +17,7 @@ var recetarium = angular.module('recetariumApp', [
     'AuthServices', 'AuthController',
     'RecipeServices', 'RecipeFilters', 'RecipeController',
     'CategoryServices', 'CategoryController',
-    'TagServices'
+    'TagServices', 'IngredientServices'
 ]);
 
 // Routes

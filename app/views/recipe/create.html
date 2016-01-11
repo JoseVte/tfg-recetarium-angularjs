@@ -170,7 +170,7 @@
             </div>
 
             <md-card-actions layout="row" layout-align="end">
-                <md-button class="md-primary md-raised" ng-click="create()" ng-disabled="progressBarActivated">crear la receta</md-button>
+                <md-button class="md-primary md-raised" ng-click="create()" ng-disabled="newRecipe.$invalid || progressBarActivated">crear la receta</md-button>
             </md-card-actions>
         </md-card>
     </form>

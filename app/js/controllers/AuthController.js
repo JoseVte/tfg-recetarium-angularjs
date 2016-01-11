@@ -129,7 +129,7 @@ authController.controller('Register',
 authController.controller('Logout',
     ['$scope', '$location', 'AuthService', 'NotificationProvider',
     function ($scope,$location, AuthService, NotificationProvider) {
-        var notify = NotificationProvider.notify({
+        NotificationProvider.notify({
             title: 'Adios :)',
             text: 'Gracias por venir. Vuelve pronto.',
             type: 'success',
