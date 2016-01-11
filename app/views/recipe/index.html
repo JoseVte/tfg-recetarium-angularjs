@@ -13,7 +13,7 @@
 </md-content>
 
 <md-content class="md-padding" layout="row" layout-wrap layout-align="space-around start">
-    <div class="container" ng-show="progressBarActivated">
+    <div class="container" ng-show="progressBarActivated && recipes.length == 0">
         <md-progress-circular md-mode="indeterminate" class="{{ loaderTheme }}" md-diameter="70"></md-progress-circular>
     </div>
     <div class="animation-card-recipes"  ng-hide="progressBarActivated" ng-repeat="recipe in recipes | filter:recipeSearch as result" flex="100" flex-gt-lg="50">
@@ -27,7 +27,7 @@
                 <md-card-title-text>
                     <span class="md-headline">{{ recipe.title }}</span>
                     <span class="md-subhead">
-                        <div ng-bind-html="description(recipe.steps)"></div>
+                        <div data-ng-bind-html="description(recipe.steps)"></div>
                     </span>
                     <md-content layout="row" layout-wrap layout-align="end end">
                         <i class="material-icons">account_circle</i>
@@ -35,6 +35,10 @@
                     </md-content>
                 </md-card-title-text>
             </md-card-title>
+            <md-card-actions layout="row" layout-align="end center" ng-if="isMine(recipe.user)">
+                <md-button aria-label="Edit" class="md-edit" ng-click="edit(recipe.slug, $event)"><md-icon class="material-icons md-dark">edit</md-icon> Editar</md-button>
+                <md-button aria-label="Remove" class="md-remove" ng-click="remove(recipe, $event)"><md-icon class="material-icons md-dark">delete</md-icon> Borrar</md-button>
+            </md-card-actions>
         </md-card>
     </div>
 </md-content>

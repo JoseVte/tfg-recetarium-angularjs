@@ -32,6 +32,14 @@ md-input-container.md-has-no-icon-left {
         left:auto;
     }
 }
+.md-button{
+    &.md-edit,&.md-edit .material-icons {
+        color: green;
+    }
+    &.md-remove,&.md-remove .material-icons {
+        color: red;
+    }
+}
 
 //*** Custom notification ***//
 @each $type, $color in (error, $errorColor), (success, $successColor) {

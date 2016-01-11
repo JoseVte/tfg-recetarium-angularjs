@@ -48,7 +48,12 @@ http-server -a localhost -p 8000
 
 ## Changelog
 
-#### [![0.1.3](/app/doc/rocket-blue.png) 0.1.3](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.1.3)
+#### [![0.1.4](/app/doc/rocket-blue.png) 0.1.4](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.1.4)
+
+- Editar receta
+- Borrar receta
+
+###### [![0.1.3](/app/doc/release.png) 0.1.3](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.1.3)
 
 - Crear una receta
     - Editor WYSIWYG

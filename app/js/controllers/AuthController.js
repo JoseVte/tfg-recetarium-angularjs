@@ -38,13 +38,13 @@ authController.controller('Login',
                 } else {
                     NotificationProvider.notify({
                         title: 'Un error ha ocurrido',
-                        text: 'Ha ocurrido un error mientras se logueaba. Por favor, intentelo mas tarde.',
+                        text: 'Ha ocurrido un error mientras se logueaba. Por favor, intentelo más tarde.',
                         type: 'error',
                         addclass: 'custom-error-notify',
                         icon: 'material-icons md-light',
                         styling: 'fontawesome',
                     });
-                    $('.ui-pnotify-icon .material-icons').html('warning');
+                    $('.ui-pnotify.custom-error-notify .material-icons').html('warning');
                     $rootScope.error = {
                         icon: 'error_outline',
                         title: 'Algo ha ido mal',
@@ -105,13 +105,13 @@ authController.controller('Register',
                 } else {
                     NotificationProvider.notify({
                         title: 'Un error ha ocurrido',
-                        text: 'Ha ocurrido un error mientras se registraba. Por favor, intentelo mas tarde.',
+                        text: 'Ha ocurrido un error mientras se registraba. Por favor, intentelo más tarde.',
                         type: 'error',
                         addclass: 'custom-error-notify',
                         icon: 'material-icons md-light',
                         styling: 'fontawesome',
                     });
-                    $('.ui-pnotify-icon .material-icons').html('warning');
+                    $('.ui-pnotify.custom-error-notify .material-icons').html('warning');
                     $rootScope.error = {
                         icon: 'error_outline',
                         title: 'Algo ha ido mal',
@@ -129,7 +129,7 @@ authController.controller('Register',
 authController.controller('Logout',
     ['$scope', '$location', 'AuthService', 'NotificationProvider',
     function ($scope,$location, AuthService, NotificationProvider) {
-        var notify = NotificationProvider.notify({
+        NotificationProvider.notify({
             title: 'Adios :)',
             text: 'Gracias por venir. Vuelve pronto.',
             type: 'success',
@@ -137,7 +137,7 @@ authController.controller('Logout',
             icon: 'material-icons md-light',
             styling: 'fontawesome',
         });
-        $('.ui-pnotify-icon .material-icons').html('cake');
+        $('.ui-pnotify.custom-success-notify .material-icons').html('cake');
         AuthService.ClearCredentials();
         $location.path('/');
     }]

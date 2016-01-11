@@ -88,6 +88,16 @@ authServices.factory('AuthService',
             return deferred.promise;
         };
 
+        service.IsMyRecipe = function(slug) {
+            var deferred = $q.defer();
+            $http({
+                method: "HEAD",
+                url: service.apiUrl + '/recipes/' + slug + '/mine',
+                timeout: deferred.promise,
+            }).then(function() { deferred.resolve(service.OK); }, function() { deferred.reject(service.UNAUTHORIZED); })
+            return deferred.promise;
+        }
+
         return service;
     }]
 );

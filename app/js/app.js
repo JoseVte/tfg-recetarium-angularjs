@@ -17,7 +17,7 @@ var recetarium = angular.module('recetariumApp', [
     'AuthServices', 'AuthController',
     'RecipeServices', 'RecipeFilters', 'RecipeController',
     'CategoryServices', 'CategoryController',
-    'TagServices'
+    'TagServices', 'IngredientServices'
 ]);
 
 // Routes
@@ -31,6 +31,7 @@ recetarium.config(['$routeProvider', '$locationProvider', function($routeProvide
         .when('/register', { templateUrl: 'views/auth/register.html', controller: 'Register', resolve: { access: ["AuthService", function (AuthService) { return AuthService.IsAnonymous(); }],}})
         .when('/recipes', { templateUrl: 'views/recipe/index.html', controller: 'RecipeAll' })
         .when('/recipes/:slug', { templateUrl: 'views/recipe/show.html', controller: 'RecipeShow' })
+        .when('/recipes/:slug/edit', { templateUrl: 'views/recipe/edit.html', controller: 'RecipeEdit', resolve: { access: ["AuthService", "$route", "$rootScope", function (AuthService, $route, $rootScope) { $rootScope.progressBarActivated = true; return AuthService.IsMyRecipe($route.current.params.slug); }], }})
         .when('/new-recipe', { templateUrl: 'views/recipe/create.html', controller: 'RecipeCreate', resolve: { access: ["AuthService", function (AuthService) { return AuthService.IsAuthenticated(); }],}})
         .when('/unauthorized', { templateUrl: 'views/error/401.html', controller: '' })
         .when('/forbidden', { templateUrl: 'views/error/403.html', controller: '' })
@@ -97,6 +98,8 @@ recetarium.run(function ($rootScope, $location, $http, AuthService, ICONS) {
 
     if (localStorage.globals) {
         $rootScope.globals = JSON.parse(localStorage.globals);
+        // TODO
+        //AuthService.CheckToken($rootScope.globals.token);
     } else {
         $rootScope.globals = {};
     }
@@ -145,6 +148,9 @@ recetarium.run(function ($rootScope, $location, $http, AuthService, ICONS) {
     });
 
     $rootScope.$on('$viewContentLoaded', function () {
+        // Scroll to top
+        $("html, body").animate({ scrollTop: 0 }, "slow");
+
         $('.md-editor-toolbar').exists(function() {
             $('.md-editor-toolbar button').each(function() {
                 var $this = $(this);
@@ -194,7 +200,7 @@ recetarium.run(function ($rootScope, $location, $http, AuthService, ICONS) {
 // Function extras
 String.prototype.trunc = function(n, useWordBoundary){
     var isTooLong = this.length > n,
-    s_ = isTooLong ? this.substr(0,n-1) : this;
+    s_ = isTooLong ? this.substr(0,n-1) : this.substr(0,this.length);
     s_ = (useWordBoundary && isTooLong) ? s_.substr(0,s_.lastIndexOf(' ')) : s_;
     return  isTooLong ? s_ + '&hellip;' : s_;
 };

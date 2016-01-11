@@ -52,12 +52,7 @@ recipeService.factory('RecipeService',
         service.get = function (slug, callbackOk, callbackError) {
             $http.get(
                 service.apiUrl + '/recipes/' + slug,
-                {
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    }
-                }
+                { headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' } }
             ).then(function (response) {
                 callbackOk(response);
             }, function (response) {
@@ -69,13 +64,13 @@ recipeService.factory('RecipeService',
             var mainImage = recipe.media.filter(function(obj) {
                 return service.regexMainImage.exec(obj.filename) !== null;
             })[0];
-            var main = mainImage ? { href: service.apiUrl + '/media/' + recipe.id + '/' + mainImage.filename } : { href: 'http://lorempixel.com/g/480/480/food/Placeholder'};
+            var main = mainImage ? { id: mainImage.id, title: mainImage.filename, href: service.apiUrl + '/media/' + recipe.id + '/' + mainImage.filename } : { href: 'http://lorempixel.com/g/480/480/food/Placeholder'};
             var gallery = [];
 
             for (var i = 0; i < recipe.media.length; i++) {
                 var image = recipe.media[i];
                 var filename = image.filename.substr(0, image.filename.lastIndexOf('.'));
-                if (image !== mainImage) gallery.push({ title: filename, href: service.apiUrl + '/media/' + recipe.id + '/' + image.filename });
+                if (image !== mainImage) gallery.push({ id: image.id, title: filename, href: service.apiUrl + '/media/' + recipe.id + '/' + image.filename });
             }
 
             return {
@@ -120,6 +115,27 @@ recipeService.factory('RecipeService',
             return promise;
         };
 
+        service.checkSlugWithId = function(slug, id) {
+            var deferredAbort = $q.defer();
+            var request = $http({
+                method: "HEAD",
+                url: service.apiUrl + '/recipes/' + slug + '/check/' + id,
+                timeout: deferredAbort.promise,
+            });
+            var promise = request.then(
+                function(response) { return response; },
+                function(response) { return response; }
+            );
+
+            promise.abort = function() { deferredAbort.resolve(); };
+            promise.finally(function() {
+                promise.abort = angular.noop;
+                deferredAbort = request = promise = null;
+            });
+
+            return promise;
+        };
+
         service.getNewTags = function(array) {
             var a = [];
             for (var el in array) {
@@ -131,6 +147,18 @@ recipeService.factory('RecipeService',
         service.create = function(recipe, callbackOk, callbackError) {
             $http.post(
                 service.apiUrl + '/recipes',
+                recipe,
+                { headers: {'Accept': 'application/json', 'Content-Type': 'application/json'} }
+            ).then(function (response) {
+                callbackOk(response);
+            }, function (response) {
+                callbackError(response);
+            });
+        };
+
+        service.edit = function(recipe, callbackOk, callbackError) {
+            $http.put(
+                service.apiUrl + '/recipes/' + recipe.id,
                 recipe,
                 { headers: {'Accept': 'application/json', 'Content-Type': 'application/json'} }
             ).then(function (response) {
@@ -158,6 +186,28 @@ recipeService.factory('RecipeService',
             ).then(function (response) {
                 callbackOk(response);
             }, function (response) {
+                callbackError(response);
+            });
+        };
+
+        service.deleteFile = function(id, callbackOk, callbackError) {
+            $http.delete(
+                service.apiUrl + '/media/' + id,
+                { headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' } }
+            ).then(function (response) {
+                callbackOk(response);
+            }, function (response) {
+                callbackError(response);
+            });
+        }
+
+        service.delete = function(id, callbackOk, callbackError) {
+            $http.delete(
+                service.apiUrl + '/recipes/' + id,
+                { headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' } }
+            ).then(function(response) {
+                callbackOk(response);
+            }, function(response) {
                 callbackError(response);
             });
         };
