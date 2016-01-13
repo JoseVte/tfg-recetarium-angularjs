@@ -1,168 +1,148 @@
 @import "app/bower/angular-material/angular-material.scss";
+@import "variables.scss";
 @import "material-icons.scss";
-
-$tealBackground: #00BFA5;
-$darkOrangeBackground: #DD2C00;
-$bodyBackground: #fafafa;
-$errorColor: #B22222;
+@import "animation.scss";
+@import "header.scss";
+@import "auth.scss";
+@import "recipe.scss";
+@import "lolliclock";
+@import "app/bower/textAngular/dist/textAngular";
+@import "app/bower/pnotify/dist/pnotify";
+@import "app/bower/pnotify/dist/pnotify.buttons";
+@import "app/bower/pnotify/dist/pnotify.mobile";
+@import "app/bower/pnotify/dist/pnotify.history";
+@import "app/bower/pnotify/dist/pnotify.brighttheme";
+@import "app/bower/fancybox/source/jquery.fancybox";
 
 /* app css stylesheet */
-
-html, body {
+html,
+body {
     background-color: $bodyBackground;
     md-content {
-        background-color: rgba(0 ,0 ,0 ,0);
+        background-color: transparent;
+    }
+}
+md-card md-card-title md-card-title-text md-input-container {
+    margin-top: 15px;
+    margin-bottom: 0px;
+}
+md-input-container.md-has-no-icon-left {
+    padding-left: 0;
+    label {
+        left:auto;
+    }
+}
+.md-button{
+    &.md-edit,&.md-edit .material-icons {
+        color: green;
+    }
+    &.md-remove,&.md-remove .material-icons {
+        color: red;
     }
 }
 
-.menuBtn {
-    background-color: transparent;
-    border: none;
-}
-
-[md-header-picture] {
-    position: absolute;
-    top: 0;
-    height: 128px;
-    width: inherit;
-    overflow: hidden;
-    background: url(../img/header-logo.png);
-    background-size: auto 128px;
-    background-repeat: no-repeat;
-    background-position: 50px;
-}
-
-.sidebar-left {
-    padding: 0;
-    a {
-        display: block;
-        padding: 0 16px 0 32px;
-        text-rendering: optimizeLegibility;
-        font-weight: 500;
-        border-radius: 0;
-        color: black;
-        cursor: pointer;
-        align-items: inherit;
-        line-height: 40px;
-        margin: 0;
-        max-height: 40px;
-        overflow: hidden;
-        text-align: left;
-        text-decoration: none;
-        white-space: normal;
-        width: 100%;
+//*** Custom notification ***//
+@each $type, $color in (error, $errorColor), (success, $successColor) {
+    .ui-pnotify{
+        &.custom-#{$type}-notify {
+            background-color: $color !important;
+            background-image: none !important;
+            border: none !important;
+            .ui-pnotify-title,
+            .ui-pnotify-text {
+                font-size: 10pt !important;
+                color: white !important;
+                padding-left: 40px !important;
+                line-height: 1 !important;
+                text-rendering: geometricPrecision !important;
+            }
+            .ui-pnotify-title {
+                font-weight: bold;
+            }
+            .ui-pnotify-icon {
+                float: left;
+            }
+        }
     }
-    .active a {
-        background-color: black;
-        color: white;
-    }
-}
-
-.custom-error {
-    -webkit-font-smoothing: antialiased;
-    color: rgb(244, 67, 54);
-    display: block;
-    font-family: Roboto, 'Helvetica Neue', sans-serif;
-    font-size: 12px;
-    line-height: 14px;
-    overflow-x: hidden;
-    overflow-y: hidden;
-    padding-right: 50px;
-    padding-top: 5px;
-}
-
-md-card md-card-title {
-    padding: 24px 16px 16px;
-    display: -webkit-flex;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-flex: 1;
-    -ms-flex: 1;
-    flex: 1;
-    -webkit-flex-direction: row;
-    -ms-flex-direction: row;
-    flex-direction: row;
-}
-
-md-card md-card-title md-card-title-text {
-    -webkit-flex: 1;
-    -ms-flex: 1;
-    flex: 1;
-    -webkit-flex-direction: column;
-    -ms-flex-direction: column;
-    flex-direction: column;
-    display: -webkit-flex;
-    display: -ms-flexbox;
-    display: flex;
 }
 
 //*** Custom Themes ***//
-
-.header-theme-auth {
-    background-color: $tealBackground;
-    color: white;
-    md-toolbar {
-        background-color: $tealBackground;
+@each $theme, $color, $backgroundDisabled, $colorDisabled in
+(default, $darkOrangeBackground, $darkOrangeBackgroundDisabled, $darkOrangeColorDisabled),
+(auth, $tealBackground, $tealBackgroundDisabled, $tealColorDisabled) {
+    .header-theme-#{$theme} {
+        background-color: $color;
         color: white;
-    }
-    .sidebar-left {
-        a {
-            color: $tealBackground;
-        }
-        .active a {
-            background-color: $tealBackground;
+        md-toolbar {
+            background-color: $color;
             color: white;
         }
-    }
-}
-
-.default-theme-auth {
-    background-color: $darkOrangeBackground;
-    color: white;
-    md-toolbar {
-        background-color: $darkOrangeBackground;
-        color: white;
-    }
-    .sidebar-left {
-        a {
-            color: $darkOrangeBackground;
-        }
-        .active a {
-            background-color: $darkOrangeBackground;
-            color: white;
+        .sidebar-left {
+            hr {
+                border-color: $color;
+            }
+            a {
+                color: $color;
+            }
+            .active a {
+                background-color: $color;
+                color: white;
+            }
         }
     }
-}
-
-.login-card,.register-card {
-    background-color: $tealBackground;
-    color: white;
-    md-content {
-        background-color: $tealBackground;
-        color: white;
-        label {
-            color: rgb(255, 255, 255) !important;
+    md-progress-circular.md-#{$theme} .md-inner {
+        .md-gap {
+            border-top-color: $color;
+            border-bottom-color: $color;
         }
-        input {
-            color: white;
-            border-color: white;
+        .md-left .md-half-circle {
+            border-top-color: $color;
+            border-left-color: $color;
         }
-        md-input-container {
-            &.md-input-invalid {
-                label {
-                    color: $errorColor !important;
-                }
-                input {
-                    border-color: $errorColor;
-                    color: $errorColor !important;
+        .md-right .md-half-circle {
+            border-top-color: $color;
+            border-right-color: $color;
+        }
+    }
+    md-progress-linear.md-#{$theme} .md-bar {
+        background-color: $color;
+    }
+    a.md-button.md-fab.md-fixed-bottom-#{$theme} {
+        bottom:45px;
+        background-color: $color;
+        position:fixed;
+        right:24px;
+        z-index:998;
+        &:hover, &:focus, &:visited, &.active, {
+            @extend .md-button.md-fab.md-fixed-bottom-#{$theme};
+        }
+    }
+    .body-theme-#{$theme} {
+        md-card-actions {
+            background-color: white;
+            color: $color;
+            .md-button {
+                &.md-raised.md-primary {
+                    background-color: $color;
+                    color: white;
+                    &:hover, &:focus, &:visited {
+                        background-color: $color;
+                    }
+                    &[disabled] {
+                        background-color: $backgroundDisabled;
+                        color: $colorDisabled;
+                    }
                 }
             }
-            &.md-input-focused .md-input {
-                border-color: white;
-            }
-
-            [ng-messages] > div {
-                color: $errorColor !important;
+        }
+        md-checkbox {
+            &.md-checked {
+                .md-icon {
+                    background-color: $color;
+                }
+                .md-ink-ripple {
+                    color: $color;
+                }
             }
         }
     }

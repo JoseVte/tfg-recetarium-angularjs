@@ -2,15 +2,17 @@
 var gulp   = require('gulp'),
 gutil      = require('gulp-util'),
 sass       = require('gulp-sass'),
-minify     = require('gulp-minify-css'),
+cssnano    = require('gulp-cssnano'),
 autoprefix = require('gulp-autoprefixer'),
 notify     = require('gulp-notify'),
 concat     = require('gulp-concat'),
 rename     = require('gulp-rename'),
 uglify     = require('gulp-uglify'),
 del        = require('del'),
-argv       = require('yargs'),
-gulpif    = require('gulp-if');
+argv       = require('yargs').argv,
+gulpif     = require('gulp-if'),
+beautify   = require('gulp-beautify'),
+ngAnnotate = require('gulp-ng-annotate');
 
 // Paths variables
 var paths = {
@@ -41,7 +43,7 @@ gulp.task('sass', function() {
     .pipe(autoprefix('last 10 version'))
     .pipe(concat('app.css'))
     .pipe(rename({ suffix: '.min' }))
-    .pipe(gulpif(argv.production, minify()))
+    .pipe(gulpif(argv.production, cssnano()))
     .pipe(gulp.dest(paths.dest.css))
     .pipe(notify({ message: 'CSS minified' }));
 });
@@ -53,7 +55,8 @@ gulp.task('js', function() {
     ])
     .pipe(concat('app.js'))
     .pipe(rename({ suffix: '.min' }))
-    .pipe(gulpif(argv.production, uglify()))
+    .pipe(ngAnnotate({single_quotes: true}))
+    .pipe(gulpif(argv.production, uglify({mangle: false}), beautify({indentSize: 2})))
     .pipe(gulp.dest(paths.dest.js))
     .pipe(notify({ message: 'JS minified' }));
 });
@@ -62,24 +65,40 @@ gulp.task('js', function() {
 gulp.task('lib-js', function() {
     return gulp.src([
         paths.src.bower + '/jquery/dist/jquery.min.js',
+        paths.src.bower + '/fancybox/source/jquery.fancybox.pack.js',
         paths.src.bower + '/angular/angular.min.js',
+        paths.src.bower + '/moment/min/moment-with-locales.min.js',
+        paths.src.bower + '/textAngular/dist/textAngular-rangy.min.js',
+        paths.src.bower + '/textAngular/dist/textAngular-sanitize.min.js',
+        paths.src.bower + '/textAngular/dist/textAngular.min.js',
+        paths.src.bower + '/pnotify/dist/pnotify.js',
+        paths.src.bower + '/pnotify/dist/pnotify.animate.js',
+        paths.src.bower + '/pnotify/dist/pnotify.buttons.js',
+        paths.src.bower + '/pnotify/dist/pnotify.callbacks.js',
+        paths.src.bower + '/pnotify/dist/pnotify.confirm.js',
+        paths.src.bower + '/pnotify/dist/pnotify.desktop.js',
+        paths.src.bower + '/pnotify/dist/pnotify.history.js',
+        paths.src.bower + '/pnotify/dist/pnotify.mobile.js',
+        paths.src.bower + '/pnotify/dist/pnotify.nonblock.js',
+        paths.src.bower + '/angular-environment/dist/angular-environment.min.js',
         paths.src.bower + '/angular-route/angular-route.min.js',
         paths.src.bower + '/angular-resource/angular-resource.min.js',
         paths.src.bower + '/angular-animate/angular-animate.min.js',
         paths.src.bower + '/angular-aria/angular-aria.min.js',
         paths.src.bower + '/angular-material/angular-material.min.js',
-        paths.src.bower + '/angular-sanitize/angular-sanitize.min.js',
         paths.src.bower + '/angular-messages/angular-messages.min.js',
         paths.src.bower + '/angular-ui-router/release/angular-ui-router.min.js'
     ])
+    .pipe(concat('app-lib.js'))
+    .pipe(rename({ suffix: '.min' }))
+    .pipe(gulpif(argv.production, uglify(), beautify({indentSize: 2})))
     .pipe(gulp.dest(paths.dest.jsLib))
-    .pipe(notify({ message: 'Library JS minified: <%= file.relative %>' }));
+    .pipe(notify({ message: 'JS lib minified' }));
 });
 
 // Fonts
 gulp.task('fonts', function() {
     return gulp.src([
-        paths.src.bower + '/font-awesome/fonts/**.*',
         paths.src.bower + '/material-design-icons/iconfont/*.*'
     ]) 
     .pipe(gulp.dest(paths.dest.fonts));
@@ -87,10 +106,16 @@ gulp.task('fonts', function() {
 
 // Imagen
 gulp.task('img', function() {
-    return gulp.src([
+    gulp.src([
         paths.src.img + '/**/*.*'
     ])
     .pipe(gulp.dest(paths.dest.img));
+
+    gulp.src([
+        paths.src.bower + '/fancybox/source/**.png',
+        paths.src.bower + '/fancybox/source/**.gif'
+    ])
+    .pipe(gulp.dest(paths.dest.css));
 });
 
 // Watch folders

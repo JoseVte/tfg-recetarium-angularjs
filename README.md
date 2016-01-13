@@ -48,7 +48,41 @@ http-server -a localhost -p 8000
 
 ## Changelog
 
-#### [![0.0.2](/app/doc/rocket-blue.png) 0.0.2](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.0.2)
+#### [![0.1.4](/app/doc/rocket-blue.png) 0.1.4](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.1.4)
+
+- Editar receta
+- Borrar receta
+
+###### [![0.1.3](/app/doc/release.png) 0.1.3](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.1.3)
+
+- Crear una receta
+    - Editor WYSIWYG
+    - Slug automático y checkeo de existencia
+    - Añadir y quitar ingredientes
+    - Añadir a una categoria existente
+    - Añadir y quitar imágenes
+    - Añadir y quitar tags (crear nuevas si no existen)
+- Actualización de las librerias
+- Fix algunos bugs
+
+###### [![0.1.2-hotfix](/app/doc/release.png) 0.1.2-hotfix](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.1.2-hotfix)
+
+- Arreglada la rua de Heroku para no mostrar nada: [recetarium-angular.herokuapp.com](https://recetarium-angular.herokuapp.com/)
+
+###### [![0.1.2](/app/doc/release.png) 0.1.2](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.1.2)
+
+- Vista en detalle de una receta responsive
+- Chequeo de credenciales desde el servidor
+- Pequeñas animaciones añadidas
+- Todas las librerias minimizadas en un [archivo](/app/assets/js/lib/app.min.js)
+
+###### [![0.1.1](/app/doc/release.png) 0.1.1](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.1.1)
+
+- Lista de recetas responsive
+- Arreglado header en moviles
+- Color a las tabs del navegador mobile
+
+###### [![0.1.0](/app/doc/release.png) 0.1.0](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.1.0)
 
 - Añadida la página de Registro
 

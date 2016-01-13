@@ -6,7 +6,8 @@ homeController.controller('Header',
         $scope.toggleLeft = buildDelayedToggler('left');
 
         $scope.navLinks = [
-            { title: 'Home', url: '/'}
+            { title: 'Home', url: '/'},
+            { title: 'Recetas', url: '/recipes'}
         ];
 
         $scope.navTo = function (ev, url) {
@@ -41,7 +42,7 @@ homeController.controller('Header',
         function buildDelayedToggler(navID) {
             return debounce(function() {
                 $mdSidenav(navID).toggle().then(function () {});
-            }, 200);
+            }, 0);
         };
 
         function closeSideNav(navID) {

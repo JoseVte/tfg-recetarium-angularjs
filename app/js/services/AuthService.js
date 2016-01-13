@@ -1,14 +1,19 @@
 var authServices = angular.module('AuthServices', ['ngResource']);
 
 authServices.factory('AuthService',
-    ['$http', '$rootScope', '$timeout',
-    function ($http, $rootScope, $timeout) {
-        var service = {};
+    ['$http', '$rootScope', '$timeout', 'envService', '$q',
+    function ($http, $rootScope, $timeout, envService, $q) {
+        var service = {
+            apiUrl: envService.read('apiUrl'),
+            OK: 200,
+            UNAUTHORIZED: 401,
+            FORBIDDEN: 403
+        };
 
-        service.Login = function (email, password, callbackOk, callbackError) {
+        service.Login = function (email, password, expiration, callbackOk, callbackError) {
             $http.post(
-                'https://recetarium.herokuapp.com/auth/login',
-                { email: email, password: password },
+                service.apiUrl + '/auth/login',
+                { email: email, password: password, setExpiration: expiration },
                 { headers: {'Accept': 'application/json', 'Content-Type': 'application/json'} }
             ).then(function (response) {
                 callbackOk(response);
@@ -19,7 +24,7 @@ authServices.factory('AuthService',
 
         service.Register = function (user, callbackOk, callbackError) {
             $http.post(
-                'https://recetarium.herokuapp.com/auth/register',
+                service.apiUrl + '/auth/register',
                 user, { headers: {'Accept': 'application/json', 'Content-Type': 'application/json'} }
             ).then(function (response) {
                 callbackOk(response);
@@ -56,12 +61,42 @@ authServices.factory('AuthService',
         service.IsAuthed = function() {
             var token = service.GetJwt();
             if (token) {
+                if (!$rootScope.globals.user.setExpiration) return true;
                 var params = service.ParseJwt(token);
-                return Math.round(new Date().getTime() / 1000) <= params.exp;
+                if (Math.round(new Date().getTime() / 1000) <= params.exp) {
+                    return true;
+                } else {
+                    service.ClearCredentials();
+                    return false;
+                }
             } else {
                 return false;
             }
         };
+
+        service.IsAnonymous = function() {
+            var deferred = $q.defer();
+            if (service.GetJwt() == null) deferred.resolve(service.OK);
+            else deferred.reject(service.FORBIDDEN);
+            return deferred.promise;
+        };
+
+        service.IsAuthenticated = function() {
+            var deferred = $q.defer();
+            if (service.IsAuthed()) deferred.resolve(service.OK);
+            else deferred.reject(service.UNAUTHORIZED);
+            return deferred.promise;
+        };
+
+        service.IsMyRecipe = function(slug) {
+            var deferred = $q.defer();
+            $http({
+                method: "HEAD",
+                url: service.apiUrl + '/recipes/' + slug + '/mine',
+                timeout: deferred.promise,
+            }).then(function() { deferred.resolve(service.OK); }, function() { deferred.reject(service.UNAUTHORIZED); })
+            return deferred.promise;
+        }
 
         return service;
     }]

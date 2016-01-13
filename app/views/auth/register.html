@@ -3,44 +3,39 @@
         <md-card class="register-card md-whiteframe-z3">
             <md-card-title>
                 <md-card-title-text>
-                    <span class="md-headline">Registro</span>
+                    <span class="md-headline">Registrate</span>
                 </md-card-title-text>
             </md-card-title>
             <md-card-content>
                 <form name="form" role="form">
                     <md-content>
+                        <em flex>Los campos con * son <u>requeridos</u>.</em>
                         <md-input-container class="md-block">
-                            <label>Nombre del usuario</label>
+                            <label>* Nombre del usuario</label>
                             <input required type="text" name="username" ng-model="username" />
                             <div ng-messages="form.username.$error" role="alert" multiple>
                                 <div ng-message="required">El nombre de usuario es requerido.</div>
-                                <div class="custom-error hide" id="customErrorRegisterUsername">{{ customErrorRegisterUsername }}</div>
                             </div>
-                            <div class="custom-error hide" id="customErrorRegister">{{ customErrorRegister }}</div>
                         </md-input-container>
                         <md-input-container class="md-block">
-                            <label>Email</label>
+                            <label>* Email</label>
                             <input required type="email" name="email" ng-model="email" />
                             <div ng-messages="form.email.$error" role="alert" multiple>
                                 <div ng-message="required">Tu email debe ser un email valido.</div>
-                                <div class="custom-error hide" id="customErrorRegisterEmail">{{ customErrorRegisterEmail }}</div>
                             </div>
-                            <div class="custom-error hide" id="customErrorRegister">{{ customErrorRegister }}</div>
                         </md-input-container>
                         <md-input-container class="md-block">
-                            <label>Contraseña</label>
+                            <label>* Contraseña</label>
                             <input type="password" name="password" ng-model="password" required>
                             <div ng-messages="form.password.$error" role="alert" multiple>
                                 <div ng-message="required">Este campo es obligatorio.</div>
-                                <div class="custom-error hide" id="customErrorRegisterPassword">{{ customErrorRegisterPassword }}</div>
                             </div>
                         </md-input-container>
                         <md-input-container class="md-block">
-                            <label>Confirmar contraseña</label>
+                            <label>* Confirmar contraseña</label>
                             <input type="password" name="passwordRepeat" ng-model="passwordRepeat" required>
                             <div ng-messages="form.passwordRepeat.$error" role="alert" multiple>
                                 <div ng-message="required">Este campo es obligatorio.</div>
-                                <div class="custom-error hide" id="customErrorRegisterPasswordRepeat">{{ customErrorRegisterPasswordRepeat }}</div>
                             </div>
                         </md-input-container>
                         <md-input-container class="md-block">
@@ -54,8 +49,17 @@
                     </md-content>
                 </form>
             </md-card-content>
-            <md-card-actions layout="column" layout-align="center center">
-                <md-button ng-click="register()" ng-disabled="form.$invalid || dataLoading">Registro</md-button>
+
+            <md-card-actions layout="column" layout-align="space-around stretch" layout-padding>
+                <div layout="column" layout-align="space-around stretch" layout-wrap>
+                    <md-button flex class="md-raised md-auth-button zoomAnimation" ng-click="register()" ng-disabled="form.$invalid" ng-hide="progressBarActivated || delay2">Registro</md-button>
+                    <div flex layout="row" layout-align="space-between center" layout-padding layout-wrap>
+                        <md-button flex class="zoomAnimation md-auth-button" ng-href="/login" ng-hide="progressBarActivated || delay2">¿Tienes cuenta? Logueate</md-button>
+                    </div>
+                    <div flex layout="row" layout-align="center center">
+                        <md-progress-circular md-mode="indeterminate" ng-show="progressBarActivated && !delay1" class="md-auth zoomAnimation" md-diameter="100"></md-progress-circular>
+                    </div>
+                </div>
             </md-card-actions>
         </md-card>
     </div>

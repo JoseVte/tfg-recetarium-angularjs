@@ -4,11 +4,18 @@
 <!--[if IE 8]>         <html lang="en" ng-app="recetariumApp" class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!--> <html lang="en" ng-app="recetariumApp" class="no-js"> <!--<![endif]-->
 <head>
+    <base href="/">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Recetarium</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Chrome, Firefox OS and Opera -->
+    <meta name="theme-color" content="{{ tabColor }}">
+    <!-- Windows Phone -->
+    <meta name="msapplication-navbutton-color" content="{{ tabColor }}">
+    <!-- iOS Safari -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="{{ tabColor }}">
     <link rel="stylesheet" href="assets/css/app.min.css">
     <link rel="icon" type="image/png" href="assets/img/favicon.png">
 </head>
@@ -25,24 +32,25 @@
             <div ng-include="'views/common/header.html'"></div>
         </div>
 
+        <div class="container" ng-show="progressBarActivated">
+            <md-progress-linear md-mode="indeterminate" class="{{ loaderTheme }}"></md-progress-linear>
+        </div>
+
+        <md-content class="md-padding" layout="row" layout-wrap layout-align="space-around start">
+            <div class="container" ng-show="errorMsg">
+                <h2><i class="material-icons md-dark">{{ error.icon }}</i> {{ error.title}}</h2>
+                <div ng-bind-html="error.msg"></div>
+            </div>
+        </md-content>
+
+
         <div layout="row" layout-wrap>
-            <div flex-offset-gt-sm="10"></div>
-            <div ng-view flex></div>
-            <div flex-offset-gt-sm="10"></div>
+            <div flex-offset-gt-sm="10" flex-offset-sm="5"></div>
+            <div ng-view  class="{{ bodyTheme }} flex"></div>
+            <div flex-offset-gt-sm="10" flex-offset-sm="5"></div>
         </div>
     </div>
-
-    <script src="bower/jquery/dist/jquery.min.js"></script>
-    <script src="bower/angular/angular.min.js"></script>
-    <script src="bower/angular-route/angular-route.min.js"></script>
-    <script src="bower/angular-resource/angular-resource.min.js"></script>
-    <script src="bower/angular-animate/angular-animate.min.js"></script>
-    <script src="bower/angular-aria/angular-aria.min.js"></script>
-    <script src="bower/angular-material/angular-material.min.js"></script>
-    <script src="bower/angular-sanitize/angular-sanitize.min.js"></script>
-    <script src="bower/angular-messages/angular-messages.min.js"></script>
-    <script src="bower/angular-ui-router/release/angular-ui-router.min.js"></script>
-
+    <script src="assets/js/lib/app-lib.min.js"></script>
     <script src="assets/js/app.min.js"></script>
 </body>
 </html>

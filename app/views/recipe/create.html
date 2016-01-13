@@ -1,0 +1,177 @@
+<md-content class="md-padding" layout="column" layout-wrap layout-align="center center" layout-align-gt-md="center start">
+    <form name="newRecipe" novalidate>
+        <md-card flex class="card-recipe-create">
+            <md-card-title>
+                <md-card-title-text>
+                    <em flex>Los campos con * son <u>requeridos</u>.</em>
+                    <md-input-container>
+                        <label>* Título</label>
+                        <input required type="text" name="title" class="md-headline" ng-model="recipe.title" aria-label="title">
+                        <div ng-messages="newRecipe.title.$error" md-auto-hide="false">
+                            <div ng-message="required">El título de la receta es obligatorio.</div>
+                        </div>
+                    </md-input-container>
+                    <md-input-container class="md-icon-right md-block md-has-no-icon-left">
+                        <label>* Slug</label>
+                        <input required type="text" name="slug" class="md-subhead" ng-model="recipe.slug" aria-label="slug">
+                        <md-icon ng-class="{loaderIcon:loadingSlug}" class="material-icons">{{ validSlugIcon }}</md-icon>
+                        <div ng-messages="newRecipe.slug.$error" md-auto-hide="false">
+                            <div ng-message="required">El slug de la receta es obligatorio.</div>
+                            <div ng-message="validSlug">El slug ya existe.</div>
+                        </div>
+                    </md-input-container>
+                </md-card-title-text>
+            </md-card-title>
+        </md-card>
+
+        <md-card flex class="card-recipe-create">
+            <div layout="column" layout-wrap layout-gt-sm="row">
+                <div class="md-padding" flex flex-order="1" flex-order-gt-sm="2" flex-gt-sm="50" flex-gt-md="40"
+                    class="md-padding" layout="row" layout-wrap layout-align="center center"
+                    layout-align-gt-sm="end start">
+                    <div layout="column" layout-wrap flex class="group-input-right">
+                        <img src="https://placeholdit.imgix.net/~text?txtsize=61&txt=Foto%20principal&w=900&h=500"
+                        id="image-main" class="image-recipe-main" />
+                        <div class="md-file-input">
+                            <md-input-container>
+                                <input type="text" ng-required="true" name="mainImageName" required readonly placeholder="* Foto principal" class="md-textfield-input" ng-model="images.name">
+                                <div ng-messages="newRecipe.mainImageName.$error" md-auto-hide="false">
+                                    <div ng-message="required">La imagen principal de la receta es obligatoria.</div>
+                                </div>
+                            </md-input-container>
+                            <div class="md-button-file md-button md-button-icon md-button-file">
+                                <md-icon class="material-icons">attach_file</md-icon>
+                                <input type="file" name="mainImage" required accept="image/*" file-model="images.main"
+                                       data-progress-bar-target="main" file-thumbnail="image-main" class="input-file-material" />
+                            </div>
+                        </div>
+                        <md-content flex class="md-padding">
+                            <md-input-container class="md-has-no-icon-left">
+                                <h4 layout="row" layout-wrap layout-align="center center">
+                                    <span flex><md-icon class="material-icons">timelapse</md-icon> * Duración (H:M):</span>
+                                    <input required flex type="time" min="00:01:00" name="duration" ng-model="recipe.duration" str-to-time aria-label="duration"/>
+                                </h4>
+                                <div ng-messages="newRecipe.duration.$error" md-auto-hide="false">
+                                    <div ng-message="min">La duración debe de ser de mas de 1 min.</div>
+                                </div>
+                            </md-input-container>
+                            <md-input-container class="md-has-no-icon-left">
+                                <h4 layout="row" layout-wrap layout-align="center center">
+                                    <span flex><md-icon class="material-icons">people</md-icon> Núm de personas:</span>
+                                    <input flex type="number" step="1" min="0" ng-model="recipe.num_persons" value="0" aria-label="num persons"/>
+                                </h4>
+                            </md-input-container>
+                            <md-input-container  class="md-has-no-icon-left">
+                                <h4 layout="row" layout-wrap layout-align="center center">
+                                    <span flex="100" flex-gt-md="60"><md-icon class="material-icons" ng-class="getDifficulty(recipe.difficulty)">stars</md-icon> * Dificultad:</span>
+                                    <md-select flex="100" flex-gt-md="40" flex ng-model="recipe.difficulty" aria-label="difficulty">
+                                        <md-option ng-value="diff" ng-repeat="diff in diffs">{{ diff | humanized }}</md-option>
+                                    </md-select>
+                                </h4>
+                            </md-input-container>
+                            <md-input-container class="md-has-no-icon-left">
+                                <h4 layout="row" layout-wrap layout-align="center center">
+                                    <span flex="100" flex-gt-md="40"><md-icon class="material-icons">bookmark</md-icon> Categoría:</span>
+                                    <md-select flex="100" flex-gt-md="60" ng-model="recipe.category_id" aria-label="Category" placeholder="Selecciona una categoría"md-on-open="loadCategories()">
+                                        <md-option ng-repeat="category in categories" ng-value="category.id">{{ category.text }}</md-option>
+                                    </md-select>
+                                </h4>
+                            </md-input-container>
+                        </md-content>
+                    </div>
+                </div>
+                <div flex flex-order="2" flex-order-gt-sm="1" flex-gt-sm="50" flex-gt-md="60">
+                    <md-card-title>
+                        <md-card-title-text>
+                            <span class="md-headline"><md-icon class="material-icons">kitchen</md-icon>Ingredientes</span>
+                        </md-card-title-text>
+                    </md-card-title>
+                    <md-card-content>
+                        <md-list class="ingredients" flex>
+                            <md-list-item ng-repeat="ingredient in recipe.ingredients">
+                                <md-button class="md-icon-button" ng-click="removeIngredient($index)">
+                                    <md-icon class="material-icons md-dark">remove_circle_outline</md-icon>
+                                </md-button>
+                                <div class="ingredient" flex layout="row">
+                                    <md-input-container class="md-block" flex="70" flex-gt-sm>
+                                        <label>Nombre</label>
+                                        <input required type="text" name="ingredientName{{$index}}" ng-model="ingredient.name" />
+                                        <div ng-messages="newRecipe['ingredientName' + $index].$error" md-auto-hide="false">
+                                            <div ng-message="required">El nombre del ingrediente es necesario.</div>
+                                        </div>
+                                    </md-input-container>
+                                    <md-input-container flex class="md-block">
+                                        <label>Cantidad</label>
+                                        <input type="text" ng-model="ingredient.count" />
+                                    </md-input-container>
+                                </div>
+                            </md-list-item>
+                            <md-list-item>
+                                <md-button class="md-icon-button" ng-click="addIngredient()">
+                                    <md-icon class="material-icons md-dark">add_circle_outline</md-icon>
+                                </md-button>
+                                <div class="ingredient" flex layout="row">
+                                    <md-input-container class="md-block" flex="70" flex-gt-sm>
+                                        <label>Nombre</label>
+                                        <input type="text" name="newIngredientName" ng-model="recipe.newIngredient.name" customRequired />
+                                        <ng-messages for="newRecipe.newIngredientName.$error" md-auto-hide="false">
+                                            <ng-message when="customRequired">El nombre del ingrediente es necesario.</ng-message>
+                                        </ng-messages>
+                                    </md-input-container>
+                                    <md-input-container flex>
+                                        <label>Cantidad</label>
+                                        <input type="text" name="newIngredientCount" ng-model="recipe.newIngredient.count" />
+                                    </md-input-container>
+                                </div>
+                            </md-list-item>
+                        </md-list>
+                    </md-card-content>
+                </div>
+            </div>
+
+            <div layout="row" layout-wrap layout-padding>
+                <md-chips ng-model="recipe.chipTags"
+                    md-autocomplete-snap
+                    readonly="false"
+                    md-transform-chip="transformChip($chip)"
+                    md-require-match="false">
+                    <md-autocomplete
+                        md-selected-item="selectedTag"
+                        md-item-text="tag.text"
+                        md-search-text="searchText"
+                        md-items="tag in tagSearch(searchText)"
+                        placeholder="Busca una etiqueta">
+                        <span md-highlight-text="searchText">{{ tag.text }}</span>
+                    </md-autocomplete>
+                    <md-chip-template>
+                        <span>{{ $chip.text }}<span ng-if="$chip.type"> (<em>{{ $chip.type }}</em>)</span></span>
+                    </md-chip-template>
+                </md-chips>
+            </div>
+
+            <div layout="row" layout-padding layout-wrap>
+                <div text-angular ng-model="recipe.steps" class="md-whiteframe-2dp"
+                    ta-toolbar-class="md-editor-toolbar" ta-toolbar-group-class="md-editor-toolbar-group"
+                    ta-toolbar-button-class="md-button md-icon-button" ta-toolbar-button-active-class="active"></div>
+            </div>
+
+            <div layout="row" layout-wrap layout-padding>
+                <div flex layout-align="center" layout="row" layout-wrap>
+                    <div class="images-recipe-input">
+                        <input type="file" name="files[]" id="files"  ng-model="images.recipe"
+                        accept="image/*" multiple="multiple" aria-label="Images">
+                        <label for="files" class="md-ink-item">
+                            <md-icon class="material-icons md-light">file_upload</md-icon> Elige tus imágenes
+                        </label>
+                    </div>
+                    <div id="filedrag">Arrastra y suelta las imágenes aqui</div>
+                    <div class="images-recipe-gallery" layout="row" layout-wrap layout-align="center center" flex></div>
+                </div>
+            </div>
+
+            <md-card-actions layout="row" layout-align="end">
+                <md-button class="md-primary md-raised" ng-click="create()" ng-disabled="newRecipe.$invalid || progressBarActivated">crear la receta</md-button>
+            </md-card-actions>
+        </md-card>
+    </form>
+</md-content>

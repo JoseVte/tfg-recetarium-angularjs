@@ -1,0 +1,71 @@
+.login-card,
+.register-card {
+    background-color: $tealBackground;
+    color: white;
+    md-card-content {
+        background-color: white;
+        padding: 0;
+        form {
+            padding: 16px;
+        }
+    }
+    md-content {
+        background-color: white;
+        color: $tealBackground;
+        overflow: inherit;
+        label {
+            color: $tealBackground !important;
+        }
+        input {
+            color: $tealBackground;
+            border-color: $tealBackground;
+        }
+        md-input-container {
+            &.md-input-invalid {
+                label {
+                    color: $errorColor !important;
+                }
+                input {
+                    border-color: $errorColor;
+                    color: $errorColor !important;
+                }
+            }
+            &.md-input-focused .md-input {
+                border-color: $tealBackground;
+            }
+            [ng-messages] > div {
+                color: $errorColor !important;
+            }
+        }
+    }
+    md-card-actions {
+        margin: 0;
+        height: 132px;
+        background-color: white;
+        color: $tealBackground;
+        .md-button {
+            max-height: 42px;
+            line-height: 24px;
+            width: 100%;
+            &.md-raised.md-auth-button {
+                margin: 12px 0;
+                background-color: $tealBackground;
+                color: white;
+                &:hover, &:focus, &:visited {
+                    background-color: $tealBackground;
+                }
+                &[disabled] {
+                    background-color: $tealBackgroundDisabled;
+                    color: $tealColorDisabled;
+                }
+            }
+        }
+        div.layout-row {
+            padding: 8px 0;
+            a {
+                margin: 0;
+                padding: 0;
+            }
+        }
+    }
+}
