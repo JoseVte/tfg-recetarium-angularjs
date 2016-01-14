@@ -75,7 +75,8 @@ recipeController.controller('RecipeAll',
         $rootScope.headerTitle = 'Recetas';
         $scope.pagination = {
             page: 1,
-            size: 10
+            size: 10,
+            search: null
         };
         $scope.recipes = [];
         $scope.sizes = [10, 30, 50];
@@ -92,13 +93,17 @@ recipeController.controller('RecipeAll',
             }
         });
 
+        $scope.searchRecipe = function () {
+            $location.search("search", $scope.pagination.search);
+        };
+
         $scope.selectSize = function () {
             $location.search("size", $scope.pagination.size);
         };
 
         $scope.getRecipes = function () {
             $rootScope.progressBarActivated = true;
-            RecipeService.all($scope.pagination, function (response) {
+            RecipeService.search($scope.pagination, function (response) {
                 var responseData = response.data;
                 $scope.recipes = responseData.data;
                 $scope.total = responseData.total;
@@ -135,7 +140,7 @@ recipeController.controller('RecipeAll',
         };
 
         $scope.isMine = function(user) {
-            if ($rootScope.globals) {
+            if ($rootScope.globals.user) {
                 var auth = $rootScope.globals.user.user;
                 return (auth.id == user.id && auth.email == user.email && auth.username == user.username) || auth.type == 'ADMIN';
             }
@@ -205,7 +210,7 @@ recipeController.controller('RecipeAll',
                     $rootScope.progressBarActivated = false;
                 });
             }, function() {});
-        }
+        };
     }]
 );
 

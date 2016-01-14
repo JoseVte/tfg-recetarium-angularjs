@@ -32,7 +32,7 @@ recipeService.factory('RecipeService',
             }
         };
 
-        service.all = function (pagination, callbackOk, callbackError) {
+        service.search = function (pagination, callbackOk, callbackError) {
             $http.get(
                 service.apiUrl + '/recipes',
                 {

@@ -5,6 +5,7 @@ sass       = require('gulp-sass'),
 cssnano    = require('gulp-cssnano'),
 autoprefix = require('gulp-autoprefixer'),
 notify     = require('gulp-notify'),
+minify     = require('gulp-minify-css'),
 concat     = require('gulp-concat'),
 rename     = require('gulp-rename'),
 uglify     = require('gulp-uglify'),
@@ -43,7 +44,7 @@ gulp.task('sass', function() {
     .pipe(autoprefix('last 10 version'))
     .pipe(concat('app.css'))
     .pipe(rename({ suffix: '.min' }))
-    .pipe(gulpif(argv.production, cssnano()))
+    .pipe(gulpif(argv.production, minify({compatibility: 'ie8'})))
     .pipe(gulp.dest(paths.dest.css))
     .pipe(notify({ message: 'CSS minified' }));
 });
@@ -56,7 +57,9 @@ gulp.task('js', function() {
     .pipe(concat('app.js'))
     .pipe(rename({ suffix: '.min' }))
     .pipe(ngAnnotate({single_quotes: true}))
+    .on("error", console.log)
     .pipe(gulpif(argv.production, uglify({mangle: false}), beautify({indentSize: 2})))
+    .on("error", console.log)
     .pipe(gulp.dest(paths.dest.js))
     .pipe(notify({ message: 'JS minified' }));
 });
@@ -91,7 +94,10 @@ gulp.task('lib-js', function() {
     ])
     .pipe(concat('app-lib.js'))
     .pipe(rename({ suffix: '.min' }))
-    .pipe(gulpif(argv.production, uglify(), beautify({indentSize: 2})))
+    .pipe(ngAnnotate({single_quotes: true}))
+    .on("error", console.log)
+    .pipe(gulpif(argv.production, uglify({mangle: false}), beautify({indentSize: 2})))
+    .on("error", console.log)
     .pipe(gulp.dest(paths.dest.jsLib))
     .pipe(notify({ message: 'JS lib minified' }));
 });

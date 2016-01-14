@@ -48,7 +48,12 @@ http-server -a localhost -p 8000
 
 ## Changelog
 
-#### [![0.1.4](/app/doc/rocket-blue.png) 0.1.4](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.1.4)
+#### [![0.2.1](/app/doc/rocket-blue.png) 0.2.1](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.2.1)
+
+- Buscar recetas
+- Fixeado CSS
+
+###### [![0.2.0](/app/doc/release.png) 0.2.0](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.2.0)
 
 - Editar receta
 - Borrar receta
