@@ -3,13 +3,13 @@ module.exports = function(config){
         basePath : './',
         reporters: ['junit', 'coverage'],
         files : [
-            'app/assets/js/lib/app-lib.min.js',
-            'app/js/**/*.js',
-            'test/**/*.js',
+            '../app/assets/js/lib/app-lib.min.js',
+            '../app/js/**/*.js',
+            '**/*.js',
         ],
         autoWatch : true,
         frameworks: ['jasmine'],
-        browsers: ['Chrome', 'ChromeCanary'],
+        browsers: ['Chrome'],
         customLaunchers: {
             Chrome_travis_ci: {
                 base: 'Chrome',
