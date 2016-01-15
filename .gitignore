@@ -2,3 +2,4 @@ app/bower/
 node_modules
 *.log
 .idea
+test_out/

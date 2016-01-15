@@ -1,4 +1,3 @@
-// Initialise
 var gulp   = require('gulp'),
 gutil      = require('gulp-util'),
 sass       = require('gulp-sass'),
@@ -13,7 +12,9 @@ del        = require('del'),
 argv       = require('yargs').argv,
 gulpif     = require('gulp-if'),
 beautify   = require('gulp-beautify'),
-ngAnnotate = require('gulp-ng-annotate');
+ngAnnotate = require('gulp-ng-annotate'),
+jshint     = require('gulp-jshint'),
+stylish    = require('jshint-stylish');
 
 // Paths variables
 var paths = {
@@ -37,14 +38,13 @@ var paths = {
 
 // SCSS Task
 gulp.task('sass', function() {
-    return gulp.src([
-        paths.src.sass + '/app.scss'
-    ])
-    .pipe(sass({ style: 'compressed' }).on('error', sass.logError))
+    return gulp.src(paths.src.sass + '/app.scss')
+    .pipe(sass({ style: 'compressed' })
+    .on('error', sass.logError))
     .pipe(autoprefix('last 10 version'))
     .pipe(concat('app.css'))
     .pipe(rename({ suffix: '.min' }))
-    .pipe(gulpif(argv.production, minify({compatibility: 'ie8'})))
+    .pipe(gulpif(argv.production, minify({ compatibility: 'ie8' })))
     .pipe(gulp.dest(paths.dest.css))
     .pipe(notify({ message: 'CSS minified' }));
 });
@@ -56,10 +56,12 @@ gulp.task('js', function() {
     ])
     .pipe(concat('app.js'))
     .pipe(rename({ suffix: '.min' }))
-    .pipe(ngAnnotate({single_quotes: true}))
-    .on("error", console.log)
+    .pipe(ngAnnotate({ single_quotes: true }))
+    .on('error', console.log)
     .pipe(gulpif(argv.production, uglify({mangle: false}), beautify({indentSize: 2})))
-    .on("error", console.log)
+    .pipe(jshint())
+    .pipe(jshint.reporter(stylish))
+    .on('error', console.log)
     .pipe(gulp.dest(paths.dest.js))
     .pipe(notify({ message: 'JS minified' }));
 });
@@ -90,7 +92,8 @@ gulp.task('lib-js', function() {
         paths.src.bower + '/angular-aria/angular-aria.min.js',
         paths.src.bower + '/angular-material/angular-material.min.js',
         paths.src.bower + '/angular-messages/angular-messages.min.js',
-        paths.src.bower + '/angular-ui-router/release/angular-ui-router.min.js'
+        paths.src.bower + '/angular-ui-router/release/angular-ui-router.min.js',
+        paths.src.bower + '/angular-mocks/angular-mocks.js',
     ])
     .pipe(concat('app-lib.js'))
     .pipe(rename({ suffix: '.min' }))
@@ -104,9 +107,7 @@ gulp.task('lib-js', function() {
 
 // Fonts
 gulp.task('fonts', function() {
-    return gulp.src([
-        paths.src.bower + '/material-design-icons/iconfont/*.*'
-    ]) 
+    return gulp.src(paths.src.bower + '/material-design-icons/iconfont/*.*')
     .pipe(gulp.dest(paths.dest.fonts));
 });
 

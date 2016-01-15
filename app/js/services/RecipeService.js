@@ -142,7 +142,7 @@ recipeService.factory('RecipeService',
                 if (array[el].type) a.push(array[el].type);
             }
             return a;
-        }
+        };
 
         service.create = function(recipe, callbackOk, callbackError) {
             $http.post(
@@ -199,7 +199,7 @@ recipeService.factory('RecipeService',
             }, function (response) {
                 callbackError(response);
             });
-        }
+        };
 
         service.delete = function(id, callbackOk, callbackError) {
             $http.delete(

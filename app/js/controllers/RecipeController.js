@@ -19,11 +19,13 @@ recipeController.constant('FILE_DROPZONE', {
         this.FileDragOver(e);
         var files = e.target.files || e.dataTransfer.files;
         var index = 0;
+        /* jshint ignore:start */
         for (var i = 0, f; f = files[i]; i++) {
             index = scope.images.index;
             this.ParseFile(f, scope, compile, index, upload, RecipeService, NotificationProvider);
             scope.images.index++;
         }
+        /* jshint ignore:end */
     },
     ParseFile: function(file, scope, compile, index, upload, RecipeService, NotificationProvider) {
         var reader = new FileReader();
@@ -31,7 +33,7 @@ recipeController.constant('FILE_DROPZONE', {
             $('.images-recipe-gallery').append(compile('<div class="image-removable" ng-if="images.show[' + index + ']" id="image-removable-' + index + '">' +
                 '<img class="img-thumbnail" src="' + e.target.result + '" />' +
                 '<md-button ng-click="removeImage(' + index + ')" class="md-fab md-mini md-remove" aria-label="Close"><md-icon class="material-icons">close</md-icon></md-button></div>')(scope));
-        }
+        };
         reader.readAsDataURL(file);
         scope.images.recipe[index] = file;
         scope.images.show[index] = false;
@@ -167,7 +169,7 @@ recipeController.controller('RecipeAll',
                 .ariaLabel('Borrar')
                 .targetEvent($event)
                 .ok('Borrar')
-                .cancel('Cancelar')
+                .cancel('Cancelar');
             $mdDialog.show(confirm).then(function () {
                 var notify = NotificationProvider.notify({
                     title: 'Receta borrada',
@@ -189,7 +191,7 @@ recipeController.controller('RecipeAll',
                             icon: 'error_outline',
                             title: 'Datos incorrectos',
                             msg: $.parseError(response.data),
-                        }
+                        };
                     } else {
                         NotificationProvider.notify({
                             title: 'Un error ha ocurrido',
@@ -204,7 +206,7 @@ recipeController.controller('RecipeAll',
                             icon: 'error_outline',
                             title: 'Algo ha ido mal',
                             msg: 'Ha ocurrido un error mientras se borraba la receta.'
-                        }
+                        };
                     }
                     $rootScope.errorMsg = true;
                     $rootScope.progressBarActivated = false;
@@ -277,7 +279,7 @@ recipeController.controller('RecipeShow',
             if (steps) return $sce.trustAsHtml(steps);
         };
 
-        $scope.getDifficulty = function (diff) { return DIFF.class[diff]; }
+        $scope.getDifficulty = function (diff) { return DIFF.class[diff]; };
     }]
 );
 
@@ -358,11 +360,11 @@ recipeController.controller('RecipeCreate',
         $scope.$watch(function() {
             return $scope.recipe.category_id;
         }, function (newVal, oldVal) {
-            if (newVal == null) $scope.recipe.category_id = undefined;
+            if (newVal === null) $scope.recipe.category_id = undefined;
         });
 
         $scope.addIngredient = function() {
-            if ($scope.recipe.newIngredient != null && $scope.recipe.newIngredient.name != null && $scope.recipe.newIngredient.name != '') {
+            if ($scope.recipe.newIngredient !== null && $scope.recipe.newIngredient.name !== null && $scope.recipe.newIngredient.name !== '') {
                 $scope.newRecipe.newIngredientName.$error = {};
                 $scope.recipe.ingredients.push({
                     name: $scope.recipe.newIngredient.name,
@@ -384,7 +386,7 @@ recipeController.controller('RecipeCreate',
             return ($scope.requestSlug && $scope.requestSlug.abort());
         };
 
-        $scope.getDifficulty = function (diff) { return DIFF.class[diff]; }
+        $scope.getDifficulty = function (diff) { return DIFF.class[diff]; };
 
         $scope.loadCategories = function() {
             CategoryService.all(function (response) {
@@ -424,8 +426,8 @@ recipeController.controller('RecipeCreate',
             if (angular.isObject(chip)) {
                 return chip;
             }
-            return { text: chip, type: 'nuevo' }
-        }
+            return { text: chip, type: 'nuevo' };
+        };
 
         $scope.tagSearch = function(search) {
             if(search) {
@@ -466,7 +468,7 @@ recipeController.controller('RecipeCreate',
                                     icon: 'error_outline',
                                     title: 'Datos incorrectos',
                                     msg: $.parseError(response.data),
-                                }
+                                };
                             } else {
                                 NotificationProvider.notify({
                                     title: 'Un error ha ocurrido',
@@ -481,7 +483,7 @@ recipeController.controller('RecipeCreate',
                                     icon: 'error_outline',
                                     title: 'Algo ha ido mal',
                                     msg: 'Ha ocurrido un error mientras se guardaban las imágenes.'
-                                }
+                                };
                             }
                             $rootScope.errorMsg = true;
                             $rootScope.progressBarActivated = false;
@@ -497,7 +499,7 @@ recipeController.controller('RecipeCreate',
                             icon: 'error_outline',
                             title: 'Datos incorrectos',
                             msg: $.parseError(response.data),
-                        }
+                        };
                     } else {
                         NotificationProvider.notify({
                             title: 'Un error ha ocurrido',
@@ -512,7 +514,7 @@ recipeController.controller('RecipeCreate',
                             icon: 'error_outline',
                             title: 'Algo ha ido mal',
                             msg: 'Ha ocurrido un error mientras se guardaban las imágenes.'
-                        }
+                        };
                     }
                     $rootScope.errorMsg = true;
                     $rootScope.progressBarActivated = false;
@@ -524,7 +526,7 @@ recipeController.controller('RecipeCreate',
                         icon: 'error_outline',
                         title: 'Datos incorrectos',
                         msg: $.parseError(response.data),
-                    }
+                    };
                 } else {
                     NotificationProvider.notify({
                         title: 'Un error ha ocurrido',
@@ -539,7 +541,7 @@ recipeController.controller('RecipeCreate',
                         icon: 'error_outline',
                         title: 'Algo ha ido mal',
                         msg: 'Ha ocurrido un error mientras se creaba la receta.'
-                    }
+                    };
                 }
                 $rootScope.errorMsg = true;
                 $rootScope.progressBarActivated = false;
@@ -552,7 +554,7 @@ recipeController.controller('RecipeCreate',
                 $('#image-removable-' + index).remove();
                 $scope.images.recipe.splice(index, 1);
             });
-        }
+        };
 
         $scope.$on('$viewContentLoaded', function() {
             if (window.File && window.FileList && window.FileReader) {
@@ -704,11 +706,11 @@ recipeController.controller('RecipeEdit',
         $scope.$watch(function() {
             return $scope.recipe.category_id;
         }, function (newVal, oldVal) {
-            if (newVal == null) $scope.recipe.category_id = undefined;
+            if (newVal === null) $scope.recipe.category_id = undefined;
         });
 
         $scope.addIngredient = function() {
-            if ($scope.recipe.newIngredient != null && $scope.recipe.newIngredient.name != null && $scope.recipe.newIngredient.name != '') {
+            if ($scope.recipe.newIngredient !== null && $scope.recipe.newIngredient.name !== null && $scope.recipe.newIngredient.name !== '') {
                 $scope.editRecipe.newIngredientName.$error = {};
                 var ingredient = {
                     name: $scope.recipe.newIngredient.name,
@@ -799,7 +801,7 @@ recipeController.controller('RecipeEdit',
             return ($scope.requestSlug && $scope.requestSlug.abort());
         };
 
-        $scope.getDifficulty = function (diff) { return DIFF.class[diff]; }
+        $scope.getDifficulty = function (diff) { return DIFF.class[diff]; };
 
         $scope.loadCategories = function() {
             CategoryService.all(function (response) {
@@ -839,8 +841,8 @@ recipeController.controller('RecipeEdit',
             if (angular.isObject(chip)) {
                 return chip;
             }
-            return { text: chip, type: 'nuevo' }
-        }
+            return { text: chip, type: 'nuevo' };
+        };
 
         $scope.tagSearch = function(search) {
             if(search) {
@@ -879,7 +881,7 @@ recipeController.controller('RecipeEdit',
                                 icon: 'error_outline',
                                 title: 'Datos incorrectos',
                                 msg: $.parseError(response.data),
-                            }
+                            };
                         } else {
                             NotificationProvider.notify({
                                 title: 'Un error ha ocurrido',
@@ -894,7 +896,7 @@ recipeController.controller('RecipeEdit',
                                 icon: 'error_outline',
                                 title: 'Algo ha ido mal',
                                 msg: 'Ha ocurrido un error mientras se guardaban las imágenes.'
-                            }
+                            };
                         }
                         $rootScope.errorMsg = true;
                         $rootScope.progressBarActivated = false;
@@ -910,7 +912,7 @@ recipeController.controller('RecipeEdit',
                         icon: 'error_outline',
                         title: 'Datos incorrectos',
                         msg: $.parseError(response.data),
-                    }
+                    };
                 } else {
                     NotificationProvider.notify({
                         title: 'Un error ha ocurrido',
@@ -925,7 +927,7 @@ recipeController.controller('RecipeEdit',
                         icon: 'error_outline',
                         title: 'Algo ha ido mal',
                         msg: 'Ha ocurrido un error mientras se guardaba la receta.'
-                    }
+                    };
                 }
                 $rootScope.errorMsg = true;
                 $rootScope.progressBarActivated = false;
@@ -958,9 +960,9 @@ recipeController.controller('RecipeEdit',
                         styling: 'fontawesome'
                     });
                     $('.ui-pnotify.custom-error-notify .material-icons').html('warning');
-                })
+                });
             });
-        }
+        };
 
         $scope.$on('$viewContentLoaded', function() {
             if (window.File && window.FileList && window.FileReader) {

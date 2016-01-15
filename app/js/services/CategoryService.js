@@ -5,7 +5,7 @@ categoryService.factory('CategoryService',
     function ($http, $rootScope, envService, $q) {
         var service = {
             apiUrl: envService.read('apiUrl'),
-        }
+        };
 
         service.all = function (callbackOk, callbackError) {
             $http.get(

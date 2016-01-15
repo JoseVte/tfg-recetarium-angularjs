@@ -18,5 +18,5 @@ timeDirective.directive('strToTime', function() {
                 return d;
             });
         }
-    }
-})
+    };
+});

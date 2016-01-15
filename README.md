@@ -52,6 +52,7 @@ http-server -a localhost -p 8000
 
 - Buscar recetas
 - Fixeado CSS
+- Test añadidos
 
 ###### [![0.2.0](/app/doc/release.png) 0.2.0](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.2.0)
 

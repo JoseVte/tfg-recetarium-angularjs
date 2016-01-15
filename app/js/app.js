@@ -1,7 +1,8 @@
 moment.locale('es');
 
+/* jshint ignore:start */
 'use strict';
-
+/* jshint ignore:end */
 var recetarium = angular.module('recetariumApp', [
     'environment',
     'ngRoute',
@@ -52,15 +53,15 @@ recetarium.config(['$httpProvider', function($httpProvider) {
             responseError: function (response) {
                 if (response.status === 401) {
                     if ($rootScope.globals.token) {
-                        $location.path('/unauthorized')
+                        $location.path('/unauthorized');
                     } else {
                         $location.path('/login');
                     }
                 }
                 return $q.reject(response);
             }
-        }
-    })
+        };
+    });
 }]);
 
 // Themes
@@ -173,7 +174,7 @@ recetarium.run(function ($rootScope, $location, $http, AuthService, ICONS) {
         $('.md-ink-item').exists(function () {
             $(document).on('click', '.md-ink-item', function (e) {
                 var $this = $(this);
-                if ($this.find('.md-ink').length == 0) {
+                if ($this.find('.md-ink').length === 0) {
                     $this.prepend('<span class="md-ink"></span>');
                 }
                 var ink = $this.find('.md-ink');
@@ -213,30 +214,6 @@ $.fn.exists = function(callback) {
     return this;
 };
 
-$.fn.extend({
-    donetyping: function(callback,timeout){
-        timeout = timeout || 1e3; // 1 second default timeout
-        var timeoutReference,
-            doneTyping = function(el){
-                if (!timeoutReference) return;
-                timeoutReference = null;
-                callback.call(el);
-            };
-        return this.each(function(i,el){
-            var $el = $(el);
-            $el.is(':input') && $el.on('keyup keypress paste',function(e){
-                if (e.type=='keyup' && e.keyCode!=8) return;
-                if (timeoutReference) clearTimeout(timeoutReference);
-                timeoutReference = setTimeout(function(){
-                    doneTyping(el);
-                }, timeout);
-            }).on('blur',function(){
-                doneTyping(el);
-            });
-        });
-    }
-});
-
 $.containsId = function(el, array) {
     var i = array.length;
     while (i--) {
@@ -251,7 +228,7 @@ $.getArrayId = function(array) {
         a.push(array[el].id);
     }
     return a;
-}
+};
 
 $.parseError = function(error) {
     var msg = '';
@@ -262,13 +239,13 @@ $.parseError = function(error) {
         }
         msg += '</ul>';
     } else if (angular.isObject(error)) {
-        for (var i in error) {
+        for (var field in error) {
             msg += '<ul>';
-            msg += '<li>' + i + '</li>' + $.parseError(error[i]);
+            msg += '<li>' + field + '</li>' + $.parseError(error[field]);
             msg += '</ul>';
         }
     } else {
         msg += error;
     }
     return msg;
-}
+};

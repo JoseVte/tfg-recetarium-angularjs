@@ -13,7 +13,7 @@ homeController.controller('Header',
         $scope.navTo = function (ev, url) {
             closeSideNav('left');
             if ($location.path() !== url) $location.path(url);
-        }
+        };
 
         $scope.getClassActive = function(path) {
             var cur_path = $location.path().substr(0, path.length);
@@ -25,7 +25,7 @@ homeController.controller('Header',
             } else {
                 return "";
             }
-        }
+        };
 
         function debounce(func, wait, context) {
             var timer;
@@ -37,13 +37,13 @@ homeController.controller('Header',
                     func.apply(context, args);
                 }, wait || 10);
             };
-        };
+        }
 
         function buildDelayedToggler(navID) {
             return debounce(function() {
                 $mdSidenav(navID).toggle().then(function () {});
             }, 0);
-        };
+        }
 
         function closeSideNav(navID) {
             $mdSidenav(navID).close().then(function () {});
