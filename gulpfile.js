@@ -56,7 +56,7 @@ gulp.task('js', function() {
     ])
     .pipe(concat('app.js'))
     .pipe(rename({ suffix: '.min' }))
-    .pipe(ngAnnotate({ single_quotes: true }))
+    .pipe(gulpif(argv.production, ngAnnotate({ single_quotes: true })))
     .on('error', console.log)
     .pipe(gulpif(argv.production, uglify({mangle: false}), beautify({indentSize: 2})))
     .pipe(jshint())

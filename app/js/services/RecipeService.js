@@ -64,13 +64,13 @@ recipeService.factory('RecipeService',
             var mainImage = recipe.media.filter(function(obj) {
                 return service.regexMainImage.exec(obj.filename) !== null;
             })[0];
-            var main = mainImage ? { id: mainImage.id, title: mainImage.filename, href: service.apiUrl + '/media/' + recipe.id + '/' + mainImage.filename } : { href: 'http://lorempixel.com/g/480/480/food/Placeholder'};
+            var main = mainImage ? { id: mainImage.id, title: mainImage.filename, href: service.apiUrl + '/recipes/' + recipe.id + '/media/' + mainImage.filename } : { href: 'http://lorempixel.com/g/480/480/food/Placeholder'};
             var gallery = [];
 
             for (var i = 0; i < recipe.media.length; i++) {
                 var image = recipe.media[i];
                 var filename = image.filename.substr(0, image.filename.lastIndexOf('.'));
-                if (image !== mainImage) gallery.push({ id: image.id, title: filename, href: service.apiUrl + '/media/' + recipe.id + '/' + image.filename });
+                if (image !== mainImage) gallery.push({ id: image.id, title: filename, href: service.apiUrl + '/recipes/' + recipe.id + '/media/' + image.filename });
             }
 
             return {
@@ -180,7 +180,7 @@ recipeService.factory('RecipeService',
             fd.append('is_main', isMain);
             fd.append('is_multiple', isMultiple);
             $http.post(
-                service.apiUrl + '/media/' + id,
+                service.apiUrl + '/recipes/' + id + '/media',
                 fd,
                 { transformRequest: angular.identity, headers: {'Content-Type': undefined} }
             ).then(function (response) {
@@ -190,9 +190,9 @@ recipeService.factory('RecipeService',
             });
         };
 
-        service.deleteFile = function(id, callbackOk, callbackError) {
+        service.deleteFile = function(idRecipe, id, callbackOk, callbackError) {
             $http.delete(
-                service.apiUrl + '/media/' + id,
+                service.apiUrl + '/recipes/' + idRecipe + '/media/' + id,
                 { headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' } }
             ).then(function (response) {
                 callbackOk(response);

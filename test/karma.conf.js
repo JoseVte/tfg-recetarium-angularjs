@@ -1,7 +1,7 @@
 module.exports = function(config){
     configuration = {
         basePath : './',
-        reporters: ['junit', 'coverage'],
+        reporters: ['junit', 'coverage', 'html'],
         files : [
             '../app/assets/js/lib/app-lib.min.js',
             '../app/js/**/*.js',
@@ -23,7 +23,12 @@ module.exports = function(config){
             'karma-jasmine',
             'karma-junit-reporter',
             'karma-coverage',
+            'karma-htmlfile-reporter',
         ],
+        htmlReporter: {
+            outputFile: 'test_out/unit.html',
+            pageTitle: 'Unit Tests'
+        },
         junitReporter : {
             outputFile: 'test_out/unit.xml',
             suite: 'unit'

@@ -937,7 +937,7 @@ recipeController.controller('RecipeEdit',
 
         $scope.removeImage = function(index) {
             $('#image-removable-' + index).exists(function () {
-                RecipeService.deleteFile(index, function (response) {
+                RecipeService.deleteFile($scope.recipe.id, index, function (response) {
                     NotificationProvider.notify({
                         title: 'Image borrada',
                         text: '',
