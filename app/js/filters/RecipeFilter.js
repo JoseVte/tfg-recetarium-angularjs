@@ -9,7 +9,7 @@ recipeFilter.filter('mainImage', ['RecipeService', function (RecipeService) {
 recipeFilter.filter('capitalize', function() {
     return function(input) {
       return (!!input) ? input.charAt(0).toUpperCase() + input.substr(1).toLowerCase() : '';
-    }
+  };
 });
 
 recipeFilter.filter('humanized', function() {
@@ -24,7 +24,7 @@ recipeFilter.filter('humanized', function() {
             default:
                 return '';
         }
-    }
+    };
 });
 
 recipeFilter.filter('duration', function() {
@@ -40,5 +40,5 @@ recipeFilter.filter('duration', function() {
         }
         duration += moment.duration(minute, "minutes").humanize();
         return duration;
-    }
+    };
 });

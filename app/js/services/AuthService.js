@@ -76,7 +76,7 @@ authServices.factory('AuthService',
 
         service.IsAnonymous = function() {
             var deferred = $q.defer();
-            if (service.GetJwt() == null) deferred.resolve(service.OK);
+            if (service.GetJwt() === (null || undefined)) deferred.resolve(service.OK);
             else deferred.reject(service.FORBIDDEN);
             return deferred.promise;
         };
@@ -94,9 +94,9 @@ authServices.factory('AuthService',
                 method: "HEAD",
                 url: service.apiUrl + '/recipes/' + slug + '/mine',
                 timeout: deferred.promise,
-            }).then(function() { deferred.resolve(service.OK); }, function() { deferred.reject(service.UNAUTHORIZED); })
+            }).then(function() { deferred.resolve(service.OK); }, function() { deferred.reject(service.UNAUTHORIZED); });
             return deferred.promise;
-        }
+        };
 
         return service;
     }]

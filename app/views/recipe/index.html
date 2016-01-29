@@ -1,7 +1,9 @@
 <md-content class="md-padding search-block" layout="row" layout-wrap layout-align="space-between center">
-    <md-input-container md-no-float class="md-block" flex="100" flex-gt-md="30">
-        <md-icon class="material-icons md-dark">search</md-icon>
-        <input type="search" ng-model="recipeSearch" placeholder="Buscar..." aria-label="Buscar recetas" />
+    <md-input-container md-no-float class="md-has-no-icon-left" flex="100" flex-gt-md="30" layout="row" layout-align="start center">
+        <md-button class="md-icon-button md-mini" ng-click="searchRecipe()" aria-label="Search">
+            <md-icon class="material-icons md-dark">search</md-icon>
+        </md-button>
+        <input type="text" ng-model="pagination.search" placeholder="Buscar..." aria-label="Buscar recetas" />
     </md-input-container>
     <md-input-container md-no-float layout-wrap flex="100" layout="column"
         layout-align-gt-md="end center" layout-align="start stretch" layout-gt-md="row" flex-gt-md="30">
@@ -16,7 +18,7 @@
     <div class="container" ng-show="progressBarActivated && recipes.length == 0">
         <md-progress-circular md-mode="indeterminate" class="{{ loaderTheme }}" md-diameter="70"></md-progress-circular>
     </div>
-    <div class="animation-card-recipes"  ng-hide="progressBarActivated" ng-repeat="recipe in recipes | filter:recipeSearch as result" flex="100" flex-gt-lg="50">
+    <div class="animation-card-recipes" ng-hide="progressBarActivated" ng-repeat="recipe in recipes" flex="100" flex-gt-lg="50">
         <md-card ng-click="show(recipe.slug)" class="card-recipe-main">
             <md-card-title>
                 <md-card-title-media>

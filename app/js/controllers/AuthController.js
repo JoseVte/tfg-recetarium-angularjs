@@ -34,7 +34,7 @@ authController.controller('Login',
                         icon: 'error_outline',
                         title: 'Datos incorrectos',
                         msg: $.parseError(response.data),
-                    }
+                    };
                 } else {
                     NotificationProvider.notify({
                         title: 'Un error ha ocurrido',
@@ -49,7 +49,7 @@ authController.controller('Login',
                         icon: 'error_outline',
                         title: 'Algo ha ido mal',
                         msg: 'Ha ocurrido un error mientras se logueaba.'
-                    }
+                    };
                 }
                 $rootScope.errorMsg = true;
                 $rootScope.progressBarActivated = false;
@@ -101,7 +101,7 @@ authController.controller('Register',
                         icon: 'error_outline',
                         title: 'Datos incorrectos',
                         msg: $.parseError(response.data),
-                    }
+                    };
                 } else {
                     NotificationProvider.notify({
                         title: 'Un error ha ocurrido',
@@ -116,13 +116,13 @@ authController.controller('Register',
                         icon: 'error_outline',
                         title: 'Algo ha ido mal',
                         msg: 'Ha ocurrido un error mientras se registraba.'
-                    }
+                    };
                 }
                 $rootScope.errorMsg = true;
                 $rootScope.progressBarActivated = false;
                 $scope.setDelay2();
             });
-        }
+        };
     }]
 );
 
