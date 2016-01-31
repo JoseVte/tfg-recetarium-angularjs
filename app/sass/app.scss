@@ -41,6 +41,9 @@ md-input-container.md-has-no-icon-left {
         color: red;
     }
 }
+.without-fixed-height {
+    height: auto !important;
+}
 
 //*** Custom notification ***//
 @each $type, $color in (error, $errorColor), (success, $successColor) {
@@ -135,6 +138,14 @@ md-input-container.md-has-no-icon-left {
                     }
                 }
             }
+        }
+        .card-alert-success {
+            display: flex;
+            color: white;
+            background: $color;
+            border-radius: 2px;
+            padding: 16px 16px;
+            margin-bottom: 32px;
         }
         md-checkbox {
             &.md-checked {
