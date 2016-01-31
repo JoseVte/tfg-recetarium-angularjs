@@ -142,3 +142,130 @@ authController.controller('Logout',
         $location.path('/');
     }]
 );
+
+authController.controller('ResetPassword',
+    ['$scope', '$rootScope', '$location', 'AuthService', '$timeout', 'NotificationProvider',
+    function ($scope, $rootScope, $location, AuthService, $timeout, NotificationProvider) {
+        $rootScope.headerTitle = 'Recuperar contraseña';
+
+        $scope.setDelay1 = function(){
+            $scope.delay1 = true;
+            $scope.delay2 = true;
+            $timeout(function(){
+                $scope.delay1 = false;
+            }, 1000);
+        };
+
+        $scope.setDelay2 = function(){
+            $timeout(function(){
+                $scope.delay2 = false;
+            }, 1000);
+        };
+
+        $scope.resetPassword = function () {
+            $rootScope.errorMsg = false;
+            $rootScope.progressBarActivated = true;
+            $scope.hasMessage = false;
+            $scope.setDelay1();
+            AuthService.ResetPassword($scope.email, function (response) {
+                $scope.msg = response.data.msg;
+                $scope.hasMessage = true;
+                $rootScope.progressBarActivated = false;
+                $scope.setDelay2();
+            }, function (response) {
+                if (response.status == 400 || response.status == 404) {
+                    $rootScope.error = {
+                        icon: 'error_outline',
+                        title: 'Datos incorrectos',
+                        msg: $.parseError(response.data),
+                    };
+                } else {
+                    NotificationProvider.notify({
+                        title: 'Un error ha ocurrido',
+                        text: 'Ha ocurrido un error mientras se enviaba el email. Por favor, intentelo más tarde.',
+                        type: 'error',
+                        addclass: 'custom-error-notify',
+                        icon: 'material-icons md-light',
+                        styling: 'fontawesome',
+                    });
+                    $('.ui-pnotify.custom-error-notify .material-icons').html('warning');
+                    $rootScope.error = {
+                        icon: 'error_outline',
+                        title: 'Algo ha ido mal',
+                        msg: 'Ha ocurrido un error mientras se enviaba el email.'
+                    };
+                }
+                $rootScope.errorMsg = true;
+                $rootScope.progressBarActivated = false;
+                $scope.setDelay2();
+            })
+        }
+    }]
+);
+
+authController.controller('RecoverPassword',
+    ['$scope', '$rootScope', '$routeParams', '$location', 'AuthService', '$timeout', 'NotificationProvider',
+    function ($scope, $rootScope, $routeParams, $location, AuthService, $timeout, NotificationProvider) {
+        $rootScope.headerTitle = 'Recuperar contraseña';
+
+        $scope.setDelay1 = function(){
+            $scope.delay1 = true;
+            $scope.delay2 = true;
+            $timeout(function(){
+                $scope.delay1 = false;
+            }, 1000);
+        };
+
+        $scope.setDelay2 = function(){
+            $timeout(function(){
+                $scope.delay2 = false;
+            }, 1000);
+        };
+
+        $scope.recoverPassword = function () {
+            $rootScope.errorMsg = false;
+            $rootScope.progressBarActivated = true;
+            $scope.hasMessage = false;
+            $scope.setDelay1();
+            AuthService.RecoverPassword($scope.email, $scope.password, $routeParams.token, function (response) {
+                NotificationProvider.notify({
+                    title: 'Contraseña cambiada con existo',
+                    text: '',
+                    type: 'success',
+                    addclass: 'custom-success-notify',
+                    icon: 'material-icons md-light',
+                    styling: 'fontawesome',
+                });
+                $('.ui-pnotify.custom-success-notify .material-icons').html('lock');
+                $rootScope.progressBarActivated = false;
+                $location.path('/login');
+            }, function (response) {
+                if (response.status == 400) {
+                    $rootScope.error = {
+                        icon: 'error_outline',
+                        title: 'Datos incorrectos',
+                        msg: $.parseError(response.data),
+                    };
+                } else {
+                    NotificationProvider.notify({
+                        title: 'Un error ha ocurrido',
+                        text: 'Ha ocurrido un error mientras se cambiaba la contraseña. Por favor, intentelo más tarde.',
+                        type: 'error',
+                        addclass: 'custom-error-notify',
+                        icon: 'material-icons md-light',
+                        styling: 'fontawesome',
+                    });
+                    $('.ui-pnotify.custom-error-notify .material-icons').html('warning');
+                    $rootScope.error = {
+                        icon: 'error_outline',
+                        title: 'Algo ha ido mal',
+                        msg: 'Ha ocurrido un error mientras se cambiaba la contraseña.'
+                    };
+                }
+                $rootScope.errorMsg = true;
+                $rootScope.progressBarActivated = false;
+                $scope.setDelay2();
+            })
+        }
+    }]
+);

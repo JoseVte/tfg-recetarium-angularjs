@@ -33,6 +33,30 @@ authServices.factory('AuthService',
             });
         };
 
+        service.ResetPassword = function (email, callbackOk, callbackError) {
+            $http.post(
+                service.apiUrl + '/auth/reset/password',
+                { email: email },
+                { headers: {'Accept': 'application/json', 'Content-Type': 'application/json'} }
+            ).then(function (response) {
+                callbackOk(response);
+            }, function (response) {
+                callbackError(response);
+            });
+        };
+
+        service.RecoverPassword = function (email, password, token, callbackOk, callbackError) {
+            $http.put(
+                service.apiUrl + '/auth/reset/password',
+                { email: email, password: password, token: token },
+                { headers: {'Accept': 'application/json', 'Content-Type': 'application/json'} }
+            ).then(function (response) {
+                callbackOk(response);
+            }, function (response) {
+                callbackError(response);
+            });
+        };
+
         service.SaveCredentials = function (token, user) {
             $rootScope.globals = {
                 token: token,
