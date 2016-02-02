@@ -9,6 +9,20 @@ recipeController.constant('DIFF', {
     'name': ['EASY', 'MEDIUM', 'HARD']
 });
 
+recipeController.constant('VISIBILITY', {
+    'class': {
+        'PUBLIC': 'md-green',
+        'FRIENDS': 'md-yellow',
+        'PRIVATE': 'md-red'
+    },
+    'icon': {
+        'PUBLIC': 'lock_open',
+        'FRIENDS': 'lock_outline',
+        'PRIVATE': 'lock'
+    },
+    'name': ['PUBLIC', 'FRIENDS', 'PRIVATE']
+})
+
 recipeController.constant('FILE_DROPZONE', {
     FileDragOver: function(e, scope) {
         e.stopPropagation();
@@ -217,8 +231,8 @@ recipeController.controller('RecipeAll',
 );
 
 recipeController.controller('RecipeShow',
-    ['$scope', '$rootScope', '$location', '$routeParams', '$sce', 'RecipeService', 'NotificationProvider', 'DIFF',
-    function ($scope, $rootScope, $location, $routeParams, $sce, RecipeService, NotificationProvider, DIFF) {
+    ['$scope', '$rootScope', '$location', '$routeParams', '$sce', 'RecipeService', 'NotificationProvider', 'DIFF', 'VISIBILITY',
+    function ($scope, $rootScope, $location, $routeParams, $sce, RecipeService, NotificationProvider, DIFF, VISIBILITY) {
         $rootScope.headerTitle = 'Cargando';
         $rootScope.progressBarActivated = true;
         $rootScope.HasBack = true;
@@ -280,14 +294,18 @@ recipeController.controller('RecipeShow',
         };
 
         $scope.getDifficulty = function (diff) { return DIFF.class[diff]; };
+
+        $scope.getVisibilityIcon = function (visibility) { return VISIBILITY.icon[visibility]; };
+
+        $scope.getVisibilityClass = function (visibility) { return VISIBILITY.class[visibility]; };
     }]
 );
 
 recipeController.controller('RecipeCreate',
     ['$scope', '$rootScope', '$location', 'RecipeService', 'CategoryService', 'TagService',
-    'NotificationProvider', 'DIFF', '$timeout', 'FILE_DROPZONE', '$compile',
+    'NotificationProvider', 'DIFF', 'VISIBILITY', '$timeout', 'FILE_DROPZONE', '$compile',
     function ($scope, $rootScope, $location, RecipeService, CategoryService, TagService,
-        NotificationProvider, DIFF, $timeout, FILE_DROPZONE, $compile) {
+        NotificationProvider, DIFF, VISIBILITY, $timeout, FILE_DROPZONE, $compile) {
         $rootScope.headerTitle = 'Nueva receta';
         $rootScope.HasBack = true;
         $rootScope.back = function () {
@@ -298,6 +316,7 @@ recipeController.controller('RecipeCreate',
         $scope.validSlug = true;
         $scope.loadingSlug = false;
         $scope.diffs = DIFF.name;
+        $scope.visibilities = VISIBILITY.name;
         $scope.tags = [];
         $scope.recipe = {
             ingredients: [],
@@ -387,6 +406,10 @@ recipeController.controller('RecipeCreate',
         };
 
         $scope.getDifficulty = function (diff) { return DIFF.class[diff]; };
+
+        $scope.getVisibilityIcon = function (visibility) { return VISIBILITY.icon[visibility]; };
+
+        $scope.getVisibilityClass = function (visibility) { return VISIBILITY.class[visibility]; };
 
         $scope.loadCategories = function() {
             CategoryService.all(function (response) {
@@ -576,9 +599,9 @@ recipeController.controller('RecipeCreate',
 
 recipeController.controller('RecipeEdit',
     ['$scope', '$rootScope', '$location', 'RecipeService', 'CategoryService', 'TagService',
-    'NotificationProvider', 'DIFF', '$timeout', 'FILE_DROPZONE', '$compile', '$routeParams', 'IngredientService',
+    'NotificationProvider', 'DIFF', 'VISIBILITY', '$timeout', 'FILE_DROPZONE', '$compile', '$routeParams', 'IngredientService',
     function ($scope, $rootScope, $location, RecipeService, CategoryService, TagService,
-        NotificationProvider, DIFF, $timeout, FILE_DROPZONE, $compile, $routeParams, IngredientService) {
+        NotificationProvider, DIFF, VISIBILITY, $timeout, FILE_DROPZONE, $compile, $routeParams, IngredientService) {
         $rootScope.headerTitle = 'Editar receta';
         $rootScope.HasBack = true;
         $rootScope.back = function () {
@@ -589,6 +612,7 @@ recipeController.controller('RecipeEdit',
         $scope.validSlug = true;
         $scope.loadingSlug = false;
         $scope.diffs = DIFF.name;
+        $scope.visibilities = VISIBILITY.name;
         $scope.recipe = {};
         $scope.tags = [];
         $scope.images = {
@@ -802,6 +826,10 @@ recipeController.controller('RecipeEdit',
         };
 
         $scope.getDifficulty = function (diff) { return DIFF.class[diff]; };
+
+        $scope.getVisibilityIcon = function (visibility) { return VISIBILITY.icon[visibility]; };
+
+        $scope.getVisibilityClass = function (visibility) { return VISIBILITY.class[visibility]; };
 
         $scope.loadCategories = function() {
             CategoryService.all(function (response) {
