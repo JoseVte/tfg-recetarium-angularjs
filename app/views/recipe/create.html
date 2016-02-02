@@ -71,6 +71,14 @@
                             </md-input-container>
                             <md-input-container class="md-has-no-icon-left">
                                 <h4 layout="row" layout-wrap layout-align="center center">
+                                    <span flex="100" flex-gt-md="60"><md-icon class="material-icons" ng-class="getVisibilityClass(recipe.visibility)">{{ getVisibilityIcon(recipe.visibility) }}</md-icon> * Visibilidad:</span>
+                                    <md-select flex="100" flex-gt-md="40" flex ng-model="recipe.visibility" aria-label="visibility">
+                                        <md-option ng-value="visibility" ng-repeat="visibility in visibilities">{{ visibility | humanized }}</md-option>
+                                    </md-select>
+                                </h4>
+                            </md-input-container>
+                            <md-input-container class="md-has-no-icon-left">
+                                <h4 layout="row" layout-wrap layout-align="center center">
                                     <span flex="100" flex-gt-md="40"><md-icon class="material-icons">bookmark</md-icon> Categoría:</span>
                                     <md-select flex="100" flex-gt-md="60" ng-model="recipe.category_id" aria-label="Category" placeholder="Selecciona una categoría"md-on-open="loadCategories()">
                                         <md-option ng-repeat="category in categories" ng-value="category.id">{{ category.text }}</md-option>

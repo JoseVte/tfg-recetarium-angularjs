@@ -49,7 +49,11 @@ http-server -a localhost -p 8000
 
 ## Changelog
 
-#### [![0.2.2](/app/doc/rocket-blue.png) 0.2.2](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.2.2)
+#### [![0.2.3](/app/doc/rocket-blue.png) 0.2.3](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.2.3)
+
+- Visibilidad de las recetas
+
+###### [![0.2.2](/app/doc/release.png) 0.2.2](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.2.2)
 
 - Seccion recuperar contraseña
 - Validador de contraseña repetida en los formularios

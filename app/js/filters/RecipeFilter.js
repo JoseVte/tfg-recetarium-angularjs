@@ -21,6 +21,12 @@ recipeFilter.filter('humanized', function() {
                 return 'Media';
             case 'HARD':
                 return 'Difícil';
+            case 'PUBLIC':
+                return 'Pública';
+            case 'FRIENDS':
+                return 'Solo amigos';
+            case 'PRIVATE':
+                return 'Privado';
             default:
                 return '';
         }
