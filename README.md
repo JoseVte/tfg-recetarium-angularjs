@@ -1,5 +1,6 @@
 [![Issue Stats](http://issuestats.com/github/JoseVte/tfg-recetarium-angularjs/badge/pr?style=flat)](http://issuestats.com/github/JoseVte/tfg-recetarium-angularjs)
 [![Issue Stats](http://issuestats.com/github/JoseVte/tfg-recetarium-angularjs/badge/issue?style=flat)](http://issuestats.com/github/JoseVte/tfg-recetarium-angularjs)
+[![Build Status](https://travis-ci.org/JoseVte/tfg-recetarium-angularjs.png)](https://travis-ci.org/JoseVte/tfg-recetarium-angularjs)
 
 [Gulp ![npm version](https://badge.fury.io/js/gulp.svg)](https://badge.fury.io/js/gulp)
 [Bower ![npm version](https://badge.fury.io/js/bower.svg)](https://badge.fury.io/js/bower)
@@ -48,7 +49,23 @@ http-server -a localhost -p 8000
 
 ## Changelog
 
-#### [![0.1.4](/app/doc/rocket-blue.png) 0.1.4](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.1.4)
+#### [![0.3.0](/app/doc/rocket-blue.png) 0.3.0](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.3.0)
+
+- Visibilidad de las recetas
+
+###### [![0.2.2](/app/doc/release.png) 0.2.2](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.2.2)
+
+- Seccion recuperar contraseña
+- Validador de contraseña repetida en los formularios
+
+###### [![0.2.1](/app/doc/release.png) 0.2.1](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.2.1)
+
+- Buscar recetas
+- Fixeado CSS
+- Test añadidos
+- Integración con Travis CI
+
+###### [![0.2.0](/app/doc/release.png) 0.2.0](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.2.0)
 
 - Editar receta
 - Borrar receta

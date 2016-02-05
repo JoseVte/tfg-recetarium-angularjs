@@ -1,5 +1,4 @@
-.login-card,
-.register-card {
+.auth-card {
     background-color: $tealBackground;
     color: white;
     md-card-content {
@@ -48,6 +47,7 @@
             line-height: 24px;
             width: 100%;
             &.md-raised.md-auth-button {
+                padding: 0;
                 margin: 12px 0;
                 background-color: $tealBackground;
                 color: white;
@@ -59,12 +59,26 @@
                     color: $tealColorDisabled;
                 }
             }
+            &.md-options {
+                margin-top: 0 !important;
+                margin-bottom: 0 !important;
+            }
         }
         div.layout-row {
             padding: 8px 0;
             a {
                 margin: 0;
-                padding: 0;
+                padding: 8px 0;
+                @media (max-width: $layout-breakpoint-xs) {
+                    padding-top: 0;
+                    padding-bottom: 0;
+                }
+                &.without-padding {
+                    padding: inherit;
+                }
+                div {
+                    white-space: pre-line;
+                }
             }
         }
     }

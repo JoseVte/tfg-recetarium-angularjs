@@ -9,7 +9,7 @@ recipeFilter.filter('mainImage', ['RecipeService', function (RecipeService) {
 recipeFilter.filter('capitalize', function() {
     return function(input) {
       return (!!input) ? input.charAt(0).toUpperCase() + input.substr(1).toLowerCase() : '';
-    }
+  };
 });
 
 recipeFilter.filter('humanized', function() {
@@ -21,10 +21,16 @@ recipeFilter.filter('humanized', function() {
                 return 'Media';
             case 'HARD':
                 return 'Difícil';
+            case 'PUBLIC':
+                return 'Pública';
+            case 'FRIENDS':
+                return 'Solo amigos';
+            case 'PRIVATE':
+                return 'Privado';
             default:
                 return '';
         }
-    }
+    };
 });
 
 recipeFilter.filter('duration', function() {
@@ -40,5 +46,5 @@ recipeFilter.filter('duration', function() {
         }
         duration += moment.duration(minute, "minutes").humanize();
         return duration;
-    }
+    };
 });

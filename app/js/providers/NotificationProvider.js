@@ -3,7 +3,7 @@ var notificationProvider = angular.module('NotificationProviders', []);
 notificationProvider.provider('NotificationProvider',
     [function () {
         var settings = { styling: 'bootstrap3' };
-        this.setDefaults = function(defaults) { settings = defaults };
+        this.setDefaults = function(defaults) { settings = defaults; };
         PNotify.desktop.permission();
 
         this.$get = [ function() {
@@ -45,7 +45,7 @@ notificationProvider.provider('NotificationProvider',
                     var notification = new PNotify(hash);
                     notification.get().click(function () {
                         notification.remove();
-                    })
+                    });
                 }
             };
         }];

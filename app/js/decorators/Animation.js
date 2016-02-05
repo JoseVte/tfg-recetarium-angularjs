@@ -14,7 +14,7 @@ animationModule.animation('.animation-card-recipes', function () {
                 if(isCancelled) {
                     jQuery(element).stop();
                 }
-            }
+            };
         },
         leave : function(element, done) {
             element.css('opacity', 1);
@@ -25,7 +25,7 @@ animationModule.animation('.animation-card-recipes', function () {
                 if(isCancelled) {
                     jQuery(element).stop();
                 }
-            }
+            };
         },
         move : function(element, done) {
             element.css('opacity', 0);
@@ -36,10 +36,10 @@ animationModule.animation('.animation-card-recipes', function () {
                 if(isCancelled) {
                     jQuery(element).stop();
                 }
-            }
+            };
         },
 
         addClass : function(element, className, done) {},
         removeClass : function(element, className, done) {}
-    }
+    };
 });

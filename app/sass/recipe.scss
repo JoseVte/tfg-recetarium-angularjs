@@ -46,10 +46,9 @@
         }
     }
     .image-recipe-main {
-        @media (max-width: $layout-breakpoint-sm) {
-            max-width: 100%;
-            width: auto;
-        }
+        max-width: 100%;
+        width: auto;
+        margin: auto;
     }
     .image-recipe-zoomable {
         text-decoration: none;
@@ -175,6 +174,7 @@
         min-width: 100%;
     }
     .image-recipe-main {
+        overflow: hidden;
         @media (max-width: $layout-breakpoint-sm) {
             max-width: 100%;
             width: auto;

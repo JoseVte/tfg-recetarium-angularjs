@@ -3,8 +3,6 @@
 * Matthew Krick 2015
 * Inspired by Google's material design & ClockPicker v0.0.7 (http://weareoutman.github.io/clockpicker/)
 */
-
-;
 (function () {
     var $ = window.jQuery;
 
@@ -121,9 +119,9 @@
         this.AmPmButtons = popover.find('.lolliclock-ampm-btn');
         this.amButton = popover.find('#lolliclock-btn-am');
         this.pmButton = popover.find('#lolliclock-btn-pm');
-        if(this.options.hour24){
-            this.AmPmButtons.hide()
-            this.spanAmPm.hide()
+        if(this.options.hour24) {
+            this.AmPmButtons.hide();
+            this.spanAmPm.hide();
         }
         //var exportName = (this.input[0].name || this.input[0].id) + '-export';
         //this.dateTimeVal = $('<input type="hidden" id="' + exportName + '"></input>').insertAfter(input);
@@ -211,16 +209,16 @@
             dy = (isTouch ? e.originalEvent.touches[0] : e).pageY - y0,
             z = Math.sqrt(dx * dx + dy * dy),
             moved = false;
-            outsideMode = true
+            outsideMode = true;
 
             // Ignore plate clicks that aren't even close
             if (z< outSizeRadius + tickRadius && z> outSizeRadius - tickRadius){
-                outsideMode = true
+                outsideMode = true;
             }
             else if (z > radius - tickRadius && z < radius + tickRadius && options.hour24 &&  self.currentView === 'hours'){
-                outsideMode = false
+                outsideMode = false;
             }else{
-                return
+                return;
             }
             e.preventDefault();
             $(document.body).addClass('lolliclock-moving');
@@ -405,7 +403,10 @@
         this.AmPmButtons.addClass('animate');
         this.spanNewTime.addClass('animate');
         this.spanOldTime.addClass('animate');
+
+        /* jshint ignore:start */
         !this.options.autoclose && this.closeButtons.addClass('animate');
+        /* jshint ignore:end */
 
         this.plate.on('webkitAnimationEnd animationend MSAnimationEnd oanimationend',
         function () {
@@ -415,7 +416,10 @@
             self.AmPmButtons.removeClass("animate");
             self.spanNewTime.removeClass("animate");
             self.spanOldTime.removeClass("animate");
+            /* jshint ignore:start */
             !self.options.autoclose && self.closeButtons.removeClass("animate");
+            /* jshint ignore:end */
+
             self.plate.off('webkitAnimationEnd animationend MSAnimationEnd oanimationend');
         }
     );
@@ -457,9 +461,9 @@
         value = new Date();
     }
     if(this.options.hour24){
-        this.hours = value.getHours()
+        this.hours = value.getHours();
     }else{
-        this.hours = value.getHours()%12
+        this.hours = value.getHours()%12;
         this.amOrPm = value.getHours() > 11 ? "AM" : "PM";
     }
     this.minutes = value.getMinutes();
@@ -502,7 +506,9 @@ LolliClock.prototype.hide = function () {
     self.plate.addClass("animate-out");
     self.header.addClass("animate-out");
     self.AmPmButtons.addClass("animate-out");
+    /* jshint ignore:start */
     !self.options.autoclose && self.closeButtons.addClass('animate-out');
+    /* jshint ignore:end */
 
     this.popover.on('webkitAnimationEnd animationend MSAnimationEnd oanimationend',
     function () {
@@ -512,7 +518,9 @@ LolliClock.prototype.hide = function () {
         self.plate.removeClass("animate-out");
         self.header.removeClass("animate-out");
         self.AmPmButtons.removeClass("animate-out");
+        /* jshint ignore:start */
         !self.options.autoclose && self.closeButtons.removeClass("animate-out");
+        /* jshint ignore:end */
         self.popover.off('webkitAnimationEnd animationend MSAnimationEnd oanimationend');
 
         // Unbinding events on document
@@ -580,12 +588,12 @@ LolliClock.prototype.resetClock = function (delay) {
     value = this[view],
     isHours = view === 'hours';
     if(isHours){
-        unit = Math.PI /  6
+        unit = Math.PI /  6;
         if(value !== 0 && value <=12 && this.options.hour24){
             outSizeMode = false;
         }
     }else{
-        unit = Math.PI / 30
+        unit = Math.PI / 30;
     }
 
     var radian = value * unit,
@@ -613,7 +621,7 @@ LolliClock.prototype.setHand = function (x, y, outSizeMode) {
 
     // Get the round value
     if(outSizeMode && this.options.hour24 && isHours){
-        value = Math.round(radian / unit)
+        value = Math.round(radian / unit);
         if(value === 12 || value ===0){
             value = 0;
         }else{
@@ -700,9 +708,9 @@ LolliClock.prototype.setHand = function (x, y, outSizeMode) {
 
     // Set clock hand and others' position
 
-    var r = radius
+    var r = radius;
     if (outSizeMode) {
-        r = outSizeRadius
+        r = outSizeRadius;
     }
     var cx = Math.sin(radian) * r,
     cy = -Math.cos(radian) * r;
@@ -720,7 +728,7 @@ LolliClock.prototype.done = function () {
     raiseCallback(this.options.beforeDone);
 
     var last = this.input.prop('value');
-    var value = ""
+    var value = "";
     if(!this.options.hour24){
         value = this.hours + ':' + leadingZero(this.minutes) + " " + this.amOrPm;
     }else{

@@ -1,7 +1,8 @@
 moment.locale('es');
 
+/* jshint ignore:start */
 'use strict';
-
+/* jshint ignore:end */
 var recetarium = angular.module('recetariumApp', [
     'environment',
     'ngRoute',
@@ -12,7 +13,8 @@ var recetarium = angular.module('recetariumApp', [
     'textAngular',
     'ui.router',
     // My Javascript
-    'Animations', 'TextEditor', 'NotificationProviders', 'FileDirectives', 'TimeDirectives',
+    'Animations', 'TextEditor', 'NotificationProviders',
+    'FileDirectives', 'TimeDirectives', 'ValidatorDirectives',
     'HomeController',
     'AuthServices', 'AuthController',
     'RecipeServices', 'RecipeFilters', 'RecipeController',
@@ -29,6 +31,8 @@ recetarium.config(['$routeProvider', '$locationProvider', function($routeProvide
         .when('/login', { templateUrl: 'views/auth/login.html', controller: 'Login', resolve: { access: ["AuthService", function (AuthService) { return AuthService.IsAnonymous(); }],}})
         .when('/logout', { template: '', controller: 'Logout', resolve: { access: ["AuthService", function (AuthService) { return AuthService.IsAuthenticated(); }],}})
         .when('/register', { templateUrl: 'views/auth/register.html', controller: 'Register', resolve: { access: ["AuthService", function (AuthService) { return AuthService.IsAnonymous(); }],}})
+        .when('/reset/password', { templateUrl: 'views/auth/reset-password.html', controller: 'ResetPassword', resolve: { access: ["AuthService", function (AuthService) { return AuthService.IsAnonymous(); }],}})
+        .when('/reset/password/:token', { templateUrl: 'views/auth/recover-password.html', controller: 'RecoverPassword', resolve: { access: ["AuthService", function (AuthService) { return AuthService.IsAnonymous(); }],}})
         .when('/recipes', { templateUrl: 'views/recipe/index.html', controller: 'RecipeAll' })
         .when('/recipes/:slug', { templateUrl: 'views/recipe/show.html', controller: 'RecipeShow' })
         .when('/recipes/:slug/edit', { templateUrl: 'views/recipe/edit.html', controller: 'RecipeEdit', resolve: { access: ["AuthService", "$route", "$rootScope", function (AuthService, $route, $rootScope) { $rootScope.progressBarActivated = true; return AuthService.IsMyRecipe($route.current.params.slug); }], }})
@@ -52,15 +56,15 @@ recetarium.config(['$httpProvider', function($httpProvider) {
             responseError: function (response) {
                 if (response.status === 401) {
                     if ($rootScope.globals.token) {
-                        $location.path('/unauthorized')
+                        $location.path('/unauthorized');
                     } else {
                         $location.path('/login');
                     }
                 }
                 return $q.reject(response);
             }
-        }
-    })
+        };
+    });
 }]);
 
 // Themes
@@ -89,6 +93,7 @@ recetarium.config(['envServiceProvider', function (envServiceProvider) {
 
 //
 recetarium.run(function ($rootScope, $location, $http, AuthService, ICONS) {
+    var authRegex = /\/login|\/register|\/reset\/password.*/
     $rootScope.location = $location;
     $rootScope.lastSearchParams = [];
     $rootScope.lastSearchParams['/recipes'] = {
@@ -115,25 +120,25 @@ recetarium.run(function ($rootScope, $location, $http, AuthService, ICONS) {
     $rootScope.$on('$locationChangeStart', function (ev, next, current, rejection) {
         // Auth header
         $http.defaults.headers.common['X-Auth-Token'] = $rootScope.globals.token;
+        var $path = $location.path();
 
         $rootScope.IsAuthed = AuthService.IsAuthed();
-        $rootScope.IsHome = ($location.path() == '/');
+        $rootScope.IsHome = ($path == '/');
         $rootScope.HasBack = false;
         $rootScope.errorMsg = false;
         $rootScope.progressBarActivated = false;
 
-        if ($rootScope.lastSearchParams[$location.path()]) {
-            $location.search($rootScope.lastSearchParams[$location.path()]);
+        if ($rootScope.lastSearchParams[$path]) {
+            $location.search($rootScope.lastSearchParams[$path]);
         }
 
         // Remove the params into URI
-        if ($location.path() !== '/recipes') {
+        if ($path !== '/recipes') {
             $location.search({});
         }
 
-        switch ($location.path()) {
-            case '/login':
-            case '/register':
+        switch (true) {
+            case (authRegex).test($path):
                 $rootScope.tabColor = '#00BFA5';
                 $rootScope.headerTheme = 'header-theme-auth';
                 $rootScope.loaderTheme = 'md-auth';
@@ -144,6 +149,7 @@ recetarium.run(function ($rootScope, $location, $http, AuthService, ICONS) {
                 $rootScope.headerTheme ='header-theme-default';
                 $rootScope.loaderTheme = 'md-default';
                 $rootScope.bodyTheme = 'body-theme-default';
+                break;
         }
     });
 
@@ -173,7 +179,7 @@ recetarium.run(function ($rootScope, $location, $http, AuthService, ICONS) {
         $('.md-ink-item').exists(function () {
             $(document).on('click', '.md-ink-item', function (e) {
                 var $this = $(this);
-                if ($this.find('.md-ink').length == 0) {
+                if ($this.find('.md-ink').length === 0) {
                     $this.prepend('<span class="md-ink"></span>');
                 }
                 var ink = $this.find('.md-ink');
@@ -227,7 +233,7 @@ $.getArrayId = function(array) {
         a.push(array[el].id);
     }
     return a;
-}
+};
 
 $.parseError = function(error) {
     var msg = '';
@@ -238,13 +244,13 @@ $.parseError = function(error) {
         }
         msg += '</ul>';
     } else if (angular.isObject(error)) {
-        for (var i in error) {
+        for (var field in error) {
             msg += '<ul>';
-            msg += '<li>' + i + '</li>' + $.parseError(error[i]);
+            msg += '<li>' + field + '</li>' + $.parseError(error[field]);
             msg += '</ul>';
         }
     } else {
         msg += error;
     }
     return msg;
-}
+};

@@ -10,7 +10,7 @@
             <div flex flex-order="1" flex-order-gt-sm="2" flex-gt-sm="40" flex-gt-md="30"
             class="md-padding" layout="row" layout-wrap layout-align="center center"
             layout-align-gt-sm="end start">
-                <div layout="column" layout-gt-md="row" layout-wrap flex>
+                <div layout="column" layout-wrap flex>
                     <a class="fancybox" title="Foto del plato principal" href="{{ images.main.href }}">
                         <img class="image-recipe-main" src="{{ images.main.href }}" />
                     </a>
@@ -23,6 +23,9 @@
                         </h4>
                         <h4>
                             <md-icon class="material-icons" ng-class="getDifficulty(recipe.difficulty)">stars</md-icon> Dificultad: {{ recipe.difficulty | humanized }}
+                        </h4>
+                        <h4>
+                            <md-icon class="material-icons" ng-class="getVisibilityClass(recipe.visibility)">{{ getVisibilityIcon(recipe.visibility) }}</md-icon> Visibilidad: {{ recipe.visibility | humanized }}
                         </h4>
                         <h4 ng-if="recipe.category">
                             <md-icon class="material-icons">bookmark</md-icon> Categoría: {{ recipe.category.text }}

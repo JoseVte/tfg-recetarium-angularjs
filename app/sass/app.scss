@@ -33,12 +33,16 @@ md-input-container.md-has-no-icon-left {
     }
 }
 .md-button{
+    min-width: 40px;
     &.md-edit,&.md-edit .material-icons {
         color: green;
     }
     &.md-remove,&.md-remove .material-icons {
         color: red;
     }
+}
+.without-fixed-height {
+    height: auto !important;
 }
 
 //*** Custom notification ***//
@@ -108,7 +112,7 @@ md-input-container.md-has-no-icon-left {
         background-color: $color;
     }
     a.md-button.md-fab.md-fixed-bottom-#{$theme} {
-        bottom:45px;
+        bottom:24px;
         background-color: $color;
         position:fixed;
         right:24px;
@@ -134,6 +138,14 @@ md-input-container.md-has-no-icon-left {
                     }
                 }
             }
+        }
+        .card-alert-success {
+            display: flex;
+            color: white;
+            background: $color;
+            border-radius: 2px;
+            padding: 16px 16px;
+            margin-bottom: 32px;
         }
         md-checkbox {
             &.md-checked {

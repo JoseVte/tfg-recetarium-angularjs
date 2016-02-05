@@ -9,6 +9,20 @@ recipeController.constant('DIFF', {
     'name': ['EASY', 'MEDIUM', 'HARD']
 });
 
+recipeController.constant('VISIBILITY', {
+    'class': {
+        'PUBLIC': 'md-green',
+        'FRIENDS': 'md-yellow',
+        'PRIVATE': 'md-red'
+    },
+    'icon': {
+        'PUBLIC': 'lock_open',
+        'FRIENDS': 'lock_outline',
+        'PRIVATE': 'lock'
+    },
+    'name': ['PUBLIC', 'FRIENDS', 'PRIVATE']
+})
+
 recipeController.constant('FILE_DROPZONE', {
     FileDragOver: function(e, scope) {
         e.stopPropagation();
@@ -19,11 +33,13 @@ recipeController.constant('FILE_DROPZONE', {
         this.FileDragOver(e);
         var files = e.target.files || e.dataTransfer.files;
         var index = 0;
+        /* jshint ignore:start */
         for (var i = 0, f; f = files[i]; i++) {
             index = scope.images.index;
             this.ParseFile(f, scope, compile, index, upload, RecipeService, NotificationProvider);
             scope.images.index++;
         }
+        /* jshint ignore:end */
     },
     ParseFile: function(file, scope, compile, index, upload, RecipeService, NotificationProvider) {
         var reader = new FileReader();
@@ -31,7 +47,7 @@ recipeController.constant('FILE_DROPZONE', {
             $('.images-recipe-gallery').append(compile('<div class="image-removable" ng-if="images.show[' + index + ']" id="image-removable-' + index + '">' +
                 '<img class="img-thumbnail" src="' + e.target.result + '" />' +
                 '<md-button ng-click="removeImage(' + index + ')" class="md-fab md-mini md-remove" aria-label="Close"><md-icon class="material-icons">close</md-icon></md-button></div>')(scope));
-        }
+        };
         reader.readAsDataURL(file);
         scope.images.recipe[index] = file;
         scope.images.show[index] = false;
@@ -75,7 +91,8 @@ recipeController.controller('RecipeAll',
         $rootScope.headerTitle = 'Recetas';
         $scope.pagination = {
             page: 1,
-            size: 10
+            size: 10,
+            search: null
         };
         $scope.recipes = [];
         $scope.sizes = [10, 30, 50];
@@ -92,13 +109,17 @@ recipeController.controller('RecipeAll',
             }
         });
 
+        $scope.searchRecipe = function () {
+            $location.search("search", $scope.pagination.search);
+        };
+
         $scope.selectSize = function () {
             $location.search("size", $scope.pagination.size);
         };
 
         $scope.getRecipes = function () {
             $rootScope.progressBarActivated = true;
-            RecipeService.all($scope.pagination, function (response) {
+            RecipeService.search($scope.pagination, function (response) {
                 var responseData = response.data;
                 $scope.recipes = responseData.data;
                 $scope.total = responseData.total;
@@ -135,7 +156,7 @@ recipeController.controller('RecipeAll',
         };
 
         $scope.isMine = function(user) {
-            if ($rootScope.globals) {
+            if ($rootScope.globals.user) {
                 var auth = $rootScope.globals.user.user;
                 return (auth.id == user.id && auth.email == user.email && auth.username == user.username) || auth.type == 'ADMIN';
             }
@@ -162,7 +183,7 @@ recipeController.controller('RecipeAll',
                 .ariaLabel('Borrar')
                 .targetEvent($event)
                 .ok('Borrar')
-                .cancel('Cancelar')
+                .cancel('Cancelar');
             $mdDialog.show(confirm).then(function () {
                 var notify = NotificationProvider.notify({
                     title: 'Receta borrada',
@@ -184,7 +205,7 @@ recipeController.controller('RecipeAll',
                             icon: 'error_outline',
                             title: 'Datos incorrectos',
                             msg: $.parseError(response.data),
-                        }
+                        };
                     } else {
                         NotificationProvider.notify({
                             title: 'Un error ha ocurrido',
@@ -199,19 +220,19 @@ recipeController.controller('RecipeAll',
                             icon: 'error_outline',
                             title: 'Algo ha ido mal',
                             msg: 'Ha ocurrido un error mientras se borraba la receta.'
-                        }
+                        };
                     }
                     $rootScope.errorMsg = true;
                     $rootScope.progressBarActivated = false;
                 });
             }, function() {});
-        }
+        };
     }]
 );
 
 recipeController.controller('RecipeShow',
-    ['$scope', '$rootScope', '$location', '$routeParams', '$sce', 'RecipeService', 'NotificationProvider', 'DIFF',
-    function ($scope, $rootScope, $location, $routeParams, $sce, RecipeService, NotificationProvider, DIFF) {
+    ['$scope', '$rootScope', '$location', '$routeParams', '$sce', 'RecipeService', 'NotificationProvider', 'DIFF', 'VISIBILITY',
+    function ($scope, $rootScope, $location, $routeParams, $sce, RecipeService, NotificationProvider, DIFF, VISIBILITY) {
         $rootScope.headerTitle = 'Cargando';
         $rootScope.progressBarActivated = true;
         $rootScope.HasBack = true;
@@ -272,15 +293,19 @@ recipeController.controller('RecipeShow',
             if (steps) return $sce.trustAsHtml(steps);
         };
 
-        $scope.getDifficulty = function (diff) { return DIFF.class[diff]; }
+        $scope.getDifficulty = function (diff) { return DIFF.class[diff]; };
+
+        $scope.getVisibilityIcon = function (visibility) { return VISIBILITY.icon[visibility]; };
+
+        $scope.getVisibilityClass = function (visibility) { return VISIBILITY.class[visibility]; };
     }]
 );
 
 recipeController.controller('RecipeCreate',
     ['$scope', '$rootScope', '$location', 'RecipeService', 'CategoryService', 'TagService',
-    'NotificationProvider', 'DIFF', '$timeout', 'FILE_DROPZONE', '$compile',
+    'NotificationProvider', 'DIFF', 'VISIBILITY', '$timeout', 'FILE_DROPZONE', '$compile',
     function ($scope, $rootScope, $location, RecipeService, CategoryService, TagService,
-        NotificationProvider, DIFF, $timeout, FILE_DROPZONE, $compile) {
+        NotificationProvider, DIFF, VISIBILITY, $timeout, FILE_DROPZONE, $compile) {
         $rootScope.headerTitle = 'Nueva receta';
         $rootScope.HasBack = true;
         $rootScope.back = function () {
@@ -291,6 +316,7 @@ recipeController.controller('RecipeCreate',
         $scope.validSlug = true;
         $scope.loadingSlug = false;
         $scope.diffs = DIFF.name;
+        $scope.visibilities = VISIBILITY.name;
         $scope.tags = [];
         $scope.recipe = {
             ingredients: [],
@@ -353,11 +379,11 @@ recipeController.controller('RecipeCreate',
         $scope.$watch(function() {
             return $scope.recipe.category_id;
         }, function (newVal, oldVal) {
-            if (newVal == null) $scope.recipe.category_id = undefined;
+            if (newVal === null) $scope.recipe.category_id = undefined;
         });
 
         $scope.addIngredient = function() {
-            if ($scope.recipe.newIngredient != null && $scope.recipe.newIngredient.name != null && $scope.recipe.newIngredient.name != '') {
+            if ($scope.recipe.newIngredient !== null && $scope.recipe.newIngredient.name !== null && $scope.recipe.newIngredient.name !== '') {
                 $scope.newRecipe.newIngredientName.$error = {};
                 $scope.recipe.ingredients.push({
                     name: $scope.recipe.newIngredient.name,
@@ -379,7 +405,11 @@ recipeController.controller('RecipeCreate',
             return ($scope.requestSlug && $scope.requestSlug.abort());
         };
 
-        $scope.getDifficulty = function (diff) { return DIFF.class[diff]; }
+        $scope.getDifficulty = function (diff) { return DIFF.class[diff]; };
+
+        $scope.getVisibilityIcon = function (visibility) { return VISIBILITY.icon[visibility]; };
+
+        $scope.getVisibilityClass = function (visibility) { return VISIBILITY.class[visibility]; };
 
         $scope.loadCategories = function() {
             CategoryService.all(function (response) {
@@ -419,8 +449,8 @@ recipeController.controller('RecipeCreate',
             if (angular.isObject(chip)) {
                 return chip;
             }
-            return { text: chip, type: 'nuevo' }
-        }
+            return { text: chip, type: 'nuevo' };
+        };
 
         $scope.tagSearch = function(search) {
             if(search) {
@@ -461,7 +491,7 @@ recipeController.controller('RecipeCreate',
                                     icon: 'error_outline',
                                     title: 'Datos incorrectos',
                                     msg: $.parseError(response.data),
-                                }
+                                };
                             } else {
                                 NotificationProvider.notify({
                                     title: 'Un error ha ocurrido',
@@ -476,7 +506,7 @@ recipeController.controller('RecipeCreate',
                                     icon: 'error_outline',
                                     title: 'Algo ha ido mal',
                                     msg: 'Ha ocurrido un error mientras se guardaban las imágenes.'
-                                }
+                                };
                             }
                             $rootScope.errorMsg = true;
                             $rootScope.progressBarActivated = false;
@@ -492,7 +522,7 @@ recipeController.controller('RecipeCreate',
                             icon: 'error_outline',
                             title: 'Datos incorrectos',
                             msg: $.parseError(response.data),
-                        }
+                        };
                     } else {
                         NotificationProvider.notify({
                             title: 'Un error ha ocurrido',
@@ -507,7 +537,7 @@ recipeController.controller('RecipeCreate',
                             icon: 'error_outline',
                             title: 'Algo ha ido mal',
                             msg: 'Ha ocurrido un error mientras se guardaban las imágenes.'
-                        }
+                        };
                     }
                     $rootScope.errorMsg = true;
                     $rootScope.progressBarActivated = false;
@@ -519,7 +549,7 @@ recipeController.controller('RecipeCreate',
                         icon: 'error_outline',
                         title: 'Datos incorrectos',
                         msg: $.parseError(response.data),
-                    }
+                    };
                 } else {
                     NotificationProvider.notify({
                         title: 'Un error ha ocurrido',
@@ -534,7 +564,7 @@ recipeController.controller('RecipeCreate',
                         icon: 'error_outline',
                         title: 'Algo ha ido mal',
                         msg: 'Ha ocurrido un error mientras se creaba la receta.'
-                    }
+                    };
                 }
                 $rootScope.errorMsg = true;
                 $rootScope.progressBarActivated = false;
@@ -547,7 +577,7 @@ recipeController.controller('RecipeCreate',
                 $('#image-removable-' + index).remove();
                 $scope.images.recipe.splice(index, 1);
             });
-        }
+        };
 
         $scope.$on('$viewContentLoaded', function() {
             if (window.File && window.FileList && window.FileReader) {
@@ -569,9 +599,9 @@ recipeController.controller('RecipeCreate',
 
 recipeController.controller('RecipeEdit',
     ['$scope', '$rootScope', '$location', 'RecipeService', 'CategoryService', 'TagService',
-    'NotificationProvider', 'DIFF', '$timeout', 'FILE_DROPZONE', '$compile', '$routeParams', 'IngredientService',
+    'NotificationProvider', 'DIFF', 'VISIBILITY', '$timeout', 'FILE_DROPZONE', '$compile', '$routeParams', 'IngredientService',
     function ($scope, $rootScope, $location, RecipeService, CategoryService, TagService,
-        NotificationProvider, DIFF, $timeout, FILE_DROPZONE, $compile, $routeParams, IngredientService) {
+        NotificationProvider, DIFF, VISIBILITY, $timeout, FILE_DROPZONE, $compile, $routeParams, IngredientService) {
         $rootScope.headerTitle = 'Editar receta';
         $rootScope.HasBack = true;
         $rootScope.back = function () {
@@ -582,6 +612,7 @@ recipeController.controller('RecipeEdit',
         $scope.validSlug = true;
         $scope.loadingSlug = false;
         $scope.diffs = DIFF.name;
+        $scope.visibilities = VISIBILITY.name;
         $scope.recipe = {};
         $scope.tags = [];
         $scope.images = {
@@ -699,11 +730,11 @@ recipeController.controller('RecipeEdit',
         $scope.$watch(function() {
             return $scope.recipe.category_id;
         }, function (newVal, oldVal) {
-            if (newVal == null) $scope.recipe.category_id = undefined;
+            if (newVal === null) $scope.recipe.category_id = undefined;
         });
 
         $scope.addIngredient = function() {
-            if ($scope.recipe.newIngredient != null && $scope.recipe.newIngredient.name != null && $scope.recipe.newIngredient.name != '') {
+            if ($scope.recipe.newIngredient !== null && $scope.recipe.newIngredient.name !== null && $scope.recipe.newIngredient.name !== '') {
                 $scope.editRecipe.newIngredientName.$error = {};
                 var ingredient = {
                     name: $scope.recipe.newIngredient.name,
@@ -794,7 +825,11 @@ recipeController.controller('RecipeEdit',
             return ($scope.requestSlug && $scope.requestSlug.abort());
         };
 
-        $scope.getDifficulty = function (diff) { return DIFF.class[diff]; }
+        $scope.getDifficulty = function (diff) { return DIFF.class[diff]; };
+
+        $scope.getVisibilityIcon = function (visibility) { return VISIBILITY.icon[visibility]; };
+
+        $scope.getVisibilityClass = function (visibility) { return VISIBILITY.class[visibility]; };
 
         $scope.loadCategories = function() {
             CategoryService.all(function (response) {
@@ -834,8 +869,8 @@ recipeController.controller('RecipeEdit',
             if (angular.isObject(chip)) {
                 return chip;
             }
-            return { text: chip, type: 'nuevo' }
-        }
+            return { text: chip, type: 'nuevo' };
+        };
 
         $scope.tagSearch = function(search) {
             if(search) {
@@ -874,7 +909,7 @@ recipeController.controller('RecipeEdit',
                                 icon: 'error_outline',
                                 title: 'Datos incorrectos',
                                 msg: $.parseError(response.data),
-                            }
+                            };
                         } else {
                             NotificationProvider.notify({
                                 title: 'Un error ha ocurrido',
@@ -889,7 +924,7 @@ recipeController.controller('RecipeEdit',
                                 icon: 'error_outline',
                                 title: 'Algo ha ido mal',
                                 msg: 'Ha ocurrido un error mientras se guardaban las imágenes.'
-                            }
+                            };
                         }
                         $rootScope.errorMsg = true;
                         $rootScope.progressBarActivated = false;
@@ -905,7 +940,7 @@ recipeController.controller('RecipeEdit',
                         icon: 'error_outline',
                         title: 'Datos incorrectos',
                         msg: $.parseError(response.data),
-                    }
+                    };
                 } else {
                     NotificationProvider.notify({
                         title: 'Un error ha ocurrido',
@@ -920,7 +955,7 @@ recipeController.controller('RecipeEdit',
                         icon: 'error_outline',
                         title: 'Algo ha ido mal',
                         msg: 'Ha ocurrido un error mientras se guardaba la receta.'
-                    }
+                    };
                 }
                 $rootScope.errorMsg = true;
                 $rootScope.progressBarActivated = false;
@@ -930,7 +965,7 @@ recipeController.controller('RecipeEdit',
 
         $scope.removeImage = function(index) {
             $('#image-removable-' + index).exists(function () {
-                RecipeService.deleteFile(index, function (response) {
+                RecipeService.deleteFile($scope.recipe.id, index, function (response) {
                     NotificationProvider.notify({
                         title: 'Image borrada',
                         text: '',
@@ -953,9 +988,9 @@ recipeController.controller('RecipeEdit',
                         styling: 'fontawesome'
                     });
                     $('.ui-pnotify.custom-error-notify .material-icons').html('warning');
-                })
+                });
             });
-        }
+        };
 
         $scope.$on('$viewContentLoaded', function() {
             if (window.File && window.FileList && window.FileReader) {
