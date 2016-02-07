@@ -230,7 +230,7 @@ $.containsId = function(el, array) {
 $.getArrayId = function(array) {
     var a = [];
     for (var el in array) {
-        a.push(array[el].id);
+        array[el].id && a.push(array[el].id);
     }
     return a;
 };

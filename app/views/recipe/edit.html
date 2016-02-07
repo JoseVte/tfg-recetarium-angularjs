@@ -1,5 +1,5 @@
 <md-content class="md-padding" layout="column" layout-wrap layout-align="center center" layout-align-gt-md="center start">
-    <form name="editRecipe" novalidate>
+    <form name="formRecipe" novalidate>
         <md-card flex class="card-recipe-edit">
             <md-card-title>
                 <md-card-title-text>
@@ -7,7 +7,7 @@
                     <md-input-container>
                         <label>* Título</label>
                         <input required type="text" name="title" class="md-headline" ng-model="recipe.title" aria-label="title">
-                        <div ng-messages="editRecipe.title.$error" md-auto-hide="false">
+                        <div ng-messages="formRecipe.title.$error" md-auto-hide="false">
                             <div ng-message="required">El título de la receta es obligatorio.</div>
                         </div>
                     </md-input-container>
@@ -15,7 +15,7 @@
                         <label>* Slug</label>
                         <input required type="text" name="slug" class="md-subhead" ng-model="recipe.slug" aria-label="slug">
                         <md-icon ng-class="{loaderIcon:loadingSlug}" class="material-icons">{{ validSlugIcon }}</md-icon>
-                        <div ng-messages="editRecipe.slug.$error" md-auto-hide="false">
+                        <div ng-messages="formRecipe.slug.$error" md-auto-hide="false">
                             <div ng-message="required">El slug de la receta es obligatorio.</div>
                             <div ng-message="validSlug">El slug ya existe.</div>
                         </div>
@@ -34,7 +34,7 @@
                         <div class="md-file-input">
                             <md-input-container>
                                 <input type="text" ng-required="true" name="mainImageName" required readonly placeholder="* Foto principal" class="md-textfield-input" ng-model="recipe.images.main.title">
-                                <div ng-messages="editRecipe.mainImageName.$error" md-auto-hide="false">
+                                <div ng-messages="formRecipe.mainImageName.$error" md-auto-hide="false">
                                     <div ng-message="required">La imagen principal de la receta es obligatoria.</div>
                                 </div>
                             </md-input-container>
@@ -50,7 +50,7 @@
                                     <span flex><md-icon class="material-icons">timelapse</md-icon> * Duración (H:M):</span>
                                     <input required flex type="time" min="00:01:00" name="duration" ng-model="recipe.duration" str-to-time aria-label="duration"/>
                                 </h4>
-                                <div ng-messages="editRecipe.duration.$error" md-auto-hide="false">
+                                <div ng-messages="formRecipe.duration.$error" md-auto-hide="false">
                                     <div ng-message="min">La duración debe de ser de mas de 1 min.</div>
                                 </div>
                             </md-input-container>
@@ -103,7 +103,7 @@
                                     <md-input-container class="md-block" flex="70" flex-gt-sm>
                                         <label>Nombre</label>
                                         <input required type="text" name="ingredientName{{$index}}" ng-model="ingredient.name" />
-                                        <div ng-messages="editRecipe['ingredientName' + $index].$error" md-auto-hide="false">
+                                        <div ng-messages="formRecipe['ingredientName' + $index].$error" md-auto-hide="false">
                                             <div ng-message="required">El nombre del ingrediente es necesario.</div>
                                         </div>
                                     </md-input-container>
@@ -121,7 +121,7 @@
                                     <md-input-container class="md-block" flex="70" flex-gt-sm>
                                         <label>Nombre</label>
                                         <input type="text" name="newIngredientName" ng-model="recipe.newIngredient.name" customRequired />
-                                        <ng-messages for="editRecipe.newIngredientName.$error" md-auto-hide="false">
+                                        <ng-messages for="formRecipe.newIngredientName.$error" md-auto-hide="false">
                                             <ng-message when="customRequired">El nombre del ingrediente es necesario.</ng-message>
                                         </ng-messages>
                                     </md-input-container>
@@ -181,7 +181,7 @@
             </div>
 
             <md-card-actions layout="row" layout-align="end">
-                <md-button class="md-primary md-raised" ng-click="edit()" ng-disabled="editRecipe.$invalid || progressBarActivated">editar la receta</md-button>
+                <md-button class="md-primary md-raised" ng-click="edit()" ng-disabled="formRecipe.$invalid || progressBarActivated">editar la receta</md-button>
             </md-card-actions>
         </md-card>
     </form>

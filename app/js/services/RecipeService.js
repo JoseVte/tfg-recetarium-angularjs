@@ -60,6 +60,30 @@ recipeService.factory('RecipeService',
             });
         };
 
+        service.getDraft = function (callbackOk, callbackError) {
+            $http.post(
+                service.apiUrl + '/recipes/draft',
+                {},
+                { headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' } }
+            ).then(function (response) {
+                callbackOk(response);
+            }, function (response) {
+                callbackError(response);
+            });
+        };
+
+        service.createFromDraft = function(callbackOk, callbackError) {
+            $http.post(
+                service.apiUrl + '/recipes/create-from-draft',
+                {},
+                { headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' } }
+            ).then(function (response) {
+                callbackOk(response);
+            }, function (response) {
+                callbackError(response);
+            });
+        };
+
         service.getImages = function(recipe) {
             var mainImage = recipe.media.filter(function(obj) {
                 return service.regexMainImage.exec(obj.filename) !== null;
@@ -139,7 +163,7 @@ recipeService.factory('RecipeService',
         service.getNewTags = function(array) {
             var a = [];
             for (var el in array) {
-                if (array[el].type) a.push(array[el].type);
+                !array[el].id && a.push(array[el].text);
             }
             return a;
         };

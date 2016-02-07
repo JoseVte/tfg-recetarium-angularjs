@@ -1,5 +1,5 @@
 <md-content class="md-padding" layout="column" layout-wrap layout-align="center center" layout-align-gt-md="center start">
-    <form name="newRecipe" novalidate>
+    <form name="formRecipe" novalidate>
         <md-card flex class="card-recipe-create">
             <md-card-title>
                 <md-card-title-text>
@@ -7,7 +7,7 @@
                     <md-input-container>
                         <label>* Título</label>
                         <input required type="text" name="title" class="md-headline" ng-model="recipe.title" aria-label="title">
-                        <div ng-messages="newRecipe.title.$error" md-auto-hide="false">
+                        <div ng-messages="formRecipe.title.$error" md-auto-hide="false">
                             <div ng-message="required">El título de la receta es obligatorio.</div>
                         </div>
                     </md-input-container>
@@ -15,7 +15,7 @@
                         <label>* Slug</label>
                         <input required type="text" name="slug" class="md-subhead" ng-model="recipe.slug" aria-label="slug">
                         <md-icon ng-class="{loaderIcon:loadingSlug}" class="material-icons">{{ validSlugIcon }}</md-icon>
-                        <div ng-messages="newRecipe.slug.$error" md-auto-hide="false">
+                        <div ng-messages="formRecipe.slug.$error" md-auto-hide="false">
                             <div ng-message="required">El slug de la receta es obligatorio.</div>
                             <div ng-message="validSlug">El slug ya existe.</div>
                         </div>
@@ -30,12 +30,11 @@
                     class="md-padding" layout="row" layout-wrap layout-align="center center"
                     layout-align-gt-sm="end start">
                     <div layout="column" layout-wrap flex class="group-input-right">
-                        <img src="https://placeholdit.imgix.net/~text?txtsize=61&txt=Foto%20principal&w=900&h=500"
-                        id="image-main" class="image-recipe-main" />
+                        <img src="{{ recipe.images.main.href }}"  id="image-main" class="image-recipe-main" />
                         <div class="md-file-input">
                             <md-input-container>
-                                <input type="text" ng-required="true" name="mainImageName" required readonly placeholder="* Foto principal" class="md-textfield-input" ng-model="images.name">
-                                <div ng-messages="newRecipe.mainImageName.$error" md-auto-hide="false">
+                                <input type="text" ng-required="true" name="mainImageName" required readonly placeholder="* Foto principal" class="md-textfield-input" ng-model="recipe.images.main.title">
+                                <div ng-messages="formRecipe.mainImageName.$error" md-auto-hide="false">
                                     <div ng-message="required">La imagen principal de la receta es obligatoria.</div>
                                 </div>
                             </md-input-container>
@@ -51,7 +50,7 @@
                                     <span flex><md-icon class="material-icons">timelapse</md-icon> * Duración (H:M):</span>
                                     <input required flex type="time" min="00:01:00" name="duration" ng-model="recipe.duration" str-to-time aria-label="duration"/>
                                 </h4>
-                                <div ng-messages="newRecipe.duration.$error" md-auto-hide="false">
+                                <div ng-messages="formRecipe.duration.$error" md-auto-hide="false">
                                     <div ng-message="min">La duración debe de ser de mas de 1 min.</div>
                                 </div>
                             </md-input-container>
@@ -104,7 +103,7 @@
                                     <md-input-container class="md-block" flex="70" flex-gt-sm>
                                         <label>Nombre</label>
                                         <input required type="text" name="ingredientName{{$index}}" ng-model="ingredient.name" />
-                                        <div ng-messages="newRecipe['ingredientName' + $index].$error" md-auto-hide="false">
+                                        <div ng-messages="formRecipe['ingredientName' + $index].$error" md-auto-hide="false">
                                             <div ng-message="required">El nombre del ingrediente es necesario.</div>
                                         </div>
                                     </md-input-container>
@@ -122,7 +121,7 @@
                                     <md-input-container class="md-block" flex="70" flex-gt-sm>
                                         <label>Nombre</label>
                                         <input type="text" name="newIngredientName" ng-model="recipe.newIngredient.name" customRequired />
-                                        <ng-messages for="newRecipe.newIngredientName.$error" md-auto-hide="false">
+                                        <ng-messages for="formRecipe.newIngredientName.$error" md-auto-hide="false">
                                             <ng-message when="customRequired">El nombre del ingrediente es necesario.</ng-message>
                                         </ng-messages>
                                     </md-input-container>
@@ -166,19 +165,24 @@
             <div layout="row" layout-wrap layout-padding>
                 <div flex layout-align="center" layout="row" layout-wrap>
                     <div class="images-recipe-input">
-                        <input type="file" name="files[]" id="files"  ng-model="images.recipe"
-                        accept="image/*" multiple="multiple" aria-label="Images">
+                        <input type="file" name="files[]" id="files"  ng-model="images.recipe" accept="image/*" multiple="multiple" aria-label="Images">
                         <label for="files" class="md-ink-item">
                             <md-icon class="material-icons md-light">file_upload</md-icon> Elige tus imágenes
                         </label>
                     </div>
                     <div id="filedrag">Arrastra y suelta las imágenes aqui</div>
-                    <div class="images-recipe-gallery" layout="row" layout-wrap layout-align="center center" flex></div>
+                    <div class="images-recipe-gallery" layout="row" layout-wrap layout-align="center center" flex>
+                        <div class="image-removable" id="image-removable-{{ image.id }}" ng-repeat="image in recipe.images.gallery">
+                            <img class="img-thumbnail" ng-src="{{ image.href }}"  />
+                            <md-button ng-click="removeImage(image.id)" class="md-fab md-mini md-remove" aria-label="Close"><md-icon class="material-icons">close</md-icon></md-button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <md-card-actions layout="row" layout-align="end">
-                <md-button class="md-primary md-raised" ng-click="create()" ng-disabled="newRecipe.$invalid || progressBarActivated">crear la receta</md-button>
+                <md-button class="md-primary md-raised" ng-click="save()" ng-disabled="progressBarActivated">guardar borrador de la receta</md-button>
+                <md-button class="md-primary md-raised" ng-click="publish()" ng-disabled="formRecipe.$invalid || progressBarActivated">publicar receta</md-button>
             </md-card-actions>
         </md-card>
     </form>

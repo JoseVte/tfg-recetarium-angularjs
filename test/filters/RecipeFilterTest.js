@@ -24,6 +24,9 @@ describe('Module RecipeFilters', function() {
             expect(humanizedFilter('EASY')).toEqual('Fácil');
             expect(humanizedFilter('MEDIUM')).toEqual('Media');
             expect(humanizedFilter('HARD')).toEqual('Difícil');
+            expect(humanizedFilter('PUBLIC')).toEqual('Pública');
+            expect(humanizedFilter('FRIENDS')).toEqual('Solo amigos');
+            expect(humanizedFilter('PRIVATE')).toEqual('Privada');
         }));
 
         it('humanize no existing difficulty', inject ( function (humanizedFilter) {

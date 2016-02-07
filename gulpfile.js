@@ -59,8 +59,8 @@ gulp.task('js', function() {
     .pipe(gulpif(argv.production, ngAnnotate({ single_quotes: true })))
     .on('error', console.log)
     .pipe(gulpif(argv.production, uglify({mangle: false}), beautify({indentSize: 2})))
-    .pipe(jshint())
-    .pipe(jshint.reporter(stylish))
+    .pipe(gulpif(!argv.production, jshint()))
+    .pipe(gulpif(!argv.production, jshint.reporter(stylish)))
     .on('error', console.log)
     .pipe(gulp.dest(paths.dest.js))
     .pipe(notify({ message: 'JS minified' }));

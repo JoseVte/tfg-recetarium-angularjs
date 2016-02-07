@@ -49,7 +49,12 @@ http-server -a localhost -p 8000
 
 ## Changelog
 
-#### [![0.3.0](/app/doc/rocket-blue.png) 0.3.0](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.3.0)
+#### [![0.3.1](/app/doc/rocket-blue.png) 0.3.1](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.3.1)
+
+- Generar receta desde un borrador
+- Primer test para el controlador
+
+###### [![0.3.0](/app/doc/release.png) 0.3.0](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.3.0)
 
 - Visibilidad de las recetas
 
