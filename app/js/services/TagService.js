@@ -7,7 +7,7 @@ tagService.factory('TagService',
             apiUrl: envService.read('apiUrl'),
         };
 
-        service.all = function (search, callbackOk, callbackError) {
+        service.search = function (search, callbackOk, callbackError) {
             return $http.get(
                 service.apiUrl + '/tags',
                 {

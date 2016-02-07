@@ -1,7 +1,7 @@
 module.exports = function(config){
     configuration = {
         basePath : './',
-        reporters: ['junit', 'coverage', 'html'],
+        reporters: ['verbose', 'junit', 'coverage', 'html'],
         files : [
             '../app/assets/js/lib/app-lib.min.js',
             '../app/js/**/*.js',
@@ -22,6 +22,7 @@ module.exports = function(config){
             'karma-firefox-launcher',
             'karma-jasmine',
             'karma-junit-reporter',
+            'karma-verbose-reporter',
             'karma-coverage',
             'karma-htmlfile-reporter',
         ],

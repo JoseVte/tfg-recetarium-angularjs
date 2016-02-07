@@ -26,7 +26,7 @@ recipeFilter.filter('humanized', function() {
             case 'FRIENDS':
                 return 'Solo amigos';
             case 'PRIVATE':
-                return 'Privado';
+                return 'Privada';
             default:
                 return '';
         }
