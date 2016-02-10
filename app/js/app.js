@@ -33,6 +33,8 @@ recetarium.config(['$routeProvider', '$locationProvider', function($routeProvide
         .when('/register', { templateUrl: 'views/auth/register.html', controller: 'Register', resolve: { access: ["AuthService", function (AuthService) { return AuthService.IsAnonymous(); }],}})
         .when('/reset/password', { templateUrl: 'views/auth/reset-password.html', controller: 'ResetPassword', resolve: { access: ["AuthService", function (AuthService) { return AuthService.IsAnonymous(); }],}})
         .when('/reset/password/:token', { templateUrl: 'views/auth/recover-password.html', controller: 'RecoverPassword', resolve: { access: ["AuthService", function (AuthService) { return AuthService.IsAnonymous(); }],}})
+        .when('/profile', { templateUrl: 'views/auth/profile.html', controller: 'EditProfile', resolver: { access: ["AuthService", function (AuthService) { return AuthService.IsAuthenticated(); }], }})
+        // Recipes
         .when('/recipes', { templateUrl: 'views/recipe/index.html', controller: 'RecipeAll' })
         .when('/recipes/:slug', { templateUrl: 'views/recipe/show.html', controller: 'RecipeShow' })
         .when('/recipes/:slug/edit', { templateUrl: 'views/recipe/edit.html', controller: 'RecipeEdit', resolve: { access: ["AuthService", "$route", "$rootScope", function (AuthService, $route, $rootScope) { $rootScope.progressBarActivated = true; return AuthService.IsMyRecipe($route.current.params.slug); }], }})
@@ -93,7 +95,8 @@ recetarium.config(['envServiceProvider', function (envServiceProvider) {
 
 //
 recetarium.run(function ($rootScope, $location, $http, AuthService, ICONS) {
-    var authRegex = /\/login|\/register|\/reset\/password.*/
+    var authRegex = /\/login|\/register|\/reset\/password.*/;
+    var profileRegex = /\/profile.*/;
     $rootScope.location = $location;
     $rootScope.lastSearchParams = [];
     $rootScope.lastSearchParams['/recipes'] = {
@@ -123,6 +126,9 @@ recetarium.run(function ($rootScope, $location, $http, AuthService, ICONS) {
         var $path = $location.path();
 
         $rootScope.IsAuthed = AuthService.IsAuthed();
+        if ($rootScope.IsAuthed) {
+            $rootScope.UserLogged = $rootScope.globals.user.user;
+        }
         $rootScope.IsHome = ($path == '/');
         $rootScope.HasBack = false;
         $rootScope.errorMsg = false;
@@ -143,6 +149,12 @@ recetarium.run(function ($rootScope, $location, $http, AuthService, ICONS) {
                 $rootScope.headerTheme = 'header-theme-auth';
                 $rootScope.loaderTheme = 'md-auth';
                 $rootScope.bodyTheme = 'body-theme-auth';
+                break;
+            case (profileRegex).test($path):
+                $rootScope.tabColor = '#304FFE';
+                $rootScope.headerTheme = 'header-theme-profile';
+                $rootScope.loaderTheme = 'md-profile';
+                $rootScope.bodyTheme = 'body-theme-profile';
                 break;
             default:
                 $rootScope.tabColor = '#DD2C00';

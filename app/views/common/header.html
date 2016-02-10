@@ -12,6 +12,7 @@
             <h1 layout-margin-gt-sm="center" ng-class="{'loading': progressBarActivated}">{{ headerTitle }}</h1>
             <span flex></span>
             <div ng-if="IsAuthed" hide-xs hide-sm show-gt-sm>
+                <md-button ng-href="/profile">Hola, {{ UserLogged.first_name }}</md-button>
                 <md-button ng-href="/logout">Logout</md-button>
             </div>
             <div ng-if="!IsAuthed" hide-xs hide-sm show-gt-sm>
