@@ -57,6 +57,29 @@ authServices.factory('AuthService',
             });
         };
 
+        service.GetProfile = function (callbackOk, callbackError) {
+            $http.get(
+                service.apiUrl + '/profile',
+                { headers: {'Accept': 'application/json', 'Content-Type': 'application/json'} }
+            ).then(function (response) {
+                callbackOk(response);
+            }, function (response) {
+                callbackError(response);
+            });
+        };
+
+        service.EditProfile = function (user, callbackOk, callbackError) {
+            $http.put(
+                service.apiUrl + '/profile',
+                user,
+                { headers: {'Accept': 'application/json', 'Content-Type': 'application/json'} }
+            ).then(function (response) {
+                callbackOk(response);
+            }, function (response) {
+                callbackError(response);
+            });
+        };
+
         service.SaveCredentials = function (token, user) {
             $rootScope.globals = {
                 token: token,
