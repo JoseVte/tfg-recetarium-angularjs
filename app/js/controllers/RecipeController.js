@@ -21,7 +21,7 @@ recipeController.constant('VISIBILITY', {
         'PRIVATE': 'lock'
     },
     'name': ['PUBLIC', 'FRIENDS', 'PRIVATE']
-})
+});
 
 recipeController.constant('FILE_DROPZONE', {
     FileDragOver: function(e, scope) {
@@ -60,7 +60,7 @@ recipeController.constant('FILE_DROPZONE', {
                     type: 'success',
                     addclass: 'custom-success-notify',
                     icon: 'material-icons md-light',
-                    styling: 'fontawesome',
+                    styling: 'fontawesome'
                 });
                 $('.ui-pnotify.custom-success-notify .material-icons').html('photo');
             }, function (response) {
@@ -97,7 +97,7 @@ recipeController.constant('EDIT_FUNCTIONS', {
         $scope.images = {
             recipe: [],
             show: [],
-            index: 0,
+            index: 0
         };
         $scope.imagesLink = {};
     },
@@ -274,7 +274,7 @@ recipeController.constant('EDIT_FUNCTIONS', {
         $scope.formRecipe.newIngredientName.$error = {};
         var ingredient = {
             name: $scope.recipe.newIngredient.name,
-            count: $scope.recipe.newIngredient.count,
+            count: $scope.recipe.newIngredient.count
         };
         IngredientService.add($scope.recipe.id, ingredient, function (response) {
             $scope.recipe.ingredients.push(response.data);
@@ -286,7 +286,7 @@ recipeController.constant('EDIT_FUNCTIONS', {
                 type: 'success',
                 addclass: 'custom-success-notify',
                 icon: 'material-icons md-light',
-                styling: 'fontawesome',
+                styling: 'fontawesome'
             });
             $('.ui-pnotify.custom-success-notify .material-icons').html('restaurant_menu');
         }, function (response) {
@@ -324,7 +324,7 @@ recipeController.constant('EDIT_FUNCTIONS', {
                 type: 'success',
                 addclass: 'custom-success-notify',
                 icon: 'material-icons md-light',
-                styling: 'fontawesome',
+                styling: 'fontawesome'
             });
             $('.ui-pnotify.custom-success-notify .material-icons').html('restaurant_menu');
         }, function (response) {
@@ -391,7 +391,7 @@ recipeController.constant('EDIT_FUNCTIONS', {
                     type: 'success',
                     addclass: 'custom-success-notify',
                     icon: 'material-icons md-light',
-                    styling: 'fontawesome',
+                    styling: 'fontawesome'
                 });
                 $('.ui-pnotify.custom-success-notify .material-icons').html('photo_filter');
                 $('#image-removable-' + index).remove();
@@ -461,7 +461,7 @@ recipeController.controller('RecipeAll',
                     type: 'error',
                     addclass: 'custom-error-notify',
                     icon: 'material-icons md-light',
-                    styling: 'fontawesome',
+                    styling: 'fontawesome'
                 });
                 $('.ui-pnotify.custom-error-notify .material-icons').html('warning');
                 $rootScope.error = {
@@ -518,7 +518,7 @@ recipeController.controller('RecipeAll',
                     type: 'success',
                     addclass: 'custom-success-notify',
                     icon: 'material-icons md-light',
-                    styling: 'fontawesome',
+                    styling: 'fontawesome'
                 });
                 $('.ui-pnotify.custom-success-notify .material-icons').html('check_circle');
                 $rootScope.progressBarActivated = true;
@@ -530,8 +530,8 @@ recipeController.controller('RecipeAll',
                     if (response.status == 404) {
                         $rootScope.error = {
                             icon: 'error_outline',
-                            title: 'Datos incorrectos',
-                            msg: $.parseError(response.data),
+                            title: 'Receta no encontrada',
+                            msg: $.parseError(response.data)
                         };
                     } else {
                         NotificationProvider.notify({
@@ -607,7 +607,7 @@ recipeController.controller('RecipeShow',
                     type: 'error',
                     addclass: 'custom-error-notify',
                     icon: 'material-icons md-light',
-                    styling: 'fontawesome',
+                    styling: 'fontawesome'
                 });
                 $('.ui-pnotify.custom-error-notify .material-icons').html('warning');
                 $rootScope.error = {
@@ -641,6 +641,7 @@ recipeController.controller('RecipeCreate',
         RecipeService, CategoryService, TagService, IngredientService,
         NotificationProvider, DIFF, VISIBILITY, FILE_DROPZONE, EDIT_FUNCTIONS) {
         $rootScope.headerTitle = 'Nueva receta (borrador)';
+        $rootScope.progressBarActivated = true;
         $rootScope.HasBack = true;
         $rootScope.back = function () {
             $location.path('/recipes');
@@ -664,7 +665,7 @@ recipeController.controller('RecipeCreate',
                 type: 'error',
                 addclass: 'custom-error-notify',
                 icon: 'material-icons md-light',
-                styling: 'fontawesome',
+                styling: 'fontawesome'
             });
             $('.ui-pnotify.custom-error-notify .material-icons').html('warning');
             $rootScope.error = {
@@ -683,14 +684,13 @@ recipeController.controller('RecipeCreate',
             $rootScope.progressBarActivated = true;
             $rootScope.errorMsg = false;
             $rootScope.headerTitle = 'Guardando borrador';
-            $("html, body").animate({ scrollTop: 0 }, "slow");
+            $('html, body').animate({ scrollTop: 0 }, 'slow');
             var recipeObj = $scope.recipe;
             recipeObj.duration += ':00';
             recipeObj.new_tags = RecipeService.getNewTags(recipeObj.chipTags);
             recipeObj.tags = $.getArrayId(recipeObj.chipTags);
             RecipeService.edit(recipeObj, function (response) {
                 var mainFile = $scope.images.main;
-                var slug = response.data.slug;
                 if (mainFile) {
                     var recipeId = response.data.id;
                     $rootScope.headerTitle = 'Subiendo imágenes';
@@ -704,7 +704,7 @@ recipeController.controller('RecipeCreate',
                             type: 'success',
                             addclass: 'custom-success-notify',
                             icon: 'material-icons md-light',
-                            styling: 'fontawesome',
+                            styling: 'fontawesome'
                         });
                         $('.ui-pnotify.custom-success-notify .material-icons').html('backup');
                     }, function (response) {
@@ -712,7 +712,7 @@ recipeController.controller('RecipeCreate',
                             $rootScope.error = {
                                 icon: 'error_outline',
                                 title: 'Datos incorrectos',
-                                msg: $.parseError(response.data),
+                                msg: $.parseError(response.data)
                             };
                         } else {
                             NotificationProvider.notify({
@@ -743,7 +743,7 @@ recipeController.controller('RecipeCreate',
                          type: 'success',
                          addclass: 'custom-success-notify',
                          icon: 'material-icons md-light',
-                         styling: 'fontawesome',
+                         styling: 'fontawesome'
                      });
                      $('.ui-pnotify.custom-success-notify .material-icons').html('backup');
                  }
@@ -752,7 +752,7 @@ recipeController.controller('RecipeCreate',
                     $rootScope.error = {
                         icon: 'error_outline',
                         title: 'Datos incorrectos',
-                        msg: $.parseError(response.data),
+                        msg: $.parseError(response.data)
                     };
                 } else {
                     NotificationProvider.notify({
@@ -804,16 +804,16 @@ recipeController.controller('RecipeCreate',
                                 type: 'success',
                                 addclass: 'custom-success-notify',
                                 icon: 'material-icons md-light',
-                                styling: 'fontawesome',
+                                styling: 'fontawesome'
                             });
                             $('.ui-pnotify.custom-success-notify .material-icons').html('publish');
-                            $location.path('/recipes/' + response.data.id + '/edit');
+                            $location.path('/recipes/' + response.data.slug + '/edit');
                         }, function(response) {
                             if (response.status == 404) {
                                 $rootScope.error = {
                                     icon: 'error_outline',
                                     title: 'Datos incorrectos',
-                                    msg: $.parseError(response.data),
+                                    msg: $.parseError(response.data)
                                 };
                             } else {
                                 NotificationProvider.notify({
@@ -840,7 +840,7 @@ recipeController.controller('RecipeCreate',
                             $rootScope.error = {
                                 icon: 'error_outline',
                                 title: 'Datos incorrectos',
-                                msg: $.parseError(response.data),
+                                msg: $.parseError(response.data)
                             };
                         } else {
                             NotificationProvider.notify({
@@ -871,16 +871,16 @@ recipeController.controller('RecipeCreate',
                             type: 'success',
                             addclass: 'custom-success-notify',
                             icon: 'material-icons md-light',
-                            styling: 'fontawesome',
+                            styling: 'fontawesome'
                         });
                         $('.ui-pnotify.custom-success-notify .material-icons').html('publish');
-                        $location.path('/recipes/' + response.data.id + '/edit');
+                        $location.path('/recipes/' + response.data.slug + '/edit');
                     }, function(response) {
                         if (response.status == 404) {
                             $rootScope.error = {
                                 icon: 'error_outline',
                                 title: 'Datos incorrectos',
-                                msg: $.parseError(response.data),
+                                msg: $.parseError(response.data)
                             };
                         } else {
                             NotificationProvider.notify({
@@ -908,7 +908,7 @@ recipeController.controller('RecipeCreate',
                     $rootScope.error = {
                         icon: 'error_outline',
                         title: 'Datos incorrectos',
-                        msg: $.parseError(response.data),
+                        msg: $.parseError(response.data)
                     };
                 } else {
                     NotificationProvider.notify({
@@ -942,6 +942,7 @@ recipeController.controller('RecipeEdit',
         RecipeService, CategoryService, TagService, IngredientService,
         NotificationProvider, DIFF, VISIBILITY, FILE_DROPZONE, EDIT_FUNCTIONS) {
         $rootScope.headerTitle = 'Editar receta';
+        $rootScope.progressBarActivated = true;
         $rootScope.HasBack = true;
         $rootScope.back = function () {
             $location.path('/recipes');
@@ -972,7 +973,7 @@ recipeController.controller('RecipeEdit',
                     type: 'error',
                     addclass: 'custom-error-notify',
                     icon: 'material-icons md-light',
-                    styling: 'fontawesome',
+                    styling: 'fontawesome'
                 });
                 $('.ui-pnotify.custom-error-notify .material-icons').html('warning');
                 $rootScope.error = {
@@ -991,8 +992,8 @@ recipeController.controller('RecipeEdit',
         $scope.edit = function() {
             $rootScope.progressBarActivated = true;
             $rootScope.errorMsg = false;
-            $rootScope.headerTitle = 'Creando receta';
-            $("html, body").animate({ scrollTop: 0 }, "slow");
+            $rootScope.headerTitle = 'Guardando receta';
+            $('html, body').animate({ scrollTop: 0 }, 'slow');
             var recipeObj = $scope.recipe;
             recipeObj.duration += ':00';
             recipeObj.new_tags = RecipeService.getNewTags(recipeObj.chipTags);
@@ -1012,7 +1013,7 @@ recipeController.controller('RecipeEdit',
                             $rootScope.error = {
                                 icon: 'error_outline',
                                 title: 'Datos incorrectos',
-                                msg: $.parseError(response.data),
+                                msg: $.parseError(response.data)
                             };
                         } else {
                             NotificationProvider.notify({
@@ -1043,7 +1044,7 @@ recipeController.controller('RecipeEdit',
                     $rootScope.error = {
                         icon: 'error_outline',
                         title: 'Datos incorrectos',
-                        msg: $.parseError(response.data),
+                        msg: $.parseError(response.data)
                     };
                 } else {
                     NotificationProvider.notify({
