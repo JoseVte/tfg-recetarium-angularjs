@@ -123,7 +123,7 @@ recipeService.factory('RecipeService',
             var request = $http({
                 method: "HEAD",
                 url: service.apiUrl + '/recipes/' + slug + '/check',
-                timeout: deferredAbort.promise,
+                timeout: deferredAbort.promise
             });
             var promise = request.then(
                 function(response) { return response; },
@@ -144,7 +144,7 @@ recipeService.factory('RecipeService',
             var request = $http({
                 method: "HEAD",
                 url: service.apiUrl + '/recipes/' + slug + '/check/' + id,
-                timeout: deferredAbort.promise,
+                timeout: deferredAbort.promise
             });
             var promise = request.then(
                 function(response) { return response; },

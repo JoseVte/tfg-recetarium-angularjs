@@ -24,8 +24,7 @@ authController.controller('Login',
             $rootScope.progressBarActivated = true;
             $scope.setDelay1();
             AuthService.Login($scope.email, $scope.password, !$scope.expiration, function (response) {
-                AuthService.SaveCredentials(response.data.auth_token,
-                    JSON.parse(AuthService.ParseJwt(response.data.auth_token).sub));
+                AuthService.SaveCredentials(response.data.auth_token, JSON.parse(AuthService.ParseJwt(response.data.auth_token).sub));
                 $rootScope.progressBarActivated = false;
                 $location.path('/');
             }, function (response) {
@@ -33,7 +32,7 @@ authController.controller('Login',
                     $rootScope.error = {
                         icon: 'error_outline',
                         title: 'Datos incorrectos',
-                        msg: $.parseError(response.data),
+                        msg: $.parseError(response.data)
                     };
                 } else {
                     NotificationProvider.notify({
@@ -42,7 +41,7 @@ authController.controller('Login',
                         type: 'error',
                         addclass: 'custom-error-notify',
                         icon: 'material-icons md-light',
-                        styling: 'fontawesome',
+                        styling: 'fontawesome'
                     });
                     $('.ui-pnotify.custom-error-notify .material-icons').html('warning');
                     $rootScope.error = {
@@ -91,8 +90,7 @@ authController.controller('Register',
                 last_name: $scope.last_name
             };
             AuthService.Register(user, function (response) {
-                AuthService.SaveCredentials(response.data.auth_token,
-                    JSON.parse(AuthService.ParseJwt(response.data.auth_token).sub));
+                AuthService.SaveCredentials(response.data.auth_token, JSON.parse(AuthService.ParseJwt(response.data.auth_token).sub));
                 $rootScope.progressBarActivated = false;
                 $location.path('/');
             }, function (response) {
@@ -100,7 +98,7 @@ authController.controller('Register',
                     $rootScope.error = {
                         icon: 'error_outline',
                         title: 'Datos incorrectos',
-                        msg: $.parseError(response.data),
+                        msg: $.parseError(response.data)
                     };
                 } else {
                     NotificationProvider.notify({
@@ -109,7 +107,7 @@ authController.controller('Register',
                         type: 'error',
                         addclass: 'custom-error-notify',
                         icon: 'material-icons md-light',
-                        styling: 'fontawesome',
+                        styling: 'fontawesome'
                     });
                     $('.ui-pnotify.custom-error-notify .material-icons').html('warning');
                     $rootScope.error = {
@@ -135,7 +133,7 @@ authController.controller('Logout',
             type: 'success',
             addclass: 'custom-success-notify',
             icon: 'material-icons md-light',
-            styling: 'fontawesome',
+            styling: 'fontawesome'
         });
         $('.ui-pnotify.custom-success-notify .material-icons').html('cake');
         AuthService.ClearCredentials();
@@ -177,7 +175,7 @@ authController.controller('ResetPassword',
                     $rootScope.error = {
                         icon: 'error_outline',
                         title: 'Datos incorrectos',
-                        msg: $.parseError(response.data),
+                        msg: $.parseError(response.data)
                     };
                 } else {
                     NotificationProvider.notify({
@@ -186,7 +184,7 @@ authController.controller('ResetPassword',
                         type: 'error',
                         addclass: 'custom-error-notify',
                         icon: 'material-icons md-light',
-                        styling: 'fontawesome',
+                        styling: 'fontawesome'
                     });
                     $('.ui-pnotify.custom-error-notify .material-icons').html('warning');
                     $rootScope.error = {
@@ -198,8 +196,8 @@ authController.controller('ResetPassword',
                 $rootScope.errorMsg = true;
                 $rootScope.progressBarActivated = false;
                 $scope.setDelay2();
-            })
-        }
+            });
+        };
     }]
 );
 
@@ -234,7 +232,7 @@ authController.controller('RecoverPassword',
                     type: 'success',
                     addclass: 'custom-success-notify',
                     icon: 'material-icons md-light',
-                    styling: 'fontawesome',
+                    styling: 'fontawesome'
                 });
                 $('.ui-pnotify.custom-success-notify .material-icons').html('lock');
                 $rootScope.progressBarActivated = false;
@@ -244,7 +242,7 @@ authController.controller('RecoverPassword',
                     $rootScope.error = {
                         icon: 'error_outline',
                         title: 'Datos incorrectos',
-                        msg: $.parseError(response.data),
+                        msg: $.parseError(response.data)
                     };
                 } else {
                     NotificationProvider.notify({
@@ -253,7 +251,7 @@ authController.controller('RecoverPassword',
                         type: 'error',
                         addclass: 'custom-error-notify',
                         icon: 'material-icons md-light',
-                        styling: 'fontawesome',
+                        styling: 'fontawesome'
                     });
                     $('.ui-pnotify.custom-error-notify .material-icons').html('warning');
                     $rootScope.error = {
@@ -265,8 +263,8 @@ authController.controller('RecoverPassword',
                 $rootScope.errorMsg = true;
                 $rootScope.progressBarActivated = false;
                 $scope.setDelay2();
-            })
-        }
+            });
+        };
     }]
 );
 
@@ -303,7 +301,7 @@ authController.controller('EditProfile',
                 type: 'error',
                 addclass: 'custom-error-notify',
                 icon: 'material-icons md-light',
-                styling: 'fontawesome',
+                styling: 'fontawesome'
             });
             $('.ui-pnotify.custom-error-notify .material-icons').html('warning');
             $rootScope.error = {
@@ -329,7 +327,7 @@ authController.controller('EditProfile',
                     type: 'success',
                     addclass: 'custom-success-notify',
                     icon: 'material-icons md-light',
-                    styling: 'fontawesome',
+                    styling: 'fontawesome'
                 });
                 $('.ui-pnotify.custom-success-notify .material-icons').html('backup');
                 $scope.setDelay2();
@@ -338,7 +336,7 @@ authController.controller('EditProfile',
                     $rootScope.error = {
                         icon: 'error_outline',
                         title: 'Datos incorrectos',
-                        msg: $.parseError(response.data),
+                        msg: $.parseError(response.data)
                     };
                 } else {
                     NotificationProvider.notify({
@@ -347,7 +345,7 @@ authController.controller('EditProfile',
                         type: 'error',
                         addclass: 'custom-error-notify',
                         icon: 'material-icons md-light',
-                        styling: 'fontawesome',
+                        styling: 'fontawesome'
                     });
                     $('.ui-pnotify.custom-error-notify .material-icons').html('warning');
                     $rootScope.error = {
