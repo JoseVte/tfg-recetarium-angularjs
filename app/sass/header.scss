@@ -19,15 +19,22 @@
     background-size: auto 64px;
     height: 64px;
 }
-
-@media (max-width: $layout-breakpoint-sm) {
-    md-sidenav {
+md-sidenav {
+    z-index: 100;
+    position: fixed;
+    @media (max-width: $layout-breakpoint-sm) {
         width: 250px;
         min-width: 250px;
         max-width: 250px;
+        .md-toolbar-tools{
+            max-height: 64px;
+        }
+    }
+    md-toolbar {
+        max-height: 64px;
     }
 }
-md-sidenav md-toolbar.md-tall, header md-toolbar.md-tall {
+header md-toolbar.md-tall {
     height: 400px;
     max-height: 400px;
     min-height: 64px;

@@ -12,7 +12,9 @@ homeController.controller('Header',
 
         $scope.navTo = function (ev, url) {
             closeSideNav('left');
-            if ($location.path() !== url) $location.path(url);
+            if ($location.path() !== url) {
+                $location.path(url);
+            }
         };
 
         $scope.getClassActive = function(path) {
@@ -51,13 +53,12 @@ homeController.controller('Header',
 
         $scope.$on('$includeContentLoaded', function() {
             $('.img-logo').exists(function () {
-                var body = $('body');
                 var button = $('.menuHome');
                 var header = $('header md-toolbar.md-tall');
                 var img = $('.img-logo');
+                var motto = $('.motto');
                 var search = $('.search-home');
                 var heightForMove = 125;
-                body.css('padding-top', 400);
                 header.css('max-height', 400);
                 header.css('height', 400);
                 button.addClass('hide');
@@ -80,8 +81,9 @@ homeController.controller('Header',
                         });
                         header.css('max-height', height);
                         header.css('height', height);
-                        body.css('padding-top', (height - 40) + height*0.1);
+                        motto.removeClass('hide');
                         button.addClass('hide');
+                        closeSideNav('left');
                     }
                     if (distanceY >= heightForMove) {
                         img.css({
@@ -98,7 +100,7 @@ homeController.controller('Header',
                         });
                         header.css('max-height', 64);
                         header.css('height', 64);
-                        body.css('padding-top', 70);
+                        motto.addClass('hide');
                         button.removeClass('hide');
                     }
                 });

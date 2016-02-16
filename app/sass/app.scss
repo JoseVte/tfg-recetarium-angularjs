@@ -30,6 +30,9 @@ body {
     -o-transition: all 0.3s;
     transition: all 0.3s;
     padding-top: 70px;
+    &.body-home {
+        padding-top: 400px;
+    }
 }
 md-card md-card-title md-card-title-text md-input-container {
     margin-top: 15px;
