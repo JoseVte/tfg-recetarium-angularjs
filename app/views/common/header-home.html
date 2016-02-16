@@ -1,20 +1,35 @@
 <section layout="row" ng-controller="Header" class="{{ headerTheme }}">
     <div ng-include="'views/common/sidenav-left.html'"></div>
 
-    <header md-page-header>
-        <md-toolbar flex class="md-whiteframe-z1 md-tall" layout-align="center">
+    <header md-page-header class="fixed-top">
+        <md-toolbar flex class="md-whiteframe-z1 md-tall">
             <div class="md-toolbar-tools">
-                <button type="button" ng-click="toggleLeft()" aria-label="Toogle menu" class="menuBtn">
+                <button type="button" ng-click="toggleLeft()" aria-label="Toogle menu" class="menuBtn menuHome hide">
                     <i class="material-icons md-light">menu</i>
                 </button>
-                <div md-header-picture></div>
+                <div md-header-picture class="img-logo-toolbar hide"></div>
                 <span flex></span>
-                <div ng-if="IsAuthed" hide-xs hide-sm show-gt-sm>
-                    <md-button ng-href="/logout">Logout</md-button>
+                <div hide-xs hide-sm show-gt-sm>
+                    <div ng-if="IsAuthed">
+                        <md-button ng-href="/logout">Logout</md-button>
+                    </div>
+                    <div ng-if="!IsAuthed">
+                        <md-button ng-href="/login">Login</md-button>
+                        <md-button ng-href="/register">Register</md-button>
+                    </div>
                 </div>
-                <div ng-if="!IsAuthed" hide-xs hide-sm show-gt-sm>
-                    <md-button ng-href="/login">Login</md-button>
-                    <md-button ng-href="/register">Register</md-button>
+            </div>
+            <div layout="column" layout-align="center center">
+                <div flex>
+                    <img class="img-logo" src="../img/header-logo.png" alt="Logo Recetarium">
+                </div>
+                <div flex>
+                    <md-input-container md-no-float class="md-has-no-icon-left search-home" flex="100" flex-gt-md="30" layout="row" layout-align="start center">
+                        <md-button class="md-icon-button md-mini" ng-click="searchRecipe()" aria-label="Search">
+                            <md-icon class="material-icons">search</md-icon>
+                        </md-button>
+                        <input type="text" ng-model="search" aria-label="Buscar recetas" />
+                    </md-input-container>
                 </div>
             </div>
         </md-toolbar>

@@ -12,6 +12,7 @@ var recetarium = angular.module('recetariumApp', [
     'ngAnimate',
     'textAngular',
     'ui.router',
+    'infinite-scroll',
     // My Javascript
     'Animations', 'TextEditor', 'NotificationProviders',
     'FileDirectives', 'TimeDirectives', 'ValidatorDirectives',
@@ -27,7 +28,8 @@ recetarium.config(['$routeProvider', '$locationProvider', function($routeProvide
     $locationProvider.html5Mode(true);
 
     $routeProvider
-        .when('/', { templateUrl: 'views/home.html', controller: '' })
+        .when('/', { templateUrl: 'views/home.html', controller: 'Home' })
+        // Auth
         .when('/login', { templateUrl: 'views/auth/login.html', controller: 'Login', resolve: { access: ["AuthService", function (AuthService) { return AuthService.IsAnonymous(); }]}})
         .when('/logout', { template: '', controller: 'Logout', resolve: { access: ["AuthService", function (AuthService) { return AuthService.IsAuthenticated(); }]}})
         .when('/register', { templateUrl: 'views/auth/register.html', controller: 'Register', resolve: { access: ["AuthService", function (AuthService) { return AuthService.IsAnonymous(); }]}})
@@ -39,6 +41,7 @@ recetarium.config(['$routeProvider', '$locationProvider', function($routeProvide
         .when('/recipes/:slug', { templateUrl: 'views/recipe/show.html', controller: 'RecipeShow' })
         .when('/recipes/:slug/edit', { templateUrl: 'views/recipe/edit.html', controller: 'RecipeEdit', resolve: { access: ["AuthService", "$route", "$rootScope", function (AuthService, $route, $rootScope) { $rootScope.progressBarActivated = true; return AuthService.IsMyRecipe($route.current.params.slug); }]}})
         .when('/new-recipe', { templateUrl: 'views/recipe/create.html', controller: 'RecipeCreate', resolve: { access: ["AuthService", function (AuthService) { return AuthService.IsAuthenticated(); }]}})
+        // Errores
         .when('/unauthorized', { templateUrl: 'views/error/401.html', controller: '' })
         .when('/forbidden', { templateUrl: 'views/error/403.html', controller: '' })
         .otherwise({ redirectTo: '/' });
@@ -212,6 +215,7 @@ recetarium.run(function ($rootScope, $location, $http, AuthService, ICONS) {
                 }).addClass('animate');
             });
         });
+
     });
 });
 
@@ -265,4 +269,8 @@ $.parseError = function(error) {
         msg += error;
     }
     return msg;
+};
+
+$.calcHeight = function(scroll) {
+    return (scroll*scroll*(-1/150))+(scroll*(-2/3))+400;
 };

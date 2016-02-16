@@ -1,3 +1,9 @@
+.fixed-top {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 99;
+}
 .menuBtn {
     background-color: transparent;
     border: none;
@@ -5,18 +11,13 @@
 [md-header-picture] {
     position: absolute;
     top: 0;
-    height: 128px;
     width: inherit;
     overflow: hidden;
     background: url(../img/header-logo.png);
-    background-size: auto 128px;
     background-repeat: no-repeat;
-    background-position: 50px;
-    @media (max-width: $layout-breakpoint-md) {
-        background-position: 10px;
-        background-size: auto 64px;
-        height: 64px;
-    }
+    background-position: 10px;
+    background-size: auto 64px;
+    height: 64px;
 }
 
 @media (max-width: $layout-breakpoint-sm) {
@@ -26,12 +27,48 @@
         max-width: 250px;
     }
 }
-@media (max-width: $layout-breakpoint-md) {
-    md-sidenav md-toolbar.md-tall,
-    header md-toolbar.md-tall {
-        height: 64px;
-        max-height: 64px;
-        min-height: 64px;
+md-sidenav md-toolbar.md-tall, header md-toolbar.md-tall {
+    height: 400px;
+    max-height: 400px;
+    min-height: 64px;
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
+    -ms-transition: all 0.3s;
+    -o-transition: all 0.3s;
+    transition: all 0.3s;
+    @media (max-width: $layout-breakpoint-sm) {
+        height: 200px;
+        max-height: 200px;
+    }
+}
+md-input-container.search-home {
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
+    -ms-transition: all 0.3s;
+    -o-transition: all 0.3s;
+    transition: all 0.3s;
+    &:not(.md-input-invalid).md-input-focused {
+        .md-input {
+            color: white;
+            border-color: white;
+        }
+        md-icon {
+            color: white;
+        }
+    }
+    label {
+        color: white !important;
+    }
+}
+.img-logo {
+    max-height: 200px;
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
+    -ms-transition: all 0.3s;
+    -o-transition: all 0.3s;
+    transition: all 0.3s;
+    @media (max-width: $layout-breakpoint-sm) {
+        max-height: 100px;
     }
 }
 .sidebar-left {

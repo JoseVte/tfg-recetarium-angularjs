@@ -5,3 +5,24 @@
         <h5>Desde esta pagina podrás manejar recetas y convertirte en un gran cocinero</h5>
     </p>
 </div>
+<div infinite-scroll="nextPage()" infinite-scroll-disabled="loadingNextPage" infinite-scroll-distance="3" layout-wrap>
+    <md-content class="md-padding home-recipe" layout="row" layout-wrap layout-align="space-around start">
+        <div ng-repeat="recipe in recipes" flex="100" flex-sm="50" flex-md="33" flex-gt-md="25" flex-gt-lg="20">
+            <md-card ng-click="show(recipe.slug)">
+                <img src="{{ recipe | mainImage }}" class="md-card-image" alt="Imagen principal">
+                <md-card-title>
+                    <md-card-title-text>
+                        <span class="md-headline">{{ recipe.title }}</span>
+                        <span class="md-subhead">
+                            <div layout="row">
+                                <div><md-icon class="material-icons" ng-class="getDifficulty(recipe.difficulty)">stars</md-icon></div>
+                                <div>{{ recipe.user.username }}</div>
+                                <div class="text-right" flex>{{ recipe.updated_at | fromNow }}</div>
+                            </div>
+                        </span>
+                    </md-card-title-text>
+                </md-card-title>
+            </md-card>
+        </div>
+    </md-content>
+</div>

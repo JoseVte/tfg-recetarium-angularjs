@@ -48,5 +48,134 @@ homeController.controller('Header',
         function closeSideNav(navID) {
             $mdSidenav(navID).close().then(function () {});
         }
+
+        $scope.$on('$includeContentLoaded', function() {
+            $('.img-logo').exists(function () {
+                var body = $('body');
+                var button = $('.menuHome');
+                var header = $('header md-toolbar.md-tall');
+                var img = $('.img-logo');
+                var search = $('.search-home');
+                var heightForMove = 125;
+                body.css('padding-top', 400);
+                header.css('max-height', 400);
+                header.css('height', 400);
+                button.addClass('hide');
+                window.addEventListener('scroll', function (e) {
+                    var distanceY = window.pageYOffset || document.documentElement.scrollTop;
+                    if (distanceY < heightForMove) {
+                        var height = $.calcHeight(distanceY);
+                        img.css('height', height/2);
+                        img.css({
+                            position: '',
+                            top: '',
+                            left: '',
+                            'max-height': ''
+                        });
+                        search.css({
+                            top: '',
+                            position: '',
+                            left: '',
+                            margin: ''
+                        });
+                        header.css('max-height', height);
+                        header.css('height', height);
+                        body.css('padding-top', (height - 40) + height*0.1);
+                        button.addClass('hide');
+                    }
+                    if (distanceY >= heightForMove) {
+                        img.css({
+                            position: 'absolute',
+                            top: 0,
+                            left: 64,
+                            'max-height': 64
+                        });
+                        search.css({
+                            top: 0,
+                            position: 'absolute',
+                            left: 300,
+                            margin: 10
+                        });
+                        header.css('max-height', 64);
+                        header.css('height', 64);
+                        body.css('padding-top', 70);
+                        button.removeClass('hide');
+                    }
+                });
+            });
+        });
+    }
+]);
+
+homeController.controller('Home',
+    ['$scope', '$rootScope', '$location','RecipeService', 'NotificationProvider', 'DIFF',
+    function ($scope, $rootScope, $location, RecipeService, NotificationProvider, DIFF) {
+        $scope.recipes = [];
+        $scope.total = 1;
+        $scope.nextPageNumber = 1;
+        $scope.loadingNextPage = true;
+
+        RecipeService.search({
+            page: $scope.nextPageNumber,
+            size: 10
+        }, function (response) {
+            var responseData = response.data;
+            $scope.recipes = responseData.data;
+            $scope.nextPageNumber++;
+            $scope.total = responseData.total;
+            $scope.loadingNextPage = false;
+        }, function (response) {
+            NotificationProvider.notify({
+                title: 'Un error ha ocurrido',
+                text: 'Ha ocurrido un error mientras se cargaban las recetas. Por favor, intentelo más tarde.',
+                type: 'error',
+                addclass: 'custom-error-notify',
+                icon: 'material-icons md-light',
+                styling: 'fontawesome'
+            });
+            $('.ui-pnotify.custom-error-notify .material-icons').html('warning');
+            $rootScope.error = {
+                icon: 'error_outline',
+                title: 'Algo ha ido mal',
+                msg: 'Ha ocurrido un error mientras se cargaban las recetas.'
+            };
+            $rootScope.errorMsg = true;
+            $scope.loadingNextPage = false;
+        });
+
+        $scope.getDifficulty = function (diff) { return DIFF.class[diff]; };
+
+        $scope.nextPage = function () {
+            if ($scope.total > $scope.recipes.length) {
+                $scope.loadingNextPage = true;
+                RecipeService.search({
+                    page: $scope.nextPageNumber,
+                    size: 10
+                }, function (response) {
+                    var responseData = response.data;
+                    $scope.recipes = $scope.recipes.concat(responseData.data);
+                    $scope.nextPageNumber++;
+                    $scope.total = responseData.total;
+                    $scope.loadingNextPage = false;
+                }, function (response) {
+                    NotificationProvider.notify({
+                        title: 'Un error ha ocurrido',
+                        text: 'Ha ocurrido un error mientras se cargaban las recetas. Por favor, intentelo más tarde.',
+                        type: 'error',
+                        addclass: 'custom-error-notify',
+                        icon: 'material-icons md-light',
+                        styling: 'fontawesome'
+                    });
+                    $('.ui-pnotify.custom-error-notify .material-icons').html('warning');
+                    $rootScope.error = {
+                        icon: 'error_outline',
+                        title: 'Algo ha ido mal',
+                        msg: 'Ha ocurrido un error mientras se cargaban las recetas.'
+                    };
+                    $rootScope.errorMsg = true;
+                    $scope.loadingNextPage = false;
+                });
+            }
+        };
     }
 ]);
