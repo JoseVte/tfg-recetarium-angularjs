@@ -32,13 +32,30 @@ md-input-container.md-has-no-icon-left {
         left:auto;
     }
 }
-.md-button{
+.md-button {
     min-width: 40px;
     &.md-edit,&.md-edit .material-icons {
         color: green;
     }
     &.md-remove,&.md-remove .material-icons {
         color: red;
+    }
+}
+.without-input {
+    margin: 9px 0;
+    label {
+        -webkit-box-ordinal-group: 2;
+        -webkit-font-smoothing: antialiased;
+        display: block;
+        order: 1;
+        padding-left: 3px;
+        padding-right: 0px;
+        pointer-events: none;
+        transform: matrix(0.75, 0, 0, 0.75, 0, 6);
+        transform-origin: 0px 0px;
+    }
+    .value {
+        padding: 8px;
     }
 }
 .without-fixed-height {
@@ -73,7 +90,8 @@ md-input-container.md-has-no-icon-left {
 //*** Custom Themes ***//
 @each $theme, $color, $backgroundDisabled, $colorDisabled in
 (default, $darkOrangeBackground, $darkOrangeBackgroundDisabled, $darkOrangeColorDisabled),
-(auth, $tealBackground, $tealBackgroundDisabled, $tealColorDisabled) {
+(auth, $tealBackground, $tealBackgroundDisabled, $tealColorDisabled),
+(profile, $blueBackground, $blueBackgroundDisabled, $blueColorDisabled) {
     .header-theme-#{$theme} {
         background-color: $color;
         color: white;
@@ -135,6 +153,98 @@ md-input-container.md-has-no-icon-left {
                     &[disabled] {
                         background-color: $backgroundDisabled;
                         color: $colorDisabled;
+                    }
+                }
+            }
+        }
+        .#{$theme}-card {
+            background-color: $color;
+            color: white;
+            md-card-content {
+                background-color: white;
+                padding: 0;
+                form {
+                    padding: 16px;
+                }
+                .md-card-subtitle {
+                    background-color: $color;
+                    color: white;
+                    margin: 4px -16px;
+                    padding: 16px;
+                }
+            }
+            md-content {
+                background-color: white;
+                color: $color;
+                overflow: inherit;
+                label {
+                    color: $color !important;
+                }
+                input {
+                    color: $color;
+                    border-color: $color;
+                }
+                md-input-container {
+                    &.md-input-invalid {
+                        label {
+                            color: $errorColor !important;
+                        }
+                        input {
+                            border-color: $errorColor;
+                            color: $errorColor !important;
+                        }
+                    }
+                    &.md-input-focused .md-input {
+                        border-color: $color;
+                    }
+                    [ng-messages] > div {
+                        color: $errorColor !important;
+                    }
+                }
+            }
+            md-card-actions {
+                margin: 0;
+                height: 132px;
+                background-color: white;
+                color: $color;
+                .md-button {
+                    max-height: 42px;
+                    line-height: 24px;
+                    width: 100%;
+                    &.md-raised.md-#{$theme}-button {
+                        padding: 0;
+                        min-width: 40px;
+                        margin: 12px 0;
+                        background-color: $color;
+                        color: white;
+                        &:hover, &:focus, &:visited {
+                            background-color: $color;
+                        }
+                        &[disabled] {
+                            background-color: $backgroundDisabled;
+                            color: $colorDisabled;
+                        }
+                    }
+                    &.md-options {
+                        margin-top: 0 !important;
+                        margin-bottom: 0 !important;
+                    }
+                }
+                div.layout-row {
+                    padding: 8px 0;
+                    a {
+                        margin: 0;
+                        padding: 8px 0;
+                        @media (max-width: $layout-breakpoint-xs) {
+                            padding-top: 0;
+                            padding-bottom: 0;
+                        }
+                        &.without-padding {
+                            padding: inherit;
+                        }
+                        div {
+                            white-space: pre-line;
+                        }
                     }
                 }
             }

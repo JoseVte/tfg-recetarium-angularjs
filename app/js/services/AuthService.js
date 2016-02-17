@@ -57,10 +57,33 @@ authServices.factory('AuthService',
             });
         };
 
+        service.GetProfile = function (callbackOk, callbackError) {
+            $http.get(
+                service.apiUrl + '/profile',
+                { headers: {'Accept': 'application/json', 'Content-Type': 'application/json'} }
+            ).then(function (response) {
+                callbackOk(response);
+            }, function (response) {
+                callbackError(response);
+            });
+        };
+
+        service.EditProfile = function (user, callbackOk, callbackError) {
+            $http.put(
+                service.apiUrl + '/profile',
+                user,
+                { headers: {'Accept': 'application/json', 'Content-Type': 'application/json'} }
+            ).then(function (response) {
+                callbackOk(response);
+            }, function (response) {
+                callbackError(response);
+            });
+        };
+
         service.SaveCredentials = function (token, user) {
             $rootScope.globals = {
                 token: token,
-                user: user,
+                user: user
             };
 
             localStorage.globals = JSON.stringify($rootScope.globals);
@@ -77,11 +100,17 @@ authServices.factory('AuthService',
             return JSON.parse(atob(base64));
         };
 
+        /**
+         * @return {object}
+         */
         service.GetJwt = function() {
             if ($rootScope.globals) return $rootScope.globals.token;
             else return null;
         };
 
+        /**
+         * @return {boolean}
+         */
         service.IsAuthed = function() {
             var token = service.GetJwt();
             if (token) {
@@ -117,7 +146,7 @@ authServices.factory('AuthService',
             $http({
                 method: "HEAD",
                 url: service.apiUrl + '/recipes/' + slug + '/mine',
-                timeout: deferred.promise,
+                timeout: deferred.promise
             }).then(function() { deferred.resolve(service.OK); }, function() { deferred.reject(service.UNAUTHORIZED); });
             return deferred.promise;
         };

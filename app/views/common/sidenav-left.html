@@ -21,6 +21,9 @@
             </li>
             <hr show-xs show-sm hide-gt-sm />
             <div ng-if="IsAuthed" show-xs show-sm hide-gt-sm>
+                <li ng-class="getClassActive('/profile')">
+                    <a class="md-button" ng-click="navTo($event, '/profile')">Hola, {{ UserLogged.first_name }}</a>
+                </li>
                 <li ng-class="getClassActive('/logout')">
                     <a class="md-button" ng-click="navTo($event, '/logout')">Logout</a>
                 <li>

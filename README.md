@@ -49,7 +49,15 @@ http-server -a localhost -p 8000
 
 ## Changelog
 
-#### [![0.3.1](/app/doc/rocket-blue.png) 0.3.1](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.3.1)
+#### [![0.3.3](/app/doc/rocket-blue.png) 0.3.3](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.3.3)
+
+- Nuevos tests añadidos
+
+###### [![0.3.2](/app/doc/release.png) 0.3.2](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.3.2)
+
+- Sección perfil de usuario
+
+###### [![0.3.1](/app/doc/release.png) 0.3.1](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.3.1)
 
 - Generar receta desde un borrador
 - Primer test para el controlador
@@ -60,7 +68,7 @@ http-server -a localhost -p 8000
 
 ###### [![0.2.2](/app/doc/release.png) 0.2.2](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.2.2)
 
-- Seccion recuperar contraseña
+- Sección recuperar contraseña
 - Validador de contraseña repetida en los formularios
 
 ###### [![0.2.1](/app/doc/release.png) 0.2.1](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.2.1)

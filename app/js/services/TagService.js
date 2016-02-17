@@ -4,7 +4,7 @@ tagService.factory('TagService',
     ['$http', '$rootScope', 'envService', '$q',
     function ($http, $rootScope, envService, $q) {
         var service = {
-            apiUrl: envService.read('apiUrl'),
+            apiUrl: envService.read('apiUrl')
         };
 
         service.search = function (search, callbackOk, callbackError) {

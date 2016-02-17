@@ -4,7 +4,7 @@ ingredientService.factory('IngredientService',
     ['$http', '$rootScope', 'envService', '$q',
     function ($http, $rootScope, envService, $q) {
         var service = {
-            apiUrl: envService.read('apiUrl'),
+            apiUrl: envService.read('apiUrl')
         };
 
         service.add = function (id, ingredient, callbackOk, callbackError) {

@@ -69,10 +69,10 @@ gulp.task('js', function() {
 // JS bower
 gulp.task('lib-js', function() {
     return gulp.src([
-        paths.src.bower + '/jquery/dist/jquery.min.js',
+        paths.src.bower + '/jquery/dist/jquery.js',
         paths.src.bower + '/fancybox/source/jquery.fancybox.pack.js',
         paths.src.bower + '/angular/angular.min.js',
-        paths.src.bower + '/moment/min/moment-with-locales.min.js',
+        paths.src.bower + '/moment/min/moment-with-locales.js',
         paths.src.bower + '/textAngular/dist/textAngular-rangy.min.js',
         paths.src.bower + '/textAngular/dist/textAngular-sanitize.min.js',
         paths.src.bower + '/textAngular/dist/textAngular.min.js',
@@ -85,14 +85,14 @@ gulp.task('lib-js', function() {
         paths.src.bower + '/pnotify/dist/pnotify.history.js',
         paths.src.bower + '/pnotify/dist/pnotify.mobile.js',
         paths.src.bower + '/pnotify/dist/pnotify.nonblock.js',
-        paths.src.bower + '/angular-environment/dist/angular-environment.min.js',
-        paths.src.bower + '/angular-route/angular-route.min.js',
-        paths.src.bower + '/angular-resource/angular-resource.min.js',
-        paths.src.bower + '/angular-animate/angular-animate.min.js',
-        paths.src.bower + '/angular-aria/angular-aria.min.js',
-        paths.src.bower + '/angular-material/angular-material.min.js',
-        paths.src.bower + '/angular-messages/angular-messages.min.js',
-        paths.src.bower + '/angular-ui-router/release/angular-ui-router.min.js',
+        paths.src.bower + '/angular-environment/dist/angular-environment.js',
+        paths.src.bower + '/angular-route/angular-route.js',
+        paths.src.bower + '/angular-resource/angular-resource.js',
+        paths.src.bower + '/angular-animate/angular-animate.js',
+        paths.src.bower + '/angular-aria/angular-aria.js',
+        paths.src.bower + '/angular-material/angular-material.js',
+        paths.src.bower + '/angular-messages/angular-messages.js',
+        paths.src.bower + '/angular-ui-router/release/angular-ui-router.js',
         paths.src.bower + '/angular-mocks/angular-mocks.js',
     ])
     .pipe(concat('app-lib.js'))
