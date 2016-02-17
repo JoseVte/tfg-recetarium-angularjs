@@ -49,7 +49,11 @@ http-server -a localhost -p 8000
 
 ## Changelog
 
-#### [![0.3.2](/app/doc/rocket-blue.png) 0.3.2](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.3.2)
+#### [![0.3.3](/app/doc/rocket-blue.png) 0.3.3](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.3.3)
+
+- Nuevos tests añadidos
+
+###### [![0.3.2](/app/doc/release.png) 0.3.2](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.3.2)
 
 - Sección perfil de usuario
 
