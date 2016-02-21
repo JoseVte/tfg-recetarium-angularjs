@@ -1,13 +1,13 @@
 <md-content class="md-padding" layout="row" layout-wrap layout-align="center start">
     <div flex-gt-md="75" flex-gt-lg="50" flex="grow" layout="column">
         <md-card class="auth-card login-card md-whiteframe-z3">
-            <md-card-title>
-                <md-card-title-text>
-                    <span class="md-headline">Bienvenido de nuevo!</span>
-                </md-card-title-text>
-            </md-card-title>
-            <md-card-content>
-                <form name="form" role="form">
+            <form name="form" role="form" ng-submit="login()">
+                <md-card-title>
+                    <md-card-title-text>
+                        <span class="md-headline">Bienvenido de nuevo!</span>
+                    </md-card-title-text>
+                </md-card-title>
+                <md-card-content>
                     <md-content>
                         <md-input-container class="md-block">
                             <label>Email</label>
@@ -27,24 +27,24 @@
                         </md-input-container>
                         <md-checkbox ng-model="expiration" arial-label="Expiration">Recordar sesión</md-checkbox>
                     </md-content>
-                </form>
-            </md-card-content>
-            <md-card-actions layout="column" layout-align="space-around stretch" layout-padding>
-                <div layout="column" layout-align="space-around stretch" layout-wrap>
-                    <md-button class="md-raised md-auth-button zoomAnimation" ng-click="login()" ng-disabled="form.$invalid" ng-hide="progressBarActivated || delay2">Login</md-button>
-                    <div flex layout="row" layout-align="space-between center" layout-padding layout-wrap ng-hide="progressBarActivated || delay2">
-                        <md-button md-ripple-size="partial" layout="column" layout-wrap layout-align="center center" flex class="zoomAnimation md-options" ng-href="register" ng-hide="progressBarActivated || delay2">
-                            <div flex>¿No tienes cuenta? Registrate</div>
-                        </md-button>
-                        <md-button md-ripple-size="partial" layout="column" layout-wrap layout-align="center center" flex class="zoomAnimation md-options" ng-href="reset/password" ng-hide="progressBarActivated || delay2">
-                            <div flex>¿Has olvidado tu contraseña?</div>
-                        </md-button>
+                </md-card-content>
+                <md-card-actions layout="column" layout-align="space-around stretch" layout-padding>
+                    <div layout="column" layout-align="space-around stretch" layout-wrap>
+                        <md-button type="submit" class="md-raised md-auth-button zoomAnimation" ng-click="login()" ng-disabled="form.$invalid" ng-hide="progressBarActivated || delay2">Login</md-button>
+                        <div flex layout="row" layout-align="space-between center" layout-padding layout-wrap ng-hide="progressBarActivated || delay2">
+                            <md-button md-ripple-size="partial" layout="column" layout-wrap layout-align="center center" flex class="zoomAnimation md-options" ng-href="register" ng-hide="progressBarActivated || delay2">
+                                <div flex>¿No tienes cuenta? Registrate</div>
+                            </md-button>
+                            <md-button md-ripple-size="partial" layout="column" layout-wrap layout-align="center center" flex class="zoomAnimation md-options" ng-href="reset/password" ng-hide="progressBarActivated || delay2">
+                                <div flex>¿Has olvidado tu contraseña?</div>
+                            </md-button>
+                        </div>
+                        <div flex layout="row" layout-align="center center">
+                            <md-progress-circular md-mode="indeterminate" ng-show="progressBarActivated && !delay1" class="md-auth zoomAnimation" md-diameter="100"></md-progress-circular>
+                        </div>
                     </div>
-                    <div flex layout="row" layout-align="center center">
-                        <md-progress-circular md-mode="indeterminate" ng-show="progressBarActivated && !delay1" class="md-auth zoomAnimation" md-diameter="100"></md-progress-circular>
-                    </div>
-                </div>
-            </md-card-actions>
+                </md-card-actions>
+            </form>
         </md-card>
     </div>
 </md-content>

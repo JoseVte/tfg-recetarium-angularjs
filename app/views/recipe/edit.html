@@ -120,14 +120,14 @@
                                 <div class="ingredient" flex layout="row">
                                     <md-input-container class="md-block" flex="70" flex-gt-sm>
                                         <label>Nombre</label>
-                                        <input type="text" name="newIngredientName" ng-model="recipe.newIngredient.name" customRequired />
+                                        <input ng-keyup="$event.keyCode == 13 ? addIngredient() : null" type="text" name="newIngredientName" ng-model="recipe.newIngredient.name" customRequired />
                                         <ng-messages for="formRecipe.newIngredientName.$error" md-auto-hide="false">
                                             <ng-message when="customRequired">El nombre del ingrediente es necesario.</ng-message>
                                         </ng-messages>
                                     </md-input-container>
                                     <md-input-container flex>
                                         <label>Cantidad</label>
-                                        <input type="text" name="newIngredientCount" ng-model="recipe.newIngredient.count" />
+                                        <input ng-keyup="$event.keyCode == 13 ? addIngredient() : null" type="text" name="newIngredientCount" ng-model="recipe.newIngredient.count" />
                                     </md-input-container>
                                 </div>
                             </md-list-item>
