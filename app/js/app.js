@@ -14,7 +14,7 @@ var recetarium = angular.module('recetariumApp', [
     'ui.router',
     // My Javascript
     'Animations', 'TextEditor', 'NotificationProviders',
-    'FileDirectives', 'TimeDirectives', 'ValidatorDirectives',
+    'FileDirectives', 'FormDirectives', 'TimeDirectives', 'ValidatorDirectives',
     'HomeController',
     'AuthServices', 'AuthController',
     'RecipeServices', 'RecipeFilters', 'RecipeController',

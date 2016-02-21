@@ -1,5 +1,5 @@
 <md-content class="md-padding" layout="column" layout-wrap layout-align="center center" layout-align-gt-md="center start">
-    <form name="formRecipe" novalidate>
+    <form name="formRecipe" novalidate ng-submit="save()">
         <md-card flex class="card-recipe-create">
             <md-card-title>
                 <md-card-title-text>
@@ -120,14 +120,14 @@
                                 <div class="ingredient" flex layout="row">
                                     <md-input-container class="md-block" flex="70" flex-gt-sm>
                                         <label>Nombre</label>
-                                        <input type="text" name="newIngredientName" ng-model="recipe.newIngredient.name" customRequired />
+                                        <input ng-keyup="$event.keyCode == 13 ? addIngredient() : null" type="text" name="newIngredientName" ng-model="recipe.newIngredient.name" customRequired />
                                         <ng-messages for="formRecipe.newIngredientName.$error" md-auto-hide="false">
                                             <ng-message when="customRequired">El nombre del ingrediente es necesario.</ng-message>
                                         </ng-messages>
                                     </md-input-container>
                                     <md-input-container flex>
                                         <label>Cantidad</label>
-                                        <input type="text" name="newIngredientCount" ng-model="recipe.newIngredient.count" />
+                                        <input ng-keyup="$event.keyCode == 13 ? addIngredient() : null" type="text" name="newIngredientCount" ng-model="recipe.newIngredient.count" />
                                     </md-input-container>
                                 </div>
                             </md-list-item>
@@ -181,7 +181,7 @@
             </div>
 
             <md-card-actions layout="row" layout-align="end">
-                <md-button class="md-primary md-raised" ng-click="save()" ng-disabled="progressBarActivated">guardar borrador de la receta</md-button>
+                <md-button type="submit" class="md-primary md-raised" ng-click="save()" ng-disabled="progressBarActivated">guardar borrador de la receta</md-button>
                 <md-button class="md-primary md-raised" ng-click="publish()" ng-disabled="formRecipe.$invalid || progressBarActivated">publicar receta</md-button>
             </md-card-actions>
         </md-card>
