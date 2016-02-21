@@ -1,13 +1,13 @@
 <md-content class="md-padding" layout="row" layout-wrap layout-align="center start">
     <div flex-gt-md="75" flex-gt-lg="50" flex="grow" layout="column">
         <md-card class="profile-card md-whiteframe-z3">
-            <md-card-title>
-                <md-card-title-text>
-                    <span class="md-headline">Editar perfil</span>
-                </md-card-title-text>
-            </md-card-title>
-            <md-card-content>
-                <form name="form" role="form">
+            <form name="form" role="form" ng-submit="save()">
+                <md-card-title>
+                    <md-card-title-text>
+                        <span class="md-headline">Editar perfil</span>
+                    </md-card-title-text>
+                </md-card-title>
+                <md-card-content>
                     <md-content>
                         <div class="md-block without-input">
                             <label>Nombre del usuario</label>
@@ -19,11 +19,11 @@
                         </div>
                         <md-input-container class="md-block">
                             <label>Nombre completo</label>
-                            <input  type="text" name="first_name" ng-model="user.first_name" />
+                            <input type="text" name="first_name" ng-model="user.first_name" />
                         </md-input-container>
                         <md-input-container class="md-block">
                             <label>Apellidos</label>
-                            <input  type="text" name="last_name" ng-model="user.last_name" />
+                            <input type="text" name="last_name" ng-model="user.last_name" />
                         </md-input-container>
                         <div class="md-card-subtitle">Cambiar contraseña</div>
                         <md-input-container class="md-block">
@@ -38,17 +38,16 @@
                             </div>
                         </md-input-container>
                     </md-content>
-                </form>
-            </md-card-content>
-
-            <md-card-actions layout="column" layout-align="space-around stretch" layout-padding>
-                <div layout="column" layout-align="space-around stretch" layout-wrap>
-                    <md-button class="md-raised md-profile-button zoomAnimation" ng-click="save()" ng-disabled="form.$invalid" ng-hide="progressBarActivated || delay2">Guardar perfil</md-button>
-                    <div flex layout="row" layout-align="center center">
-                        <md-progress-circular md-mode="indeterminate" ng-show="progressBarActivated && !delay1" class="md-profile zoomAnimation" md-diameter="100"></md-progress-circular>
+                </md-card-content>
+                <md-card-actions layout="column" layout-align="space-around stretch" layout-padding>
+                    <div layout="column" layout-align="space-around stretch" layout-wrap>
+                        <md-button type="submit" class="md-raised md-profile-button zoomAnimation" ng-click="save()" ng-disabled="form.$invalid" ng-hide="progressBarActivated || delay2">Guardar perfil</md-button>
+                        <div flex layout="row" layout-align="center center">
+                            <md-progress-circular md-mode="indeterminate" ng-show="progressBarActivated && !delay1" class="md-profile zoomAnimation" md-diameter="100"></md-progress-circular>
+                        </div>
                     </div>
-                </div>
-            </md-card-actions>
+                </md-card-actions>
+            </form>
         </md-card>
     </div>
 </md-content>
