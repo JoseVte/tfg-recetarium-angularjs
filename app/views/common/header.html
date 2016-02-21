@@ -1,24 +1,26 @@
 <section layout="row" ng-controller="Header" class="{{ headerTheme }}">
     <div ng-include="'views/common/sidenav-left.html'"></div>
 
-    <md-toolbar layout="row" flex class="md-whiteframe-z1 fixed-top" md-scroll-shrink>
-        <div class="md-toolbar-tools">
-            <button ng-if="!HasBack" type="button" ng-click="toggleLeft()" aria-label="Toogle menu" class="menuBtn">
-                <i class="material-icons md-light">menu</i>
-            </button>
-            <button ng-if="HasBack" type="button" ng-click="back()" aria-label="Toogle menu" class="menuBtn">
-                <i class="material-icons md-light">arrow_back</i>
-            </button>
-            <h1 layout-margin-gt-sm="center" ng-class="{'loading': progressBarActivated}">{{ headerTitle }}</h1>
-            <span flex></span>
-            <div ng-if="IsAuthed" hide-xs hide-sm show-gt-sm>
-                <md-button ng-href="/profile">Hola, {{ UserLogged.first_name }}</md-button>
-                <md-button ng-href="/logout">Logout</md-button>
+    <header md-page-header class="fixed-top">
+        <md-toolbar layout="row" flex class="md-whiteframe-z1" md-scroll-shrink>
+            <div class="md-toolbar-tools">
+                <button ng-if="!HasBack" type="button" ng-click="toggleLeft()" aria-label="Toogle menu" class="menuBtn">
+                    <i class="material-icons md-light">menu</i>
+                </button>
+                <button ng-if="HasBack" type="button" ng-click="back()" aria-label="Toogle menu" class="menuBtn">
+                    <i class="material-icons md-light">arrow_back</i>
+                </button>
+                <h1 layout-margin-gt-sm="center" ng-class="{'loading': progressBarActivated}">{{ headerTitle }}</h1>
+                <span flex></span>
+                <div ng-if="IsAuthed" hide-xs hide-sm show-gt-sm>
+                    <md-button ng-href="/profile">Hola, {{ UserLogged.first_name }}</md-button>
+                    <md-button ng-href="/logout">Logout</md-button>
+                </div>
+                <div ng-if="!IsAuthed" hide-xs hide-sm show-gt-sm>
+                    <md-button ng-href="/login">Login</md-button>
+                    <md-button ng-href="/register">Register</md-button>
+                </div>
             </div>
-            <div ng-if="!IsAuthed" hide-xs hide-sm show-gt-sm>
-                <md-button ng-href="/login">Login</md-button>
-                <md-button ng-href="/register">Register</md-button>
-            </div>
-        </div>
-    </md-toolbar>
+        </md-toolbar>
+    </header>
 </section>

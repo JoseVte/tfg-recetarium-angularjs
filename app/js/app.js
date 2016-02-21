@@ -271,6 +271,28 @@ $.parseError = function(error) {
     return msg;
 };
 
-$.calcHeight = function(scroll) {
-    return (scroll*scroll*(-1/150))+(scroll*(-2/3))+400;
+$.calcHeightDesktop = function(x) {
+    // (((-3)) / 15625 * x^(3)) + (18 / 625 * x^(2)) - (49 / 25 * x) + 400
+    return (((-3)) / 15625 * x*x*x) + (18 / 625 * x*x) - (49 / 25 * x) + 400;
+};
+
+$.calcHeightTablet = function(x) {
+    // (((-3)) / 15625 * x^(3)) + (18 / 625 * x^(2)) - (49 / 25 * x) + 300
+    return (((-3)) / 15625 * x*x*x) + (18 / 625 * x*x) - (49 / 25 * x) + 300;
+};
+
+$.calcHeightMobile = function(x) {
+    // (((-3)) / 15625 * x^(3)) + (18 / 625 * x^(2)) - (49 / 25 * x) + 300
+    return (((-3)) / 15625 * x*x*x) + (18 / 625 * x*x) - (49 / 25 * x) + 300;
+};
+
+$.scrollbarWidth = function() {
+    var parent, child, width;
+    if(width===undefined) {
+        parent = $('<div style="width:50px;height:50px;overflow:auto"><div/></div>').appendTo('body');
+        child = parent.children();
+        width=child.innerWidth()-child.height(99).innerWidth();
+        parent.remove();
+    }
+    return width;
 };

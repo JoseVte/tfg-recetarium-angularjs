@@ -27,6 +27,7 @@ md-sidenav {
         min-width: 250px;
         max-width: 250px;
         .md-toolbar-tools{
+            height: 64px;
             max-height: 64px;
         }
     }
@@ -34,18 +35,32 @@ md-sidenav {
         max-height: 64px;
     }
 }
-header md-toolbar.md-tall {
-    height: 400px;
-    max-height: 400px;
-    min-height: 64px;
-    -webkit-transition: all 0.3s;
-    -moz-transition: all 0.3s;
-    -ms-transition: all 0.3s;
-    -o-transition: all 0.3s;
-    transition: all 0.3s;
-    @media (max-width: $layout-breakpoint-sm) {
-        height: 200px;
-        max-height: 200px;
+header md-toolbar {
+    &.md-tall {
+        height: 400px;
+        max-height: 400px;
+        min-height: 64px;
+        -webkit-transition: all 0.3s;
+        -moz-transition: all 0.3s;
+        -ms-transition: all 0.3s;
+        -o-transition: all 0.3s;
+        transition: all 0.3s;
+        @media (max-width: $layout-breakpoint-sm) {
+            height: 300px;
+            max-height: 300px;
+            .md-toolbar-tools {
+                height: 64px;
+                max-height: 64px;
+            }
+        }
+    }
+    &:not(.md-tall) {
+        height: 64px;
+        max-height: 64px;
+        .md-toolbar-tools {
+            height: 64px;
+            max-height: 64px;
+        }
     }
 }
 md-input-container.search-home {
@@ -75,7 +90,7 @@ md-input-container.search-home {
     -o-transition: all 0.3s;
     transition: all 0.3s;
     @media (max-width: $layout-breakpoint-sm) {
-        max-height: 100px;
+        max-height: 150px;
     }
 }
 .sidebar-left {

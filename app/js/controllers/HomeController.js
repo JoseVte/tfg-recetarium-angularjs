@@ -1,8 +1,8 @@
 var homeController = angular.module('HomeController', []);
 
 homeController.controller('Header',
-    ['$scope', '$mdSidenav', '$timeout', '$location',
-    function ($scope, $mdSidenav, $timeout, $location) {
+    ['$scope', '$rootScope', '$mdSidenav', '$timeout', '$location',
+    function ($scope, $rootScope, $mdSidenav, $timeout, $location) {
         $scope.toggleLeft = buildDelayedToggler('left');
 
         $scope.navLinks = [
@@ -51,57 +51,202 @@ homeController.controller('Header',
             $mdSidenav(navID).close().then(function () {});
         }
 
+        function desktopEvent(e) {
+            var img = $('.img-logo');
+            var motto = $('.motto');
+            var search = $('.search-home');
+            var button = $('.menuHome');
+            var header = $('header md-toolbar.md-tall');
+            var heightForMove = 125;
+            search.removeClass('hide');
+            var distanceY = window.pageYOffset || document.documentElement.scrollTop;
+            if (distanceY <= heightForMove) {
+                var height = $.calcHeightDesktop(distanceY);
+                img.css('height', height/2);
+                img.css({
+                    position: '',
+                    top: '',
+                    left: '',
+                    'max-height': ''
+                });
+                search.css({
+                    top: '',
+                    position: '',
+                    left: '',
+                    margin: ''
+                });
+                header.css('max-height', height);
+                header.css('height', height);
+                motto.removeClass('hide');
+                button.addClass('hide');
+                closeSideNav('left');
+            }
+            if (distanceY > heightForMove) {
+                img.css({
+                    position: 'absolute',
+                    top: 0,
+                    left: 64,
+                    'max-height': 64
+                });
+                search.css({
+                    top: 0,
+                    position: 'absolute',
+                    left: 300,
+                    margin: 10
+                });
+                header.css('max-height', 64);
+                header.css('height', 64);
+                motto.addClass('hide');
+                button.removeClass('hide');
+            }
+        }
+
+        function tableEvent(e) {
+            var img = $('.img-logo');
+            var motto = $('.motto');
+            var search = $('.search-home');
+            var button = $('.menuHome');
+            var header = $('header md-toolbar.md-tall');
+            var heightForMove = 125;
+            var distanceY = window.pageYOffset || document.documentElement.scrollTop;
+            search.removeClass('hide');
+            if (distanceY <= heightForMove) {
+                var height = $.calcHeightTablet(distanceY);
+                img.css('height', height/2);
+                img.css({
+                    position: '',
+                    top: '',
+                    left: '',
+                    'max-height': ''
+                });
+                search.css({
+                    top: '',
+                    position: '',
+                    left: '',
+                    margin: ''
+                });
+                header.css('max-height', height);
+                header.css('height', height);
+                motto.removeClass('hide');
+                button.addClass('hide');
+                closeSideNav('left');
+            }
+            if (distanceY > heightForMove) {
+                img.css({
+                    position: 'absolute',
+                    top: 0,
+                    left: 64,
+                    'max-height': 64
+                });
+                search.css({
+                    top: 0,
+                    position: 'absolute',
+                    left: 300,
+                    margin: 10
+                });
+                header.css('max-height', 64);
+                header.css('height', 64);
+                motto.addClass('hide');
+                button.removeClass('hide');
+            }
+        }
+
+        function mobileEvent(e) {
+            var img = $('.img-logo');
+            var motto = $('.motto');
+            var search = $('.search-home');
+            var button = $('.menuHome');
+            var header = $('header md-toolbar.md-tall');
+            var heightForMove = 125;
+            var distanceY = window.pageYOffset || document.documentElement.scrollTop;
+            if (distanceY <= heightForMove) {
+                var height = $.calcHeightMobile(distanceY);
+                img.css('height', height/2);
+                img.css({
+                    position: '',
+                    top: '',
+                    left: '',
+                    'max-height': ''
+                });
+                search.css({
+                    top: '',
+                    position: '',
+                    left: '',
+                    margin: ''
+                }); 
+                search.removeClass('hide');
+                header.css('max-height', height);
+                header.css('height', height);
+                motto.removeClass('hide');
+                button.addClass('hide');
+                closeSideNav('left');
+            }
+            if (distanceY > heightForMove) {
+                img.css({
+                    position: 'absolute',
+                    top: 0,
+                    left: 64,
+                    'max-height': 64
+                });
+                search.addClass('hide');
+                header.css('max-height', 64);
+                header.css('height', 64);
+                motto.addClass('hide');
+                button.removeClass('hide');
+            }
+        }
+
         $scope.$on('$includeContentLoaded', function() {
             $('.img-logo').exists(function () {
                 var button = $('.menuHome');
                 var header = $('header md-toolbar.md-tall');
-                var img = $('.img-logo');
-                var motto = $('.motto');
-                var search = $('.search-home');
-                var heightForMove = 125;
-                header.css('max-height', 400);
-                header.css('height', 400);
-                button.addClass('hide');
-                window.addEventListener('scroll', function (e) {
-                    var distanceY = window.pageYOffset || document.documentElement.scrollTop;
-                    if (distanceY < heightForMove) {
-                        var height = $.calcHeight(distanceY);
-                        img.css('height', height/2);
-                        img.css({
-                            position: '',
-                            top: '',
-                            left: '',
-                            'max-height': ''
-                        });
-                        search.css({
-                            top: '',
-                            position: '',
-                            left: '',
-                            margin: ''
-                        });
-                        header.css('max-height', height);
-                        header.css('height', height);
-                        motto.removeClass('hide');
+
+                if ($(window).width() > (960 - $.scrollbarWidth())) {
+                    $rootScope.size = 'desktop';
+                    window.addEventListener('scroll', desktopEvent, false);
+                } else if($(window).width() <= (599 - $.scrollbarWidth())) {
+                    $rootScope.size = 'mobile';
+                    window.addEventListener('scroll', mobileEvent, false);
+                } else {
+                    $rootScope.size = 'table';
+                    window.addEventListener('scroll', tableEvent, false);
+                }
+
+                // Check size
+                $(window).resize(function() {
+                    if ($(window).width() > (960 - $.scrollbarWidth())) {
+                        if ($rootScope.size != 'desktop') {
+                            window.removeEventListener('scroll', tableEvent, false);
+                            window.removeEventListener('scroll', mobileEvent, false);
+                        }
+                        $rootScope.size = 'desktop';
+                        header.css('max-height', 400);
+                        header.css('height', 400);
                         button.addClass('hide');
-                        closeSideNav('left');
-                    }
-                    if (distanceY >= heightForMove) {
-                        img.css({
-                            position: 'absolute',
-                            top: 0,
-                            left: 64,
-                            'max-height': 64
-                        });
-                        search.css({
-                            top: 0,
-                            position: 'absolute',
-                            left: 300,
-                            margin: 10
-                        });
-                        header.css('max-height', 64);
-                        header.css('height', 64);
-                        motto.addClass('hide');
-                        button.removeClass('hide');
+                        desktopEvent();
+                        window.addEventListener('scroll', desktopEvent, false);
+                    } else if($(window).width() <= (599 - $.scrollbarWidth())) {
+                        if ($rootScope.size != 'mobile') {
+                            window.removeEventListener('scroll', desktopEvent, false);
+                            window.removeEventListener('scroll', tableEvent, false);
+                        }
+                        $rootScope.size = 'mobile';
+                        header.css('max-height', 300);
+                        header.css('height', 300);
+                        button.addClass('hide');
+                        mobileEvent();
+                        window.addEventListener('scroll', mobileEvent, false);
+                    } else {
+                        if ($rootScope.size != 'table') {
+                            window.removeEventListener('scroll', desktopEvent, false);
+                            window.removeEventListener('scroll', mobileEvent, false);
+                        }
+                        $rootScope.size = 'table';
+                        header.css('max-height', 300);
+                        header.css('height', 300);
+                        button.addClass('hide');
+                        tableEvent();
+                        window.addEventListener('scroll', tableEvent, false);
                     }
                 });
             });
