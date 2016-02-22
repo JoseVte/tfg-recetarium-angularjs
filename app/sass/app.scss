@@ -35,6 +35,9 @@ body {
         @media (max-width: $layout-breakpoint-sm) {
             padding-top: 300px;
         }
+        @media (max-width: $layout-breakpoint-xs) {
+            padding-top: 200px;
+        }
     }
 }
 md-card md-card-title md-card-title-text md-input-container {
@@ -183,10 +186,7 @@ md-input-container.md-has-no-icon-left {
             color: white;
             md-card-content {
                 background-color: white;
-                padding: 0;
-                form {
-                    padding: 16px;
-                }
+                padding: 16px;
                 .md-card-subtitle {
                     background-color: $color;
                     color: white;
@@ -235,7 +235,7 @@ md-input-container.md-has-no-icon-left {
                     &.md-raised.md-#{$theme}-button {
                         padding: 0;
                         min-width: 40px;
-                        margin: 12px 0;
+                        /*margin: 12px 0;*/
                         background-color: $color;
                         color: white;
                         &:hover, &:focus, &:visited {

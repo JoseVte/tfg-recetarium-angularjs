@@ -53,6 +53,13 @@ header md-toolbar {
                 max-height: 64px;
             }
         }
+        @media (max-width: $layout-breakpoint-xs) {
+            height: 200px;
+            max-height: 200px;
+            .md-toolbar-tools {
+                display: none;
+            }
+        }
     }
     &:not(.md-tall) {
         height: 64px;
@@ -83,6 +90,7 @@ md-input-container.search-home {
     }
 }
 .img-logo {
+    max-width: 100%;
     max-height: 200px;
     -webkit-transition: all 0.3s;
     -moz-transition: all 0.3s;
@@ -91,6 +99,9 @@ md-input-container.search-home {
     transition: all 0.3s;
     @media (max-width: $layout-breakpoint-sm) {
         max-height: 150px;
+    }
+    @media (max-width: $layout-breakpoint-xs) {
+        max-height: 100px;
     }
 }
 .sidebar-left {

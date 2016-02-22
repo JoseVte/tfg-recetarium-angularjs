@@ -282,8 +282,8 @@ $.calcHeightTablet = function(x) {
 };
 
 $.calcHeightMobile = function(x) {
-    // (((-3)) / 15625 * x^(3)) + (18 / 625 * x^(2)) - (49 / 25 * x) + 300
-    return (((-3)) / 15625 * x*x*x) + (18 / 625 * x*x) - (49 / 25 * x) + 300;
+    // (((-3)) / 15625 * x^(3)) + (18 / 625 * x^(2)) - (49 / 25 * x) + 200
+    return (((-3)) / 15625 * x*x*x) + (18 / 625 * x*x) - (49 / 25 * x) + 200;
 };
 
 $.scrollbarWidth = function() {

@@ -57,7 +57,9 @@ homeController.controller('Header',
             var search = $('.search-home');
             var button = $('.menuHome');
             var header = $('header md-toolbar.md-tall');
+            var toolbar = $('.md-toolbar-tools');
             var heightForMove = 125;
+            toolbar.css('display', 'flex');
             search.removeClass('hide');
             var distanceY = window.pageYOffset || document.documentElement.scrollTop;
             if (distanceY <= heightForMove) {
@@ -107,10 +109,14 @@ homeController.controller('Header',
             var search = $('.search-home');
             var button = $('.menuHome');
             var header = $('header md-toolbar.md-tall');
+            var toolbar = $('.md-toolbar-tools');
             var heightForMove = 125;
             var distanceY = window.pageYOffset || document.documentElement.scrollTop;
+            toolbar.css('display', 'flex');
             search.removeClass('hide');
-            if (distanceY <= heightForMove) {
+            if (distanceY == 0) {
+                motto.removeClass('hide');
+            } else if (distanceY <= heightForMove) {
                 var height = $.calcHeightTablet(distanceY);
                 img.css('height', height/2);
                 img.css({
@@ -127,7 +133,7 @@ homeController.controller('Header',
                 });
                 header.css('max-height', height);
                 header.css('height', height);
-                motto.removeClass('hide');
+                motto.addClass('hide');
                 button.addClass('hide');
                 closeSideNav('left');
             }
@@ -157,9 +163,12 @@ homeController.controller('Header',
             var search = $('.search-home');
             var button = $('.menuHome');
             var header = $('header md-toolbar.md-tall');
+            var toolbar = $('.md-toolbar-tools');
             var heightForMove = 125;
             var distanceY = window.pageYOffset || document.documentElement.scrollTop;
-            if (distanceY <= heightForMove) {
+            if (distanceY == 0) {
+                motto.removeClass('hide');
+            } else if (distanceY <= heightForMove) {
                 var height = $.calcHeightMobile(distanceY);
                 img.css('height', height/2);
                 img.css({
@@ -173,12 +182,13 @@ homeController.controller('Header',
                     position: '',
                     left: '',
                     margin: ''
-                }); 
+                });
                 search.removeClass('hide');
                 header.css('max-height', height);
                 header.css('height', height);
-                motto.removeClass('hide');
+                motto.addClass('hide');
                 button.addClass('hide');
+                toolbar.css('display', 'none');
                 closeSideNav('left');
             }
             if (distanceY > heightForMove) {
@@ -193,6 +203,7 @@ homeController.controller('Header',
                 header.css('height', 64);
                 motto.addClass('hide');
                 button.removeClass('hide');
+                toolbar.css('display', 'flex');
             }
         }
 
