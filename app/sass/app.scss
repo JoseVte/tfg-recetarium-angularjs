@@ -2,6 +2,7 @@
 @import "variables.scss";
 @import "material-icons.scss";
 @import "animation.scss";
+@import "home.scss";
 @import "header.scss";
 @import "auth.scss";
 @import "recipe.scss";
@@ -22,14 +23,34 @@ body {
         background-color: transparent;
     }
 }
+body {
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
+    -ms-transition: all 0.3s;
+    -o-transition: all 0.3s;
+    transition: all 0.3s;
+    padding-top: 64px;
+    &.body-home {
+        padding-top: 400px;
+        @media (max-width: $layout-breakpoint-sm) {
+            padding-top: 300px;
+        }
+        @media (max-width: $layout-breakpoint-xs) {
+            padding-top: 200px;
+        }
+    }
+}
 md-card md-card-title md-card-title-text md-input-container {
     margin-top: 15px;
     margin-bottom: 0px;
 }
+.md-card-image {
+    overflow: auto;
+}
 md-input-container.md-has-no-icon-left {
     padding-left: 0;
     label {
-        left:auto;
+        left: auto;
     }
 }
 .md-button {
@@ -41,6 +62,9 @@ md-input-container.md-has-no-icon-left {
         color: red;
     }
 }
+.text-right {
+    text-align: right;
+}
 .without-input {
     margin: 9px 0;
     label {
@@ -49,7 +73,7 @@ md-input-container.md-has-no-icon-left {
         display: block;
         order: 1;
         padding-left: 3px;
-        padding-right: 0px;
+        padding-right: 0;
         pointer-events: none;
         transform: matrix(0.75, 0, 0, 0.75, 0, 6);
         transform-origin: 0px 0px;
@@ -162,10 +186,7 @@ md-input-container.md-has-no-icon-left {
             color: white;
             md-card-content {
                 background-color: white;
-                padding: 0;
-                form {
-                    padding: 16px;
-                }
+                padding: 16px;
                 .md-card-subtitle {
                     background-color: $color;
                     color: white;
@@ -214,7 +235,7 @@ md-input-container.md-has-no-icon-left {
                     &.md-raised.md-#{$theme}-button {
                         padding: 0;
                         min-width: 40px;
-                        margin: 12px 0;
+                        /*margin: 12px 0;*/
                         background-color: $color;
                         color: white;
                         &:hover, &:focus, &:visited {

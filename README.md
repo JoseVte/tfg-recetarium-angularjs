@@ -49,7 +49,12 @@ http-server -a localhost -p 8000
 
 ## Changelog
 
-#### [![0.4.1](/app/doc/rocket-blue.png) 0.4.1](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.4.1)
+#### [![0.4.2](/app/doc/rocket-blue.png) 0.4.2](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.4.2)
+
+- Nuevo dashboard
+- Nueva barra de navegacion
+
+###### [![0.4.1](/app/doc/release.png) 0.4.1](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.4.1)
 
 - Añadidos eventos cuando se presiona la tecla intro
 

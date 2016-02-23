@@ -49,13 +49,10 @@ describe('Module RecipeController', function() {
             $location.path('/recipes');
             $scope.$apply();
             $httpBackend.flush();
-            expect($location.url()).toBe('/recipes?page=1&size=10');
+            expect($location.url()).toBe('/recipes');
 
             $scope.pagination.search = 'test';
             $scope.searchRecipe();
-            $httpBackend.expectGET(/http:\/\/localhost:9000\/recipes(.*)/).respond({});
-            $scope.$apply();
-            $httpBackend.flush();
             expect($location.url()).toBe('/recipes?page=1&size=10&search=test');
         });
 
@@ -64,13 +61,10 @@ describe('Module RecipeController', function() {
             $location.path('/recipes');
             $scope.$apply();
             $httpBackend.flush();
-            expect($location.url()).toBe('/recipes?page=1&size=10');
+            expect($location.url()).toBe('/recipes');
 
             $scope.pagination.size = 50;
             $scope.searchRecipe();
-            $httpBackend.expectGET(/http:\/\/localhost:9000\/recipes(.*)/).respond({});
-            $scope.$apply();
-            $httpBackend.flush();
             expect($location.url()).toBe('/recipes?page=1&size=50');
         });
 
@@ -79,13 +73,10 @@ describe('Module RecipeController', function() {
             $location.path('/recipes');
             $scope.$apply();
             $httpBackend.flush();
-            expect($location.url()).toBe('/recipes?page=1&size=10');
+            expect($location.url()).toBe('/recipes');
 
             $scope.pagination.page = 5;
             $scope.searchRecipe();
-            $httpBackend.expectGET(/http:\/\/localhost:9000\/recipes(.*)/).respond({});
-            $scope.$apply();
-            $httpBackend.flush();
             expect($location.url()).toBe('/recipes?page=5&size=10');
         });
 
@@ -98,7 +89,7 @@ describe('Module RecipeController', function() {
             expect($rootScope.error.icon).toBe('error_outline');
             expect($rootScope.error.title).toBe('Algo ha ido mal');
             expect($rootScope.error.msg).toBe('Ha ocurrido un error mientras se cargaban las recetas.');
-            expect($location.url()).toBe('/recipes?page=1&size=10');
+            expect($location.url()).toBe('/recipes');
         });
 
         it('description method', function () {
