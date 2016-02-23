@@ -137,7 +137,7 @@ recetarium.run(function ($rootScope, $location, $http, AuthService, ICONS) {
         $rootScope.errorMsg = false;
         $rootScope.progressBarActivated = false;
 
-        if ($rootScope.lastSearchParams[$path]) {
+        if (!$location.search() && $rootScope.lastSearchParams[$path]) {
             $location.search($rootScope.lastSearchParams[$path]);
         }
 

@@ -1,8 +1,8 @@
 var homeController = angular.module('HomeController', []);
 
 homeController.controller('Header',
-    ['$scope', '$rootScope', '$mdSidenav', '$timeout', '$location',
-    function ($scope, $rootScope, $mdSidenav, $timeout, $location) {
+    ['$scope', '$rootScope', '$mdSidenav', '$timeout', '$location', 'RecipeService',
+    function ($scope, $rootScope, $mdSidenav, $timeout, $location, RecipeService) {
         $scope.toggleLeft = buildDelayedToggler('left');
 
         $scope.navLinks = [
@@ -27,6 +27,10 @@ homeController.controller('Header',
             } else {
                 return "";
             }
+        };
+
+        $scope.searchRecipe = function() {
+            $location.path('recipes').search('search', $scope.search);
         };
 
         function debounce(func, wait, context) {
@@ -266,7 +270,7 @@ homeController.controller('Header',
 ]);
 
 homeController.controller('Home',
-    ['$scope', '$rootScope', '$location','RecipeService', 'NotificationProvider', 'DIFF',
+    ['$scope', '$rootScope', '$location', 'RecipeService', 'NotificationProvider', 'DIFF',
     function ($scope, $rootScope, $location, RecipeService, NotificationProvider, DIFF) {
         $scope.recipes = [];
         $scope.total = 1;
