@@ -630,6 +630,35 @@ recipeController.controller('RecipeShow',
         $scope.getVisibilityIcon = function (visibility) { return VISIBILITY.icon[visibility]; };
 
         $scope.getVisibilityClass = function (visibility) { return VISIBILITY.class[visibility]; };
+
+        $scope.toggleLike = function() {
+            if ($rootScope.globals.user) {
+                RecipeService.toggleLike($scope.recipe, $scope.liked, function (response) {
+                    $scope.liked = response.liked
+                    NotificationProvider.notify({
+                        title: 'Guardado',
+                        text: '',
+                        type: 'error',
+                        addclass: 'custom-success-notify',
+                        icon: 'material-icons md-light',
+                        styling: 'fontawesome'
+                    });
+                    $('.ui-pnotify.custom-success-notify .material-icons').html('heart');
+                }, function (response) {
+                    NotificationProvider.notify({
+                        title: 'Un error ha ocurrido',
+                        text: 'Ha ocurrido un error. Por favor, intentelo más tarde.',
+                        type: 'error',
+                        addclass: 'custom-error-notify',
+                        icon: 'material-icons md-light',
+                        styling: 'fontawesome'
+                    });
+                    $('.ui-pnotify.custom-error-notify .material-icons').html('warning');
+                });
+            } else {
+                $location.path('/login');
+            }
+        }
     }]
 );
 
