@@ -137,7 +137,16 @@ describe('Module RecipeController', function() {
                 $scope: $scope,
                 $routeParams: { slug: 'test' }
             });
-            $httpBackend.when('GET', /http:\/\/localhost:9000\/recipes\/(.*)/).respond(200, {});
+            $httpBackend.when('GET', /http:\/\/localhost:9000\/recipes\/(.*)/).respond(200, {
+                title: 'Test',
+                slug: 'test',
+                media: [],
+                favorites: [],
+                rating: {
+                    rating: 0.0,
+                    ratings: {}
+                }
+            });
         }));
 
         afterEach(function() {
@@ -150,11 +159,7 @@ describe('Module RecipeController', function() {
             expect($rootScope.progressBarActivated).toBeTruthy();
             expect($rootScope.HasBack).toBeTruthy();
 
-            $httpBackend.expectGET('http://localhost:9000/recipes/test').respond({
-                title: 'Test',
-                slug: 'test',
-                media: []
-            });
+            $httpBackend.expectGET('http://localhost:9000/recipes/test');
             $location.path('/recipes/test');
             $scope.$apply();
             $httpBackend.flush();
@@ -163,22 +168,14 @@ describe('Module RecipeController', function() {
         });
 
         it('description method', function () {
-            $httpBackend.expectGET('http://localhost:9000/recipes/test').respond({
-                title: 'Test',
-                slug: 'test',
-                media: []
-            });
+            $httpBackend.expectGET('http://localhost:9000/recipes/test');
             $httpBackend.flush();
             expect($scope.description('<div>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</div>').$$unwrapTrustedValue()).toEqual('<div>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</div>');
             expect($scope.description(null)).toBeUndefined();
         });
 
         it('difficulty method', function () {
-            $httpBackend.expectGET('http://localhost:9000/recipes/test').respond({
-                title: 'Test',
-                slug: 'test',
-                media: []
-            });
+            $httpBackend.expectGET('http://localhost:9000/recipes/test');
             $httpBackend.flush();
             expect($scope.getDifficulty('EASY')).toEqual('md-green');
             expect($scope.getDifficulty('MEDIUM')).toEqual('md-yellow');
@@ -186,11 +183,7 @@ describe('Module RecipeController', function() {
         });
 
         it('visibility class method', function () {
-            $httpBackend.expectGET('http://localhost:9000/recipes/test').respond({
-                title: 'Test',
-                slug: 'test',
-                media: []
-            });
+            $httpBackend.expectGET('http://localhost:9000/recipes/test');
             $httpBackend.flush();
             expect($scope.getVisibilityClass('PUBLIC')).toEqual('md-green');
             expect($scope.getVisibilityClass('FRIENDS')).toEqual('md-yellow');
@@ -198,11 +191,7 @@ describe('Module RecipeController', function() {
         });
 
         it('visibility icon method', function () {
-            $httpBackend.expectGET('http://localhost:9000/recipes/test').respond({
-                title: 'Test',
-                slug: 'test',
-                media: []
-            });
+            $httpBackend.expectGET('http://localhost:9000/recipes/test');
             $httpBackend.flush();
             expect($scope.getVisibilityIcon('PUBLIC')).toEqual('lock_open');
             expect($scope.getVisibilityIcon('FRIENDS')).toEqual('lock_outline');

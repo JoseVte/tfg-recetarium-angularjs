@@ -558,8 +558,8 @@ recipeController.controller('RecipeAll',
 );
 
 recipeController.controller('RecipeShow',
-    ['$scope', '$rootScope', '$location', '$routeParams', '$sce', 'RecipeService', 'NotificationProvider', 'DIFF', 'VISIBILITY',
-    function ($scope, $rootScope, $location, $routeParams, $sce, RecipeService, NotificationProvider, DIFF, VISIBILITY) {
+    ['$scope', '$rootScope', '$location', '$routeParams', '$sce', '$mdDialog', 'RecipeService', 'NotificationProvider', 'DIFF', 'VISIBILITY',
+    function ($scope, $rootScope, $location, $routeParams, $sce, $mdDialog, RecipeService, NotificationProvider, DIFF, VISIBILITY) {
         $rootScope.headerTitle = 'Cargando';
         $rootScope.progressBarActivated = true;
         $rootScope.HasBack = true;
@@ -573,6 +573,13 @@ recipeController.controller('RecipeShow',
                 $scope.images = RecipeService.getImages(response.data);
                 $scope.tags = response.data.tags;
                 $scope.comments = response.data.comments;
+                $scope.favorites = response.data.favorites.length;
+                if ($rootScope.globals.user) {
+                    $scope.fav = response.data.favorites.contains($rootScope.globals.user.user.id);
+                    $scope.rated = response.data.rating.ratings[$rootScope.globals.user.user.id];
+                    $rootScope.globals.rated = $scope.rated;
+                    $rootScope.globals.recipe = $scope.recipe;
+                }
 
                 $rootScope.headerTitle = response.data.title;
                 $rootScope.progressBarActivated = false;
@@ -630,6 +637,59 @@ recipeController.controller('RecipeShow',
         $scope.getVisibilityIcon = function (visibility) { return VISIBILITY.icon[visibility]; };
 
         $scope.getVisibilityClass = function (visibility) { return VISIBILITY.class[visibility]; };
+
+        $scope.getRatingIcon = function (rating) {
+            if (rating >= 4.0) {
+                return 'star';
+            } else if (rating < 2.0) {
+                return 'star_border';
+            } else {
+                return 'star_half';
+            }
+        };
+
+        $scope.toggleFav = function() {
+            if ($rootScope.globals.user) {
+                RecipeService.toggleFav($scope.recipe.id, function (response) {
+                    $scope.fav = response.data.fav;
+                    $scope.favorites = response.data.favorites;
+                    NotificationProvider.notify({
+                        title: 'Guardado',
+                        text: '',
+                        type: 'error',
+                        addclass: 'custom-success-notify',
+                        icon: 'material-icons md-light',
+                        styling: 'fontawesome'
+                    });
+                    $('.ui-pnotify.custom-success-notify .material-icons').html($scope.fav ? 'favorite' : 'favorite_border');
+                }, function (response) {
+                    NotificationProvider.notify({
+                        title: 'Un error ha ocurrido',
+                        text: 'Ha ocurrido un error. Por favor, intentelo más tarde.',
+                        type: 'error',
+                        addclass: 'custom-error-notify',
+                        icon: 'material-icons md-light',
+                        styling: 'fontawesome'
+                    });
+                    $('.ui-pnotify.custom-error-notify .material-icons').html('warning');
+                });
+            } else {
+                $location.path('/login');
+            }
+        };
+
+        $scope.showRating = function(ev) {
+            $mdDialog.show({
+                controller: RatingDialogController,
+                templateUrl: 'views/recipe/rating_dialog.html',
+                parent: angular.element(document.body),
+                targetEvent: ev,
+                clickOutsideToClose:true
+            })
+            .then(function(answer) {
+                $scope.status = 'You said the information was "' + answer + '".';
+            }, function() {});
+        };
     }]
 );
 
@@ -1069,3 +1129,39 @@ recipeController.controller('RecipeEdit',
         };
     }]
 );
+
+function RatingDialogController($scope, $rootScope, $location, $mdDialog, RecipeService, NotificationProvider) {
+    $scope.rated = $rootScope.globals.rated;
+    $scope.recipe = $rootScope.globals.recipe;
+    $scope.hide = function() { $mdDialog.hide(); };
+    $scope.cancel = function() { $mdDialog.cancel(); };
+    $scope.rating = function() {
+        if ($rootScope.globals.user) {
+            RecipeService.rating($scope.recipe.id, $scope.rated, function (response) {
+                NotificationProvider.notify({
+                    title: 'Guardado',
+                    text: '',
+                    type: 'error',
+                    addclass: 'custom-success-notify',
+                    icon: 'material-icons md-light',
+                    styling: 'fontawesome'
+                });
+                $('.ui-pnotify.custom-success-notify .material-icons').html('star');
+                $mdDialog.cancel();
+                $location.path('/recipes/' + $scope.recipe.slug);
+            }, function (response) {
+                NotificationProvider.notify({
+                    title: 'Un error ha ocurrido',
+                    text: 'Ha ocurrido un error. Por favor, intentelo más tarde.',
+                    type: 'error',
+                    addclass: 'custom-error-notify',
+                    icon: 'material-icons md-light',
+                    styling: 'fontawesome'
+                });
+                $('.ui-pnotify.custom-error-notify .material-icons').html('warning');
+            });
+        } else {
+            $location.path('/login');
+        }
+    };
+};

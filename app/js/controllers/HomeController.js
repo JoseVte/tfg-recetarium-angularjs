@@ -339,5 +339,9 @@ homeController.controller('Home',
                 });
             }
         };
+
+        $scope.show = function(slug) {
+            $location.path('/recipes/' + slug);
+        };
     }
 ]);
