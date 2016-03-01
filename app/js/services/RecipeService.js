@@ -236,6 +236,30 @@ recipeService.factory('RecipeService',
             });
         };
 
+        service.toggleFav = function(idRecipe, callbackOk, callbackError) {
+            $http.patch(
+                service.apiUrl +'/recipes/' + idRecipe + '/fav',
+                {},
+                { headers: {'Accept': 'application/json', 'Content-Type': 'application/json'} }
+            ).then(function (response) {
+                callbackOk(response);
+            }, function (response) {
+                callbackError(response);
+            });
+        };
+
+        service.rating = function(idRecipe, rating, callbackOk, callbackError) {
+            $http.put(
+                service.apiUrl + '/recipes/' + idRecipe + '/rating',
+                { rating: rating },
+                { headers: {'Accept': 'application/json', 'Content-Type': 'application/json'} }
+            ).then(function (response) {
+                callbackOk(response);
+            }, function (response) {
+                callbackError(response);
+            });
+        };
+
         return service;
     }]
 );

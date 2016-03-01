@@ -1,0 +1,24 @@
+<md-dialog aria-label="Puntúa la receta" ng-cloak>
+    <form>
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>Puntúa la receta</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="cancel()">
+                    <md-icon class="material-icons" aria-label="Close dialog">close</md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+        <md-dialog-content>
+            <md-input-container>
+                <label>Puntuación</label>
+                <input required type="number" step="any" name="rated" ng-model="rated" min="0" max="5" />
+            </md-input-container>
+        </md-dialog-content>
+        <md-dialog-actions layout="row">
+            <span flex></span>
+            <md-button ng-click="cancel()">Cancelar</md-button>
+            <md-button ng-click="rating()">Aceptar</md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>

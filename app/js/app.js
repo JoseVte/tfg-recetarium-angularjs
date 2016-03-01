@@ -227,6 +227,14 @@ String.prototype.trunc = function(n, useWordBoundary){
     return  isTooLong ? s_ + '&hellip;' : s_;
 };
 
+Array.prototype.contains = function(obj) {
+    var i = this.length;
+    while (i--) {
+        if (this[i] === obj) { return true; }
+    }
+    return false;
+}
+
 $.fn.exists = function(callback) {
     var args = [].slice.call(arguments, 1);
     if (this.length) {
