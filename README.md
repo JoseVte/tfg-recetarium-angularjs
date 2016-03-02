@@ -49,7 +49,13 @@ http-server -a localhost -p 8000
 
 ## Changelog
 
-#### [![0.4.2](/app/doc/rocket-blue.png) 0.4.2](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.4.2)
+#### [![0.4.3](/app/doc/rocket-blue.png) 0.4.3](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.4.3)
+
+- Añadido boton para añadir a favoritos
+- Añadida posibilidad de puntuar una receta del 0 al 5
+- Añadido Vagrantfile para poder probar la app sin instalar nada en el equipo
+
+###### [![0.4.2](/app/doc/release.png) 0.4.2](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.4.2)
 
 - Nuevo dashboard
 - Nueva barra de navegacion
