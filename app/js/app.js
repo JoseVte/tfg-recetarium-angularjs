@@ -12,9 +12,10 @@ var recetarium = angular.module('recetariumApp', [
     'ngAnimate',
     'textAngular',
     'ui.router',
+    'infinite-scroll',
     // My Javascript
     'Animations', 'TextEditor', 'NotificationProviders',
-    'FileDirectives', 'TimeDirectives', 'ValidatorDirectives',
+    'FileDirectives', 'FormDirectives', 'TimeDirectives', 'ValidatorDirectives',
     'HomeController',
     'AuthServices', 'AuthController',
     'RecipeServices', 'RecipeFilters', 'RecipeController',
@@ -27,7 +28,8 @@ recetarium.config(['$routeProvider', '$locationProvider', function($routeProvide
     $locationProvider.html5Mode(true);
 
     $routeProvider
-        .when('/', { templateUrl: 'views/home.html', controller: '' })
+        .when('/', { templateUrl: 'views/home.html', controller: 'Home' })
+        // Auth
         .when('/login', { templateUrl: 'views/auth/login.html', controller: 'Login', resolve: { access: ["AuthService", function (AuthService) { return AuthService.IsAnonymous(); }]}})
         .when('/logout', { template: '', controller: 'Logout', resolve: { access: ["AuthService", function (AuthService) { return AuthService.IsAuthenticated(); }]}})
         .when('/register', { templateUrl: 'views/auth/register.html', controller: 'Register', resolve: { access: ["AuthService", function (AuthService) { return AuthService.IsAnonymous(); }]}})
@@ -39,6 +41,7 @@ recetarium.config(['$routeProvider', '$locationProvider', function($routeProvide
         .when('/recipes/:slug', { templateUrl: 'views/recipe/show.html', controller: 'RecipeShow' })
         .when('/recipes/:slug/edit', { templateUrl: 'views/recipe/edit.html', controller: 'RecipeEdit', resolve: { access: ["AuthService", "$route", "$rootScope", function (AuthService, $route, $rootScope) { $rootScope.progressBarActivated = true; return AuthService.IsMyRecipe($route.current.params.slug); }]}})
         .when('/new-recipe', { templateUrl: 'views/recipe/create.html', controller: 'RecipeCreate', resolve: { access: ["AuthService", function (AuthService) { return AuthService.IsAuthenticated(); }]}})
+        // Errores
         .when('/unauthorized', { templateUrl: 'views/error/401.html', controller: '' })
         .when('/forbidden', { templateUrl: 'views/error/403.html', controller: '' })
         .otherwise({ redirectTo: '/' });
@@ -134,7 +137,7 @@ recetarium.run(function ($rootScope, $location, $http, AuthService, ICONS) {
         $rootScope.errorMsg = false;
         $rootScope.progressBarActivated = false;
 
-        if ($rootScope.lastSearchParams[$path]) {
+        if (!$location.search() && $rootScope.lastSearchParams[$path]) {
             $location.search($rootScope.lastSearchParams[$path]);
         }
 
@@ -212,6 +215,7 @@ recetarium.run(function ($rootScope, $location, $http, AuthService, ICONS) {
                 }).addClass('animate');
             });
         });
+
     });
 });
 
@@ -222,6 +226,14 @@ String.prototype.trunc = function(n, useWordBoundary){
     s_ = (useWordBoundary && isTooLong) ? s_.substr(0,s_.lastIndexOf(' ')) : s_;
     return  isTooLong ? s_ + '&hellip;' : s_;
 };
+
+Array.prototype.contains = function(obj) {
+    var i = this.length;
+    while (i--) {
+        if (this[i] === obj) { return true; }
+    }
+    return false;
+}
 
 $.fn.exists = function(callback) {
     var args = [].slice.call(arguments, 1);
@@ -265,4 +277,30 @@ $.parseError = function(error) {
         msg += error;
     }
     return msg;
+};
+
+$.calcHeightDesktop = function(x) {
+    // (((-3)) / 15625 * x^(3)) + (18 / 625 * x^(2)) - (49 / 25 * x) + 400
+    return (((-3)) / 15625 * x*x*x) + (18 / 625 * x*x) - (49 / 25 * x) + 400;
+};
+
+$.calcHeightTablet = function(x) {
+    // (((-3)) / 15625 * x^(3)) + (18 / 625 * x^(2)) - (49 / 25 * x) + 300
+    return (((-3)) / 15625 * x*x*x) + (18 / 625 * x*x) - (49 / 25 * x) + 300;
+};
+
+$.calcHeightMobile = function(x) {
+    // (((-3)) / 15625 * x^(3)) + (18 / 625 * x^(2)) - (49 / 25 * x) + 200
+    return (((-3)) / 15625 * x*x*x) + (18 / 625 * x*x) - (49 / 25 * x) + 200;
+};
+
+$.scrollbarWidth = function() {
+    var parent, child, width;
+    if(width===undefined) {
+        parent = $('<div style="width:50px;height:50px;overflow:auto"><div/></div>').appendTo('body');
+        child = parent.children();
+        width=child.innerWidth()-child.height(99).innerWidth();
+        parent.remove();
+    }
+    return width;
 };

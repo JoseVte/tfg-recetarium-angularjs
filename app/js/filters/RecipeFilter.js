@@ -48,3 +48,9 @@ recipeFilter.filter('duration', function() {
         return duration;
     };
 });
+
+recipeFilter.filter('fromNow', function() {
+    return function(date) {
+        return moment(date).fromNow();
+    };
+});

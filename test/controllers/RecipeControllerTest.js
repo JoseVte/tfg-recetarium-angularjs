@@ -49,13 +49,10 @@ describe('Module RecipeController', function() {
             $location.path('/recipes');
             $scope.$apply();
             $httpBackend.flush();
-            expect($location.url()).toBe('/recipes?page=1&size=10');
+            expect($location.url()).toBe('/recipes');
 
             $scope.pagination.search = 'test';
             $scope.searchRecipe();
-            $httpBackend.expectGET(/http:\/\/localhost:9000\/recipes(.*)/).respond({});
-            $scope.$apply();
-            $httpBackend.flush();
             expect($location.url()).toBe('/recipes?page=1&size=10&search=test');
         });
 
@@ -64,13 +61,10 @@ describe('Module RecipeController', function() {
             $location.path('/recipes');
             $scope.$apply();
             $httpBackend.flush();
-            expect($location.url()).toBe('/recipes?page=1&size=10');
+            expect($location.url()).toBe('/recipes');
 
             $scope.pagination.size = 50;
             $scope.searchRecipe();
-            $httpBackend.expectGET(/http:\/\/localhost:9000\/recipes(.*)/).respond({});
-            $scope.$apply();
-            $httpBackend.flush();
             expect($location.url()).toBe('/recipes?page=1&size=50');
         });
 
@@ -79,13 +73,10 @@ describe('Module RecipeController', function() {
             $location.path('/recipes');
             $scope.$apply();
             $httpBackend.flush();
-            expect($location.url()).toBe('/recipes?page=1&size=10');
+            expect($location.url()).toBe('/recipes');
 
             $scope.pagination.page = 5;
             $scope.searchRecipe();
-            $httpBackend.expectGET(/http:\/\/localhost:9000\/recipes(.*)/).respond({});
-            $scope.$apply();
-            $httpBackend.flush();
             expect($location.url()).toBe('/recipes?page=5&size=10');
         });
 
@@ -98,7 +89,7 @@ describe('Module RecipeController', function() {
             expect($rootScope.error.icon).toBe('error_outline');
             expect($rootScope.error.title).toBe('Algo ha ido mal');
             expect($rootScope.error.msg).toBe('Ha ocurrido un error mientras se cargaban las recetas.');
-            expect($location.url()).toBe('/recipes?page=1&size=10');
+            expect($location.url()).toBe('/recipes');
         });
 
         it('description method', function () {
@@ -146,7 +137,16 @@ describe('Module RecipeController', function() {
                 $scope: $scope,
                 $routeParams: { slug: 'test' }
             });
-            $httpBackend.when('GET', /http:\/\/localhost:9000\/recipes\/(.*)/).respond(200, {});
+            $httpBackend.when('GET', /http:\/\/localhost:9000\/recipes\/(.*)/).respond(200, {
+                title: 'Test',
+                slug: 'test',
+                media: [],
+                favorites: [],
+                rating: {
+                    rating: 0.0,
+                    ratings: {}
+                }
+            });
         }));
 
         afterEach(function() {
@@ -159,11 +159,7 @@ describe('Module RecipeController', function() {
             expect($rootScope.progressBarActivated).toBeTruthy();
             expect($rootScope.HasBack).toBeTruthy();
 
-            $httpBackend.expectGET('http://localhost:9000/recipes/test').respond({
-                title: 'Test',
-                slug: 'test',
-                media: []
-            });
+            $httpBackend.expectGET('http://localhost:9000/recipes/test');
             $location.path('/recipes/test');
             $scope.$apply();
             $httpBackend.flush();
@@ -172,22 +168,14 @@ describe('Module RecipeController', function() {
         });
 
         it('description method', function () {
-            $httpBackend.expectGET('http://localhost:9000/recipes/test').respond({
-                title: 'Test',
-                slug: 'test',
-                media: []
-            });
+            $httpBackend.expectGET('http://localhost:9000/recipes/test');
             $httpBackend.flush();
             expect($scope.description('<div>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</div>').$$unwrapTrustedValue()).toEqual('<div>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</div>');
             expect($scope.description(null)).toBeUndefined();
         });
 
         it('difficulty method', function () {
-            $httpBackend.expectGET('http://localhost:9000/recipes/test').respond({
-                title: 'Test',
-                slug: 'test',
-                media: []
-            });
+            $httpBackend.expectGET('http://localhost:9000/recipes/test');
             $httpBackend.flush();
             expect($scope.getDifficulty('EASY')).toEqual('md-green');
             expect($scope.getDifficulty('MEDIUM')).toEqual('md-yellow');
@@ -195,11 +183,7 @@ describe('Module RecipeController', function() {
         });
 
         it('visibility class method', function () {
-            $httpBackend.expectGET('http://localhost:9000/recipes/test').respond({
-                title: 'Test',
-                slug: 'test',
-                media: []
-            });
+            $httpBackend.expectGET('http://localhost:9000/recipes/test');
             $httpBackend.flush();
             expect($scope.getVisibilityClass('PUBLIC')).toEqual('md-green');
             expect($scope.getVisibilityClass('FRIENDS')).toEqual('md-yellow');
@@ -207,11 +191,7 @@ describe('Module RecipeController', function() {
         });
 
         it('visibility icon method', function () {
-            $httpBackend.expectGET('http://localhost:9000/recipes/test').respond({
-                title: 'Test',
-                slug: 'test',
-                media: []
-            });
+            $httpBackend.expectGET('http://localhost:9000/recipes/test');
             $httpBackend.flush();
             expect($scope.getVisibilityIcon('PUBLIC')).toEqual('lock_open');
             expect($scope.getVisibilityIcon('FRIENDS')).toEqual('lock_outline');
