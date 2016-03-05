@@ -96,6 +96,7 @@ gulp.task('lib-js', function() {
         paths.src.bower + '/angular-mocks/angular-mocks.js',
         paths.src.bower + '/ngInfiniteScroll/build/ng-infinite-scroll.js',
         paths.src.bower + '/angulargrid/angulargrid.js',
+        paths.src.bower + '/dropzone/dist/dropzone.js',
     ])
     .pipe(concat('app-lib.js'))
     .pipe(rename({ suffix: '.min' }))

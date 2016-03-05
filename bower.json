@@ -31,11 +31,11 @@
     "pnotify": "~3.0.0",
     "fancybox": "~2.1.5",
     "textAngular": "~1.5.0",
-    "dropzone": "~4.2.0",
+    "dropzone": "~4.3.0",
     "moment": "2.11.2",
     "angular-xeditable": "~0.1.9",
     "angular-mocks": "~1.5.0",
     "ngInfiniteScroll": "~1.2.2",
-    "angulargrid": "~0.4.0"
+    "angulargrid": "~0.5.3"
   }
 }

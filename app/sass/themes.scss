@@ -1,0 +1,192 @@
+//*** Custom Themes ***//
+@each $theme, $color, $backgroundDisabled, $colorDisabled in
+(default, $darkOrangeBackground, $darkOrangeBackgroundDisabled, $darkOrangeColorDisabled),
+(auth, $tealBackground, $tealBackgroundDisabled, $tealColorDisabled),
+(profile, $blueBackground, $blueBackgroundDisabled, $blueColorDisabled) {
+    .header-theme-#{$theme} {
+        background-color: $color;
+        color: white;
+        md-toolbar {
+            background-color: $color;
+            color: white;
+        }
+        .sidebar-left {
+            hr {
+                border-color: $color;
+            }
+            a {
+                color: $color;
+            }
+            .active a {
+                background-color: $color;
+                color: white;
+            }
+        }
+    }
+    md-progress-circular.md-#{$theme} .md-inner {
+        .md-gap {
+            border-top-color: $color;
+            border-bottom-color: $color;
+        }
+        .md-left .md-half-circle {
+            border-top-color: $color;
+            border-left-color: $color;
+        }
+        .md-right .md-half-circle {
+            border-top-color: $color;
+            border-right-color: $color;
+        }
+    }
+    md-progress-linear.md-#{$theme} .md-bar {
+        background-color: $color;
+    }
+    a.md-button.md-fab.md-fixed-bottom-#{$theme} {
+        bottom:24px;
+        background-color: $color;
+        position:fixed;
+        right:24px;
+        z-index:998;
+        &:hover, &:focus, &:visited, &.active, {
+            @extend .md-button.md-fab.md-fixed-bottom-#{$theme};
+        }
+    }
+    .body-theme-#{$theme} {
+        md-card-actions {
+            background-color: white;
+            color: $color;
+            .md-button {
+                &.md-raised.md-primary {
+                    background-color: $color;
+                    color: white;
+                    &:hover, &:focus, &:visited {
+                        background-color: $color;
+                    }
+                    &[disabled] {
+                        background-color: $backgroundDisabled;
+                        color: $colorDisabled;
+                    }
+                }
+            }
+        }
+        .#{$theme}-card {
+            background-color: $color;
+            color: white;
+            md-card-content {
+                background-color: white;
+                padding: 16px;
+                .md-card-subtitle {
+                    background-color: $color;
+                    color: white;
+                    margin: 4px -16px;
+                    padding: 16px;
+                }
+            }
+            md-content {
+                background-color: white;
+                color: $color;
+                overflow: inherit;
+                label {
+                    color: $color !important;
+                }
+                input {
+                    color: $color;
+                    border-color: $color;
+                }
+                md-input-container {
+                    &.md-input-invalid {
+                        label {
+                            color: $errorColor !important;
+                        }
+                        input {
+                            border-color: $errorColor;
+                            color: $errorColor !important;
+                        }
+                    }
+                    &.md-input-focused .md-input {
+                        border-color: $color;
+                    }
+                    [ng-messages] > div {
+                        color: $errorColor !important;
+                    }
+                }
+            }
+            md-card-actions {
+                margin: 0;
+                height: 132px;
+                background-color: white;
+                color: $color;
+                .md-button {
+                    max-height: 42px;
+                    line-height: 24px;
+                    width: 100%;
+                    &.md-raised.md-#{$theme}-button {
+                        padding: 0;
+                        min-width: 40px;
+                        /*margin: 12px 0;*/
+                        background-color: $color;
+                        color: white;
+                        &:hover, &:focus, &:visited {
+                            background-color: $color;
+                        }
+                        &[disabled] {
+                            background-color: $backgroundDisabled;
+                            color: $colorDisabled;
+                        }
+                    }
+                    &.md-options {
+                        margin-top: 0 !important;
+                        margin-bottom: 0 !important;
+                    }
+                }
+                div.layout-row {
+                    padding: 8px 0;
+                    a {
+                        margin: 0;
+                        padding: 8px 0;
+                        @media (max-width: $layout-breakpoint-xs) {
+                            padding-top: 0;
+                            padding-bottom: 0;
+                        }
+                        &.without-padding {
+                            padding: inherit;
+                        }
+                        div {
+                            white-space: pre-line;
+                        }
+                    }
+                }
+            }
+        }
+        .card-alert-success {
+            display: flex;
+            color: white;
+            background: $color;
+            border-radius: 2px;
+            padding: 16px 16px;
+            margin-bottom: 32px;
+        }
+        md-checkbox {
+            &.md-checked {
+                .md-icon {
+                    background-color: $color;
+                }
+                .md-ink-ripple {
+                    color: $color;
+                }
+            }
+        }
+        .md-button {
+            &.md-raised.md-primary {
+                background-color: $color;
+                color: white;
+                &:hover, &:focus, &:visited {
+                    background-color: $color;
+                }
+                &[disabled] {
+                    background-color: $backgroundDisabled;
+                    color: $colorDisabled;
+                }
+            }
+        }
+    }
+}

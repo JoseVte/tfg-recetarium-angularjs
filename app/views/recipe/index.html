@@ -23,7 +23,7 @@
             <md-card-title>
                 <md-card-title-media>
                     <div class="md-media-md card-media">
-                        <img class="recipe-photo-main" data-ng-src="{{ recipe | mainImage }}" />
+                        <img class="recipe-photo-main" data-ng-src="{{ recipe.image_main | srcImage:recipe.user }}" />
                     </div>
                 </md-card-title-media>
                 <md-card-title-text>

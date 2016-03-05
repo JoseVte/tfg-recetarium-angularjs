@@ -15,7 +15,7 @@ var recetarium = angular.module('recetariumApp', [
     'infinite-scroll',
     // My Javascript
     'Animations', 'TextEditor', 'NotificationProviders',
-    'FileDirectives', 'FormDirectives', 'TimeDirectives', 'ValidatorDirectives',
+    'FileServices', 'FileDirectives', 'FormDirectives', 'TimeDirectives', 'ValidatorDirectives',
     'HomeController',
     'AuthServices', 'AuthController',
     'RecipeServices', 'RecipeFilters', 'RecipeController',
@@ -233,7 +233,7 @@ Array.prototype.contains = function(obj) {
         if (this[i] === obj) { return true; }
     }
     return false;
-}
+};
 
 $.fn.exists = function(callback) {
     var args = [].slice.call(arguments, 1);
@@ -246,7 +246,7 @@ $.fn.exists = function(callback) {
 $.containsId = function(el, array) {
     var i = array.length;
     while (i--) {
-       if (array[i].id === el.id) { return true; }
+       if (array[i] !== undefined && array[i] !== null && array[i].id === el.id) { return true; }
     }
     return false;
 };
