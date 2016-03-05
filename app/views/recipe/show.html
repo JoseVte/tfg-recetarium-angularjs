@@ -11,8 +11,8 @@
             class="md-padding" layout="row" layout-wrap layout-align="center center"
             layout-align-gt-sm="end start">
                 <div layout="column" layout-wrap flex>
-                    <a class="fancybox" title="Foto del plato principal" href="{{ images.main.href }}">
-                        <img class="image-recipe-main" src="{{ images.main.href }}" />
+                    <a class="fancybox" title="Foto del plato principal" href="{{ recipe.image_main | srcImage:recipe.user }}">
+                        <img class="image-recipe-main" src="{{ recipe.image_main | srcImage:recipe.user }}" />
                     </a>
                     <md-content flex class="md-padding">
                         <h4>
@@ -67,8 +67,8 @@
             </md-card-title-text>
         </md-card-title>
         <md-card-content>
-            <a class="image-recipe-zoomable fancybox" rel="gallery" title="{{ image.title }}" ng-href="{{ image.href }}" ng-repeat="image in images.gallery">
-                <img ng-src="{{ image.href }}" />
+            <a class="image-recipe-zoomable fancybox" rel="gallery" title="{{ image.title }}" ng-href="{{ image | srcImage:recipe.user }}" ng-repeat="image in images">
+                <img ng-src="{{ image | srcImage:recipe.user }}" />
             </a>
         </md-card-content>
         <md-card-content>

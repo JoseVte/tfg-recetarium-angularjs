@@ -2,7 +2,7 @@
     <md-content class="md-padding home-recipe" layout="row" layout-wrap layout-align="space-around start">
         <div ng-repeat="recipe in recipes" flex="100" flex-sm="50" flex-md="33" flex-gt-md="25" flex-gt-lg="20">
             <md-card ng-click="show(recipe.slug)">
-                <img src="{{ recipe | mainImage }}" class="md-card-image" alt="Imagen principal">
+                <img src="{{ recipe.image_main | srcImage:recipe.user }}" class="md-card-image" alt="Imagen principal">
                 <md-card-title>
                     <md-card-title-text>
                         <span class="md-headline">{{ recipe.title }}</span>

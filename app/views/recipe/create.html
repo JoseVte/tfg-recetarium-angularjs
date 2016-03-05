@@ -1,6 +1,6 @@
 <md-content class="md-padding" layout="column" layout-wrap layout-align="center center" layout-align-gt-md="center start">
     <form name="formRecipe" novalidate ng-submit="save()">
-        <md-card flex class="card-recipe-create">
+        <md-card flex class="card-recipe-with-form">
             <md-card-title>
                 <md-card-title-text>
                     <em flex>Los campos con * son <u>requeridos</u>.</em>
@@ -24,26 +24,27 @@
             </md-card-title>
         </md-card>
 
-        <md-card flex class="card-recipe-create">
+        <md-card flex class="card-recipe-with-form">
             <div layout="column" layout-wrap layout-gt-sm="row">
                 <div class="md-padding" flex flex-order="1" flex-order-gt-sm="2" flex-gt-sm="50" flex-gt-md="40"
                     class="md-padding" layout="row" layout-wrap layout-align="center center"
                     layout-align-gt-sm="end start">
                     <div layout="column" layout-wrap flex class="group-input-right">
-                        <img src="{{ recipe.images.main.href }}"  id="image-main" class="image-recipe-main" />
-                        <div class="md-file-input">
-                            <md-input-container>
-                                <input type="text" ng-required="true" name="mainImageName" required readonly placeholder="* Foto principal" class="md-textfield-input" ng-model="recipe.images.main.title">
-                                <div ng-messages="formRecipe.mainImageName.$error" md-auto-hide="false">
+                        <md-content flex class="md-padding">
+                            <md-input-container class="md-has-no-icon-left">
+                                <h4><md-icon class="material-icons">panorama</md-icon> * Foto principal (Portada)</h4>
+                                <input type="hidden" ng-required="true" name="mainImage" required ng-model="recipe.image_main.id" aria-label="Foto principal">
+                                <div ng-messages="formRecipe.mainImage.$error" md-auto-hide="false">
                                     <div ng-message="required">La imagen principal de la receta es obligatoria.</div>
                                 </div>
                             </md-input-container>
-                            <div class="md-button-file md-button md-button-icon md-button-file">
-                                <md-icon class="material-icons">attach_file</md-icon>
-                                <input type="file" name="mainImage" required accept="image/*" file-model="images.main"
-                                       data-progress-bar-target="main" file-thumbnail="image-main" class="input-file-material" />
+                            <div layout="row" layout-align="center center">
+                                <md-button class="img-container" ng-click="selectImageMain($event)">
+                                    <md-tooltip>Haz click en la imagen para elegir otra</md-tooltip>
+                                    <img src="{{ recipe.image_main | srcImage:recipe.user }}"  id="image-main" class="image-recipe-main" />
+                                </md-button>
                             </div>
-                        </div>
+                        </md-content>
                         <md-content flex class="md-padding">
                             <md-input-container class="md-has-no-icon-left">
                                 <h4 layout="row" layout-wrap layout-align="center center">
@@ -163,18 +164,20 @@
             </div>
 
             <div layout="row" layout-wrap layout-padding>
-                <div flex layout-align="center" layout="row" layout-wrap>
-                    <div class="images-recipe-input">
-                        <input type="file" name="files[]" id="files"  ng-model="images.recipe" accept="image/*" multiple="multiple" aria-label="Images">
-                        <label for="files" class="md-ink-item">
+                <div flex layout-align="center" layout="column" layout-wrap>
+                    <div flex layout-align="center center" layout="column" layout-wrap>
+                        <md-button class="md-primary md-raised" ng-click="selectImages($event)">
                             <md-icon class="material-icons md-light">file_upload</md-icon> Elige tus imágenes
-                        </label>
+                        </md-button>
                     </div>
-                    <div id="filedrag">Arrastra y suelta las imágenes aqui</div>
-                    <div class="images-recipe-gallery" layout="row" layout-wrap layout-align="center center" flex>
-                        <div class="image-removable" id="image-removable-{{ image.id }}" ng-repeat="image in recipe.images.gallery">
-                            <img class="img-thumbnail" ng-src="{{ image.href }}"  />
-                            <md-button ng-click="removeImage(image.id)" class="md-fab md-mini md-remove" aria-label="Close"><md-icon class="material-icons">close</md-icon></md-button>
+                    <div class="images-recipe-gallery md-whiteframe-2dp" ng-show="recipe.files.length > 0"
+                        layout="row" layout-wrap layout-align="space-around center" flex>
+                        <div flex="nogrow" class="image-removable" ng-repeat="image in recipe.files">
+                            <md-card>
+                                <md-tooltip>{{ image.title }}</md-tooltip>
+                                <img src="{{ image | srcImage:recipe.user }}" class="md-card-image" alt="{{ image.title }}">
+                                <md-button ng-click="removeImageFromRecipe($index)" class="md-fab md-mini md-remove" aria-label="Remove"><md-icon class="material-icons">close</md-icon></md-button>
+                            </md-card>
                         </div>
                     </div>
                 </div>
@@ -182,7 +185,7 @@
 
             <md-card-actions layout="row" layout-align="end">
                 <md-button type="submit" class="md-primary md-raised" ng-click="save()" ng-disabled="progressBarActivated">guardar borrador de la receta</md-button>
-                <md-button class="md-primary md-raised" ng-click="publish()" ng-disabled="formRecipe.$invalid || progressBarActivated">publicar receta</md-button>
+                <md-button class="md-primary md-raised" ng-click="publish($event)" ng-disabled="formRecipe.$invalid || progressBarActivated">publicar receta</md-button>
             </md-card-actions>
         </md-card>
     </form>

@@ -118,7 +118,7 @@ homeController.controller('Header',
             var distanceY = window.pageYOffset || document.documentElement.scrollTop;
             toolbar.css('display', 'flex');
             search.removeClass('hide');
-            if (distanceY == 0) {
+            if (distanceY === 0) {
                 motto.removeClass('hide');
             } else if (distanceY <= heightForMove) {
                 var height = $.calcHeightTablet(distanceY);
@@ -170,7 +170,7 @@ homeController.controller('Header',
             var toolbar = $('.md-toolbar-tools');
             var heightForMove = 125;
             var distanceY = window.pageYOffset || document.documentElement.scrollTop;
-            if (distanceY == 0) {
+            if (distanceY === 0) {
                 motto.removeClass('hide');
             } else if (distanceY <= heightForMove) {
                 var height = $.calcHeightMobile(distanceY);

@@ -1,0 +1,79 @@
+/* app css stylesheet */
+html,
+body {
+    background-color: $bodyBackground;
+    md-content {
+        background-color: transparent;
+    }
+}
+body {
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
+    -ms-transition: all 0.3s;
+    -o-transition: all 0.3s;
+    transition: all 0.3s;
+    padding-top: 64px;
+    &.body-home {
+        padding-top: 400px;
+        @media (max-width: $layout-breakpoint-sm) {
+            padding-top: 300px;
+        }
+        @media (max-width: $layout-breakpoint-xs) {
+            padding-top: 200px;
+        }
+    }
+}
+md-dialog {
+    background-color: transparent;
+    md-dialog-content, md-dialog-actions {
+        background-color: white;
+    }
+}
+md-card md-card-title md-card-title-text md-input-container {
+    margin-top: 15px;
+    margin-bottom: 0px;
+}
+.md-card-image {
+    overflow: auto;
+}
+md-input-container.md-has-no-icon-left {
+    padding-left: 0;
+    label {
+        left: auto;
+    }
+}
+.md-button {
+    min-width: 40px;
+    &.md-edit,&.md-edit .material-icons {
+        color: green;
+    }
+    &.md-remove,&.md-remove .material-icons {
+        color: red;
+    }
+}
+.text-center {
+    text-align: center;
+}
+.text-right {
+    text-align: right;
+}
+.without-input {
+    margin: 9px 0;
+    label {
+        -webkit-box-ordinal-group: 2;
+        -webkit-font-smoothing: antialiased;
+        display: block;
+        order: 1;
+        padding-left: 3px;
+        padding-right: 0;
+        pointer-events: none;
+        transform: matrix(0.75, 0, 0, 0.75, 0, 6);
+        transform-origin: 0px 0px;
+    }
+    .value {
+        padding: 8px;
+    }
+}
+.without-fixed-height {
+    height: auto !important;
+}

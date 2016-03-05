@@ -82,7 +82,7 @@
         padding-bottom: 2px;
     }
 }
-.card-recipe-create, .card-recipe-edit {
+.card-recipe-with-form {
     width: 100%;
     .group-input-right {
         md-content {
@@ -173,11 +173,22 @@
         float: left;
         min-width: 100%;
     }
-    .image-recipe-main {
-        overflow: hidden;
-        @media (max-width: $layout-breakpoint-sm) {
-            max-width: 100%;
+    .img-container {
+        width: auto;
+        vertical-align:top;
+        text-align:center;
+        padding: 0;
+        .image-recipe-main {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
             width: auto;
+            height: auto;
+            max-width:100%;
+            @media(max-width: $layout-breakpoint-md) {
+                overflow: hidden;
+                max-height: 450px;
+            }
         }
     }
     md-input-container{
@@ -211,95 +222,56 @@
     md-chips .md-chip.md-focused {
         background: $darkOrangeBackground;
     }
-    #filedrag {
-    	display: none;
-    	font-weight: bold;
-    	text-align: center;
-    	padding: 1em 0;
-    	margin: 1em 0;
-    	color: $darkOrangeBackground;
-    	border: 2px dashed $darkOrangeBackground;
-    	border-radius: 7px;
-    	cursor: default;
-        width: 100%;
-    }
+}
 
-    #filedrag.hover {
-    	border-style: solid;
-    	box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 2px 1px -1px rgba(0, 0, 0, 0.12);
+.images-recipe-gallery {
+    margin-top: 10px;
+    padding: 5px 5px 20px;
+    &.md-whiteframe-2dp .image-removable {
+        img {
+            max-height: 250px;
+            max-width: 250px;
+            z-index: 1;
+        }
+    }
+    md-card {
+        position: relative;
+    }
+    button.md-button {
+        z-index: 2;
+        position: absolute;
+        &.md-remove {
+            top: 0;
+            right: 0;
+            background-color: #9C0000;
+            &:not([disabled]):hover {
+                background-color: #B52603;
+            }
+            &:not([disabled]).md-focused {
+                background-color: #F44336;
+            }
+            md-icon.material-icons {
+                color: white;
+            }
+        }
+        &.md-selected {
+            top: 0;
+            left: 0;
+            &, &:not([disabled]):hover, &:not([disabled]).md-focused {
+                background-color: hsla(176, 60%, 49%, 0.5);
+            }
+            md-icon.material-icons {
+                color: white;
+            }
+        }
+    }
+}
+
+.md-dialog-gallery-images {
+    md-toolbar {
+        background-color: $darkOrangeBackground;
     }
     .images-recipe-gallery {
-        .image-removable {
-            position: relative;
-            height: 250px;
-            width: 250px;
-            img {
-                max-height: 240px;
-                height: auto;
-                width: auto;
-                max-width: 240px;
-                padding: 4px;
-                background-color: white;
-                border: 1px solid #ddd;
-                border-radius: 4px;
-                position: absolute;
-                top: 0;
-                left: 0;
-                z-index: 1;
-            }
-            button {
-                z-index: 2;
-                position: absolute;
-                top: 0;
-                left: 0;
-                background-color: #9C0000;
-                &:not([disabled]):hover {
-                    background-color: #B52603;
-                }
-                &:not([disabled]).md-focused {
-                    background-color: #F44336;
-                }
-            }
-        }
-    }
-    .images-recipe-input input {
-        width: 0.1px;
-    	height: 0.1px;
-    	opacity: 0;
-    	overflow: hidden;
-    	position: absolute;
-    	z-index: -1;
-        & + label {
-            border-radius: 3px;
-            box-sizing: border-box;
-            color: white;
-            user-select: none;
-            position: relative;
-            outline: none;
-            border: 0;
-            display: inline-block;
-            align-items: center;
-            padding: 0 6px;
-            margin: 6px 8px;
-            line-height: 36px;
-            min-height: 36px;
-            background: $darkOrangeBackground;
-            white-space: nowrap;
-            min-width: 88px;
-            text-align: center;
-            text-transform: uppercase;
-            font-weight: 500;
-            font-size: 14px;
-            font-style: inherit;
-            font-variant: inherit;
-            font-family: inherit;
-            text-decoration: none;
-            cursor: pointer;
-            overflow: hidden;
-            box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
-            * {
-                pointer-events: none;
-            }
-        }
+        margin-top: 0px;
     }
 }

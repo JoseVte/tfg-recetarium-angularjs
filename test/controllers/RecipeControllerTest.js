@@ -138,6 +138,7 @@ describe('Module RecipeController', function() {
                 $routeParams: { slug: 'test' }
             });
             $httpBackend.when('GET', /http:\/\/localhost:9000\/recipes\/(.*)/).respond(200, {
+                image_main: { id: 1},
                 title: 'Test',
                 slug: 'test',
                 media: [],
@@ -211,6 +212,7 @@ describe('Module RecipeController', function() {
                 $routeParams: { slug: 'test' }
             });
             $httpBackend.when('GET', /http:\/\/localhost:9000\/recipes\/(.*)/).respond(200, {
+                image_main: { id: 1},
                 id: 1,
                 title: 'Test',
                 slug: 'test',
@@ -276,7 +278,9 @@ describe('Module RecipeController', function() {
             $scope.edit();
             $httpBackend.flush();
 
-            expect($location.url()).toBe('/recipes/test');
+            expect($rootScope.headerTitle).toEqual('Editar receta');
+            expect($rootScope.progressBarActivated).toBeFalsy();
+            expect($rootScope.errorMsg).toBeFalsy();
         });
 
         it('edit error method', function () {
@@ -305,18 +309,21 @@ describe('Module RecipeController', function() {
                 $scope: $scope
             });
             $httpBackend.when('GET', /http:\/\/localhost:9000\/recipes\/(.*)/).respond(200, {
+                image_main: { id: 1},
                 title: 'Test',
                 slug: 'test',
                 media: []
             });
             $httpBackend.when('GET', /http:\/\/localhost:9000\/categories(.*)/).respond(200, [{id:1,text:'test'}]);
             $httpBackend.when('POST', /http:\/\/localhost:9000\/recipes\/draft(.*)/).respond(200, {
+                image_main: { id: 1},
                 id: 1,
                 title: 'Test',
                 slug: 'test',
                 media: []
             });
             $httpBackend.when('POST', /http:\/\/localhost:9000\/recipes\/create-from-draft(.*)/).respond(200, {
+                image_main: { id: 1},
                 id: 1,
                 title: 'Test',
                 slug: 'test',
@@ -405,12 +412,13 @@ describe('Module RecipeController', function() {
             $httpBackend.flush();
 
             $httpBackend.expectPUT('http://localhost:9000/recipes/1');
-            $httpBackend.expectPOST('http://localhost:9000/recipes/create-from-draft');
             $scope.publish();
             $scope.$apply();
             $httpBackend.flush();
 
-            expect($location.url()).toBe('/recipes/test/edit');
+            expect($rootScope.headerTitle).toEqual('Nueva receta (borrador)');
+            expect($rootScope.progressBarActivated).toBeFalsy();
+            expect($rootScope.errorMsg).toBeFalsy();
         });
 
         it('publish error method', function () {
