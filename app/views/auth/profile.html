@@ -8,6 +8,9 @@
                     </md-card-title-text>
                 </md-card-title>
                 <md-card-content>
+                    <md-tabs class="md-info" md-selectedIndex="{{ selectedProfileTab }}" md-align-tabs="top" md-dynamic-height md-border-bottom>
+
+                    </md-tabs>
                     <md-content>
                         <div class="md-block without-input">
                             <label>Nombre del usuario</label>
@@ -41,7 +44,7 @@
                 </md-card-content>
                 <md-card-actions layout="column" layout-align="space-around stretch" layout-padding>
                     <div layout="column" layout-align="space-around stretch" layout-wrap>
-                        <md-button type="submit" class="md-raised md-profile-button zoomAnimation" ng-click="save()" ng-disabled="form.$invalid" ng-hide="progressBarActivated || delay2">Guardar perfil</md-button>
+                        <md-button type="submit" class="md-raised md-profile-button zoomAnimation" ng-disabled="form.$invalid" ng-hide="progressBarActivated || delay2">Guardar perfil</md-button>
                         <div flex layout="row" layout-align="center center">
                             <md-progress-circular md-mode="indeterminate" ng-show="progressBarActivated && !delay1" class="md-profile zoomAnimation" md-diameter="100"></md-progress-circular>
                         </div>

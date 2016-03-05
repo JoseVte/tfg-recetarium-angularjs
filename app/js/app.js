@@ -264,7 +264,9 @@ $.parseError = function(error) {
     if (angular.isArray(error)) {
         msg += '<ul>';
         for (var i in error) {
-            msg += '<li>' + $.parseError(error[i]) + '</li>';
+            if (error.hasOwnProperty(i)) {
+                msg += '<li>' + $.parseError(error[i]) + '</li>';
+            }
         }
         msg += '</ul>';
     } else if (angular.isObject(error)) {

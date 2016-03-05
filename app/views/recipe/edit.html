@@ -38,10 +38,12 @@
                                     <div ng-message="required">La imagen principal de la receta es obligatoria.</div>
                                 </div>
                             </md-input-container>
-                            <md-button class="img-container" ng-click="selectImageMain($event)">
-                                <md-tooltip>Haz click en la imagen para elegir otra</md-tooltip>
-                                <img src="{{ recipe.image_main | srcImage:recipe.user }}"  id="image-main" class="image-recipe-main" />
-                            </md-button>
+                            <div layout="row" layout-align="center center">
+                                <md-button class="img-container" ng-click="selectImageMain($event)">
+                                    <md-tooltip>Haz click en la imagen para elegir otra</md-tooltip>
+                                    <img src="{{ recipe.image_main | srcImage:recipe.user }}"  id="image-main" class="image-recipe-main" />
+                                </md-button>
+                            </div>
                         </md-content>
                         <md-content flex class="md-padding">
                             <md-input-container class="md-has-no-icon-left">
