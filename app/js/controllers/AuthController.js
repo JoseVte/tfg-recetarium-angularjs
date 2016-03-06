@@ -269,8 +269,8 @@ authController.controller('RecoverPassword',
 );
 
 authController.controller('EditProfile',
-    ['$scope', '$rootScope', '$location', 'AuthService', '$timeout', 'NotificationProvider',
-    function ($scope, $rootScope, $location, AuthService, $timeout, NotificationProvider) {
+    ['$scope', '$rootScope', '$location', '$timeout', '$mdDialog', 'AuthService', 'FileService', 'NotificationProvider',
+    function ($scope, $rootScope, $location, $timeout, $mdDialog, AuthService, FileService, NotificationProvider) {
         $rootScope.headerTitle = 'Editar perfil';
         $rootScope.progressBarActivated = true;
 
@@ -288,32 +288,69 @@ authController.controller('EditProfile',
             }, 1000);
         };
 
-        $scope.setDelay1();
-        AuthService.GetProfile(function (response) {
-            $scope.user = response.data;
-            $rootScope.errorMsg = false;
-            $rootScope.progressBarActivated = false;
-            $scope.setDelay2();
-        }, function (response) {
-            NotificationProvider.notify({
-                title: 'Un error ha ocurrido',
-                text: 'Ha ocurrido un error mientras se cargaba el perfil. Por favor, intentelo más tarde.',
-                type: 'error',
-                addclass: 'custom-error-notify',
-                icon: 'material-icons md-light',
-                styling: 'fontawesome'
+        $scope.loadPersonalData = function() {
+            $scope.setDelay1();
+            AuthService.GetProfile(function (response) {
+                $scope.user = response.data;
+                $rootScope.errorMsg = false;
+                $rootScope.progressBarActivated = false;
+                $scope.setDelay2();
+            }, function (response) {
+                NotificationProvider.notify({
+                    title: 'Un error ha ocurrido',
+                    text: 'Ha ocurrido un error mientras se cargaba el perfil. Por favor, intentelo más tarde.',
+                    type: 'error',
+                    addclass: 'custom-error-notify',
+                    icon: 'material-icons md-light',
+                    styling: 'fontawesome'
+                });
+                $('.ui-pnotify.custom-error-notify .material-icons').html('warning');
+                $rootScope.error = {
+                    icon: 'error_outline',
+                    title: 'Algo ha ido mal',
+                    msg: 'Ha ocurrido un error mientras se cargaba el perfil.'
+                };
+                $rootScope.errorMsg = true;
+                $rootScope.headerTitle = 'Error';
+                $rootScope.progressBarActivated = false;
+                $scope.setDelay2();
             });
-            $('.ui-pnotify.custom-error-notify .material-icons').html('warning');
-            $rootScope.error = {
-                icon: 'error_outline',
-                title: 'Algo ha ido mal',
-                msg: 'Ha ocurrido un error mientras se cargaba el perfil.'
-            };
-            $rootScope.errorMsg = true;
-            $rootScope.headerTitle = 'Error';
-            $rootScope.progressBarActivated = false;
-            $scope.setDelay2();
-        });
+        };
+
+        $scope.loadUserImages = function() {
+            FileService.loadUserImages($rootScope.globals.user.user, function (response) {
+                $scope.images = response.data;
+                $rootScope.progressBarActivated = false;
+            }, function (response) {
+                NotificationProvider.notify({
+                    title: 'Un error ha ocurrido',
+                    text: 'Ha ocurrido un error mientras se cargaban las imagenes. Por favor, intentelo más tarde.',
+                    type: 'error',
+                    addclass: 'custom-error-notify',
+                    icon: 'material-icons md-light',
+                    styling: 'fontawesome'
+                });
+                $('.ui-pnotify.custom-error-notify .material-icons').html('warning');
+                $rootScope.headerTitle = 'Error';
+                $rootScope.progressBarActivated = false;
+            });
+        };
+
+        $scope.openUploadImage = function($event) {
+            $mdDialog.show({
+                controller: UserUploadDialogController,
+                templateUrl: 'views/auth/upload_images_dialog.html',
+                parent: angular.element(document.body),
+                locals: { data: {
+                        user: $scope.user,
+                    }
+                },
+                targetEvent: $event,
+                clickOutsideToClose: true
+            }).then(function(answer) {
+                $scope.images = $scope.images.concat(answer);
+            }, function() {});
+        };
 
         $scope.save = function () {
             $rootScope.errorMsg = false;
@@ -361,3 +398,19 @@ authController.controller('EditProfile',
         };
     }]
 );
+
+function UserUploadDialogController($scope, $rootScope, $mdDialog, data, FileService, NotificationProvider) {
+    $scope.user = data.user;
+    $scope.images = [];
+    $scope.urlUpload = FileService.getUrlUpload($scope.user);
+
+    $scope.successUpload = function(file, response) {
+        $scope.images.push(response);
+    };
+
+    $scope.hide = function() { $mdDialog.hide(); };
+    $scope.cancel = function() { $mdDialog.cancel(); };
+    $scope.returnUploaded = function() {
+        $mdDialog.hide($scope.images);
+    };
+}

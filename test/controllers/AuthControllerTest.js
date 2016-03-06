@@ -188,7 +188,8 @@ describe('Module RecipeController', function() {
             ctrl = $controller('EditProfile', {
                 $scope: $scope
             });
-            $httpBackend.when('GET', /http:\/\/localhost:9000\/profile(.*)/).respond(200);
+            $httpBackend.when('GET', /http:\/\/localhost:9000\/profile(.*)/).respond(200, {id:1});
+            $httpBackend.when('GET', /http:\/\/localhost:9000\/users\/1\/files(.*)/).respond(200, [{id:1}]);
             $httpBackend.when('PUT', /http:\/\/localhost:9000\/profile(.*)/).respond(200);
         }));
 
@@ -199,9 +200,24 @@ describe('Module RecipeController', function() {
 
         it('initialize controller', function() {
             expect($rootScope.headerTitle).toEqual('Editar perfil');
+        });
+
+        it('loadPersonalData method', function () {
             $httpBackend.expectGET('http://localhost:9000/profile');
+            $scope.loadPersonalData();
             $scope.$apply();
             $httpBackend.flush();
+
+            expect($scope.user.id).toEqual(1);
+        });
+
+        it('loadUserImages method', function () {
+            $rootScope.globals = { user: { user: {  id: 1 }}};
+            $httpBackend.expectGET('http://localhost:9000/users/1/files');
+            $scope.loadUserImages();
+            $scope.$apply();
+            $httpBackend.flush();
+            expect($scope.images[0].id).toEqual(1);
         });
 
         it('save method', function () {
