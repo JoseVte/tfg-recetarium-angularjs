@@ -272,7 +272,6 @@ authController.controller('EditProfile',
     ['$scope', '$rootScope', '$location', '$timeout', '$mdDialog', 'AuthService', 'FileService', 'NotificationProvider',
     function ($scope, $rootScope, $location, $timeout, $mdDialog, AuthService, FileService, NotificationProvider) {
         $rootScope.headerTitle = 'Editar perfil';
-        $rootScope.progressBarActivated = true;
 
         $scope.setDelay1 = function(){
             $scope.delay1 = true;
@@ -289,6 +288,7 @@ authController.controller('EditProfile',
         };
 
         $scope.loadPersonalData = function() {
+            $rootScope.progressBarActivated = true;
             $scope.setDelay1();
             AuthService.GetProfile(function (response) {
                 $scope.user = response.data;
@@ -318,6 +318,7 @@ authController.controller('EditProfile',
         };
 
         $scope.loadUserImages = function() {
+            $rootScope.progressBarActivated = true;
             FileService.loadUserImages($rootScope.globals.user.user, function (response) {
                 $scope.images = response.data;
                 $rootScope.progressBarActivated = false;
@@ -395,6 +396,60 @@ authController.controller('EditProfile',
                 $rootScope.progressBarActivated = false;
                 $scope.setDelay2();
             });
+        };
+
+        $scope.remove = function(image, $event) {
+            var msg = '¿De verdad que quieres borrar la imagen \'' + image.title +'\'?\r\nEsta acción no se puede deshacer.';
+            if (image.recipes > 0) msg += '\r\nLa imagen desaparecerá de todas las recetas';
+            var confirm = $mdDialog.confirm()
+                .title('Borrar imagen')
+                .textContent(msg)
+                .ariaLabel('Borrar')
+                .targetEvent($event)
+                .ok('Borrar')
+                .cancel('Cancelar');
+            $mdDialog.show(confirm).then(function () {
+                $rootScope.progressBarActivated = true;
+                $rootScope.errorMsg = false;
+                FileService.deleteFile($scope.user, image.id, function(response) {
+                    NotificationProvider.notify({
+                        title: 'Receta borrada',
+                        text: 'Has borrado la imagen \'' + image.title +'\'.',
+                        type: 'success',
+                        addclass: 'custom-success-notify',
+                        icon: 'material-icons md-light',
+                        styling: 'fontawesome'
+                    });
+                    $('.ui-pnotify.custom-success-notify .material-icons').html('check_circle');
+                    $rootScope.progressBarActivated = false;
+                    $scope.images.splice($scope.images.findIndex(function(imageInArray) { return image.id == imageInArray.id; }), 1);
+                }, function(response) {
+                    if (response.status == 404) {
+                        $rootScope.error = {
+                            icon: 'error_outline',
+                            title: 'Receta no encontrada',
+                            msg: $.parseError(response.data)
+                        };
+                    } else {
+                        NotificationProvider.notify({
+                            title: 'Un error ha ocurrido',
+                            text: 'Ha ocurrido un error mientras se borraba la imagen. Por favor, intentelo más tarde.',
+                            type: 'error',
+                            addclass: 'custom-error-notify',
+                            icon: 'material-icons md-light',
+                            styling: 'fontawesome'
+                        });
+                        $('.ui-pnotify.custom-error-notify .material-icons').html('warning');
+                        $rootScope.error = {
+                            icon: 'error_outline',
+                            title: 'Algo ha ido mal',
+                            msg: 'Ha ocurrido un error mientras se borraba la imagen.'
+                        };
+                    }
+                    $rootScope.errorMsg = true;
+                    $rootScope.progressBarActivated = false;
+                });
+            }, function() {});
         };
     }]
 );
