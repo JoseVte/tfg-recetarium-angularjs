@@ -6,6 +6,12 @@ recipeFilter.filter('mainImage', ['RecipeService', function (RecipeService) {
     };
 }]);
 
+recipeFilter.filter('srcImage', function(envService) {
+    return function(input, user) {
+      return (!!input) ? envService.read('apiUrl') + '/users/' + user.id +'/files/' + input.new_title : 'assets/img/favicon.png';
+  };
+});
+
 recipeFilter.filter('capitalize', function() {
     return function(input) {
       return (!!input) ? input.charAt(0).toUpperCase() + input.substr(1).toLowerCase() : '';

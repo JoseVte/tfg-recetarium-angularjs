@@ -49,7 +49,11 @@ http-server -a localhost -p 8000
 
 ## Changelog
 
-#### [![0.4.3](/app/doc/rocket-blue.png) 0.4.3](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.4.3)
+#### [![0.5.1](/app/doc/rocket-blue.png) 0.5.1](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.5.1)
+
+- Añadida galeria para elegir imagenes en la receta y el perfil de usuario
+
+###### [![0.4.3](/app/doc/release.png) 0.4.3](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.4.3)
 
 - Añadido boton para añadir a favoritos
 - Añadida posibilidad de puntuar una receta del 0 al 5
