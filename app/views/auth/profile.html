@@ -55,7 +55,7 @@
                     <md-tab label="Tus recetas" ng-disabled="true">TO-DO</md-tab>
                     <md-tab label="Tus imagenes" md-on-select="loadUserImages()">
                         <md-content class="md-padding">
-                            <div ng-repeat="image in images | orderBy:'-created_at'" flex="100" flex-lg="50">
+                            <div ng-repeat="image in images | orderBy:'-created_at'" flex="100">
                                 <md-card class="image-list-card">
                                     <md-card-title>
                                         <md-card-title-media>
