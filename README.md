@@ -49,7 +49,11 @@ http-server -a localhost -p 8000
 
 ## Changelog
 
-#### [![0.5.1](/app/doc/rocket-blue.png) 0.5.1](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.5.1)
+#### [![0.5.1-hotfix](/app/doc/rocket-blue.png) 0.5.1-hotfix](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.5.1-hotfix)
+
+- Fixeado boton de borrar una imagen en el perfil
+
+###### [![0.5.1](/app/doc/release.png) 0.5.1](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.5.1)
 
 - Añadida galeria para elegir imagenes en la receta y el perfil de usuario
 
