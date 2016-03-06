@@ -55,7 +55,13 @@ md-input-container.md-has-no-icon-left {
     text-align: center;
 }
 .text-right {
-    text-align: right;
+    text-align: right !important;
+}
+*.without-padding {
+    padding: inherit !important;
+}
+*.with-16-padding {
+    padding: 16px !important;
 }
 .without-input {
     margin: 9px 0;

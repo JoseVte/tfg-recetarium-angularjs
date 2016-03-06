@@ -40,7 +40,7 @@
     md-progress-linear.md-#{$theme} .md-bar {
         background-color: $color;
     }
-    a.md-button.md-fab.md-fixed-bottom-#{$theme} {
+    a.md-button.md-fab.md-fixed-bottom-#{$theme}, button.md-button.md-fab.md-fixed-bottom-#{$theme} {
         bottom:24px;
         background-color: $color;
         position:fixed;
@@ -110,7 +110,7 @@
                     }
                 }
             }
-            md-card-actions {
+            md-card-actions, .md-card-actions {
                 margin: 0;
                 height: 132px;
                 background-color: white;

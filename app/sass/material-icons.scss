@@ -48,3 +48,6 @@
 .material-icons.md-green { color: rgba(0, 180, 0, 1); }
 .material-icons.md-yellow { color: rgba(200, 200, 0, 1); }
 .material-icons.md-red { color: rgba(180, 0, 0, 1); }
+
+// Rules disabled
+.md-button[disabled] md-icon.material-icons { color: rgba(0,0,0,0.26); }
