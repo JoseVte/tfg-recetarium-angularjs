@@ -1,29 +1,29 @@
 <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left">
     <md-toolbar flex class="md-whiteframe-z1">
         <div class="md-toolbar-tools">
-            <h1><i class="material-icons md-light">home</i> Recetarium</h1>
+            <div layout="column">
+                <a ng-href="/"><img class="img-header" src="../img/header-logo.png" alt="Recetarium"></a>
+                <h1 ng-if="IsAuthed">Hola, {{ UserLogged.first_name }}</h1>
+            </div>
         </div>
     </md-toolbar>
     <md-content>
         <ul class="sidebar-left">
             <li ng-repeat="navLink in navLinks" ng-class="getClassActive(navLink.url)">
-                <a class="md-button" ng-click="navTo($event, navLink.url)">{{ navLink.title }}</a>
+                <a class="md-button {{ navLink.class }}" ng-click="navTo($event, navLink.url)"><div layout="row" layout-align="start center" data-ng-bind-html="navLink.title"></div></a>
             </li>
             <hr show-xs show-sm hide-gt-sm />
             <div ng-if="IsAuthed" show-xs show-sm hide-gt-sm>
                 <li ng-class="getClassActive('/profile')">
-                    <a class="md-button" ng-click="navTo($event, '/profile')">Hola, {{ UserLogged.first_name }}</a>
+                    <a class="md-button" ng-click="navTo($event, '/profile')"><md-icon class="material-icons">person</md-icon> Perfil</a>
                 </li>
                 <li ng-class="getClassActive('/logout')">
-                    <a class="md-button" ng-click="navTo($event, '/logout')">Logout</a>
+                    <a class="md-button" ng-click="navTo($event, '/logout')"><md-icon class="material-icons">exit_to_app</md-icon> Logout</a>
                 <li>
             </div>
             <div ng-if="!IsAuthed" show-xs show-sm hide-gt-sm>
-                <li ng-class="getClassActive('/login')">
-                    <a class="md-button" ng-click="navTo($event, '/login')">Login</a>
-                </li>
-                <li ng-class="getClassActive('/register')">
-                    <a class="md-button" ng-click="navTo($event, '/register')">Register</a>
+                <li ng-class="getClassActive('/login') || getClassActive('/register')">
+                    <a class="md-button" ng-click="navTo($event, '/login')">Login / Registrate</a>
                 </li>
             </div>
         </ul>

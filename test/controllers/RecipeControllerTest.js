@@ -36,48 +36,18 @@ describe('Module RecipeController', function() {
         });
 
         it('initialize controller', function() {
+            $httpBackend.expectGET(/http:\/\/localhost:9000\/recipes(.*)/).respond({data: []});
+            $httpBackend.flush();
             expect($rootScope.headerTitle).toEqual('Recetas');
-            expect($scope.pagination.page).toEqual(1);
-            expect($scope.pagination.size).toEqual(10);
-            expect($scope.pagination.search).toBeNull();
             expect($scope.recipes).toEqual([]);
-            expect($scope.sizes).toEqual([10, 30, 50]);
         });
 
-        it('search location', function() {
+        it('loading recipes', function() {
             $httpBackend.expectGET(/http:\/\/localhost:9000\/recipes(.*)/).respond({});
             $location.path('/recipes');
             $scope.$apply();
             $httpBackend.flush();
             expect($location.url()).toBe('/recipes');
-
-            $scope.pagination.search = 'test';
-            $scope.searchRecipe();
-            expect($location.url()).toBe('/recipes?page=1&size=10&search=test');
-        });
-
-        it('size location', function() {
-            $httpBackend.expectGET(/http:\/\/localhost:9000\/recipes(.*)/).respond({});
-            $location.path('/recipes');
-            $scope.$apply();
-            $httpBackend.flush();
-            expect($location.url()).toBe('/recipes');
-
-            $scope.pagination.size = 50;
-            $scope.searchRecipe();
-            expect($location.url()).toBe('/recipes?page=1&size=50');
-        });
-
-        it('page location', function() {
-            $httpBackend.expectGET(/http:\/\/localhost:9000\/recipes(.*)/).respond({});
-            $location.path('/recipes');
-            $scope.$apply();
-            $httpBackend.flush();
-            expect($location.url()).toBe('/recipes');
-
-            $scope.pagination.page = 5;
-            $scope.searchRecipe();
-            expect($location.url()).toBe('/recipes?page=5&size=10');
         });
 
         it('error loading', function() {
@@ -93,23 +63,31 @@ describe('Module RecipeController', function() {
         });
 
         it('description method', function () {
+            $httpBackend.expectGET(/http:\/\/localhost:9000\/recipes(.*)/).respond({});
+            $httpBackend.flush();
             expect($scope.description('<div>Code HTML with more than 260 characters. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>').$$unwrapTrustedValue()).toEqual('<div>Code HTML with more than 260 characters. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea&hellip;');
             expect($scope.description(null)).toBeUndefined();
         });
 
         it('show recipe', function () {
+            $httpBackend.expectGET(/http:\/\/localhost:9000\/recipes(.*)/).respond({});
+            $httpBackend.flush();
             $scope.show('test');
             $scope.$apply();
             expect($location.path()).toBe('/recipes/test');
         });
 
         it('edit recipe', function () {
+            $httpBackend.expectGET(/http:\/\/localhost:9000\/recipes(.*)/).respond({});
+            $httpBackend.flush();
             $scope.edit(1, $scope.$broadcast("click"));
             $scope.$apply();
             expect($location.url()).toBe('/recipes/1/edit');
         });
 
         it('isMine recipe', function () {
+            $httpBackend.expectGET(/http:\/\/localhost:9000\/recipes(.*)/).respond({});
+            $httpBackend.flush();
             var user = {
                 id: 1,
                 username: 'test',

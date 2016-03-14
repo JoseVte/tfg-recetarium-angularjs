@@ -43,6 +43,12 @@ notificationProvider.provider('NotificationProvider',
                         styling: true
                     };
                     var notification = new PNotify(hash);
+                    if (hash.type === 'error' && (hash.icon_class === undefined || hash.icon_class === null)) {
+                        notification.get().find('.material-icons').html('warning');
+                    } else {
+                        notification.get().find('.material-icons').html(hash.icon_class);
+                    }
+
                     notification.get().click(function () {
                         notification.remove();
                     });

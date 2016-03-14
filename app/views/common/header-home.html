@@ -4,18 +4,39 @@
     <header md-page-header class="fixed-top">
         <md-toolbar flex class="md-whiteframe-z1 md-tall">
             <div class="md-toolbar-tools">
-                <button type="button" ng-click="toggleLeft()" aria-label="Toogle menu" class="menuBtn menuHome hide">
+                <button type="button" ng-click="toggleLeft()" aria-label="Toogle menu" class="menuBtn menuHome" hide-gt-sm>
                     <i class="material-icons md-light">menu</i>
                 </button>
                 <div md-header-picture class="img-logo-toolbar hide"></div>
                 <span flex></span>
                 <div hide-xs hide-sm show-gt-sm>
                     <div ng-if="IsAuthed">
-                        <md-button ng-href="/logout">Logout</md-button>
+                        <md-menu>
+                            <md-button ng-click="openUserDropdrown($mdOpenMenu, $event)">
+                                Hola, {{ UserLogged.first_name }}
+                            </md-button>
+                            <md-menu-content>
+                                <md-menu-item>
+                                    <md-button ng-href="/new-recipe">
+                                        <md-icon class="material-icons md-black">edit</md-icon> Escribe una receta
+                                    </md-button>
+                                </md-menu-item>
+                                <md-menu-item>
+                                    <md-button ng-href="/profile">
+                                        <md-icon class="material-icons">person</md-icon> Perfil
+                                    </md-button>
+                                </md-menu-item>
+                                <md-menu-divider></md-menu-divider>
+                                <md-menu-item>
+                                    <md-button ng-href="/logout">
+                                        <md-icon class="material-icons">exit_to_app</md-icon> Logout
+                                    </md-button>
+                                </md-menu-item>
+                            </md-menu-content>
+                        </md-menu>
                     </div>
                     <div ng-if="!IsAuthed">
-                        <md-button ng-href="/login">Login</md-button>
-                        <md-button ng-href="/register">Register</md-button>
+                        <md-button ng-href="/login">Login / Registrate</md-button>
                     </div>
                 </div>
             </div>

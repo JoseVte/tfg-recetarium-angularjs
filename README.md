@@ -49,7 +49,12 @@ http-server -a localhost -p 8000
 
 ## Changelog
 
-#### [![0.5.1-hotfix](/app/doc/rocket-blue.png) 0.5.1-hotfix](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.5.1-hotfix)
+#### [![0.5.2](/app/doc/rocket-blue.png) 0.5.2](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.5.2)
+
+- Scroll infinito en la busqueda
+- Cambiada barra superior
+
+###### [![0.5.1-hotfix](/app/doc/release.png) 0.5.1-hotfix](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.5.1-hotfix)
 
 - Fixeado boton de borrar una imagen en el perfil
 

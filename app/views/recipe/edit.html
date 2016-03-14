@@ -1,27 +1,34 @@
 <md-content class="md-padding" layout="column" layout-wrap layout-align="center center" layout-align-gt-md="center start">
     <form name="formRecipe" novalidate>
         <md-card flex class="card-recipe-with-form">
-            <md-card-title>
+            <md-card-title class="md-title-page">
                 <md-card-title-text>
-                    <em flex>Los campos con * son <u>requeridos</u>.</em>
-                    <md-input-container>
-                        <label>* Título</label>
-                        <input required type="text" name="title" class="md-headline" ng-model="recipe.title" aria-label="title">
-                        <div ng-messages="formRecipe.title.$error" md-auto-hide="false">
-                            <div ng-message="required">El título de la receta es obligatorio.</div>
-                        </div>
-                    </md-input-container>
-                    <md-input-container class="md-icon-right md-block md-has-no-icon-left">
-                        <label>* Slug</label>
-                        <input required type="text" name="slug" class="md-subhead" ng-model="recipe.slug" aria-label="slug">
-                        <md-icon ng-class="{loaderIcon:loadingSlug}" class="material-icons">{{ validSlugIcon }}</md-icon>
-                        <div ng-messages="formRecipe.slug.$error" md-auto-hide="false">
-                            <div ng-message="required">El slug de la receta es obligatorio.</div>
-                            <div ng-message="validSlug">El slug ya existe.</div>
-                        </div>
-                    </md-input-container>
+                    <span class="md-headline" ng-class="{'loading': progressBarActivated}">{{ headerTitle }}</span>
                 </md-card-title-text>
             </md-card-title>
+            <div ng-hide="progressBarActivated || errorMsg">
+                <md-card-title>
+                    <md-card-title-text>
+                        <em flex>Los campos con * son <u>requeridos</u>.</em>
+                        <md-input-container>
+                            <label>* Título</label>
+                            <input required type="text" name="title" class="md-headline" ng-model="recipe.title" aria-label="title">
+                            <div ng-messages="formRecipe.title.$error" md-auto-hide="false">
+                                <div ng-message="required">El título de la receta es obligatorio.</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container class="md-icon-right md-block md-has-no-icon-left">
+                            <label>* Slug</label>
+                            <input required type="text" name="slug" class="md-subhead" ng-model="recipe.slug" aria-label="slug">
+                            <md-icon ng-class="{loaderIcon:loadingSlug}" class="material-icons">{{ validSlugIcon }}</md-icon>
+                            <div ng-messages="formRecipe.slug.$error" md-auto-hide="false">
+                                <div ng-message="required">El slug de la receta es obligatorio.</div>
+                                <div ng-message="validSlug">El slug ya existe.</div>
+                            </div>
+                        </md-input-container>
+                    </md-card-title-text>
+                </md-card-title>
+            </div>
         </md-card>
 
         <md-card flex class="card-recipe-with-form">
