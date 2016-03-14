@@ -59,7 +59,6 @@ fileDirective.directive('dropzone', function (NotificationProvider) {
                         icon: 'material-icons md-light',
                         styling: 'fontawesome'
                     });
-                    $('.ui-pnotify.custom-error-notify .material-icons').html('warning');
                 }
             });
         }

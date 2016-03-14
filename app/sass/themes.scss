@@ -3,21 +3,43 @@
 (default, $darkOrangeBackground, $darkOrangeBackgroundDisabled, $darkOrangeColorDisabled),
 (auth, $tealBackground, $tealBackgroundDisabled, $tealColorDisabled),
 (profile, $blueBackground, $blueBackgroundDisabled, $blueColorDisabled) {
+    .html-theme-#{$theme} {
+        md-menu-content md-menu-item.active {
+            background: $color;
+            color: white;
+            .material-icons {
+                color: white;
+            }
+        }
+    }
     .header-theme-#{$theme} {
         background-color: $color;
         color: white;
         md-toolbar {
             background-color: $color;
             color: white;
+            .md-button {
+                padding: 0px 10px;
+                &.active {
+                    background-color: rgba(256, 256, 256, 0.3);
+                    &.md-raised {
+                        background-color: rgba(255, 186, 169, 0.5);
+                        color: white;
+                        .material-icons {
+                            color: white;
+                        }
+                    }
+                }
+            }
         }
         .sidebar-left {
             hr {
                 border-color: $color;
             }
-            a {
+            a, md-icon {
                 color: $color;
             }
-            .active a {
+            .active a, .active md-icon {
                 background-color: $color;
                 color: white;
             }
@@ -156,6 +178,11 @@
                     }
                 }
             }
+        }
+        .md-title-page {
+            background-color: $color;
+            color: white;
+            border-radius: 2px 2px 0 0;
         }
         .card-alert-success {
             display: flex;

@@ -60,9 +60,9 @@ recipeController.constant('FILE_DROPZONE', {
                     type: 'success',
                     addclass: 'custom-success-notify',
                     icon: 'material-icons md-light',
+                    icon_class: 'photo',
                     styling: 'fontawesome'
                 });
-                $('.ui-pnotify.custom-success-notify .material-icons').html('photo');
             }, function (response) {
                 NotificationProvider.notify({
                     title: 'Un error ha ocurrido',
@@ -72,7 +72,6 @@ recipeController.constant('FILE_DROPZONE', {
                     icon: 'material-icons md-light',
                     styling: 'fontawesome'
                 });
-                $('.ui-pnotify.custom-error-notify .material-icons').html('warning');
                 $('#image-removable-' + index).exists(function () {
                     $('#image-removable-' + index).remove();
                     $scope.images.recipe.splice(index, 1);
@@ -119,7 +118,6 @@ recipeController.constant('EDIT_FUNCTIONS', {
                     icon: 'material-icons md-light',
                     styling: 'fontawesome'
                 });
-                $('.ui-pnotify.custom-error-notify .material-icons').html('warning');
             });
 
             $rootScope.progressBarActivated = false;
@@ -137,143 +135,143 @@ recipeController.constant('EDIT_FUNCTIONS', {
     CommonFunctions: function($scope, $rootScope, $location, $timeout, $compile, $mdDialog,
         RecipeService, CategoryService, TagService, IngredientService,
         NotificationProvider, DIFF, VISIBILITY, FILE_DROPZONE, EDIT_FUNCTIONS) {
-        /**
-         * Auxiliars
-         */
-         $scope.getDifficulty = function (diff) { return DIFF.class[diff]; };
-         $scope.getVisibilityIcon = function (visibility) { return VISIBILITY.icon[visibility]; };
-         $scope.getVisibilityClass = function (visibility) { return VISIBILITY.class[visibility]; };
+            /**
+             * Auxiliars
+             */
+            $scope.getDifficulty = function (diff) { return DIFF.class[diff]; };
+            $scope.getVisibilityIcon = function (visibility) { return VISIBILITY.icon[visibility]; };
+            $scope.getVisibilityClass = function (visibility) { return VISIBILITY.class[visibility]; };
 
-        /**
-         * Ingredients
-         */
-        $scope.$watch(function() {
-            return $scope.recipe.newIngredient ?
+            /**
+            * Ingredients
+            */
+            $scope.$watch(function() {
+                return $scope.recipe.newIngredient ?
                 $scope.recipe.newIngredient.name:
                 $scope.recipe.newIngredient;
-        }, function (newVal, oldVal) {
-            $scope.formRecipe.newIngredientName.$error = {};
-        });
+            }, function (newVal, oldVal) {
+                $scope.formRecipe.newIngredientName.$error = {};
+            });
 
-        $scope.addIngredient = function() {
-            if ($scope.recipe.newIngredient && $scope.recipe.newIngredient !== null && $scope.recipe.newIngredient.name !== null && $scope.recipe.newIngredient.name !== '') {
-                EDIT_FUNCTIONS.AddIngredient($scope, IngredientService, NotificationProvider);
-            } else {
-                $scope.formRecipe.newIngredientName.$error.customRequired = true;
-            }
-        };
+            $scope.addIngredient = function() {
+                if ($scope.recipe.newIngredient && $scope.recipe.newIngredient !== null && $scope.recipe.newIngredient.name !== null && $scope.recipe.newIngredient.name !== '') {
+                    EDIT_FUNCTIONS.AddIngredient($scope, IngredientService, NotificationProvider);
+                } else {
+                    $scope.formRecipe.newIngredientName.$error.customRequired = true;
+                }
+            };
 
-        $scope.removeIngredient = function(index) {
-            EDIT_FUNCTIONS.DeleteIngredient($scope, IngredientService, NotificationProvider, index);
-        };
+            $scope.removeIngredient = function(index) {
+                EDIT_FUNCTIONS.DeleteIngredient($scope, IngredientService, NotificationProvider, index);
+            };
 
-        /**
-         * Slug
-         */
-        $scope.$watch(function() {
-            return $scope.recipe.title;
-        }, function (newVal, oldVal) {
-            $scope.recipe.slug = RecipeService.getSlug(newVal);
-        });
+            /**
+             * Slug
+             */
+            $scope.$watch(function() {
+                return $scope.recipe.title;
+            }, function (newVal, oldVal) {
+                $scope.recipe.slug = RecipeService.getSlug(newVal);
+            });
 
-        $scope.$watch(function() {
-            return $scope.recipe.slug;
-        }, function (newVal, oldVal) {
-            $scope.formRecipe.slug.$error = {};
-            $scope.abortSlugRequest();
-            if (newVal && newVal.length > 0) {
-                $scope.loadingSlug = true;
-                $scope.validSlugIcon = 'autorenew';
-                $timeout(function() {
-                    requestSlug = RecipeService.checkSlugWithId(newVal, $scope.recipe.id).then(
-                        function (response) {
-                            $scope.loadingSlug = false;
-                            if (response.status == 200) {
-                                $scope.validSlugIcon = 'done';
-                            } else {
+            $scope.$watch(function() {
+                return $scope.recipe.slug;
+            }, function (newVal, oldVal) {
+                $scope.formRecipe.slug.$error = {};
+                $scope.abortSlugRequest();
+                if (newVal && newVal.length > 0) {
+                    $scope.loadingSlug = true;
+                    $scope.validSlugIcon = 'autorenew';
+                    $timeout(function() {
+                        requestSlug = RecipeService.checkSlugWithId(newVal, $scope.recipe.id).then(
+                            function (response) {
+                                $scope.loadingSlug = false;
+                                if (response.status == 200) {
+                                    $scope.validSlugIcon = 'done';
+                                } else {
+                                    $scope.formRecipe.slug.$error.validSlug = true;
+                                    $scope.validSlugIcon = 'error';
+                                }
+                            },
+                            function (response) {
+                                $scope.loadingSlug = false;
                                 $scope.formRecipe.slug.$error.validSlug = true;
                                 $scope.validSlugIcon = 'error';
                             }
-                        },
-                        function (response) {
-                            $scope.loadingSlug = false;
-                            $scope.formRecipe.slug.$error.validSlug = true;
-                            $scope.validSlugIcon = 'error';
+                        );
+                    }, 500);
+                } else {
+                    $scope.validSlugIcon = 'error';
+                }
+            });
+
+            // Abort the check slug request
+            $scope.abortSlugRequest = function () {
+                return ($scope.requestSlug && $scope.requestSlug.abort());
+            };
+
+            /**
+             * Categories
+             */
+            $scope.loadCategories = function() {
+                EDIT_FUNCTIONS.AllCategories($scope, CategoryService, NotificationProvider);
+            };
+
+            $scope.$watch(function() {
+                return $scope.recipe.category_id;
+            }, function (newVal, oldVal) {
+                if (newVal === null) $scope.recipe.category_id = undefined;
+            });
+
+            /**
+             * Tags
+             */
+            $scope.loadTags = function(search) {
+                return EDIT_FUNCTIONS.SearchTag($scope, TagService, NotificationProvider, search);
+            };
+
+            $scope.transformChip = function(chip) {
+                if (angular.isObject(chip)) { return chip; }
+                return { text: chip, type: 'nuevo' };
+            };
+
+            $scope.tagSearch = function(search) {
+                if(search) {
+                    return $scope.loadTags(search).then(function(response) {
+                        $scope.tags = response.filter(function (el) { return !$.containsId(el, $scope.recipe.chipTags); });
+                        return $scope.tags;
+                    });
+                }
+                return [];
+            };
+
+            /**
+             * Images
+             */
+            $scope.selectImageMain = function(ev) {
+                $mdDialog.show({
+                    controller: GalleryDialogController,
+                    templateUrl: 'views/recipe/gallery_dialog.html',
+                    parent: angular.element(document.body),
+                    locals: { data: {
+                            selectedImages: ($scope.recipe.image_main) ? [ $scope.recipe.image_main ] : [],
+                            mode: 'selectImageMain',
+                            user: $scope.recipe.user,
                         }
-                    );
-                }, 500);
-            } else {
-                $scope.validSlugIcon = 'error';
-            }
-        });
+                    },
+                    targetEvent: ev,
+                    clickOutsideToClose: true
+                }).then(function(answer) {
+                    $scope.recipe.image_main = answer;
+                }, function() {});
+            };
 
-        // Abort the check slug request
-        $scope.abortSlugRequest = function () {
-            return ($scope.requestSlug && $scope.requestSlug.abort());
-        };
-
-        /**
-         * Categories
-         */
-        $scope.loadCategories = function() {
-            EDIT_FUNCTIONS.AllCategories($scope, CategoryService, NotificationProvider);
-        };
-
-        $scope.$watch(function() {
-            return $scope.recipe.category_id;
-        }, function (newVal, oldVal) {
-            if (newVal === null) $scope.recipe.category_id = undefined;
-        });
-
-        /**
-         * Tags
-         */
-        $scope.loadTags = function(search) {
-            return EDIT_FUNCTIONS.SearchTag($scope, TagService, NotificationProvider, search);
-        };
-
-        $scope.transformChip = function(chip) {
-            if (angular.isObject(chip)) { return chip; }
-            return { text: chip, type: 'nuevo' };
-        };
-
-        $scope.tagSearch = function(search) {
-            if(search) {
-                return $scope.loadTags(search).then(function(response) {
-                    $scope.tags = response.filter(function (el) { return !$.containsId(el, $scope.recipe.chipTags); });
-                    return $scope.tags;
-                });
-            }
-            return [];
-        };
-
-        /**
-         * Images
-         */
-        $scope.selectImageMain = function(ev) {
-            $mdDialog.show({
-                controller: GalleryDialogController,
-                templateUrl: 'views/recipe/gallery_dialog.html',
-                parent: angular.element(document.body),
-                locals: { data: {
-                        selectedImages: ($scope.recipe.image_main) ? [ $scope.recipe.image_main ] : [],
-                        mode: 'selectImageMain',
-                        user: $scope.recipe.user,
-                    }
-                },
-                targetEvent: ev,
-                clickOutsideToClose: true
-            }).then(function(answer) {
-                $scope.recipe.image_main = answer;
-            }, function() {});
-        };
-
-        $scope.selectImages = function(ev) {
-            $mdDialog.show({
-                controller: GalleryDialogController,
-                templateUrl: 'views/recipe/gallery_dialog.html',
-                parent: angular.element(document.body),
-                locals: { data: {
+            $scope.selectImages = function(ev) {
+                $mdDialog.show({
+                    controller: GalleryDialogController,
+                    templateUrl: 'views/recipe/gallery_dialog.html',
+                    parent: angular.element(document.body),
+                    locals: { data: {
                         selectedImages: $scope.recipe.files,
                         mode: 'selectImages',
                         user: $scope.recipe.user,
@@ -306,9 +304,9 @@ recipeController.constant('EDIT_FUNCTIONS', {
                 type: 'success',
                 addclass: 'custom-success-notify',
                 icon: 'material-icons md-light',
+                icon_class: 'restaurant_menu',
                 styling: 'fontawesome'
             });
-            $('.ui-pnotify.custom-success-notify .material-icons').html('restaurant_menu');
         }, function (response) {
             if (response.status == 400) {
                 NotificationProvider.notify({
@@ -329,7 +327,6 @@ recipeController.constant('EDIT_FUNCTIONS', {
                     styling: 'fontawesome'
                 });
             }
-            $('.ui-pnotify.custom-error-notify .material-icons').html('warning');
             $scope.recipe.newIngredient.name = null;
             $scope.recipe.newIngredient.count = null;
         });
@@ -344,9 +341,9 @@ recipeController.constant('EDIT_FUNCTIONS', {
                 type: 'success',
                 addclass: 'custom-success-notify',
                 icon: 'material-icons md-light',
+                icon_class: 'restaurant_menu',
                 styling: 'fontawesome'
             });
-            $('.ui-pnotify.custom-success-notify .material-icons').html('restaurant_menu');
         }, function (response) {
             if (response.status == 400) {
                 NotificationProvider.notify({
@@ -367,7 +364,6 @@ recipeController.constant('EDIT_FUNCTIONS', {
                     styling: 'fontawesome'
                 });
             }
-            $('.ui-pnotify.custom-error-notify .material-icons').html('warning');
         });
     },
     AllCategories: function($scope, CategoryService, NotificationProvider) {
@@ -383,7 +379,6 @@ recipeController.constant('EDIT_FUNCTIONS', {
                 icon: 'material-icons md-light',
                 styling: 'fontawesome'
             });
-            $('.ui-pnotify.custom-error-notify .material-icons').html('warning');
         });
     },
     SearchTag: function ($scope, TagService, NotificationProvider, search) {
@@ -398,7 +393,6 @@ recipeController.constant('EDIT_FUNCTIONS', {
                 icon: 'material-icons md-light',
                 styling: 'fontawesome'
             });
-            $('.ui-pnotify.custom-error-notify .material-icons').html('warning');
             return [];
         });
     },
@@ -408,62 +402,70 @@ recipeController.controller('RecipeAll',
     ['$scope', '$rootScope', '$location', '$sce', 'RecipeService', 'NotificationProvider', '$mdDialog',
     function ($scope, $rootScope, $location, $sce, RecipeService, NotificationProvider, $mdDialog) {
         $rootScope.headerTitle = 'Recetas';
-        $scope.pagination = {
-            page: 1,
-            size: 10,
-            search: null
-        };
         $scope.recipes = [];
-        $scope.sizes = [10, 30, 50];
+        $scope.total = 1;
+        $scope.nextPageNumber = 1;
+        $scope.loadingNextPage = true;
 
-        $scope.$watch(function() {
-            return $location.search();
-        }, function (newVal, oldVal) {
-            if (!newVal.page) newVal.page = 1;
-            if (!newVal.size) newVal.size = 10;
-            $scope.pagination = newVal;
-            if ($location.path() == '/recipes') {
-                $rootScope.lastSearchParams['/recipes'] = $scope.pagination;
-                $scope.getRecipes();
-            }
+        RecipeService.search({
+            page: $scope.nextPageNumber,
+            size: 10,
+            search: $rootScope.searchString
+        }, function (response) {
+            var responseData = response.data;
+            $scope.recipes = responseData.data;
+            $scope.nextPageNumber++;
+            $scope.total = responseData.total;
+            $scope.loadingNextPage = false;
+        }, function (response) {
+            NotificationProvider.notify({
+                title: 'Un error ha ocurrido',
+                text: 'Ha ocurrido un error mientras se cargaban las recetas. Por favor, intentelo más tarde.',
+                type: 'error',
+                addclass: 'custom-error-notify',
+                icon: 'material-icons md-light',
+                styling: 'fontawesome'
+            });
+            $rootScope.error = {
+                icon: 'error_outline',
+                title: 'Algo ha ido mal',
+                msg: 'Ha ocurrido un error mientras se cargaban las recetas.'
+            };
+            $rootScope.errorMsg = true;
+            $scope.loadingNextPage = false;
         });
 
-        $scope.searchRecipe = function () {
-            $location.search("search", $scope.pagination.search);
-        };
-
-        $scope.selectSize = function () {
-            $location.search("size", $scope.pagination.size);
-        };
-
-        $scope.getRecipes = function () {
-            $rootScope.progressBarActivated = true;
-            RecipeService.search($scope.pagination, function (response) {
-                var responseData = response.data;
-                $scope.recipes = responseData.data;
-                $scope.total = responseData.total;
-                $scope.current = responseData["link-self"];
-                if (responseData["link-prev"]) $scope.prev = responseData["link-prev"];
-                if (responseData["link-next"]) $scope.next = responseData["link-next"];
-                $rootScope.progressBarActivated = false;
-            }, function (response) {
-                NotificationProvider.notify({
-                    title: 'Un error ha ocurrido',
-                    text: 'Ha ocurrido un error mientras se cargaban las recetas. Por favor, intentelo más tarde.',
-                    type: 'error',
-                    addclass: 'custom-error-notify',
-                    icon: 'material-icons md-light',
-                    styling: 'fontawesome'
+        $scope.nextPage = function () {
+            if ($scope.total > $scope.recipes.length) {
+                $scope.loadingNextPage = true;
+                RecipeService.search({
+                    page: $scope.nextPageNumber,
+                    size: 10,
+                    search: $rootScope.searchString,
+                }, function (response) {
+                    var responseData = response.data;
+                    $scope.recipes = $scope.recipes.concat(responseData.data);
+                    $scope.nextPageNumber++;
+                    $scope.total = responseData.total;
+                    $scope.loadingNextPage = false;
+                }, function (response) {
+                    NotificationProvider.notify({
+                        title: 'Un error ha ocurrido',
+                        text: 'Ha ocurrido un error mientras se cargaban las recetas. Por favor, intentelo más tarde.',
+                        type: 'error',
+                        addclass: 'custom-error-notify',
+                        icon: 'material-icons md-light',
+                        styling: 'fontawesome'
+                    });
+                    $rootScope.error = {
+                        icon: 'error_outline',
+                        title: 'Algo ha ido mal',
+                        msg: 'Ha ocurrido un error mientras se cargaban las recetas.'
+                    };
+                    $rootScope.errorMsg = true;
+                    $scope.loadingNextPage = false;
                 });
-                $('.ui-pnotify.custom-error-notify .material-icons').html('warning');
-                $rootScope.error = {
-                    icon: 'error_outline',
-                    title: 'Algo ha ido mal',
-                    msg: 'Ha ocurrido un error mientras se cargaban las recetas.'
-                };
-                $rootScope.errorMsg = true;
-                $rootScope.progressBarActivated = false;
-            });
+            }
         };
 
         $scope.description = function(steps) {
@@ -513,9 +515,9 @@ recipeController.controller('RecipeAll',
                         type: 'success',
                         addclass: 'custom-success-notify',
                         icon: 'material-icons md-light',
+                        icon_class: 'check_circle',
                         styling: 'fontawesome'
                     });
-                    $('.ui-pnotify.custom-success-notify .material-icons').html('check_circle');
                     $rootScope.progressBarActivated = false;
                     $scope.getRecipes();
                 }, function(response) {
@@ -534,7 +536,6 @@ recipeController.controller('RecipeAll',
                             icon: 'material-icons md-light',
                             styling: 'fontawesome'
                         });
-                        $('.ui-pnotify.custom-error-notify .material-icons').html('warning');
                         $rootScope.error = {
                             icon: 'error_outline',
                             title: 'Algo ha ido mal',
@@ -608,7 +609,6 @@ recipeController.controller('RecipeShow',
                     icon: 'material-icons md-light',
                     styling: 'fontawesome'
                 });
-                $('.ui-pnotify.custom-error-notify .material-icons').html('warning');
                 $rootScope.error = {
                     icon: 'error_outline',
                     title: 'Algo ha ido mal',
@@ -651,9 +651,9 @@ recipeController.controller('RecipeShow',
                         type: 'error',
                         addclass: 'custom-success-notify',
                         icon: 'material-icons md-light',
+                        icon_class: $scope.fav ? 'favorite' : 'favorite_border',
                         styling: 'fontawesome'
                     });
-                    $('.ui-pnotify.custom-success-notify .material-icons').html($scope.fav ? 'favorite' : 'favorite_border');
                 }, function (response) {
                     NotificationProvider.notify({
                         title: 'Un error ha ocurrido',
@@ -663,7 +663,6 @@ recipeController.controller('RecipeShow',
                         icon: 'material-icons md-light',
                         styling: 'fontawesome'
                     });
-                    $('.ui-pnotify.custom-error-notify .material-icons').html('warning');
                 });
             } else {
                 $location.path('/login');
@@ -717,7 +716,6 @@ recipeController.controller('RecipeCreate',
                 icon: 'material-icons md-light',
                 styling: 'fontawesome'
             });
-            $('.ui-pnotify.custom-error-notify .material-icons').html('warning');
             $rootScope.error = {
                 icon: 'error_outline',
                 title: 'Algo ha ido mal',
@@ -748,9 +746,9 @@ recipeController.controller('RecipeCreate',
                     type: 'success',
                     addclass: 'custom-success-notify',
                     icon: 'material-icons md-light',
+                    icon_class: 'save',
                     styling: 'fontawesome'
                 });
-                $('.ui-pnotify.custom-success-notify .material-icons').html('save');
                 $rootScope.progressBarActivated = false;
                 $rootScope.errorMsg = false;
                 $rootScope.headerTitle = 'Nueva receta (borrador)';
@@ -770,7 +768,6 @@ recipeController.controller('RecipeCreate',
                         icon: 'material-icons md-light',
                         styling: 'fontawesome'
                     });
-                    $('.ui-pnotify.custom-error-notify .material-icons').html('warning');
                     $rootScope.error = {
                         icon: 'error_outline',
                         title: 'Algo ha ido mal',
@@ -825,9 +822,9 @@ recipeController.controller('RecipeCreate',
                             type: 'success',
                             addclass: 'custom-success-notify',
                             icon: 'material-icons md-light',
+                            icon_class: 'publish',
                             styling: 'fontawesome'
                         });
-                        $('.ui-pnotify.custom-success-notify .material-icons').html('publish');
                         $location.path('/recipes/' + response.data.slug);
                     }, function(response) {
                         if (response.status == 404) {
@@ -845,7 +842,6 @@ recipeController.controller('RecipeCreate',
                                 icon: 'material-icons md-light',
                                 styling: 'fontawesome'
                             });
-                            $('.ui-pnotify.custom-error-notify .material-icons').html('warning');
                             $rootScope.error = {
                                 icon: 'error_outline',
                                 title: 'Algo ha ido mal',
@@ -873,7 +869,6 @@ recipeController.controller('RecipeCreate',
                         icon: 'material-icons md-light',
                         styling: 'fontawesome'
                     });
-                    $('.ui-pnotify.custom-error-notify .material-icons').html('warning');
                     $rootScope.error = {
                         icon: 'error_outline',
                         title: 'Algo ha ido mal',
@@ -884,10 +879,6 @@ recipeController.controller('RecipeCreate',
                 $rootScope.progressBarActivated = false;
                 $rootScope.headerTitle = 'Nueva receta (borrador)';
             });
-            /*
-
-            });
-             */
         };
     }]
 );
@@ -933,7 +924,6 @@ recipeController.controller('RecipeEdit',
                     icon: 'material-icons md-light',
                     styling: 'fontawesome'
                 });
-                $('.ui-pnotify.custom-error-notify .material-icons').html('warning');
                 $rootScope.error = {
                     icon: 'error_outline',
                     title: 'Algo ha ido mal',
@@ -965,9 +955,9 @@ recipeController.controller('RecipeEdit',
                     type: 'success',
                     addclass: 'custom-success-notify',
                     icon: 'material-icons md-light',
+                    icon_class: 'save',
                     styling: 'fontawesome'
                 });
-                $('.ui-pnotify.custom-success-notify .material-icons').html('save');
                 $rootScope.progressBarActivated = false;
                 $rootScope.errorMsg = false;
                 $rootScope.headerTitle = 'Editar receta';
@@ -987,7 +977,6 @@ recipeController.controller('RecipeEdit',
                         icon: 'material-icons md-light',
                         styling: 'fontawesome'
                     });
-                    $('.ui-pnotify.custom-error-notify .material-icons').html('warning');
                     $rootScope.error = {
                         icon: 'error_outline',
                         title: 'Algo ha ido mal',
@@ -1016,9 +1005,9 @@ function RatingDialogController($scope, $rootScope, $location, $mdDialog, Recipe
                     type: 'error',
                     addclass: 'custom-success-notify',
                     icon: 'material-icons md-light',
+                    icon_class: 'star',
                     styling: 'fontawesome'
                 });
-                $('.ui-pnotify.custom-success-notify .material-icons').html('star');
                 $mdDialog.cancel();
                 $location.path('/recipes/' + $scope.recipe.slug);
             }, function (response) {
@@ -1030,7 +1019,6 @@ function RatingDialogController($scope, $rootScope, $location, $mdDialog, Recipe
                     icon: 'material-icons md-light',
                     styling: 'fontawesome'
                 });
-                $('.ui-pnotify.custom-error-notify .material-icons').html('warning');
             });
         } else {
             $location.path('/login');
@@ -1055,7 +1043,6 @@ function GalleryDialogController($scope, $rootScope, $mdDialog, data, FileServic
             icon: 'material-icons md-light',
             styling: 'fontawesome'
         });
-        $('.ui-pnotify.custom-error-notify .material-icons').html('warning');
     });
 
     $scope.toggleImageSelected = function(image) {
@@ -1106,9 +1093,9 @@ function GalleryDialogController($scope, $rootScope, $mdDialog, data, FileServic
                     type: 'success',
                     addclass: 'custom-success-notify',
                     icon: 'material-icons md-light',
+                    icon_class: 'check_circle',
                     styling: 'fontawesome'
                 });
-                $('.ui-pnotify.custom-success-notify .material-icons').html('check_circle');
             }, function(response) {
                 if (response.status == 400 || response.status == 404) {
                     NotificationProvider.notify({
@@ -1119,7 +1106,6 @@ function GalleryDialogController($scope, $rootScope, $mdDialog, data, FileServic
                         icon: 'material-icons md-light',
                         styling: 'fontawesome'
                     });
-                    $('.ui-pnotify.custom-error-notify .material-icons').html('warning');
                 } else {
                     NotificationProvider.notify({
                         title: 'Un error ha ocurrido',
@@ -1129,7 +1115,6 @@ function GalleryDialogController($scope, $rootScope, $mdDialog, data, FileServic
                         icon: 'material-icons md-light',
                         styling: 'fontawesome'
                     });
-                    $('.ui-pnotify.custom-error-notify .material-icons').html('warning');
                 }
             });
         }, function() {});

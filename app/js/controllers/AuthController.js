@@ -43,7 +43,6 @@ authController.controller('Login',
                         icon: 'material-icons md-light',
                         styling: 'fontawesome'
                     });
-                    $('.ui-pnotify.custom-error-notify .material-icons').html('warning');
                     $rootScope.error = {
                         icon: 'error_outline',
                         title: 'Algo ha ido mal',
@@ -109,7 +108,6 @@ authController.controller('Register',
                         icon: 'material-icons md-light',
                         styling: 'fontawesome'
                     });
-                    $('.ui-pnotify.custom-error-notify .material-icons').html('warning');
                     $rootScope.error = {
                         icon: 'error_outline',
                         title: 'Algo ha ido mal',
@@ -133,9 +131,9 @@ authController.controller('Logout',
             type: 'success',
             addclass: 'custom-success-notify',
             icon: 'material-icons md-light',
+            icon_class: 'cake',
             styling: 'fontawesome'
         });
-        $('.ui-pnotify.custom-success-notify .material-icons').html('cake');
         AuthService.ClearCredentials();
         $location.path('/');
     }]
@@ -186,7 +184,6 @@ authController.controller('ResetPassword',
                         icon: 'material-icons md-light',
                         styling: 'fontawesome'
                     });
-                    $('.ui-pnotify.custom-error-notify .material-icons').html('warning');
                     $rootScope.error = {
                         icon: 'error_outline',
                         title: 'Algo ha ido mal',
@@ -232,9 +229,9 @@ authController.controller('RecoverPassword',
                     type: 'success',
                     addclass: 'custom-success-notify',
                     icon: 'material-icons md-light',
+                    icon_class: 'lock',
                     styling: 'fontawesome'
                 });
-                $('.ui-pnotify.custom-success-notify .material-icons').html('lock');
                 $rootScope.progressBarActivated = false;
                 $location.path('/login');
             }, function (response) {
@@ -253,7 +250,6 @@ authController.controller('RecoverPassword',
                         icon: 'material-icons md-light',
                         styling: 'fontawesome'
                     });
-                    $('.ui-pnotify.custom-error-notify .material-icons').html('warning');
                     $rootScope.error = {
                         icon: 'error_outline',
                         title: 'Algo ha ido mal',
@@ -304,7 +300,6 @@ authController.controller('EditProfile',
                     icon: 'material-icons md-light',
                     styling: 'fontawesome'
                 });
-                $('.ui-pnotify.custom-error-notify .material-icons').html('warning');
                 $rootScope.error = {
                     icon: 'error_outline',
                     title: 'Algo ha ido mal',
@@ -331,7 +326,6 @@ authController.controller('EditProfile',
                     icon: 'material-icons md-light',
                     styling: 'fontawesome'
                 });
-                $('.ui-pnotify.custom-error-notify .material-icons').html('warning');
                 $rootScope.headerTitle = 'Error';
                 $rootScope.progressBarActivated = false;
             });
@@ -365,9 +359,9 @@ authController.controller('EditProfile',
                     type: 'success',
                     addclass: 'custom-success-notify',
                     icon: 'material-icons md-light',
+                    icon_class: 'backup',
                     styling: 'fontawesome'
                 });
-                $('.ui-pnotify.custom-success-notify .material-icons').html('backup');
                 $scope.setDelay2();
             }, function (response) {
                 if (response.status == 400) {
@@ -385,7 +379,6 @@ authController.controller('EditProfile',
                         icon: 'material-icons md-light',
                         styling: 'fontawesome'
                     });
-                    $('.ui-pnotify.custom-error-notify .material-icons').html('warning');
                     $rootScope.error = {
                         icon: 'error_outline',
                         title: 'Algo ha ido mal',
@@ -418,9 +411,9 @@ authController.controller('EditProfile',
                         type: 'success',
                         addclass: 'custom-success-notify',
                         icon: 'material-icons md-light',
+                        icon_class: 'check_circle',
                         styling: 'fontawesome'
                     });
-                    $('.ui-pnotify.custom-success-notify .material-icons').html('check_circle');
                     $rootScope.progressBarActivated = false;
                     $scope.images.splice($scope.images.findIndex(function(imageInArray) { return image.id == imageInArray.id; }), 1);
                 }, function(response) {
@@ -439,7 +432,6 @@ authController.controller('EditProfile',
                             icon: 'material-icons md-light',
                             styling: 'fontawesome'
                         });
-                        $('.ui-pnotify.custom-error-notify .material-icons').html('warning');
                         $rootScope.error = {
                             icon: 'error_outline',
                             title: 'Algo ha ido mal',
