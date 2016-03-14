@@ -86,7 +86,7 @@ homeController.controller('Header',
                 search.css({
                     top: '',
                     position: '',
-                    left: '',
+                    right: '',
                     margin: ''
                 });
                 header.css('max-height', height);
@@ -102,7 +102,7 @@ homeController.controller('Header',
                     left: 16,
                     'max-height': 64
                 });
-                var position = ($rootScope.IsAuthed ? 240  : 155);
+                var position = ($rootScope.IsAuthed ? 155  : 190);
                 search.css({
                     top: 0,
                     position: 'absolute',
