@@ -1,14 +1,20 @@
 var homeController = angular.module('HomeController', []);
 
 homeController.controller('Header',
-    ['$scope', '$rootScope', '$mdSidenav', '$timeout', '$location', 'RecipeService',
-    function ($scope, $rootScope, $mdSidenav, $timeout, $location, RecipeService) {
+    ['$scope', '$rootScope', '$mdSidenav', '$timeout', '$location', '$route', 'RecipeService',
+    function ($scope, $rootScope, $mdSidenav, $timeout, $location, $route, RecipeService) {
         $scope.toggleLeft = buildDelayedToggler('left');
 
         $scope.navLinks = [
-            { title: 'Home', url: '/'},
-            { title: 'Recetas', url: '/recipes'}
+            { title: '<i class="material-icons">fiber_new</i> Ultimas recetas', url: '/recipes' },
+            { title: '<i class="material-icons">stars</i> Top recetas', url: '/top-recipes', class: 'no-implemented'},
+            { title: '<i class="material-icons">edit</i> Escribe una receta', url: '/new-recipe' },
         ];
+
+        $scope.openUserDropdrown = function($mdOpenMenu, ev) {
+            originatorEv = ev;
+            $mdOpenMenu(ev);
+        };
 
         $scope.navTo = function (ev, url) {
             closeSideNav('left');
@@ -30,7 +36,9 @@ homeController.controller('Header',
         };
 
         $scope.searchRecipe = function() {
-            $location.path('recipes').search('search', $scope.search);
+            $rootScope.searchString = $scope.search;
+            $location.path('recipes');
+            $route.reload();
         };
 
         function debounce(func, wait, context) {
@@ -78,7 +86,7 @@ homeController.controller('Header',
                 search.css({
                     top: '',
                     position: '',
-                    left: '',
+                    right: '',
                     margin: ''
                 });
                 header.css('max-height', height);
@@ -91,13 +99,14 @@ homeController.controller('Header',
                 img.css({
                     position: 'absolute',
                     top: 0,
-                    left: 64,
+                    left: 16,
                     'max-height': 64
                 });
+                var position = ($rootScope.IsAuthed ? 155  : 190);
                 search.css({
                     top: 0,
                     position: 'absolute',
-                    left: 300,
+                    right: position,
                     margin: 10
                 });
                 header.css('max-height', 64);
@@ -118,7 +127,7 @@ homeController.controller('Header',
             var distanceY = window.pageYOffset || document.documentElement.scrollTop;
             toolbar.css('display', 'flex');
             search.removeClass('hide');
-            if (distanceY == 0) {
+            if (distanceY === 0) {
                 motto.removeClass('hide');
             } else if (distanceY <= heightForMove) {
                 var height = $.calcHeightTablet(distanceY);
@@ -170,7 +179,7 @@ homeController.controller('Header',
             var toolbar = $('.md-toolbar-tools');
             var heightForMove = 125;
             var distanceY = window.pageYOffset || document.documentElement.scrollTop;
-            if (distanceY == 0) {
+            if (distanceY === 0) {
                 motto.removeClass('hide');
             } else if (distanceY <= heightForMove) {
                 var height = $.calcHeightMobile(distanceY);
@@ -246,8 +255,8 @@ homeController.controller('Header',
                             window.removeEventListener('scroll', tableEvent, false);
                         }
                         $rootScope.size = 'mobile';
-                        header.css('max-height', 300);
-                        header.css('height', 300);
+                        header.css('max-height', 200);
+                        header.css('height', 200);
                         button.addClass('hide');
                         mobileEvent();
                         window.addEventListener('scroll', mobileEvent, false);
@@ -295,7 +304,6 @@ homeController.controller('Home',
                 icon: 'material-icons md-light',
                 styling: 'fontawesome'
             });
-            $('.ui-pnotify.custom-error-notify .material-icons').html('warning');
             $rootScope.error = {
                 icon: 'error_outline',
                 title: 'Algo ha ido mal',
@@ -328,7 +336,6 @@ homeController.controller('Home',
                         icon: 'material-icons md-light',
                         styling: 'fontawesome'
                     });
-                    $('.ui-pnotify.custom-error-notify .material-icons').html('warning');
                     $rootScope.error = {
                         icon: 'error_outline',
                         title: 'Algo ha ido mal',

@@ -43,7 +43,6 @@ authController.controller('Login',
                         icon: 'material-icons md-light',
                         styling: 'fontawesome'
                     });
-                    $('.ui-pnotify.custom-error-notify .material-icons').html('warning');
                     $rootScope.error = {
                         icon: 'error_outline',
                         title: 'Algo ha ido mal',
@@ -109,7 +108,6 @@ authController.controller('Register',
                         icon: 'material-icons md-light',
                         styling: 'fontawesome'
                     });
-                    $('.ui-pnotify.custom-error-notify .material-icons').html('warning');
                     $rootScope.error = {
                         icon: 'error_outline',
                         title: 'Algo ha ido mal',
@@ -133,9 +131,9 @@ authController.controller('Logout',
             type: 'success',
             addclass: 'custom-success-notify',
             icon: 'material-icons md-light',
+            icon_class: 'cake',
             styling: 'fontawesome'
         });
-        $('.ui-pnotify.custom-success-notify .material-icons').html('cake');
         AuthService.ClearCredentials();
         $location.path('/');
     }]
@@ -186,7 +184,6 @@ authController.controller('ResetPassword',
                         icon: 'material-icons md-light',
                         styling: 'fontawesome'
                     });
-                    $('.ui-pnotify.custom-error-notify .material-icons').html('warning');
                     $rootScope.error = {
                         icon: 'error_outline',
                         title: 'Algo ha ido mal',
@@ -232,9 +229,9 @@ authController.controller('RecoverPassword',
                     type: 'success',
                     addclass: 'custom-success-notify',
                     icon: 'material-icons md-light',
+                    icon_class: 'lock',
                     styling: 'fontawesome'
                 });
-                $('.ui-pnotify.custom-success-notify .material-icons').html('lock');
                 $rootScope.progressBarActivated = false;
                 $location.path('/login');
             }, function (response) {
@@ -253,7 +250,6 @@ authController.controller('RecoverPassword',
                         icon: 'material-icons md-light',
                         styling: 'fontawesome'
                     });
-                    $('.ui-pnotify.custom-error-notify .material-icons').html('warning');
                     $rootScope.error = {
                         icon: 'error_outline',
                         title: 'Algo ha ido mal',
@@ -269,10 +265,9 @@ authController.controller('RecoverPassword',
 );
 
 authController.controller('EditProfile',
-    ['$scope', '$rootScope', '$location', 'AuthService', '$timeout', 'NotificationProvider',
-    function ($scope, $rootScope, $location, AuthService, $timeout, NotificationProvider) {
+    ['$scope', '$rootScope', '$location', '$timeout', '$mdDialog', 'AuthService', 'FileService', 'NotificationProvider',
+    function ($scope, $rootScope, $location, $timeout, $mdDialog, AuthService, FileService, NotificationProvider) {
         $rootScope.headerTitle = 'Editar perfil';
-        $rootScope.progressBarActivated = true;
 
         $scope.setDelay1 = function(){
             $scope.delay1 = true;
@@ -288,32 +283,69 @@ authController.controller('EditProfile',
             }, 1000);
         };
 
-        $scope.setDelay1();
-        AuthService.GetProfile(function (response) {
-            $scope.user = response.data;
-            $rootScope.errorMsg = false;
-            $rootScope.progressBarActivated = false;
-            $scope.setDelay2();
-        }, function (response) {
-            NotificationProvider.notify({
-                title: 'Un error ha ocurrido',
-                text: 'Ha ocurrido un error mientras se cargaba el perfil. Por favor, intentelo más tarde.',
-                type: 'error',
-                addclass: 'custom-error-notify',
-                icon: 'material-icons md-light',
-                styling: 'fontawesome'
+        $scope.loadPersonalData = function() {
+            $rootScope.progressBarActivated = true;
+            $scope.setDelay1();
+            AuthService.GetProfile(function (response) {
+                $scope.user = response.data;
+                $rootScope.errorMsg = false;
+                $rootScope.progressBarActivated = false;
+                $scope.setDelay2();
+            }, function (response) {
+                NotificationProvider.notify({
+                    title: 'Un error ha ocurrido',
+                    text: 'Ha ocurrido un error mientras se cargaba el perfil. Por favor, intentelo más tarde.',
+                    type: 'error',
+                    addclass: 'custom-error-notify',
+                    icon: 'material-icons md-light',
+                    styling: 'fontawesome'
+                });
+                $rootScope.error = {
+                    icon: 'error_outline',
+                    title: 'Algo ha ido mal',
+                    msg: 'Ha ocurrido un error mientras se cargaba el perfil.'
+                };
+                $rootScope.errorMsg = true;
+                $rootScope.headerTitle = 'Error';
+                $rootScope.progressBarActivated = false;
+                $scope.setDelay2();
             });
-            $('.ui-pnotify.custom-error-notify .material-icons').html('warning');
-            $rootScope.error = {
-                icon: 'error_outline',
-                title: 'Algo ha ido mal',
-                msg: 'Ha ocurrido un error mientras se cargaba el perfil.'
-            };
-            $rootScope.errorMsg = true;
-            $rootScope.headerTitle = 'Error';
-            $rootScope.progressBarActivated = false;
-            $scope.setDelay2();
-        });
+        };
+
+        $scope.loadUserImages = function() {
+            $rootScope.progressBarActivated = true;
+            FileService.loadUserImages($rootScope.globals.user.user, function (response) {
+                $scope.images = response.data;
+                $rootScope.progressBarActivated = false;
+            }, function (response) {
+                NotificationProvider.notify({
+                    title: 'Un error ha ocurrido',
+                    text: 'Ha ocurrido un error mientras se cargaban las imagenes. Por favor, intentelo más tarde.',
+                    type: 'error',
+                    addclass: 'custom-error-notify',
+                    icon: 'material-icons md-light',
+                    styling: 'fontawesome'
+                });
+                $rootScope.headerTitle = 'Error';
+                $rootScope.progressBarActivated = false;
+            });
+        };
+
+        $scope.openUploadImage = function($event) {
+            $mdDialog.show({
+                controller: UserUploadDialogController,
+                templateUrl: 'views/auth/upload_images_dialog.html',
+                parent: angular.element(document.body),
+                locals: { data: {
+                        user: $scope.user,
+                    }
+                },
+                targetEvent: $event,
+                clickOutsideToClose: true
+            }).then(function(answer) {
+                $scope.images = $scope.images.concat(answer);
+            }, function() {});
+        };
 
         $scope.save = function () {
             $rootScope.errorMsg = false;
@@ -327,9 +359,9 @@ authController.controller('EditProfile',
                     type: 'success',
                     addclass: 'custom-success-notify',
                     icon: 'material-icons md-light',
+                    icon_class: 'backup',
                     styling: 'fontawesome'
                 });
-                $('.ui-pnotify.custom-success-notify .material-icons').html('backup');
                 $scope.setDelay2();
             }, function (response) {
                 if (response.status == 400) {
@@ -347,7 +379,6 @@ authController.controller('EditProfile',
                         icon: 'material-icons md-light',
                         styling: 'fontawesome'
                     });
-                    $('.ui-pnotify.custom-error-notify .material-icons').html('warning');
                     $rootScope.error = {
                         icon: 'error_outline',
                         title: 'Algo ha ido mal',
@@ -359,5 +390,74 @@ authController.controller('EditProfile',
                 $scope.setDelay2();
             });
         };
+
+        $scope.remove = function(image, $event) {
+            var msg = '¿De verdad que quieres borrar la imagen \'' + image.title +'\'?\r\nEsta acción no se puede deshacer.';
+            if (image.recipes > 0) msg += '\r\nLa imagen desaparecerá de todas las recetas';
+            var confirm = $mdDialog.confirm()
+                .title('Borrar imagen')
+                .textContent(msg)
+                .ariaLabel('Borrar')
+                .targetEvent($event)
+                .ok('Borrar')
+                .cancel('Cancelar');
+            $mdDialog.show(confirm).then(function () {
+                $rootScope.progressBarActivated = true;
+                $rootScope.errorMsg = false;
+                FileService.deleteFile($scope.user, image.id, function(response) {
+                    NotificationProvider.notify({
+                        title: 'Receta borrada',
+                        text: 'Has borrado la imagen \'' + image.title +'\'.',
+                        type: 'success',
+                        addclass: 'custom-success-notify',
+                        icon: 'material-icons md-light',
+                        icon_class: 'check_circle',
+                        styling: 'fontawesome'
+                    });
+                    $rootScope.progressBarActivated = false;
+                    $scope.images.splice($scope.images.findIndex(function(imageInArray) { return image.id == imageInArray.id; }), 1);
+                }, function(response) {
+                    if (response.status == 404) {
+                        $rootScope.error = {
+                            icon: 'error_outline',
+                            title: 'Receta no encontrada',
+                            msg: $.parseError(response.data)
+                        };
+                    } else {
+                        NotificationProvider.notify({
+                            title: 'Un error ha ocurrido',
+                            text: 'Ha ocurrido un error mientras se borraba la imagen. Por favor, intentelo más tarde.',
+                            type: 'error',
+                            addclass: 'custom-error-notify',
+                            icon: 'material-icons md-light',
+                            styling: 'fontawesome'
+                        });
+                        $rootScope.error = {
+                            icon: 'error_outline',
+                            title: 'Algo ha ido mal',
+                            msg: 'Ha ocurrido un error mientras se borraba la imagen.'
+                        };
+                    }
+                    $rootScope.errorMsg = true;
+                    $rootScope.progressBarActivated = false;
+                });
+            }, function() {});
+        };
     }]
 );
+
+function UserUploadDialogController($scope, $rootScope, $mdDialog, data, FileService, NotificationProvider) {
+    $scope.user = data.user;
+    $scope.images = [];
+    $scope.urlUpload = FileService.getUrlUpload($scope.user);
+
+    $scope.successUpload = function(file, response) {
+        $scope.images.push(response);
+    };
+
+    $scope.hide = function() { $mdDialog.hide(); };
+    $scope.cancel = function() { $mdDialog.cancel(); };
+    $scope.returnUploaded = function() {
+        $mdDialog.hide($scope.images);
+    };
+}

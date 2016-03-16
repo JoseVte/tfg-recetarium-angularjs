@@ -4,89 +4,96 @@
     </div>
 </md-content>
 
-<md-content class="md-padding" layout="column" layout-wrap layout-align="center start" ng-hide="progressBarActivated || errorMsg">
+<md-content class="md-padding" layout="column" layout-wrap layout-align="center start">
     <md-card flex class="card-recipe-show">
-        <div layout="column" layout-wrap layout-gt-sm="row">
-            <div flex flex-order="1" flex-order-gt-sm="2" flex-gt-sm="40" flex-gt-md="30"
-            class="md-padding" layout="row" layout-wrap layout-align="center center"
-            layout-align-gt-sm="end start">
-                <div layout="column" layout-wrap flex>
-                    <a class="fancybox" title="Foto del plato principal" href="{{ images.main.href }}">
-                        <img class="image-recipe-main" src="{{ images.main.href }}" />
-                    </a>
-                    <md-content flex class="md-padding">
-                        <h4>
-                            <md-icon class="material-icons">timelapse</md-icon> Duración: {{ recipe.duration | duration }}
-                        </h4>
-                        <h4 ng-if="recipe.num_persons > 0">
-                            <md-icon class="material-icons">people</md-icon> Núm de personas: {{ recipe.num_persons }}
-                        </h4>
-                        <h4>
-                            <md-icon class="material-icons" ng-class="getDifficulty(recipe.difficulty)">stars</md-icon> Dificultad: {{ recipe.difficulty | humanized }}
-                        </h4>
-                        <h4>
-                            <md-icon class="material-icons" ng-class="getVisibilityClass(recipe.visibility)">{{ getVisibilityIcon(recipe.visibility) }}</md-icon> Visibilidad: {{ recipe.visibility | humanized }}
-                        </h4>
-                        <h4 ng-if="recipe.category">
-                            <md-icon class="material-icons">bookmark</md-icon> Categoría: {{ recipe.category.text }}
-                        </h4>
-                    </md-content>
+        <md-card-title class="md-title-page">
+            <md-card-title-text>
+                <span class="md-headline" ng-class="{'loading': progressBarActivated}">{{ headerTitle }}</span>
+            </md-card-title-text>
+        </md-card-title>
+        <div ng-hide="progressBarActivated || errorMsg">
+            <div layout="column" layout-wrap layout-gt-sm="row">
+                <div flex flex-order="1" flex-order-gt-sm="2" flex-gt-sm="40" flex-gt-md="30"
+                class="md-padding" layout="row" layout-wrap layout-align="center center"
+                layout-align-gt-sm="end start">
+                    <div layout="column" layout-wrap flex>
+                        <a class="fancybox" title="Foto del plato principal" href="{{ recipe.image_main | srcImage:recipe.user }}">
+                            <img class="image-recipe-main" src="{{ recipe.image_main | srcImage:recipe.user }}" />
+                        </a>
+                        <md-content flex class="md-padding">
+                            <h4>
+                                <md-icon class="material-icons">timelapse</md-icon> Duración: {{ recipe.duration | duration }}
+                            </h4>
+                            <h4 ng-if="recipe.num_persons > 0">
+                                <md-icon class="material-icons">people</md-icon> Núm de personas: {{ recipe.num_persons }}
+                            </h4>
+                            <h4>
+                                <md-icon class="material-icons" ng-class="getDifficulty(recipe.difficulty)">stars</md-icon> Dificultad: {{ recipe.difficulty | humanized }}
+                            </h4>
+                            <h4>
+                                <md-icon class="material-icons" ng-class="getVisibilityClass(recipe.visibility)">{{ getVisibilityIcon(recipe.visibility) }}</md-icon> Visibilidad: {{ recipe.visibility | humanized }}
+                            </h4>
+                            <h4 ng-if="recipe.category">
+                                <md-icon class="material-icons">bookmark</md-icon> Categoría: {{ recipe.category.text }}
+                            </h4>
+                        </md-content>
+                    </div>
+                </div>
+                <div flex flex-order="2" flex-order-gt-sm="1" flex-gt-sm="60" flex-gt-md="70">
+                    <md-card-title>
+                        <md-card-title-text>
+                            <span class="md-headline"><md-icon class="material-icons">kitchen</md-icon>Ingredientes</span>
+                        </md-card-title-text>
+                    </md-card-title>
+                    <md-card-content>
+                        <md-list class="ingredients" flex>
+                            <md-list-item ng-repeat="ingredient in recipe.ingredients">
+                                <md-icon class="material-icons md-dark">label</md-icon>
+                                <div class="ingredient" flex layout="row">
+                                    <div class="name" flex="70">{{ ingredient.name | capitalize }}</div>
+                                    <div class="count" flex>{{ ingredient.count }}</div>
+                                </div>
+                                <md-divider md-inset ng-if="!$last"></md-divider>
+                            </md-list-item>
+                        </md-list>
+                    </md-card-content>
                 </div>
             </div>
-            <div flex flex-order="2" flex-order-gt-sm="1" flex-gt-sm="60" flex-gt-md="70">
-                <md-card-title>
-                    <md-card-title-text>
-                        <span class="md-headline"><md-icon class="material-icons">kitchen</md-icon>Ingredientes</span>
-                    </md-card-title-text>
-                </md-card-title>
-                <md-card-content>
-                    <md-list class="ingredients" flex>
-                        <md-list-item ng-repeat="ingredient in recipe.ingredients">
-                            <md-icon class="material-icons md-dark">label</md-icon>
-                            <div class="ingredient" flex layout="row">
-                                <div class="name" flex="70">{{ ingredient.name | capitalize }}</div>
-                                <div class="count" flex>{{ ingredient.count }}</div>
-                            </div>
-                            <md-divider md-inset ng-if="!$last"></md-divider>
-                        </md-list-item>
-                    </md-list>
-                </md-card-content>
-            </div>
+            <md-card-title>
+                <md-card-title-text>
+                    <span class="md-headline">Pasos</span>
+                </md-card-title-text>
+            </md-card-title>
+            <md-card-content>
+                <div data-ng-bind-html="description(recipe.steps)"></div>
+            </md-card-content>
+            <md-card-title>
+                <md-card-title-text>
+                    <span class="md-headline">Imágenes</span>
+                </md-card-title-text>
+            </md-card-title>
+            <md-card-content>
+                <a class="image-recipe-zoomable fancybox" rel="gallery" title="{{ image.title }}" ng-href="{{ image | srcImage:recipe.user }}" ng-repeat="image in images">
+                    <img ng-src="{{ image | srcImage:recipe.user }}" />
+                </a>
+            </md-card-content>
+            <md-card-content>
+                <div class="tag" ng-repeat="tag in tags" ng-click="">{{ tag.text }}</div>
+            </md-card-content>
+            <md-card-actions layout="row" layout-align="space-between center" flex>
+                <md-button class="no-implemented">{{ comments.length }} Comentario<span ng-if="comments.length > 1">s</span></md-button>
+                <md-card-icons-actions>
+                    <md-button class="md-icon-button no-implemented" aria-label="Comentar"><md-icon class="material-icons md-dark">reply</md-icon></md-button>
+                    <md-button ng-click="toggleFav()" class="md-icon-button" aria-label="Favoritos">
+                        <md-tooltip md-direction="top">{{ favorites }} favoritos</md-tooltip>
+                        <md-icon class="material-icons md-red">{{ fav ? 'favorite' : 'favorite_border' }}</md-icon>
+                    </md-button>
+                    <md-button ng-click="showRating()" class="md-icon-button" aria-label="Puntuación">
+                        <md-tooltip md-direction="top">{{ recipe.rating.rating }}</md-tooltip>
+                        <md-icon class="material-icons md-yellow">{{ getRatingIcon(recipe.rating.rating) }}</md-icon>
+                    </md-button>
+                </md-card-icons-actions>
+            </md-card-actions>
         </div>
-        <md-card-title>
-            <md-card-title-text>
-                <span class="md-headline">Pasos</span>
-            </md-card-title-text>
-        </md-card-title>
-        <md-card-content>
-            <div data-ng-bind-html="description(recipe.steps)"></div>
-        </md-card-content>
-        <md-card-title>
-            <md-card-title-text>
-                <span class="md-headline">Imágenes</span>
-            </md-card-title-text>
-        </md-card-title>
-        <md-card-content>
-            <a class="image-recipe-zoomable fancybox" rel="gallery" title="{{ image.title }}" ng-href="{{ image.href }}" ng-repeat="image in images.gallery">
-                <img ng-src="{{ image.href }}" />
-            </a>
-        </md-card-content>
-        <md-card-content>
-            <div class="tag" ng-repeat="tag in tags" ng-click="">{{ tag.text }}</div>
-        </md-card-content>
-        <md-card-actions layout="row" layout-align="space-between center" flex>
-            <md-button>{{ comments.length }} Comentario<span ng-if="comments.length > 1">s</span></md-button>
-            <md-card-icons-actions>
-                <md-button class="md-icon-button" aria-label="Comentar"><md-icon class="material-icons md-dark">reply</md-icon></md-button>
-                <md-button ng-click="toggleFav()" class="md-icon-button" aria-label="Favoritos">
-                    <md-tooltip md-direction="top">{{ favorites }} favoritos</md-tooltip>
-                    <md-icon class="material-icons md-red">{{ fav ? 'favorite' : 'favorite_border' }}</md-icon>
-                </md-button>
-                <md-button ng-click="showRating()" class="md-icon-button" aria-label="Puntuación">
-                    <md-tooltip md-direction="top">{{ recipe.rating.rating }}</md-tooltip>
-                    <md-icon class="material-icons md-yellow">{{ getRatingIcon(recipe.rating.rating) }}</md-icon>
-                </md-button>
-            </md-card-icons-actions>
-        </md-card-actions>
     </md-card>
 </md-content>

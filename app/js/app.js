@@ -15,7 +15,7 @@ var recetarium = angular.module('recetariumApp', [
     'infinite-scroll',
     // My Javascript
     'Animations', 'TextEditor', 'NotificationProviders',
-    'FileDirectives', 'FormDirectives', 'TimeDirectives', 'ValidatorDirectives',
+    'FileServices', 'FileDirectives', 'FormDirectives', 'TimeDirectives', 'ValidatorDirectives',
     'HomeController',
     'AuthServices', 'AuthController',
     'RecipeServices', 'RecipeFilters', 'RecipeController',
@@ -97,7 +97,7 @@ recetarium.config(['envServiceProvider', function (envServiceProvider) {
 }]);
 
 //
-recetarium.run(function ($rootScope, $location, $http, AuthService, ICONS) {
+recetarium.run(function ($rootScope, $location, $http, AuthService, NotificationProvider, ICONS) {
     var authRegex = /\/login|\/register|\/reset\/password.*/;
     var profileRegex = /\/profile.*/;
     $rootScope.location = $location;
@@ -114,6 +114,19 @@ recetarium.run(function ($rootScope, $location, $http, AuthService, ICONS) {
     } else {
         $rootScope.globals = {};
     }
+
+    $(document).on('click', '.no-implemented', function (e) {
+        e.preventDefault();
+        NotificationProvider.notify({
+            title: 'No implementado',
+            text: 'Esta opcion esta en desarrollo y sera aplicada posteriormente.',
+            type: 'error',
+            addclass: 'custom-error-notify',
+            icon: 'material-icons md-light',
+            icon_class: 'update',
+            styling: 'fontawesome'
+        });
+    });
 
     $rootScope.$on('$routeChangeError', function (ev, next, current, rejection) {
         if (rejection == AuthService.UNAUTHORIZED) {
@@ -152,18 +165,21 @@ recetarium.run(function ($rootScope, $location, $http, AuthService, ICONS) {
                 $rootScope.headerTheme = 'header-theme-auth';
                 $rootScope.loaderTheme = 'md-auth';
                 $rootScope.bodyTheme = 'body-theme-auth';
+                $rootScope.htmlTheme = 'html-theme-auth';
                 break;
             case (profileRegex).test($path):
                 $rootScope.tabColor = '#304FFE';
                 $rootScope.headerTheme = 'header-theme-profile';
                 $rootScope.loaderTheme = 'md-profile';
                 $rootScope.bodyTheme = 'body-theme-profile';
+                $rootScope.htmlTheme = 'html-theme-profile';
                 break;
             default:
                 $rootScope.tabColor = '#DD2C00';
                 $rootScope.headerTheme ='header-theme-default';
                 $rootScope.loaderTheme = 'md-default';
                 $rootScope.bodyTheme = 'body-theme-default';
+                $rootScope.htmlTheme = 'html-theme-default';
                 break;
         }
     });
@@ -215,7 +231,6 @@ recetarium.run(function ($rootScope, $location, $http, AuthService, ICONS) {
                 }).addClass('animate');
             });
         });
-
     });
 });
 
@@ -233,7 +248,7 @@ Array.prototype.contains = function(obj) {
         if (this[i] === obj) { return true; }
     }
     return false;
-}
+};
 
 $.fn.exists = function(callback) {
     var args = [].slice.call(arguments, 1);
@@ -246,7 +261,7 @@ $.fn.exists = function(callback) {
 $.containsId = function(el, array) {
     var i = array.length;
     while (i--) {
-       if (array[i].id === el.id) { return true; }
+       if (array[i] !== undefined && array[i] !== null && array[i].id === el.id) { return true; }
     }
     return false;
 };
@@ -264,7 +279,9 @@ $.parseError = function(error) {
     if (angular.isArray(error)) {
         msg += '<ul>';
         for (var i in error) {
-            msg += '<li>' + $.parseError(error[i]) + '</li>';
+            if (error.hasOwnProperty(i)) {
+                msg += '<li>' + $.parseError(error[i]) + '</li>';
+            }
         }
         msg += '</ul>';
     } else if (angular.isObject(error)) {

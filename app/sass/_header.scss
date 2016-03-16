@@ -27,12 +27,15 @@ md-sidenav {
         min-width: 250px;
         max-width: 250px;
         .md-toolbar-tools{
-            height: 64px;
-            max-height: 64px;
+            height: 128px;
+            max-height: 128px;
+            h1 {
+                margin-left: 12px;
+            }
         }
     }
     md-toolbar {
-        max-height: 64px;
+        max-height: 128px;
     }
 }
 header md-toolbar {
@@ -104,6 +107,44 @@ md-input-container.search-home {
         max-height: 100px;
     }
 }
+
+.img-header {
+    max-height: 64px;
+    @media (max-width: $layout-breakpoint-sm) {
+        margin-left: 10px;
+    }
+}
+
+.search-container {
+    max-width: 280px;
+    min-width: 200px;
+    margin-right: 40px;
+    @media (max-width: $layout-breakpoint-sm) {
+        margin-right: 6px;
+    }
+    md-input-container {
+        @extend md-input-container.search-home;
+        .md-input {
+            color: white;
+            border-color: white;
+        }
+    }
+}
+
+@each $size, $width in (md, 1115px), (sm, 780px), (xs, 400px) {
+    .hide-custom-header-#{$size} {
+        @media (max-width: $width) {
+            display: none;
+        }
+    }
+
+    .show-custom-header-#{$size} {
+        @media (min-width: $width + 1) {
+            display: none;
+        }
+    }
+}
+
 .sidebar-left {
     padding: 0;
     a {
@@ -117,12 +158,14 @@ md-input-container.search-home {
         align-items: inherit;
         line-height: 40px;
         margin: 0;
-        max-height: 40px;
         overflow: hidden;
         text-align: left;
         text-decoration: none;
         white-space: normal;
         width: 100%;
+        i {
+            margin-right: 6px;
+        }
     }
     .active a {
         background-color: black;
