@@ -27,7 +27,7 @@
                         <md-button class="md-icon-button md-mini" ng-click="searchRecipe()" aria-label="Search">
                             <md-icon class="material-icons">search</md-icon>
                         </md-button>
-                        <input type="text" ng-model="search" aria-label="Buscar recetas" />
+                        <input ng-keyup="$event.keyCode == 13 ? searchRecipe() : null" type="text" ng-model="search" aria-label="Buscar recetas" />
                     </md-input-container>
                 </div>
                 <div hide-xs hide-sm show-gt-sm>

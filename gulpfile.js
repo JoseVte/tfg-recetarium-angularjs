@@ -66,12 +66,12 @@ gulp.task('js', function() {
     .pipe(notify({ message: 'JS minified' }));
 });
 
-// JS bower
+// JS library bower
 gulp.task('lib-js', function() {
     return gulp.src([
         paths.src.bower + '/jquery/dist/jquery.js',
         paths.src.bower + '/fancybox/source/jquery.fancybox.pack.js',
-        paths.src.bower + '/angular/angular.min.js',
+        paths.src.bower + '/angular/angular.js',
         paths.src.bower + '/moment/min/moment-with-locales.js',
         paths.src.bower + '/textAngular/dist/textAngular-rangy.min.js',
         paths.src.bower + '/textAngular/dist/textAngular-sanitize.min.js',
@@ -108,13 +108,22 @@ gulp.task('lib-js', function() {
     .pipe(notify({ message: 'JS lib minified' }));
 });
 
+// JS map library
+gulp.task('lib-map-js', function() {
+    return gulp.src([
+        paths.src.bower + '/angular/angular.min.js.map',
+    ])
+    .pipe(gulp.dest(paths.dest.jsLib))
+    .pipe(notify({ message: 'JS lib map minified' }));
+})
+
 // Fonts
 gulp.task('fonts', function() {
     return gulp.src(paths.src.bower + '/material-design-icons/iconfont/*.*')
     .pipe(gulp.dest(paths.dest.fonts));
 });
 
-// Imagen
+// Images
 gulp.task('img', function() {
     gulp.src([
         paths.src.img + '/**/*.*'
@@ -148,6 +157,7 @@ gulp.task('default', [
     'sass',
     'js',
     'lib-js',
+    'lib-map-js',
     'fonts',
     'img',
     'watch'

@@ -27,7 +27,9 @@ describe('Module RecipeController', function() {
             ctrl = $controller('RecipeAll', {
                 $scope: $scope
             });
+            $httpBackend.when('HEAD', /http:\/\/localhost:9000\/recipes\/(.*)/).respond(200, {});
             $httpBackend.when('GET', /http:\/\/localhost:9000\/recipes\?(.*)/).respond(200, {});
+            $httpBackend.when('GET', /views\/(.*)/).respond(200, {});
         }));
 
         afterEach(function() {
@@ -37,6 +39,7 @@ describe('Module RecipeController', function() {
 
         it('initialize controller', function() {
             $httpBackend.expectGET(/http:\/\/localhost:9000\/recipes(.*)/).respond({data: []});
+            $httpBackend.expectGET(/views\/(.*)/);
             $httpBackend.flush();
             expect($rootScope.headerTitle).toEqual('Recetas');
             expect($scope.recipes).toEqual([]);
@@ -44,6 +47,7 @@ describe('Module RecipeController', function() {
 
         it('loading recipes', function() {
             $httpBackend.expectGET(/http:\/\/localhost:9000\/recipes(.*)/).respond({});
+            $httpBackend.expectGET(/views\/(.*)/);
             $location.path('/recipes');
             $scope.$apply();
             $httpBackend.flush();
@@ -52,6 +56,7 @@ describe('Module RecipeController', function() {
 
         it('error loading', function() {
             $httpBackend.expectGET(/http:\/\/localhost:9000\/recipes(.*)/).respond(404, {});
+            $httpBackend.expectGET(/views\/(.*)/);
             $location.path('/recipes');
             $scope.$apply();
             $httpBackend.flush();
@@ -64,6 +69,7 @@ describe('Module RecipeController', function() {
 
         it('description method', function () {
             $httpBackend.expectGET(/http:\/\/localhost:9000\/recipes(.*)/).respond({});
+            $httpBackend.expectGET(/views\/(.*)/);
             $httpBackend.flush();
             expect($scope.description('<div>Code HTML with more than 260 characters. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>').$$unwrapTrustedValue()).toEqual('<div>Code HTML with more than 260 characters. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea&hellip;');
             expect($scope.description(null)).toBeUndefined();
@@ -71,22 +77,27 @@ describe('Module RecipeController', function() {
 
         it('show recipe', function () {
             $httpBackend.expectGET(/http:\/\/localhost:9000\/recipes(.*)/).respond({});
+            $httpBackend.expectGET(/views\/(.*)/);
             $httpBackend.flush();
             $scope.show('test');
             $scope.$apply();
+            $httpBackend.flush();
             expect($location.path()).toBe('/recipes/test');
         });
 
         it('edit recipe', function () {
             $httpBackend.expectGET(/http:\/\/localhost:9000\/recipes(.*)/).respond({});
+            $httpBackend.expectGET(/views\/(.*)/);
             $httpBackend.flush();
             $scope.edit(1, $scope.$broadcast("click"));
             $scope.$apply();
+            $httpBackend.flush();
             expect($location.url()).toBe('/recipes/1/edit');
         });
 
         it('isMine recipe', function () {
             $httpBackend.expectGET(/http:\/\/localhost:9000\/recipes(.*)/).respond({});
+            $httpBackend.expectGET(/views\/(.*)/);
             $httpBackend.flush();
             var user = {
                 id: 1,
@@ -115,6 +126,7 @@ describe('Module RecipeController', function() {
                 $scope: $scope,
                 $routeParams: { slug: 'test' }
             });
+            $httpBackend.when('GET', /views\/(.*)/).respond(200, {});
             $httpBackend.when('GET', /http:\/\/localhost:9000\/recipes\/(.*)/).respond(200, {
                 image_main: { id: 1},
                 title: 'Test',
@@ -189,6 +201,8 @@ describe('Module RecipeController', function() {
                 $scope: $scope,
                 $routeParams: { slug: 'test' }
             });
+            $httpBackend.when('GET', /views\/(.*)/).respond(200, {});
+            $httpBackend.when('HEAD', /http:\/\/localhost:9000\/recipes\/(.*)/).respond(200, {});
             $httpBackend.when('GET', /http:\/\/localhost:9000\/recipes\/(.*)/).respond(200, {
                 image_main: { id: 1},
                 id: 1,
@@ -286,6 +300,7 @@ describe('Module RecipeController', function() {
             ctrl = $controller('RecipeCreate', {
                 $scope: $scope
             });
+            $httpBackend.when('GET', /views\/(.*)/).respond(200, {});
             $httpBackend.when('GET', /http:\/\/localhost:9000\/recipes\/(.*)/).respond(200, {
                 image_main: { id: 1},
                 title: 'Test',

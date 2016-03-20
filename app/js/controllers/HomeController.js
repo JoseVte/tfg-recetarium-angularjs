@@ -4,6 +4,7 @@ homeController.controller('Header',
     ['$scope', '$rootScope', '$mdSidenav', '$timeout', '$location', '$route', 'RecipeService',
     function ($scope, $rootScope, $mdSidenav, $timeout, $location, $route, RecipeService) {
         $scope.toggleLeft = buildDelayedToggler('left');
+        $scope.search = $rootScope.searchString;
 
         $scope.navLinks = [
             { title: '<i class="material-icons">fiber_new</i> Ultimas recetas', url: '/recipes' },

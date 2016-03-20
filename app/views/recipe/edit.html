@@ -23,8 +23,9 @@
                             <md-icon ng-class="{loaderIcon:loadingSlug}" class="material-icons">{{ validSlugIcon }}</md-icon>
                             <div ng-messages="formRecipe.slug.$error" md-auto-hide="false">
                                 <div ng-message="required">El slug de la receta es obligatorio.</div>
-                                <div ng-message="validSlug">El slug ya existe.</div>
+                                <div ng-message="validSlug">El slug ya existe. Puedes introducir uno nuevo o cambiarlo por otro, o cambiar el titulo de la receta para autogenerar otro nuevo.</div>
                             </div>
+                            <div class="hint">El 'slug' es una frase descriptiva extraida del titulo de la receta para usarla en la direccion web. No afecta a nada del contenido.</div>
                         </md-input-container>
                     </md-card-title-text>
                 </md-card-title>
