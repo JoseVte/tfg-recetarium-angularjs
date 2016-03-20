@@ -83,3 +83,9 @@ md-input-container.md-has-no-icon-left {
 .without-fixed-height {
     height: auto !important;
 }
+md-input-container .hint {
+    padding-top: 5px;
+    font-size: 12px;
+    line-height: 14px;
+    color: gray;
+}

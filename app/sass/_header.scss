@@ -79,6 +79,10 @@ md-input-container.search-home {
     -ms-transition: all 0.3s;
     -o-transition: all 0.3s;
     transition: all 0.3s;
+    .md-input {
+        color: white;
+        border-color: white;
+    }
     &:not(.md-input-invalid).md-input-focused {
         .md-input {
             color: white;
@@ -124,10 +128,6 @@ md-input-container.search-home {
     }
     md-input-container {
         @extend md-input-container.search-home;
-        .md-input {
-            color: white;
-            border-color: white;
-        }
     }
 }
 

@@ -101,6 +101,7 @@ recetarium.run(function ($rootScope, $location, $http, AuthService, Notification
     var authRegex = /\/login|\/register|\/reset\/password.*/;
     var profileRegex = /\/profile.*/;
     $rootScope.location = $location;
+    $rootScope.searchString = '';
     $rootScope.lastSearchParams = [];
     $rootScope.lastSearchParams['/recipes'] = {
         page: 1,

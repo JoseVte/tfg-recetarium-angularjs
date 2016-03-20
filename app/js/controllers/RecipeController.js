@@ -734,7 +734,9 @@ recipeController.controller('RecipeCreate',
             $rootScope.headerTitle = 'Guardando borrador';
             $('html, body').animate({ scrollTop: 0 }, 'slow');
             var recipeObj = angular.copy($scope.recipe);
-            recipeObj.image_main = recipeObj.image_main.id;
+            if (recipeObj.image_main) {
+                recipeObj.image_main = recipeObj.image_main.id;
+            }
             recipeObj.duration += ':00';
             recipeObj.new_tags = RecipeService.getNewTags(recipeObj.chipTags);
             recipeObj.tags = $.getArrayId(recipeObj.chipTags);
