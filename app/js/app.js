@@ -15,7 +15,8 @@ var recetarium = angular.module('recetariumApp', [
     'infinite-scroll',
     // My Javascript
     'Animations', 'TextEditor', 'NotificationProviders',
-    'FileServices', 'FileDirectives', 'FormDirectives', 'TimeDirectives', 'ValidatorDirectives',
+    'CommentServices', 'FileServices',
+    'FileDirectives', 'FormDirectives', 'TimeDirectives', 'ValidatorDirectives',
     'HomeController',
     'AuthServices', 'AuthController',
     'RecipeServices', 'RecipeFilters', 'RecipeController',
@@ -251,6 +252,35 @@ Array.prototype.contains = function(obj) {
     return false;
 };
 
+Array.prototype.getById = function(id) {
+    var i = this.length;
+    while (i--) {
+        if (this[i] !== undefined && this[i] !== null && this[i].id === id) { return this[i]; }
+    }
+    return null;
+};
+
+Array.prototype.getByIdWithParent = function(id) {
+    return $.getByIdWithParent(this, id);
+}
+
+Array.prototype.setById = function(id, data) {
+    var object = this.getByIdWithParent(id);
+    if (object !== undefined && object !== null && object.id === id) {
+        object = data;
+        return object;
+    }
+    return null;
+};
+
+Array.prototype.removeById = function(id) {
+    var i = this.length;
+    while (i--) {
+        if (this[i] !== undefined && this[i] !== null && this[i].id === id) { return this.splice(i, 1); }
+    }
+    return null;
+};
+
 $.fn.exists = function(callback) {
     var args = [].slice.call(arguments, 1);
     if (this.length) {
@@ -273,6 +303,19 @@ $.getArrayId = function(array) {
         array[el].id && a.push(array[el].id);
     }
     return a;
+};
+
+$.getByIdWithParent = function(array, id) {
+    if (array) {
+        for (var i = 0; i < array.length; i++) {
+            var object = array.getById(id);
+            if (object !== null) {
+                return object;
+            }
+            object = $.getByIdWithParent(array[i].replies, id);
+            if (object) return object;
+        }
+    }
 };
 
 $.parseError = function(error) {
