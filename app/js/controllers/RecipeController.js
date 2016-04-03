@@ -551,11 +551,12 @@ recipeController.controller('RecipeAll',
 );
 
 recipeController.controller('RecipeShow',
-    ['$scope', '$rootScope', '$location', '$routeParams', '$sce', '$mdDialog', 'RecipeService', 'NotificationProvider', 'DIFF', 'VISIBILITY',
-    function ($scope, $rootScope, $location, $routeParams, $sce, $mdDialog, RecipeService, NotificationProvider, DIFF, VISIBILITY) {
+    ['$scope', '$rootScope', '$location', '$routeParams', '$sce', '$compile', '$mdDialog', 'RecipeService', 'CommentService', 'NotificationProvider', 'DIFF', 'VISIBILITY',
+    function ($scope, $rootScope, $location, $routeParams, $sce, $compile, $mdDialog, RecipeService, CommentService, NotificationProvider, DIFF, VISIBILITY) {
         $rootScope.headerTitle = 'Cargando';
         $rootScope.progressBarActivated = true;
         $rootScope.HasBack = true;
+        $scope.commentsActived = false;
         $rootScope.back = function () {
             $location.path('/recipes');
         };
@@ -678,6 +679,191 @@ recipeController.controller('RecipeShow',
                 clickOutsideToClose:true
             })
             .then(function(answer) {}, function() {});
+        };
+
+        $scope.toggleComments = function() {
+            $scope.commentsActived = !$scope.commentsActived;
+        };
+
+        $scope.toggleReplies = function(comment, ev) {
+            if ($('#replies-' + comment.id).text() == '') {
+                $('#replies-' + comment.id).append($compile('<div ng-repeat="comment in comments.getByIdWithParent(' + comment.id + ').replies | orderBy:created_at:true" flex="100">' +
+                    '<md-card class="comment-list-card"><md-card-title><md-card-title-media>' +
+                    '<div class="md-media-md card-media" layout="row" layout-align="center center"><img ng-src="{{ comment.user | srcImage:recipe.user }}" /></div>' +
+                    '</md-card-title-media><md-card-title-text>' +
+                        '<span class="md-headline">{{ comment.text }}</span>' +
+                        '<span class="md-subhead" ng-if="comment.updated_at != comment.created_at">Ultima modificación el <em>{{ comment.updated_at | date:medium }}</em></span>' +
+                        '<span class="md-subhead">Creado el <em>{{ comment.created_at | date:medium }}</em></span>' +
+                        '<span class="md-subhead"><strong>{{ comment.user.first_name + " " + comment.user.last_name }}</strong></span>' +
+                    '</md-card-title-text></md-card-title><md-card-actions layout="row" layout-align="end end" flex ng-if="IsAuthed"><md-card-icons-actions>' +
+                        '<md-button class="md-icon-button" aria-label="Comentar" ng-click="addComment(comment.id, $event)"><md-icon class="material-icons md-dark">reply</md-icon></md-button>' +
+                        '<md-button class="md-icon-button-lg" aria-label="Respuestas" ng-click="toggleReplies(comment, $event)" ng-if="comment.replies.length > 0"><md-icon class="material-icons md-dark">expand_more</md-icon> {{ comment.replies.length }}</md-button>' +
+                        '<md-button class="md-icon-button" aria-label="Editar" ng-click="editComment(comment.id, comment.text, $event)" ng-if="isMine(comment.user)"><md-icon class="material-icons md-green">edit</md-icon></md-button>' +
+                        '<md-button class="md-icon-button" aria-label="Borrar" ng-click="deleteComment(comment, $event)" ng-if="isMine(comment.user)"><md-icon class="material-icons md-red">delete_forever</md-icon></md-button>' +
+                    '</md-card-icons-actions></md-card-actions><md-content id="replies-{{ comment.id }}"></md-content></md-card></div>')($scope));
+            } else {
+                $('#replies-' + comment.id).empty();
+            }
+        };
+
+        $scope.addComment = function(parent, ev) {
+            $mdDialog.show({
+                controller: CommentDialogController,
+                templateUrl: 'views/recipe/comment_dialog.html',
+                parent: angular.element(document.body),
+                locals: { data: { text: '' } },
+                targetEvent: ev,
+                clickOutsideToClose: true
+            })
+            .then(function(answer) {
+                CommentService.create($scope.recipe.id, parent, answer, function(response) {
+                    if (parent === null) {
+                        $scope.comments.push(response.data);
+                    } else {
+                        $scope.comments.getByIdWithParent(parent).replies.push(response.data);
+                    }
+
+                    NotificationProvider.notify({
+                        title: 'Comentario añadido',
+                        text: '',
+                        type: 'success',
+                        addclass: 'custom-success-notify',
+                        icon: 'material-icons md-light',
+                        icon_class: 'check_circle',
+                        styling: 'fontawesome'
+                    });
+                },  function(response) {
+                    var icon = 'error_outline';
+                    var title = 'Un error ha ocurrido';
+                    var msg = 'Ha ocurrido un error mientras se guardaba el comentario. Por favor, intentelo más tarde.';
+                    if (response.status == 404) {
+                        title = 'Error 404';
+                        msg = 'La receta \'' + $scope.recipe.id + '\' no existe.';
+                    } else if (response.status == 403) {
+                        icon = 'lock';
+                        title = 'Acceso prohibido';
+                        msg = 'Necesitas estar logueado para comentar.';
+                    } else if (response.status == 400) {
+                        icon = 'lock';
+                        title = 'Error en el formulario';
+                        msg = 'El texto del comentario el obligatorio.';
+                    }
+                    NotificationProvider.notify({
+                        title: title,
+                        text: msg,
+                        type: 'error',
+                        addclass: 'custom-error-notify',
+                        icon: 'material-icons md-light',
+                        icon_class: icon,
+                        styling: 'fontawesome'
+                    });
+                });
+            }, function() {});
+        };
+
+        $scope.editComment = function(id, text, ev) {
+            $mdDialog.show({
+                controller: CommentDialogController,
+                templateUrl: 'views/recipe/comment_dialog.html',
+                parent: angular.element(document.body),
+                locals: { data: { text: text } },
+                targetEvent: ev,
+                clickOutsideToClose: true
+            })
+            .then(function(answer) {
+                CommentService.edit($scope.recipe.id, id, answer, function(response) {
+                    $scope.comments.getByIdWithParent(id).text = response.data.text;
+
+                    NotificationProvider.notify({
+                        title: 'Comentario editado',
+                        text: '',
+                        type: 'success',
+                        addclass: 'custom-success-notify',
+                        icon: 'material-icons md-light',
+                        icon_class: 'comment',
+                        styling: 'fontawesome'
+                    });
+                },  function(response) {
+                    var icon = 'error_outline';
+                    var title = 'Un error ha ocurrido';
+                    var msg = 'Ha ocurrido un error mientras se guardaba el comentario. Por favor, intentelo más tarde.';
+                    if (response.status == 404) {
+                        title = 'Error 404';
+                        msg = 'El comentario \'' + id + '\' no existe.';
+                    } else if (response.status == 403) {
+                        icon = 'lock';
+                        title = 'Acceso prohibido';
+                        msg = 'Necesitas estar logueado para comentar.';
+                    } else if (response.status == 400) {
+                        icon = 'lock';
+                        title = 'Error en el formulario';
+                        msg = 'El texto del comentario el obligatorio.';
+                    }
+                    NotificationProvider.notify({
+                        title: title,
+                        text: msg,
+                        type: 'error',
+                        addclass: 'custom-error-notify',
+                        icon: 'material-icons md-light',
+                        icon_class: icon,
+                        styling: 'fontawesome'
+                    });
+                });
+            }, function() {});
+        };
+
+        $scope.deleteComment = function(comment, $event) {
+            var confirm = $mdDialog.confirm()
+                .title('Borrar receta')
+                .textContent('¿De verdad que quieres borrar el comentario?\nEsta acción no se puede deshacer.\nSe borraran las respuestas.')
+                .ariaLabel('Borrar')
+                .targetEvent($event)
+                .ok('Borrar')
+                .cancel('Cancelar');
+            $mdDialog.show(confirm).then(function () {
+                CommentService.delete($scope.recipe.id, comment.id, function(response) {
+                    if (comment.parent === null) {
+                        $scope.comments.removeById(comment.id);
+                    } else {
+                        $scope.comments.getByIdWithParent(comment.parent.id).replies.removeById(comment.id);
+                    }
+
+                    NotificationProvider.notify({
+                        title: 'Comentario borrado',
+                        text: '',
+                        type: 'success',
+                        addclass: 'custom-success-notify',
+                        icon: 'material-icons md-light',
+                        icon_class: 'comment',
+                        styling: 'fontawesome'
+                    });
+                }, function(response) {
+                    var icon = 'error_outline';
+                    var title = 'Un error ha ocurrido';
+                    var msg = 'Ha ocurrido un error mientras se borraba el comentario. Por favor, intentelo más tarde.';
+                    if (response.status == 404) {
+                        title = 'Error 404';
+                        msg = 'El comentario \'' + id + '\' no existe.';
+                    }
+                    NotificationProvider.notify({
+                        title: title,
+                        text: msg,
+                        type: 'error',
+                        addclass: 'custom-error-notify',
+                        icon: 'material-icons md-light',
+                        icon_class: icon,
+                        styling: 'fontawesome'
+                    });
+                });
+            }, function() {});
+        };
+
+        $scope.isMine = function(user) {
+            if ($rootScope.globals.user) {
+                var auth = $rootScope.globals.user.user;
+                return (auth.id == user.id && auth.email == user.email && auth.username == user.username) || auth.type == 'ADMIN';
+            }
+            return false;
         };
     }]
 );
@@ -1134,5 +1320,15 @@ function GalleryDialogController($scope, $rootScope, $mdDialog, data, FileServic
         } else {
             $mdDialog.hide($scope.selectedImages);
         }
+    };
+}
+
+function CommentDialogController($scope, $rootScope, $mdDialog, data, NotificationProvider) {
+    $scope.text = data.text;
+
+    $scope.hide = function() { $mdDialog.hide(); };
+    $scope.cancel = function() { $mdDialog.cancel(); };
+    $scope.save = function() {
+        $mdDialog.hide($scope.text);
     };
 }

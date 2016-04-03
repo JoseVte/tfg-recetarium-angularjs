@@ -275,3 +275,32 @@
         margin-top: 0px;
     }
 }
+
+.card-recipe-comments {
+    width: 100%;
+    .comment-list-card md-card-title {
+        padding-top: 16px;
+        md-card-title-media {
+            margin-top: 0;
+            .md-media-md {
+                position: relative;
+                overflow: hidden;
+                height: 100px;
+                width: 100px;
+                img {
+                    min-width: 100%;
+                    min-height: 100%;
+                }
+            }
+        }
+        md-card-title-text {
+            margin-left: 5px;
+            .md-headline {
+                font-size: 18px;
+            }
+            .md-subhead {
+                text-align: right;
+            }
+        }
+    }
+}
