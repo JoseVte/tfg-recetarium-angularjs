@@ -77,9 +77,21 @@
     background-color: white;
 }
 .search-block {
-    padding-bottom: 0;
-    md-input-container {
-        padding-bottom: 2px;
+    md-chips .md-chip {
+        background: $darkOrangeBackgroundDisabled;
+        color: white;
+        md-icon {
+            color: white;
+        }
+    }
+    md-chips .md-chips.md-focused {
+        box-shadow: 0 2px $darkOrangeBackground;
+    }
+    md-chips .md-chip.md-focused {
+        background: $darkOrangeBackground;
+    }
+    md-progress-linear .md-bar {
+        background-color: $darkOrangeBackground;
     }
 }
 .card-recipe-with-form {

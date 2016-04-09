@@ -262,7 +262,7 @@ Array.prototype.getById = function(id) {
 
 Array.prototype.getByIdWithParent = function(id) {
     return $.getByIdWithParent(this, id);
-}
+};
 
 Array.prototype.setById = function(id, data) {
     var object = this.getByIdWithParent(id);
@@ -301,6 +301,14 @@ $.getArrayId = function(array) {
     var a = [];
     for (var el in array) {
         array[el].id && a.push(array[el].id);
+    }
+    return a;
+};
+
+$.getArrayText = function(array) {
+    var a = [];
+    for (var el in array) {
+        array[el].text && a.push(array[el].text);
     }
     return a;
 };
