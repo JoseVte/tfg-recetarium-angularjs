@@ -399,73 +399,74 @@ recipeController.constant('EDIT_FUNCTIONS', {
 });
 
 recipeController.controller('RecipeAll',
-    ['$scope', '$rootScope', '$location', '$sce', 'RecipeService', 'NotificationProvider', '$mdDialog',
-    function ($scope, $rootScope, $location, $sce, RecipeService, NotificationProvider, $mdDialog) {
+    ['$scope', '$rootScope', '$location', '$sce', '$mdDialog', 'RecipeService', 'TagService', 'NotificationProvider', 'EDIT_FUNCTIONS',
+    function ($scope, $rootScope, $location, $sce, $mdDialog, RecipeService, TagService, NotificationProvider, EDIT_FUNCTIONS) {
         $rootScope.headerTitle = 'Recetas';
         $scope.recipes = [];
+        $scope.tags = [];
         $scope.total = 1;
         $scope.nextPageNumber = 1;
-        $scope.loadingNextPage = true;
 
-        RecipeService.search({
-            page: $scope.nextPageNumber,
-            size: 10,
-            search: $rootScope.searchString
-        }, function (response) {
-            var responseData = response.data;
-            $scope.recipes = responseData.data;
-            $scope.nextPageNumber++;
-            $scope.total = responseData.total;
-            $scope.loadingNextPage = false;
-        }, function (response) {
-            NotificationProvider.notify({
-                title: 'Un error ha ocurrido',
-                text: 'Ha ocurrido un error mientras se cargaban las recetas. Por favor, intentelo más tarde.',
-                type: 'error',
-                addclass: 'custom-error-notify',
-                icon: 'material-icons md-light',
-                styling: 'fontawesome'
-            });
-            $rootScope.error = {
-                icon: 'error_outline',
-                title: 'Algo ha ido mal',
-                msg: 'Ha ocurrido un error mientras se cargaban las recetas.'
-            };
-            $rootScope.errorMsg = true;
-            $scope.loadingNextPage = false;
+        $scope.$watchCollection('tags', function (newVal, oldVal) {
+            $scope.reloadRecipes();
         });
+
+        $scope.reloadRecipes = function() {
+            $scope.recipes = [];
+            $scope.total = 1;
+            $scope.nextPageNumber = 1;
+            $scope.getRecipes();
+        };
+
+        $scope.getRecipes = function() {
+            $scope.loadingNextPage = true;
+            RecipeService.search({
+                page: $scope.nextPageNumber,
+                size: 10,
+                search: $rootScope.searchString,
+                tags: $.getArrayId($scope.tags),
+            }, function (response) {
+                var responseData = response.data;
+                $scope.recipes = responseData.data;
+                $scope.nextPageNumber++;
+                $scope.total = responseData.total;
+                $scope.loadingNextPage = false;
+            }, function (response) {
+                NotificationProvider.notify({
+                    title: 'Un error ha ocurrido',
+                    text: 'Ha ocurrido un error mientras se cargaban las recetas. Por favor, intentelo más tarde.',
+                    type: 'error',
+                    addclass: 'custom-error-notify',
+                    icon: 'material-icons md-light',
+                    styling: 'fontawesome'
+                });
+                $rootScope.error = {
+                    icon: 'error_outline',
+                    title: 'Algo ha ido mal',
+                    msg: 'Ha ocurrido un error mientras se cargaban las recetas.'
+                };
+                $rootScope.errorMsg = true;
+                $scope.loadingNextPage = false;
+            });
+        };
 
         $scope.nextPage = function () {
             if ($scope.total > $scope.recipes.length) {
-                $scope.loadingNextPage = true;
-                RecipeService.search({
-                    page: $scope.nextPageNumber,
-                    size: 10,
-                    search: $rootScope.searchString,
-                }, function (response) {
-                    var responseData = response.data;
-                    $scope.recipes = $scope.recipes.concat(responseData.data);
-                    $scope.nextPageNumber++;
-                    $scope.total = responseData.total;
-                    $scope.loadingNextPage = false;
-                }, function (response) {
-                    NotificationProvider.notify({
-                        title: 'Un error ha ocurrido',
-                        text: 'Ha ocurrido un error mientras se cargaban las recetas. Por favor, intentelo más tarde.',
-                        type: 'error',
-                        addclass: 'custom-error-notify',
-                        icon: 'material-icons md-light',
-                        styling: 'fontawesome'
-                    });
-                    $rootScope.error = {
-                        icon: 'error_outline',
-                        title: 'Algo ha ido mal',
-                        msg: 'Ha ocurrido un error mientras se cargaban las recetas.'
-                    };
-                    $rootScope.errorMsg = true;
-                    $scope.loadingNextPage = false;
+                $scope.getRecipes();
+            }
+        };
+
+        $scope.tagSearch = function(search) {
+            if(search) {
+                return $scope.loadTags(search).then(function(response) {
+                    return response;
                 });
             }
+            return [];
+        };
+
+        $scope.loadTags = function(search) {
+            return EDIT_FUNCTIONS.SearchTag($scope, TagService, NotificationProvider, search);
         };
 
         $scope.description = function(steps) {
@@ -686,7 +687,7 @@ recipeController.controller('RecipeShow',
         };
 
         $scope.toggleReplies = function(comment, ev) {
-            if ($('#replies-' + comment.id).text() == '') {
+            if ($('#replies-' + comment.id).text() === '') {
                 $('#replies-' + comment.id).append($compile('<div ng-repeat="comment in comments.getByIdWithParent(' + comment.id + ').replies | orderBy:created_at:true" flex="100">' +
                     '<md-card class="comment-list-card"><md-card-title><md-card-title-media>' +
                     '<div class="md-media-md card-media" layout="row" layout-align="center center"><img ng-src="{{ comment.user | srcImage:recipe.user }}" /></div>' +
@@ -695,8 +696,8 @@ recipeController.controller('RecipeShow',
                         '<span class="md-subhead" ng-if="comment.updated_at != comment.created_at">Ultima modificación el <em>{{ comment.updated_at | date:medium }}</em></span>' +
                         '<span class="md-subhead">Creado el <em>{{ comment.created_at | date:medium }}</em></span>' +
                         '<span class="md-subhead"><strong>{{ comment.user.first_name + " " + comment.user.last_name }}</strong></span>' +
-                    '</md-card-title-text></md-card-title><md-card-actions layout="row" layout-align="end end" flex ng-if="IsAuthed"><md-card-icons-actions>' +
-                        '<md-button class="md-icon-button" aria-label="Comentar" ng-click="addComment(comment.id, $event)"><md-icon class="material-icons md-dark">reply</md-icon></md-button>' +
+                    '</md-card-title-text></md-card-title><md-card-actions layout="row" layout-align="end end" flex><md-card-icons-actions>' +
+                        '<md-button class="md-icon-button" aria-label="Comentar" ng-click="addComment(comment.id, $event)" ng-if="IsAuthed"><md-icon class="material-icons md-dark">reply</md-icon></md-button>' +
                         '<md-button class="md-icon-button-lg" aria-label="Respuestas" ng-click="toggleReplies(comment, $event)" ng-if="comment.replies.length > 0"><md-icon class="material-icons md-dark">expand_more</md-icon> {{ comment.replies.length }}</md-button>' +
                         '<md-button class="md-icon-button" aria-label="Editar" ng-click="editComment(comment.id, comment.text, $event)" ng-if="isMine(comment.user)"><md-icon class="material-icons md-green">edit</md-icon></md-button>' +
                         '<md-button class="md-icon-button" aria-label="Borrar" ng-click="deleteComment(comment, $event)" ng-if="isMine(comment.user)"><md-icon class="material-icons md-red">delete_forever</md-icon></md-button>' +
