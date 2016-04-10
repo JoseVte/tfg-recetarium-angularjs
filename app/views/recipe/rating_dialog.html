@@ -1,4 +1,4 @@
-<md-dialog aria-label="Puntúa la receta" ng-cloak>
+<md-dialog class="md-dialog-rating" aria-label="Puntúa la receta" ng-cloak>
     <form>
         <md-toolbar>
             <div class="md-toolbar-tools">
@@ -10,10 +10,9 @@
             </div>
         </md-toolbar>
         <md-dialog-content>
-            <md-input-container>
-                <label>Puntuación</label>
-                <input required type="number" step="any" name="rated" ng-model="rated" min="0" max="5" />
-            </md-input-container>
+            <div layout="column" layout-align="center center">
+                    <md-slider flex="100" md-discrete ng-model="rated" step="0.5" min="0" max="5" aria-label="rating"></md-slider>
+            </div>
         </md-dialog-content>
         <md-dialog-actions layout="row">
             <span flex></span>

@@ -49,7 +49,12 @@ http-server -a localhost -p 8000
 
 ## Changelog
 
-#### [![0.6.2](/app/doc/rocket-blue.png) 0.6.2](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.6.2)
+#### [![0.6.3](/app/doc/rocket-blue.png) 0.6.3](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.6.3)
+
+- Compartir recetas
+- Cambiado estilo del modal de puntuación
+
+###### [![0.6.2](/app/doc/release.png) 0.6.2](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.6.2)
 
 - Busqueda por tags
 
