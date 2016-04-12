@@ -37,7 +37,10 @@
                         </md-button>
                         <md-menu>
                             <md-button ng-click="openUserDropdrown($mdOpenMenu, $event)">
-                                Hola, {{ UserLogged.first_name }}
+                                <div layout="row" layout-align="center center">
+                                    <img class="user-image" ng-src="{{ UserLogged | srcImage:UserLogged }}" />
+                                    <span>Hola, {{ UserLogged.first_name }}</span>
+                                </div>
                             </md-button>
                             <md-menu-content>
                                 <md-menu-item ng-class="getClassActive('/new-recipe')" class="show-custom-header-md">

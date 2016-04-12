@@ -72,21 +72,30 @@
                     <span class="md-headline">Imágenes</span>
                 </md-card-title-text>
             </md-card-title>
-            <md-card-content>
-                <a class="image-recipe-zoomable fancybox" rel="gallery" title="{{ image.title }}" ng-href="{{ image | srcImage:recipe.user }}" ng-repeat="image in images">
-                    <img ng-src="{{ image | srcImage:recipe.user }}" />
-                </a>
+            <md-card-content layout="row" layout-align="start center">
+                <div ng-repeat="image in images">
+                    <a class="image-recipe-zoomable fancybox" rel="gallery" title="{{ image.title }}" ng-href="{{ image | srcImage:recipe.user }}" >
+                        <img ng-src="{{ image | srcImage:recipe.user }}" />
+                    </a>
+                </div>
             </md-card-content>
-            <md-card-content>
+            <md-card-content layout="row" layout-align="start center">
                 <div class="tag" ng-repeat="tag in tags" ng-click="">{{ tag.text }}</div>
             </md-card-content>
-            <md-card-actions layout="row" layout-align="space-between center" flex>
+            <md-card-actions flex="100" layout="row" layout-align="space-between center">
                 <md-button ng-click="toggleComments()">
                     <md-tooltip md-direction="top">Mostrar los comentarios</md-tooltip>
                     {{ comments.length }} Comentario<span ng-if="comments.length > 1">s</span>
                 </md-button>
                 <md-card-icons-actions>
-                    <md-button class="md-icon-button no-implemented" aria-label="Compartir"><md-icon class="material-icons md-dark">share</md-icon></md-button>
+                    <md-menu md-offset="0 -105">
+                        <md-button ng-click="openShareMenu($mdOpenMenu, $event)"  class="md-icon-button" aria-label="Compartir"><md-icon class="material-icons md-dark">share</md-icon></md-button>
+                        <md-menu-content>
+                            <md-menu-item><md-button ng-click="shareBy('email')"><md-icon class="material-icons">mail</md-icon> Email</md-button></md-menu-item>
+                            <md-menu-item><md-button class="no-implemented"><md-icon md-svg-src="/assets/img/icons/facebook.svg" class="s24" aria-label="Facebook"></md-icon> Facebook</md-button></md-menu-item>
+                            <md-menu-item><md-button class="no-implemented"><md-icon md-svg-src="/assets/img/icons/twitter.svg" class="s24" aria-label="Twitter"></md-icon> Twitter</md-button></md-menu-item>
+                        </md-menu-content>
+                    </md-menu>
                     <md-button ng-click="toggleFav()" class="md-icon-button" aria-label="Favoritos">
                         <md-tooltip md-direction="top">{{ favorites }} favoritos</md-tooltip>
                         <md-icon class="material-icons md-red">{{ fav ? 'favorite' : 'favorite_border' }}</md-icon>

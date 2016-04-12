@@ -72,6 +72,12 @@ header md-toolbar {
             max-height: 64px;
         }
     }
+    .user-image {
+        max-height: 24px;
+        max-width: 24px;
+        border-radius: 50%;
+        margin-right: 6px;
+    }
 }
 md-input-container.search-home {
     -webkit-transition: all 0.3s;

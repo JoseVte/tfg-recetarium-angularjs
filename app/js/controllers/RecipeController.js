@@ -427,7 +427,7 @@ recipeController.controller('RecipeAll',
                 tags: $.getArrayId($scope.tags),
             }, function (response) {
                 var responseData = response.data;
-                $scope.recipes = responseData.data;
+                $scope.recipes = $scope.recipes.concat(responseData.data);
                 $scope.nextPageNumber++;
                 $scope.total = responseData.total;
                 $scope.loadingNextPage = false;
@@ -552,8 +552,8 @@ recipeController.controller('RecipeAll',
 );
 
 recipeController.controller('RecipeShow',
-    ['$scope', '$rootScope', '$location', '$routeParams', '$sce', '$compile', '$mdDialog', 'RecipeService', 'CommentService', 'NotificationProvider', 'DIFF', 'VISIBILITY',
-    function ($scope, $rootScope, $location, $routeParams, $sce, $compile, $mdDialog, RecipeService, CommentService, NotificationProvider, DIFF, VISIBILITY) {
+    ['$scope', '$rootScope', '$location', '$routeParams', '$sce', '$compile', '$mdDialog', '$window', 'RecipeService', 'CommentService', 'NotificationProvider', 'DIFF', 'VISIBILITY',
+    function ($scope, $rootScope, $location, $routeParams, $sce, $compile, $mdDialog, $window, RecipeService, CommentService, NotificationProvider, DIFF, VISIBILITY) {
         $rootScope.headerTitle = 'Cargando';
         $rootScope.progressBarActivated = true;
         $rootScope.HasBack = true;
@@ -639,6 +639,20 @@ recipeController.controller('RecipeShow',
                 return 'star_border';
             } else {
                 return 'star_half';
+            }
+        };
+
+        $scope.openShareMenu = function($mdOpenMenu, ev) {
+            $mdOpenMenu(ev);
+        };
+
+        $scope.shareBy = function(via) {
+            switch (via) {
+                case 'email':
+                    var subject = 'Has visto la receta \'' + $scope.recipe.title + '\'?';
+                    var message = 'Echale un vistazo: ' + $location.absUrl();
+                    $window.open('mailto:?subject=' + subject + '&body=' + message, '_blank');
+                    break;
             }
         };
 

@@ -28,6 +28,12 @@
             max-width: 100px;
         }
     }
+    .user-image {
+        max-width: 32px;
+        border-radius: 50%;
+        border: 1px solid;
+        margin-right: 6px;
+    }
 }
 .card-recipe-show {
     width: 100%;
@@ -55,6 +61,8 @@
         img {
             max-height: 100px;
             max-width: 100px;
+            padding: 5px;
+            width: auto;
         }
     }
     .tag {
@@ -279,12 +287,29 @@
     }
 }
 
-.md-dialog-gallery-images {
+.md-dialog-gallery-images, .md-dialog-rating {
     md-toolbar {
         background-color: $darkOrangeBackground;
     }
     .images-recipe-gallery {
         margin-top: 0px;
+    }
+    md-slider {
+        margin-top: 25px;
+        min-width: 75%;
+        .md-track.md-track-fill {
+            background-color: $darkOrangeBackground;
+        }
+        .md-thumb:after {
+            border-color: $darkOrangeBackground;
+            background-color: $darkOrangeBackground;
+        }
+        .md-sign {
+            background-color: $darkOrangeBackground;
+            &::after {
+                border-top-color:  $darkOrangeBackground;
+            }
+        }
     }
 }
 
@@ -300,8 +325,9 @@
                 height: 100px;
                 width: 100px;
                 img {
-                    min-width: 100%;
-                    min-height: 100%;
+                    max-width: 200px;
+                    max-height: 200px;
+                    border-radius: 4px;
                 }
             }
         }
