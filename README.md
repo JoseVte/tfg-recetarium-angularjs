@@ -53,6 +53,7 @@ http-server -a localhost -p 8000
 
 - Compartir recetas
 - Cambiado estilo del modal de puntuación
+- Gravatar para los iconos de los usuarios
 
 ###### [![0.6.2](/app/doc/release.png) 0.6.2](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.6.2)
 
@@ -61,6 +62,12 @@ http-server -a localhost -p 8000
 ###### [![0.6.1](/app/doc/release.png) 0.6.1](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.6.1)
 
 - Añadidos los comentarios
+
+###### [![0.6.0-hotfix](/app/doc/release.png) 0.6.0-hotfix](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.6.0-hotfix)
+
+- Ahora el texto de busqueda se mantiene entre paginas
+- La tecla enter activa la busqueda
+- Fixeado error al guardar una receta sin imagen
 
 ###### [![0.5.2](/app/doc/release.png) 0.5.2](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.5.2)
 

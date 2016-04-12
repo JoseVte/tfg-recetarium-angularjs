@@ -28,6 +28,12 @@
             max-width: 100px;
         }
     }
+    .user-image {
+        max-width: 32px;
+        border-radius: 50%;
+        border: 1px solid;
+        margin-right: 6px;
+    }
 }
 .card-recipe-show {
     width: 100%;
@@ -319,8 +325,9 @@
                 height: 100px;
                 width: 100px;
                 img {
-                    min-width: 100%;
-                    min-height: 100%;
+                    max-width: 200px;
+                    max-height: 200px;
+                    border-radius: 4px;
                 }
             }
         }
