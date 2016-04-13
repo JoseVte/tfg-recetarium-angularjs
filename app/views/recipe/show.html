@@ -72,18 +72,30 @@
                     <span class="md-headline">Imágenes</span>
                 </md-card-title-text>
             </md-card-title>
-            <md-card-content>
-                <a class="image-recipe-zoomable fancybox" rel="gallery" title="{{ image.title }}" ng-href="{{ image | srcImage:recipe.user }}" ng-repeat="image in images">
-                    <img ng-src="{{ image | srcImage:recipe.user }}" />
-                </a>
+            <md-card-content layout="row" layout-align="start center">
+                <div ng-repeat="image in images">
+                    <a class="image-recipe-zoomable fancybox" rel="gallery" title="{{ image.title }}" ng-href="{{ image | srcImage:recipe.user }}" >
+                        <img ng-src="{{ image | srcImage:recipe.user }}" />
+                    </a>
+                </div>
             </md-card-content>
-            <md-card-content>
+            <md-card-content layout="row" layout-align="start center">
                 <div class="tag" ng-repeat="tag in tags" ng-click="">{{ tag.text }}</div>
             </md-card-content>
-            <md-card-actions layout="row" layout-align="space-between center" flex>
-                <md-button class="no-implemented">{{ comments.length }} Comentario<span ng-if="comments.length > 1">s</span></md-button>
+            <md-card-actions flex="100" layout="row" layout-align="space-between center">
+                <md-button ng-click="toggleComments()">
+                    <md-tooltip md-direction="top">Mostrar los comentarios</md-tooltip>
+                    {{ comments.length }} Comentario<span ng-if="comments.length > 1">s</span>
+                </md-button>
                 <md-card-icons-actions>
-                    <md-button class="md-icon-button no-implemented" aria-label="Comentar"><md-icon class="material-icons md-dark">reply</md-icon></md-button>
+                    <md-menu md-offset="0 -105">
+                        <md-button ng-click="openShareMenu($mdOpenMenu, $event)"  class="md-icon-button" aria-label="Compartir"><md-icon class="material-icons md-dark">share</md-icon></md-button>
+                        <md-menu-content>
+                            <md-menu-item><md-button ng-click="shareBy('email')"><md-icon class="material-icons">mail</md-icon> Email</md-button></md-menu-item>
+                            <md-menu-item><md-button class="no-implemented"><md-icon md-svg-src="/assets/img/icons/facebook.svg" class="s24" aria-label="Facebook"></md-icon> Facebook</md-button></md-menu-item>
+                            <md-menu-item><md-button class="no-implemented"><md-icon md-svg-src="/assets/img/icons/twitter.svg" class="s24" aria-label="Twitter"></md-icon> Twitter</md-button></md-menu-item>
+                        </md-menu-content>
+                    </md-menu>
                     <md-button ng-click="toggleFav()" class="md-icon-button" aria-label="Favoritos">
                         <md-tooltip md-direction="top">{{ favorites }} favoritos</md-tooltip>
                         <md-icon class="material-icons md-red">{{ fav ? 'favorite' : 'favorite_border' }}</md-icon>
@@ -95,5 +107,42 @@
                 </md-card-icons-actions>
             </md-card-actions>
         </div>
+    </md-card>
+
+    <md-card flex class="card-recipe-comments" ng-if="commentsActived">
+        <md-card-title class="md-title-page">
+            <md-card-title-text flex="100" layout="row" layout-align="space-between center">
+                <div class="md-headline">Comentarios</div>
+                <md-button ng-if="IsAuthed" ng-click="addComment(null, $event)"  class="md-raised"><md-icon class="material-icons md-black">reply</md-icon> Escribe un comentario</md-button>
+            </md-card-title-text>
+        </md-card-title>
+        <md-card-content id="comments-{{ recipe.id }}">
+            <div ng-repeat="comment in comments | orderBy:created_at:true" flex="100">
+                <md-card class="comment-list-card">
+                    <md-card-title>
+                        <md-card-title-media>
+                            <div class="md-media-md card-media" layout="row" layout-align="center center">
+                                <img ng-src="{{ comment.user | srcImage:recipe.user }}" />
+                            </div>
+                        </md-card-title-media>
+                        <md-card-title-text>
+                            <span class="md-headline">{{ comment.text }}</span>
+                            <span class="md-subhead" ng-if="comment.updated_at != comment.created_at">Ultima modificación el <em>{{ comment.updated_at | date:'medium' }}</em></span>
+                            <span class="md-subhead">Creado el <em>{{ comment.created_at | date:'medium' }}</em></span>
+                            <span class="md-subhead"><strong>{{ comment.user.first_name + ' ' + comment.user.last_name }}</strong></span>
+                        </md-card-title-text>
+                    </md-card-title>
+                    <md-card-actions layout="row" layout-align="end end" flex>
+                        <md-card-icons-actions>
+                            <md-button class="md-icon-button" aria-label="Comentar" ng-click="addComment(comment.id, $event)" ng-if="IsAuthed"><md-icon class="material-icons md-dark">reply</md-icon></md-button>
+                            <md-button class="md-icon-button-lg" aria-label="Respuestas" ng-click="toggleReplies(comment, $event)" ng-if="comment.replies.length > 0"><md-icon class="material-icons md-dark">expand_more</md-icon> {{ comment.replies.length }}</md-button>
+                            <md-button class="md-icon-button" aria-label="Editar" ng-click="editComment(comment.id, comment.text, $event)" ng-if="isMine(comment.user)"><md-icon class="material-icons md-green">edit</md-icon></md-button>
+                            <md-button class="md-icon-button" aria-label="Borrar" ng-click="deleteComment(comment, $event)" ng-if="isMine(comment.user)"><md-icon class="material-icons md-red">delete_forever</md-icon></md-button>
+                        </md-card-icons-actions>
+                    </md-card-actions>
+                    <md-content id="replies-{{ comment.id }}"></md-content>
+                </md-card>
+            </div>
+        </md-card-content>
     </md-card>
 </md-content>

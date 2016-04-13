@@ -27,6 +27,7 @@ describe('Module RecipeController', function() {
             ctrl = $controller('Login', {
                 $scope: $scope
             });
+            $httpBackend.when('GET', /views\/(.*)/).respond(200, {});
             $httpBackend.when('POST', /http:\/\/localhost:9000\/auth\/login(.*)/).respond(200, {
                 auth_token: 'eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE0NTU0MzgxMzIsImp0aSI6ImVHejVlUGVzZ3cwcURBT3UtbU9FS2ciLCJpYXQiOjE0NTUzNTE3MzIsIm5iZiI6MTQ1NTM1MTYxMiwic3ViIjoie1widXNlclwiOntcImlkXCI6MSxcInVzZXJuYW1lXCI6XCJKb3Nyb21cIixcImVtYWlsXCI6XCJqdm9ydHNyb21lcm9AZ21haWwuY29tXCIsXCJmaXJzdF9uYW1lXCI6XCJKb3NlIFZpY2VudGVcIixcImxhc3RfbmFtZVwiOlwiT3J0cyBSb21lcm9cIixcInR5cGVcIjpcIkFETUlOXCIsXCJjcmVhdGVkX2F0XCI6MTQ1MjM2NjMyNzAwMCxcInVwZGF0ZWRfYXRcIjoxNDU0Njk0MDk2MDAwfSxcInNldEV4cGlyYXRpb25cIjp0cnVlfSJ9.hjYH9aa0_rE6AfR-uQLLWHB-X64Au0Vd_5kLvVrFj44'
             });
@@ -38,6 +39,7 @@ describe('Module RecipeController', function() {
         });
 
         it('initialize controller', function() {
+            $httpBackend.flush();
             expect($rootScope.headerTitle).toEqual('Login');
         });
 
@@ -63,6 +65,7 @@ describe('Module RecipeController', function() {
             ctrl = $controller('Register', {
                 $scope: $scope
             });
+            $httpBackend.when('GET', /views\/(.*)/).respond(200, {});
             $httpBackend.when('POST', /http:\/\/localhost:9000\/auth\/register(.*)/).respond(200, {
                 auth_token: 'eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE0NTU0MzgxMzIsImp0aSI6ImVHejVlUGVzZ3cwcURBT3UtbU9FS2ciLCJpYXQiOjE0NTUzNTE3MzIsIm5iZiI6MTQ1NTM1MTYxMiwic3ViIjoie1widXNlclwiOntcImlkXCI6MSxcInVzZXJuYW1lXCI6XCJKb3Nyb21cIixcImVtYWlsXCI6XCJqdm9ydHNyb21lcm9AZ21haWwuY29tXCIsXCJmaXJzdF9uYW1lXCI6XCJKb3NlIFZpY2VudGVcIixcImxhc3RfbmFtZVwiOlwiT3J0cyBSb21lcm9cIixcInR5cGVcIjpcIkFETUlOXCIsXCJjcmVhdGVkX2F0XCI6MTQ1MjM2NjMyNzAwMCxcInVwZGF0ZWRfYXRcIjoxNDU0Njk0MDk2MDAwfSxcInNldEV4cGlyYXRpb25cIjp0cnVlfSJ9.hjYH9aa0_rE6AfR-uQLLWHB-X64Au0Vd_5kLvVrFj44'
             });
@@ -74,6 +77,7 @@ describe('Module RecipeController', function() {
         });
 
         it('initialize controller', function() {
+            $httpBackend.flush();
             expect($rootScope.headerTitle).toEqual('Registro');
         });
 
@@ -99,6 +103,7 @@ describe('Module RecipeController', function() {
             ctrl = $controller('Logout', {
                 $scope: $scope
             });
+            $httpBackend.when('GET', /views\/(.*)/).respond(200, {});
         }));
 
         afterEach(function() {
@@ -107,6 +112,7 @@ describe('Module RecipeController', function() {
         });
 
         it('initialize controller', function() {
+            $httpBackend.flush();
             $scope.$apply();
             expect($rootScope.globals).toEqual({});
             expect($location.url()).toBe('/');
@@ -119,6 +125,7 @@ describe('Module RecipeController', function() {
             ctrl = $controller('ResetPassword', {
                 $scope: $scope
             });
+            $httpBackend.when('GET', /views\/(.*)/).respond(200, {});
             $httpBackend.when('POST', /http:\/\/localhost:9000\/auth\/reset\/password(.*)/).respond(200, {msg: 'test'});
         }));
 
@@ -128,6 +135,7 @@ describe('Module RecipeController', function() {
         });
 
         it('initialize controller', function() {
+            $httpBackend.flush();
             expect($rootScope.headerTitle).toEqual('Recuperar contraseña');
         });
 
@@ -154,6 +162,7 @@ describe('Module RecipeController', function() {
             ctrl = $controller('RecoverPassword', {
                 $scope: $scope
             });
+            $httpBackend.when('GET', /views\/(.*)/).respond(200, {});
             $httpBackend.when('PUT', /http:\/\/localhost:9000\/auth\/reset\/password(.*)/).respond(200);
         }));
 
@@ -163,6 +172,7 @@ describe('Module RecipeController', function() {
         });
 
         it('initialize controller', function() {
+            $httpBackend.flush();
             expect($rootScope.headerTitle).toEqual('Recuperar contraseña');
         });
 
@@ -188,6 +198,7 @@ describe('Module RecipeController', function() {
             ctrl = $controller('EditProfile', {
                 $scope: $scope
             });
+            $httpBackend.when('GET', /views\/(.*)/).respond(200, {});
             $httpBackend.when('GET', /http:\/\/localhost:9000\/profile(.*)/).respond(200, {id:1});
             $httpBackend.when('GET', /http:\/\/localhost:9000\/users\/1\/files(.*)/).respond(200, [{id:1}]);
             $httpBackend.when('PUT', /http:\/\/localhost:9000\/profile(.*)/).respond(200);
@@ -199,6 +210,7 @@ describe('Module RecipeController', function() {
         });
 
         it('initialize controller', function() {
+            $httpBackend.flush();
             expect($rootScope.headerTitle).toEqual('Editar perfil');
         });
 

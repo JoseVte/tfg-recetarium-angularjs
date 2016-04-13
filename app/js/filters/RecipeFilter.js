@@ -8,7 +8,13 @@ recipeFilter.filter('mainImage', ['RecipeService', function (RecipeService) {
 
 recipeFilter.filter('srcImage', function(envService) {
     return function(input, user) {
-      return (!!input) ? envService.read('apiUrl') + '/users/' + user.id +'/files/' + input.new_title : 'assets/img/favicon.png';
+        if (!!input) {
+            if (!!input.new_title) {
+                return envService.read('apiUrl') + '/users/' + user.id +'/files/' + input.new_title;
+            }
+            return 'https://www.gravatar.com/avatar/' + input.id + '?d=identicon&f=y&s=200';
+        }
+      return 'assets/img/favicon.png';
   };
 });
 

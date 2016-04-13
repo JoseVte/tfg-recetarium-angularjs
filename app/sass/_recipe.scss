@@ -28,6 +28,12 @@
             max-width: 100px;
         }
     }
+    .user-image {
+        max-width: 32px;
+        border-radius: 50%;
+        border: 1px solid;
+        margin-right: 6px;
+    }
 }
 .card-recipe-show {
     width: 100%;
@@ -55,6 +61,8 @@
         img {
             max-height: 100px;
             max-width: 100px;
+            padding: 5px;
+            width: auto;
         }
     }
     .tag {
@@ -77,9 +85,21 @@
     background-color: white;
 }
 .search-block {
-    padding-bottom: 0;
-    md-input-container {
-        padding-bottom: 2px;
+    md-chips .md-chip {
+        background: $darkOrangeBackgroundDisabled;
+        color: white;
+        md-icon {
+            color: white;
+        }
+    }
+    md-chips .md-chips.md-focused {
+        box-shadow: 0 2px $darkOrangeBackground;
+    }
+    md-chips .md-chip.md-focused {
+        background: $darkOrangeBackground;
+    }
+    md-progress-linear .md-bar {
+        background-color: $darkOrangeBackground;
     }
 }
 .card-recipe-with-form {
@@ -267,11 +287,58 @@
     }
 }
 
-.md-dialog-gallery-images {
+.md-dialog-gallery-images, .md-dialog-rating {
     md-toolbar {
         background-color: $darkOrangeBackground;
     }
     .images-recipe-gallery {
         margin-top: 0px;
+    }
+    md-slider {
+        margin-top: 25px;
+        min-width: 75%;
+        .md-track.md-track-fill {
+            background-color: $darkOrangeBackground;
+        }
+        .md-thumb:after {
+            border-color: $darkOrangeBackground;
+            background-color: $darkOrangeBackground;
+        }
+        .md-sign {
+            background-color: $darkOrangeBackground;
+            &::after {
+                border-top-color:  $darkOrangeBackground;
+            }
+        }
+    }
+}
+
+.card-recipe-comments {
+    width: 100%;
+    .comment-list-card md-card-title {
+        padding-top: 16px;
+        md-card-title-media {
+            margin-top: 0;
+            .md-media-md {
+                position: relative;
+                overflow: hidden;
+                height: 100px;
+                width: 100px;
+                img {
+                    max-width: 200px;
+                    max-height: 200px;
+                    border-radius: 4px;
+                }
+            }
+        }
+        md-card-title-text {
+            margin-left: 5px;
+            .md-headline {
+                font-size: 18px;
+            }
+            .md-subhead {
+                text-align: right;
+            }
+        }
     }
 }

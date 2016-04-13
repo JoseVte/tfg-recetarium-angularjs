@@ -1,3 +1,22 @@
+<div layout="row" layout-wrap layout-padding class="search-block">
+    <md-chips ng-model="tags"
+        md-autocomplete-snap
+        readonly="false"
+        md-require-match="true">
+        <md-autocomplete
+            md-selected-item="selectedTag"
+            md-item-text="tag.text"
+            md-search-text="searchText"
+            md-items="tag in tagSearch(searchText)"
+            placeholder="Busca una etiqueta">
+            <span md-highlight-text="searchText">{{ tag.text }}</span>
+        </md-autocomplete>
+        <md-chip-template>
+            <span>{{ $chip.text }}<span ng-if="$chip.type"> (<em>{{ $chip.type }}</em>)</span></span>
+        </md-chip-template>
+    </md-chips>
+</div>
+
 <div infinite-scroll="nextPage()" infinite-scroll-disabled="loadingNextPage || errorMsg" infinite-scroll-distance="3" layout-wrap>
     <md-content class="md-padding" layout="row" layout-wrap layout-align="space-around start">
         <div class="container" ng-show="progressBarActivated && recipes.length == 0">
@@ -16,8 +35,8 @@
                         <span class="md-subhead">
                             <div data-ng-bind-html="description(recipe.steps)"></div>
                         </span>
-                        <md-content layout="row" layout-wrap layout-align="end end">
-                            <i class="material-icons">account_circle</i>
+                        <md-content layout="row" layout-wrap layout-align="end center">
+                            <img class="user-image" ng-src="{{ recipe.user | srcImage:recipe.user }}" />
                             <i>{{ recipe.user.username }}</i>
                         </md-content>
                     </md-card-title-text>

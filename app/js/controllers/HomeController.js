@@ -4,6 +4,7 @@ homeController.controller('Header',
     ['$scope', '$rootScope', '$mdSidenav', '$timeout', '$location', '$route', 'RecipeService',
     function ($scope, $rootScope, $mdSidenav, $timeout, $location, $route, RecipeService) {
         $scope.toggleLeft = buildDelayedToggler('left');
+        $scope.search = $rootScope.searchString;
 
         $scope.navLinks = [
             { title: '<i class="material-icons">fiber_new</i> Ultimas recetas', url: '/recipes' },
@@ -102,7 +103,7 @@ homeController.controller('Header',
                     left: 16,
                     'max-height': 64
                 });
-                var position = ($rootScope.IsAuthed ? 155  : 190);
+                var position = ($rootScope.IsAuthed ? 170  : 190);
                 search.css({
                     top: 0,
                     position: 'absolute',

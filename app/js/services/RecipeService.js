@@ -32,7 +32,7 @@ recipeService.factory('RecipeService',
             }
         };
 
-        service.search = function (pagination, callbackOk, callbackError) {
+        service.search = function (data, callbackOk, callbackError) {
             $http.get(
                 service.apiUrl + '/recipes',
                 {
@@ -40,7 +40,7 @@ recipeService.factory('RecipeService',
                         'Accept': 'application/json',
                         'Content-Type': 'application/json'
                     },
-                    params: pagination
+                    params: data
                 }
             ).then(function (response) {
                 callbackOk(response);
