@@ -80,6 +80,18 @@ authServices.factory('AuthService',
             });
         };
 
+        service.GetRecipes = function (callbackOk, callbackError) {
+            var user = $rootScope.globals.user.user;
+            $http.get(
+                service.apiUrl + '/users/' + user.id + '/recipes',
+                { headers: {'Accept': 'application/json', 'Content-Type': 'application/json'} }
+            ).then(function (response) {
+                callbackOk(response);
+            }, function (response) {
+                callbackError(response);
+            });
+        };
+
         service.SaveCredentials = function (token, user) {
             $rootScope.globals = {
                 token: token,
