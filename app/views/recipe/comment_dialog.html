@@ -1,4 +1,4 @@
-<md-dialog aria-label="Escribe un comentario" ng-cloak>
+<md-dialog class="md-dialog-comment" aria-label="Escribe un comentario" ng-cloak>
     <form name="commentForm">
         <md-toolbar>
             <div class="md-toolbar-tools">
@@ -9,15 +9,17 @@
                 </md-button>
             </div>
         </md-toolbar>
-        <md-dialog-content>
-            <md-input-container class="md-block">
-                <label>Texto</label>
-                <textarea ng-model="text" md-maxlength="140" rows="5" required></textarea>
-                <div ng-messages="commentForm.text.$error">
-                    <div ng-message="required">El comentario es obligatorio.</div>
-                    <div ng-message="md-maxlength">El comentario debe ser de 140 caracteres.</div>
-                </div>
-            </md-input-container>
+        <md-dialog-content class="md-dialog-content-comment">
+            <div layout="column" layout-align="center strech" layout-padding>
+                <md-input-container class="md-block" flex=100>
+                    <label>Texto</label>
+                    <textarea ng-model="text" md-maxlength="140" rows="5" required></textarea>
+                    <div ng-messages="commentForm.text.$error">
+                        <div ng-message="required">El comentario es obligatorio.</div>
+                        <div ng-message="md-maxlength">El comentario debe ser de 140 caracteres.</div>
+                    </div>
+                </md-input-container>
+            </div>
         </md-dialog-content>
         <md-dialog-actions layout="row">
             <span flex></span>

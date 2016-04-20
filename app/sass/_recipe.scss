@@ -287,7 +287,7 @@
     }
 }
 
-.md-dialog-gallery-images, .md-dialog-rating {
+.md-dialog-gallery-images, .md-dialog-rating, .md-dialog-comment {
     md-toolbar {
         background-color: $darkOrangeBackground;
     }
@@ -309,6 +309,14 @@
             &::after {
                 border-top-color:  $darkOrangeBackground;
             }
+        }
+    }
+    .md-dialog-content-comment {
+        @media (min-width: $layout-breakpoint-sm) {
+            min-width: 500px;
+        }
+        @media (min-width: $layout-breakpoint-md) {
+            min-width: 700px;
         }
     }
 }
