@@ -75,26 +75,6 @@ describe('Module RecipeController', function() {
             expect($scope.description(null)).toBeUndefined();
         });
 
-        it('show recipe', function () {
-            $httpBackend.expectGET(/http:\/\/localhost:9000\/recipes(.*)/).respond({});
-            $httpBackend.expectGET(/views\/(.*)/);
-            $httpBackend.flush();
-            $scope.show('test');
-            $scope.$apply();
-            $httpBackend.flush();
-            expect($location.path()).toBe('/recipes/test');
-        });
-
-        it('edit recipe', function () {
-            $httpBackend.expectGET(/http:\/\/localhost:9000\/recipes(.*)/).respond({});
-            $httpBackend.expectGET(/views\/(.*)/);
-            $httpBackend.flush();
-            $scope.edit(1, $scope.$broadcast("click"));
-            $scope.$apply();
-            $httpBackend.flush();
-            expect($location.url()).toBe('/recipes/1/edit');
-        });
-
         it('isMine recipe', function () {
             $httpBackend.expectGET(/http:\/\/localhost:9000\/recipes(.*)/).respond({});
             $httpBackend.expectGET(/views\/(.*)/);
