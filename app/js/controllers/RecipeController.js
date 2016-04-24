@@ -473,25 +473,12 @@ recipeController.controller('RecipeAll',
             if (steps) return $sce.trustAsHtml(steps.trunc(260, true));
         };
 
-        $scope.show = function(slug) {
-            $location.path('/recipes/' + slug);
-        };
-
         $scope.isMine = function(user) {
             if ($rootScope.globals.user) {
                 var auth = $rootScope.globals.user.user;
                 return (auth.id == user.id && auth.email == user.email && auth.username == user.username) || auth.type == 'ADMIN';
             }
             return false;
-        };
-
-        $scope.edit = function(slug, $event) {
-            if ($event.stopPropagation) $event.stopPropagation();
-            if ($event.preventDefault) $event.preventDefault();
-            $event.cancelBubble = true;
-            $event.returnValue = false;
-            $scope.recipes = [];
-            $location.path('/recipes/' + slug + '/edit');
         };
 
         $scope.remove = function(recipe, $event) {
@@ -520,7 +507,7 @@ recipeController.controller('RecipeAll',
                         styling: 'fontawesome'
                     });
                     $rootScope.progressBarActivated = false;
-                    $scope.getRecipes();
+                    $scope.reloadRecipes();
                 }, function(response) {
                     if (response.status == 404) {
                         $rootScope.error = {
