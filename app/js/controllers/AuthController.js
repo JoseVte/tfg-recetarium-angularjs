@@ -414,19 +414,6 @@ authController.controller('EditProfile',
             if (steps) return $sce.trustAsHtml(steps.trunc(260, true));
         };
 
-        $scope.show = function(slug) {
-            $location.path('/recipes/' + slug);
-        };
-
-        $scope.edit = function(slug, $event) {
-            if ($event.stopPropagation) $event.stopPropagation();
-            if ($event.preventDefault) $event.preventDefault();
-            $event.cancelBubble = true;
-            $event.returnValue = false;
-            $scope.recipes = [];
-            $location.path('/recipes/' + slug + '/edit');
-        };
-
         $scope.removeRecipe = function(recipe, $event) {
             if ($event.stopPropagation) $event.stopPropagation();
             if ($event.preventDefault) $event.preventDefault();
