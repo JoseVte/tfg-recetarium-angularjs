@@ -1,0 +1,61 @@
+<md-content class="md-padding" layout="row" layout-wrap layout-align="center start">
+    <div flex-gt-md="75" flex-gt-lg="50" flex="grow" layout="column">
+        <md-card class="user-card md-whiteframe-z3">
+            <md-card-title>
+                <md-card-title-text>
+                    <span class="md-headline" ng-class="{'loading': progressBarActivated}">{{ headerTitle }}</span>
+                </md-card-title-text>
+            </md-card-title>
+            <md-card-content class="without-padding">
+                <md-tabs class="md-info" md-border-bottom="true" md-stretch-tabs="auto" md-swipe-content="true"
+                md-enable-disconnect="true" md-selected="selectedUserTab" md-align-tabs="top"
+                md-dynamic-height md-border-bottom>
+                <md-tab label="Datos personales" md-on-select="loadPersonalData()">
+                    <md-content class="md-padding">
+                        <div class="md-block without-input">
+                            <label>Nombre del usuario</label>
+                            <div class="value">{{ user.username }}</div>
+                        </div>
+                        <div class="md-block without-input">
+                            <label>Email</label>
+                            <div class="value">{{ user.email }}</div>
+                        </div>
+                        <div class="md-block without-input">
+                            <label>Nombre completo</label>
+                            <div class="value">{{ user.first_name }}</div>
+                        </div>
+                        <div class="md-block without-input">
+                            <label>Apellidos</label>
+                            <div class="value">{{ user.last_name }}</div>
+                        </div>
+                    </md-content>
+                </md-tab>
+                <md-tab label="Recetas publicadas" md-on-select="loadUserRecipes()">
+                    <md-content class="md-padding">
+                        <div ng-repeat="recipe in recipes | orderBy:'-created_at'" flex="100">
+                            <md-card class="card-recipe-user">
+                                <a ng-href="/recipes/{{ recipe.slug }}">
+                                    <md-card-title>
+                                        <md-card-title-media>
+                                            <div class="md-media-md card-media">
+                                                <img class="recipe-photo-main" data-ng-src="{{ recipe.image_main | srcImage:recipe.user }}" />
+                                            </div>
+                                        </md-card-title-media>
+                                        <md-card-title-text>
+                                            <span class="md-headline">{{ recipe.title }}</span>
+                                            <span class="md-subhead">
+                                                <div data-ng-bind-html="description(recipe.steps)"></div>
+                                            </span>
+                                        </md-card-title-text>
+                                    </md-card-title>
+                                </a>
+                            </md-card>
+                        </div>
+                    </md-content>
+                </md-tab>
+                <md-tab label="Amigos" ng-disabled="true">TO-DO</md-tab>
+            </md-tabs>
+        </md-card-content>
+    </md-card>
+</div>
+</md-content>

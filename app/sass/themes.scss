@@ -2,7 +2,8 @@
 @each $theme, $color, $backgroundDisabled, $colorDisabled in
 (default, $darkOrangeBackground, $darkOrangeBackgroundDisabled, $darkOrangeColorDisabled),
 (auth, $tealBackground, $tealBackgroundDisabled, $tealColorDisabled),
-(profile, $blueBackground, $blueBackgroundDisabled, $blueColorDisabled) {
+(profile, $blueBackground, $blueBackgroundDisabled, $blueColorDisabled),
+(user, $amberBackground, $amberBackgroundDisabled, $amberColorDisabled) {
     .html-theme-#{$theme} {
         md-menu-content md-menu-item.active {
             background: $color;
