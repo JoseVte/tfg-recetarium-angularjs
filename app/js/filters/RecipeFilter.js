@@ -12,6 +12,9 @@ recipeFilter.filter('srcImage', function(envService) {
             if (!!input.new_title) {
                 return envService.read('apiUrl') + '/users/' + user.id +'/files/' + input.new_title;
             }
+            if (!!input.email) {
+                return 'https://www.gravatar.com/avatar/' + md5(input.email.toLowerCase().trim()) + '?d=identicon&f=y&s=200';
+            }
             return 'https://www.gravatar.com/avatar/' + input.id + '?d=identicon&f=y&s=200';
         }
       return 'assets/img/favicon.png';

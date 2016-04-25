@@ -49,7 +49,11 @@ http-server -a localhost -p 8000
 
 ## Changelog
 
-#### [![0.7.2](/app/doc/rocket-blue.png) 0.7.2](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.7.2)
+#### [![0.7.3](/app/doc/rocket-blue.png) 0.7.3](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.7.3)
+
+- Seccion de usuarios WIP
+
+###### [![0.7.2](/app/doc/release.png) 0.7.2](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.7.2)
 
 - Cambiados los 'ng-click' por 'ng-href' para poder utilizar el context menu del navegador
 

@@ -292,19 +292,21 @@ authController.controller('EditProfile',
                 $rootScope.progressBarActivated = false;
                 $scope.setDelay2();
             }, function (response) {
-                NotificationProvider.notify({
-                    title: 'Un error ha ocurrido',
-                    text: 'Ha ocurrido un error mientras se cargaba el perfil. Por favor, intentelo más tarde.',
-                    type: 'error',
-                    addclass: 'custom-error-notify',
-                    icon: 'material-icons md-light',
-                    styling: 'fontawesome'
-                });
-                $rootScope.error = {
-                    icon: 'error_outline',
-                    title: 'Algo ha ido mal',
-                    msg: 'Ha ocurrido un error mientras se cargaba el perfil.'
-                };
+                if (response.status !== 401){
+                    NotificationProvider.notify({
+                        title: 'Un error ha ocurrido',
+                        text: 'Ha ocurrido un error mientras se cargaba el perfil. Por favor, intentelo más tarde.',
+                        type: 'error',
+                        addclass: 'custom-error-notify',
+                        icon: 'material-icons md-light',
+                        styling: 'fontawesome'
+                    });
+                    $rootScope.error = {
+                        icon: 'error_outline',
+                        title: 'Algo ha ido mal',
+                        msg: 'Ha ocurrido un error mientras se cargaba el perfil.'
+                    };
+                }
                 $rootScope.errorMsg = true;
                 $rootScope.headerTitle = 'Error';
                 $rootScope.progressBarActivated = false;

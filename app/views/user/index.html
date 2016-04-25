@@ -1,0 +1,25 @@
+<div infinite-scroll="nextPage()" infinite-scroll-disabled="loadingNextPage || errorMsg" infinite-scroll-distance="3" layout-wrap>
+    <md-content class="md-padding" layout="row" layout-wrap layout-align="space-around start">
+        <div class="container" ng-show="progressBarActivated && users.length == 0">
+            <md-progress-circular md-mode="indeterminate" class="{{ loaderTheme }}" md-diameter="70"></md-progress-circular>
+        </div>
+        <div class="animation-card-users" ng-repeat="user in users" flex="100" flex-gt-lg="50">
+            <md-card class="card-user-main">
+                <a ng-href="/users/{{ user.id }}">
+                    <md-card-title>
+                        <md-card-title-media>
+                            <div class="md-media-md card-media">
+                                <img ng-src="{{ user | srcImage:user }}" />
+                            </div>
+                        </md-card-title-media>
+                        <md-card-title-text>
+                            <span class="md-headline">{{ user.first_name + ' ' + user.last_name }}</span>
+                            <span class="md-subhead">{{ user.username }}</span>
+                            <span class="md-subhead">{{ user.email }}</span>
+                        </md-card-title-text>
+                    </md-card-title>
+                </a>
+            </md-card>
+        </div>
+    </md-content>
+</div>

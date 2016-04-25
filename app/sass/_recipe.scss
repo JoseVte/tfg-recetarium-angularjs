@@ -1,5 +1,5 @@
 //noinspection ALL
-.card-recipe-main, .card-recipe-profile {
+.card-recipe-main, .card-recipe-profile, .card-recipe-user {
     min-height: 140px;
     @media (max-width: $layout-breakpoint-sm) {
         md-card-title {
@@ -35,7 +35,7 @@
         margin-right: 6px;
     }
 }
-.card-recipe-profile md-card-title {
+.card-recipe-profile md-card-title, .card-recipe-user md-card-title {
      padding-bottom: 0;
  }
 .card-recipe-show {
