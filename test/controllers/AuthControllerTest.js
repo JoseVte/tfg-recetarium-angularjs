@@ -39,7 +39,6 @@ describe('Module RecipeController', function() {
         });
 
         it('initialize controller', function() {
-            $httpBackend.flush();
             expect($rootScope.headerTitle).toEqual('Login');
         });
 
@@ -77,7 +76,6 @@ describe('Module RecipeController', function() {
         });
 
         it('initialize controller', function() {
-            $httpBackend.flush();
             expect($rootScope.headerTitle).toEqual('Registro');
         });
 
@@ -112,7 +110,6 @@ describe('Module RecipeController', function() {
         });
 
         it('initialize controller', function() {
-            $httpBackend.flush();
             $scope.$apply();
             expect($rootScope.globals).toEqual({});
             expect($location.url()).toBe('/');
@@ -135,7 +132,6 @@ describe('Module RecipeController', function() {
         });
 
         it('initialize controller', function() {
-            $httpBackend.flush();
             expect($rootScope.headerTitle).toEqual('Recuperar contraseña');
         });
 
@@ -172,7 +168,6 @@ describe('Module RecipeController', function() {
         });
 
         it('initialize controller', function() {
-            $httpBackend.flush();
             expect($rootScope.headerTitle).toEqual('Recuperar contraseña');
         });
 
@@ -210,7 +205,6 @@ describe('Module RecipeController', function() {
         });
 
         it('initialize controller', function() {
-            $httpBackend.flush();
             expect($rootScope.headerTitle).toEqual('Editar perfil');
         });
 

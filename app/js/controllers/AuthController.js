@@ -265,8 +265,8 @@ authController.controller('RecoverPassword',
 );
 
 authController.controller('EditProfile',
-    ['$scope', '$rootScope', '$location', '$timeout', '$mdDialog', 'AuthService', 'FileService', 'NotificationProvider',
-    function ($scope, $rootScope, $location, $timeout, $mdDialog, AuthService, FileService, NotificationProvider) {
+    ['$scope', '$rootScope', '$location', '$timeout', '$sce', '$mdDialog', 'AuthService', 'FileService', 'NotificationProvider',
+    function ($scope, $rootScope, $location, $timeout, $sce, $mdDialog, AuthService, FileService, NotificationProvider) {
         $rootScope.headerTitle = 'Editar perfil';
 
         $scope.setDelay1 = function(){
@@ -292,23 +292,44 @@ authController.controller('EditProfile',
                 $rootScope.progressBarActivated = false;
                 $scope.setDelay2();
             }, function (response) {
+                if (response.status !== 401){
+                    NotificationProvider.notify({
+                        title: 'Un error ha ocurrido',
+                        text: 'Ha ocurrido un error mientras se cargaba el perfil. Por favor, intentelo más tarde.',
+                        type: 'error',
+                        addclass: 'custom-error-notify',
+                        icon: 'material-icons md-light',
+                        styling: 'fontawesome'
+                    });
+                    $rootScope.error = {
+                        icon: 'error_outline',
+                        title: 'Algo ha ido mal',
+                        msg: 'Ha ocurrido un error mientras se cargaba el perfil.'
+                    };
+                }
+                $rootScope.errorMsg = true;
+                $rootScope.headerTitle = 'Error';
+                $rootScope.progressBarActivated = false;
+                $scope.setDelay2();
+            });
+        };
+
+        $scope.loadUserRecipes = function() {
+            $rootScope.progressBarActivated = true;
+            AuthService.GetRecipes(function (response) {
+                $scope.recipes = response.data;
+                $rootScope.progressBarActivated = false;
+            }, function (response) {
                 NotificationProvider.notify({
                     title: 'Un error ha ocurrido',
-                    text: 'Ha ocurrido un error mientras se cargaba el perfil. Por favor, intentelo más tarde.',
+                    text: 'Ha ocurrido un error mientras se cargaban las recetas. Por favor, intentelo más tarde.',
                     type: 'error',
                     addclass: 'custom-error-notify',
                     icon: 'material-icons md-light',
                     styling: 'fontawesome'
                 });
-                $rootScope.error = {
-                    icon: 'error_outline',
-                    title: 'Algo ha ido mal',
-                    msg: 'Ha ocurrido un error mientras se cargaba el perfil.'
-                };
-                $rootScope.errorMsg = true;
                 $rootScope.headerTitle = 'Error';
                 $rootScope.progressBarActivated = false;
-                $scope.setDelay2();
             });
         };
 
@@ -389,6 +410,65 @@ authController.controller('EditProfile',
                 $rootScope.progressBarActivated = false;
                 $scope.setDelay2();
             });
+        };
+
+        $scope.description = function(steps) {
+            if (steps) return $sce.trustAsHtml(steps.trunc(260, true));
+        };
+
+        $scope.removeRecipe = function(recipe, $event) {
+            if ($event.stopPropagation) $event.stopPropagation();
+            if ($event.preventDefault) $event.preventDefault();
+            $event.cancelBubble = true;
+            $event.returnValue = false;
+            var confirm = $mdDialog.confirm()
+                .title('Borrar receta')
+                .textContent('¿De verdad que quieres borrar la receta \'' + recipe.title +'\'?\nEsta acción no se puede deshacer.')
+                .ariaLabel('Borrar')
+                .targetEvent($event)
+                .ok('Borrar')
+                .cancel('Cancelar');
+            $mdDialog.show(confirm).then(function () {
+                $rootScope.progressBarActivated = true;
+                $rootScope.errorMsg = false;
+                RecipeService.delete(recipe.id, function(response) {
+                    NotificationProvider.notify({
+                        title: 'Receta borrada',
+                        text: 'Has borrado la receta \'' + recipe.title +'\'.',
+                        type: 'success',
+                        addclass: 'custom-success-notify',
+                        icon: 'material-icons md-light',
+                        icon_class: 'check_circle',
+                        styling: 'fontawesome'
+                    });
+                    $rootScope.progressBarActivated = false;
+                    $scope.getRecipes();
+                }, function(response) {
+                    if (response.status == 404) {
+                        $rootScope.error = {
+                            icon: 'error_outline',
+                            title: 'Receta no encontrada',
+                            msg: $.parseError(response.data)
+                        };
+                    } else {
+                        NotificationProvider.notify({
+                            title: 'Un error ha ocurrido',
+                            text: 'Ha ocurrido un error mientras se borraba la receta. Por favor, intentelo más tarde.',
+                            type: 'error',
+                            addclass: 'custom-error-notify',
+                            icon: 'material-icons md-light',
+                            styling: 'fontawesome'
+                        });
+                        $rootScope.error = {
+                            icon: 'error_outline',
+                            title: 'Algo ha ido mal',
+                            msg: 'Ha ocurrido un error mientras se borraba la receta.'
+                        };
+                    }
+                    $rootScope.errorMsg = true;
+                    $rootScope.progressBarActivated = false;
+                });
+            }, function() {});
         };
 
         $scope.remove = function(image, $event) {

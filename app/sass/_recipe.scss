@@ -1,6 +1,6 @@
 //noinspection ALL
-.card-recipe-main {
-    min-height: 190px;
+.card-recipe-main, .card-recipe-profile, .card-recipe-user {
+    min-height: 140px;
     @media (max-width: $layout-breakpoint-sm) {
         md-card-title {
             padding: 16px;
@@ -35,6 +35,9 @@
         margin-right: 6px;
     }
 }
+.card-recipe-profile md-card-title, .card-recipe-user md-card-title {
+     padding-bottom: 0;
+ }
 .card-recipe-show {
     width: 100%;
     .ingredients {
@@ -287,7 +290,7 @@
     }
 }
 
-.md-dialog-gallery-images, .md-dialog-rating {
+.md-dialog-gallery-images, .md-dialog-rating, .md-dialog-comment {
     md-toolbar {
         background-color: $darkOrangeBackground;
     }
@@ -309,6 +312,14 @@
             &::after {
                 border-top-color:  $darkOrangeBackground;
             }
+        }
+    }
+    .md-dialog-content-comment {
+        @media (min-width: $layout-breakpoint-sm) {
+            min-width: 500px;
+        }
+        @media (min-width: $layout-breakpoint-md) {
+            min-width: 700px;
         }
     }
 }

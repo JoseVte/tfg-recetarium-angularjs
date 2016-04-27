@@ -52,7 +52,33 @@
                             </div>
                         </form>
                     </md-tab>
-                    <md-tab label="Tus recetas" ng-disabled="true">TO-DO</md-tab>
+                    <md-tab label="Tus recetas" md-on-select="loadUserRecipes()">
+                        <md-content class="md-padding">
+                            <div ng-repeat="recipe in recipes | orderBy:'-created_at'" flex="100">
+                                <md-card class="card-recipe-profile">
+                                    <a ng-href="/recipes/{{ recipe.slug }}">
+                                    <md-card-title>
+                                        <md-card-title-media>
+                                            <div class="md-media-md card-media">
+                                                <img class="recipe-photo-main" data-ng-src="{{ recipe.image_main | srcImage:recipe.user }}" />
+                                            </div>
+                                        </md-card-title-media>
+                                        <md-card-title-text>
+                                                <span class="md-headline">{{ recipe.title }}</span>
+                                                <span class="md-subhead">
+                                                    <div data-ng-bind-html="description(recipe.steps)"></div>
+                                                </span>
+                                        </md-card-title-text>
+                                    </md-card-title>
+                                </a>
+                                    <div layout="row" layout-align="end center">
+                                        <md-button aria-label="Edit" class="md-edit" ng-href="/recipes/{{ recipe.slug }}/edit"><md-icon class="material-icons md-dark">edit</md-icon> Editar</md-button>
+                                        <md-button aria-label="Remove" class="md-remove" ng-click="removeRecipe(recipe, $event)"><md-icon class="material-icons md-dark">delete</md-icon> Borrar</md-button>
+                                    </div>
+                                </md-card>
+                            </div>
+                        </md-content>
+                    </md-tab>
                     <md-tab label="Tus imagenes" md-on-select="loadUserImages()">
                         <md-content class="md-padding">
                             <div ng-repeat="image in images | orderBy:'-created_at'" flex="100">

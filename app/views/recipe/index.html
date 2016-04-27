@@ -23,26 +23,28 @@
             <md-progress-circular md-mode="indeterminate" class="{{ loaderTheme }}" md-diameter="70"></md-progress-circular>
         </div>
         <div class="animation-card-recipes" ng-repeat="recipe in recipes" flex="100" flex-gt-lg="50">
-            <md-card ng-click="show(recipe.slug)" class="card-recipe-main">
-                <md-card-title>
-                    <md-card-title-media>
-                        <div class="md-media-md card-media">
-                            <img class="recipe-photo-main" data-ng-src="{{ recipe.image_main | srcImage:recipe.user }}" />
-                        </div>
-                    </md-card-title-media>
-                    <md-card-title-text>
-                        <span class="md-headline">{{ recipe.title }}</span>
-                        <span class="md-subhead">
-                            <div data-ng-bind-html="description(recipe.steps)"></div>
-                        </span>
-                        <md-content layout="row" layout-wrap layout-align="end center">
-                            <img class="user-image" ng-src="{{ recipe.user | srcImage:recipe.user }}" />
-                            <i>{{ recipe.user.username }}</i>
-                        </md-content>
-                    </md-card-title-text>
-                </md-card-title>
+            <md-card class="card-recipe-main">
+                <a ng-href="/recipes/{{ recipe.slug }}">
+                    <md-card-title>
+                        <md-card-title-media>
+                            <div class="md-media-md card-media">
+                                <img class="recipe-photo-main" data-ng-src="{{ recipe.image_main | srcImage:recipe.user }}" />
+                            </div>
+                        </md-card-title-media>
+                        <md-card-title-text>
+                            <span class="md-headline">{{ recipe.title }}</span>
+                            <span class="md-subhead">
+                                <div data-ng-bind-html="description(recipe.steps)"></div>
+                            </span>
+                            <md-content layout="row" layout-wrap layout-align="end center">
+                                <img class="user-image" ng-src="{{ recipe.user | srcImage:recipe.user }}" />
+                                <i>{{ recipe.user.username }}</i>
+                            </md-content>
+                        </md-card-title-text>
+                    </md-card-title>
+                </a>
                 <md-card-actions layout="row" layout-align="end center" ng-if="isMine(recipe.user)">
-                    <md-button aria-label="Edit" class="md-edit" ng-click="edit(recipe.slug, $event)"><md-icon class="material-icons md-dark">edit</md-icon> Editar</md-button>
+                    <md-button aria-label="Edit" class="md-edit" ng-href="/recipes/{{ recipe.slug }}/edit"><md-icon class="material-icons md-dark">edit</md-icon> Editar</md-button>
                     <md-button aria-label="Remove" class="md-remove" ng-click="remove(recipe, $event)"><md-icon class="material-icons md-dark">delete</md-icon> Borrar</md-button>
                 </md-card-actions>
             </md-card>
