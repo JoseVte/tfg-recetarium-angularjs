@@ -404,7 +404,7 @@ recipeController.controller('RecipeAll',
         $rootScope.headerTitle = 'Recetas';
         $scope.recipes = [];
         $scope.tags = [];
-        $scope.total = 1;
+        $scope.total = 0;
         $scope.nextPageNumber = 1;
 
         $scope.$watchCollection('tags', function (newVal, oldVal) {
@@ -413,7 +413,7 @@ recipeController.controller('RecipeAll',
 
         $scope.reloadRecipes = function() {
             $scope.recipes = [];
-            $scope.total = 1;
+            $scope.total = 0;
             $scope.nextPageNumber = 1;
             $scope.getRecipes();
         };

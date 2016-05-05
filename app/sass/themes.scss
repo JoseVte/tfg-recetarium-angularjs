@@ -108,6 +108,9 @@
                 background-color: white;
                 color: $color;
                 overflow: inherit;
+                &.color-black {
+                    color: black;
+                }
                 label {
                     color: $color !important;
                 }

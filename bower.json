@@ -21,7 +21,7 @@
     "angular-ui-router": "~0.2.18",
     "jquery": "~2.2.3",
     "angular-route": "~1.5.5",
-    "angular-material": "~1.0.7",
+    "angular-material": "~1.0.8",
     "angular-resource": "~1.5.5",
     "angular-sanitize": "~1.5.5",
     "angular-messages": "~1.5.5",
@@ -36,7 +36,7 @@
     "angular-xeditable": "~0.1.12",
     "angular-mocks": "~1.5.5",
     "ngInfiniteScroll": "~1.2.2",
-    "angulargrid": "~0.5.3",
+    "angulargrid": "~0.5.5",
     "js-md5": "md5#^0.4.1"
   }
 }

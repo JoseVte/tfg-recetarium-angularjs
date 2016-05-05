@@ -265,9 +265,30 @@ authController.controller('RecoverPassword',
 );
 
 authController.controller('EditProfile',
-    ['$scope', '$rootScope', '$location', '$timeout', '$sce', '$mdDialog', 'AuthService', 'FileService', 'NotificationProvider',
-    function ($scope, $rootScope, $location, $timeout, $sce, $mdDialog, AuthService, FileService, NotificationProvider) {
+    ['$scope', '$rootScope', '$location', '$timeout', '$sce', '$mdDialog', 'AuthService', 'FileService', 'NotificationProvider', 'FRIENDS_FUNCTIONS',
+    function ($scope, $rootScope, $location, $timeout, $sce, $mdDialog, AuthService, FileService, NotificationProvider, FRIENDS_FUNCTIONS) {
         $rootScope.headerTitle = 'Editar perfil';
+
+        $scope.infiniteScroll = {
+            recipes: {
+                data: [],
+                total: 0,
+                nextPageNumber: 1,
+                loadingNextPage: false,
+            },
+            images: {
+                data: [],
+                total: 0,
+                nextPageNumber: 1,
+                loadingNextPage: false,
+            },
+            friends: {
+                data: [],
+                total: 0,
+                nextPageNumber: 1,
+                loadingNextPage: false,
+            },
+        };
 
         $scope.setDelay1 = function(){
             $scope.delay1 = true;
@@ -281,6 +302,23 @@ authController.controller('EditProfile',
             $timeout(function(){
                 $scope.delay2 = false;
             }, 1000);
+        };
+
+        $scope.isMe = function(user) {
+            return (user !== undefined && $rootScope.globals.user.user.id == user.id);
+        };
+
+        $scope.checkFriend = function(user) {
+            var i = 0;
+            if (user !== undefined) {
+                while (i < user.friends.length) {
+                    if (user.friends[i].user_id === $rootScope.globals.user.user.id) {
+                        return true;
+                    }
+                    i++;
+                }
+            }
+            return false;
         };
 
         $scope.loadPersonalData = function() {
@@ -350,6 +388,47 @@ authController.controller('EditProfile',
                 $rootScope.headerTitle = 'Error';
                 $rootScope.progressBarActivated = false;
             });
+        };
+
+        $scope.loadFriends = function() {
+            $rootScope.progressBarActivated = true;
+            $scope.infiniteScroll.friends.loadingNextPage = true;
+            AuthService.getFriends($rootScope.globals.user.user, {
+                page: $scope.infiniteScroll.friends.nextPageNumber,
+                size: 10,
+                order: 'firstName',
+            }, function (response) {
+                $scope.infiniteScroll.friends.data = $scope.infiniteScroll.friends.data.concat(response.data.data);
+                $scope.infiniteScroll.friends.total = response.data.total;
+                $rootScope.progressBarActivated = false;
+                $scope.infiniteScroll.friends.nextPageNumber++;
+                $scope.infiniteScroll.friends.loadingNextPage = false;
+            }, function (response) {
+                NotificationProvider.notify({
+                    title: 'Un error ha ocurrido',
+                    text: 'Ha ocurrido un error mientras se cargaban los amigos. Por favor, intentelo más tarde.',
+                    type: 'error',
+                    addclass: 'custom-error-notify',
+                    icon: 'material-icons md-light',
+                    styling: 'fontawesome'
+                });
+                $rootScope.headerTitle = 'Error';
+                $rootScope.progressBarActivated = false;
+                $scope.infiniteScroll.friends.loadingNextPage = false;
+            });
+        };
+
+        $scope.nextPageFriends = function () {
+            if ($scope.infiniteScroll.friends.total > $scope.infiniteScroll.friends.data.length) {
+                $scope.loadFriends();
+            }
+        };
+
+        $scope.reloadFriends = function() {
+            $scope.infiniteScroll.friends.data = [];
+            $scope.infiniteScroll.friends.total = 0;
+            $scope.infiniteScroll.friends.nextPageNumber = 1;
+            $scope.loadFriends();
         };
 
         $scope.openUploadImage = function($event) {
@@ -522,6 +601,22 @@ authController.controller('EditProfile',
                     $rootScope.progressBarActivated = false;
                 });
             }, function() {});
+        };
+
+        $scope.addFriend = function (user, $event) {
+            if ($event.stopPropagation) $event.stopPropagation();
+            if ($event.preventDefault) $event.preventDefault();
+            $event.cancelBubble = true;
+            $event.returnValue = false;
+            FRIENDS_FUNCTIONS.AddFriend(UserService, NotificationProvider, $rootScope.globals.user.user, user, $scope.reloadFriends);
+        };
+
+        $scope.deleteFriend = function (user, $event) {
+            if ($event.stopPropagation) $event.stopPropagation();
+            if ($event.preventDefault) $event.preventDefault();
+            $event.cancelBubble = true;
+            $event.returnValue = false;
+            FRIENDS_FUNCTIONS.DeleteFriend(UserService, NotificationProvider, $rootScope.globals.user.user, user, $scope.reloadFriends);
         };
     }]
 );

@@ -13,12 +13,13 @@ var recetarium = angular.module('recetariumApp', [
     'textAngular',
     'ui.router',
     'infinite-scroll',
+    'elif',
     // My Javascript
     'Animations', 'TextEditor', 'NotificationProviders',
     'CommentServices', 'FileServices',
     'FileDirectives', 'FormDirectives', 'TimeDirectives', 'ValidatorDirectives',
     'HomeController',
-    'UserServices', 'UserController',
+    'UserServices', 'UserFilters', 'UserController',
     'AuthServices', 'AuthController',
     'RecipeServices', 'RecipeFilters', 'RecipeController',
     'CategoryServices', 'CategoryController',
@@ -262,6 +263,14 @@ Array.prototype.contains = function(obj) {
         if (this[i] === obj) { return true; }
     }
     return false;
+};
+
+Array.prototype.removeItem = function(item) {
+    var index = this.indexOf(item);
+    if (index > -1) {
+        return this.splice(item, 1);
+    }
+    return this;
 };
 
 Array.prototype.getById = function(id) {

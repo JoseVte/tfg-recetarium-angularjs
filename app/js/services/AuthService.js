@@ -92,6 +92,23 @@ authServices.factory('AuthService',
             });
         };
 
+        service.getFriends = function (user, params, callbackOk, callbackError) {
+            $http.get(
+                service.apiUrl + '/users/' + user.id + '/friends',
+                {
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    params: params
+                }
+            ).then(function (response) {
+                callbackOk(response);
+            }, function (response) {
+                callbackError(response);
+            });
+        };
+
         service.SaveCredentials = function (token, user) {
             $rootScope.globals = {
                 token: token,
