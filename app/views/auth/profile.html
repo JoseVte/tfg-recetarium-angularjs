@@ -113,7 +113,45 @@
                             </div>
                         </md-content>
                     </md-tab>
-                    <md-tab label="Tus amigos" ng-disabled="true">TO-DO</md-tab>
+                    <md-tab label="Tus amigos" md-on-select="loadFriends()">
+                        <div infinite-scroll="nextPageFriends()" infinite-scroll-disabled="infiniteScroll.friends.loadingNextPage || errorMsg" infinite-scroll-distance="3" layout-wrap>
+                            <md-content class="md-padding" layout="row" layout-wrap layout-align="space-around start">
+                                <div class="animation-card-users" ng-repeat="user in infiniteScroll.friends.data" flex="100">
+                                    <md-card class="card-user-main">
+                                        <a ng-href="/users/{{ user.id }}">
+                                            <md-card-title>
+                                                <md-card-title-media>
+                                                    <div class="md-media-md card-media">
+                                                        <img ng-src="{{ user | userImage }}" />
+                                                    </div>
+                                                </md-card-title-media>
+                                                <md-card-title-text>
+                                                    <div layout="row" layout-align="space-between end">
+                                                        <div>
+                                                            <div class="md-headline">{{ user | fullname }}</div>
+                                                            <div class="md-subhead">{{ user.username }}</div>
+                                                            <div class="md-subhead">{{ user.email }}</div>
+                                                        </div>
+                                                        <div ng-if="isMe(user)"></div>
+                                                        <div ng-else-if="checkFriend(user)">
+                                                            <md-button class="md-remove" ng-click="deleteFriend(user, $event)">
+                                                                <md-icon class="material-icons md-dark">delete</md-icon> Borrar de tus amigos
+                                                            </md-button>
+                                                        </div>
+                                                        <div ng-else>
+                                                            <md-button class="md-edit" ng-click="addFriend(user, $event)">
+                                                                <md-icon class="material-icons md-dark">plus</md-icon> Añadir a amigos
+                                                            </md-button>
+                                                        </div>
+                                                    </div>
+                                                </md-card-title-text>
+                                            </md-card-title>
+                                        </a>
+                                    </md-card>
+                                </div>
+                            </md-content>
+                        </div>
+                    </md-tab>
                 </md-tabs>
             </md-card-content>
         </md-card>

@@ -1,5 +1,54 @@
 var userController = angular.module('UserController', []);
 
+userController.constant('FRIENDS_FUNCTIONS', {
+    AddFriend: function(UserService, NotificationProvider, currentUser, user, callback) {
+        UserService.addFriend(currentUser.id, user.id, function (response) {
+            NotificationProvider.notify({
+                title: 'Amigo añadido',
+                text: 'Has añadido a \'' + user.first_name +' ' + user.last_name + '\' como amigo.',
+                type: 'success',
+                addclass: 'custom-success-notify',
+                icon: 'material-icons md-light',
+                icon_class: 'check_circle',
+                styling: 'fontawesome'
+            });
+            callback();
+        }, function (response) {
+            NotificationProvider.notify({
+                title: 'Un error ha ocurrido',
+                text: 'Ha ocurrido un error mientras se añadia a tus amigos. Por favor, intentelo más tarde.',
+                type: 'error',
+                addclass: 'custom-error-notify',
+                icon: 'material-icons md-light',
+                styling: 'fontawesome'
+            });
+        });
+    },
+    DeleteFriend: function(UserService, NotificationProvider, currentUser, user, callback) {
+        UserService.deleteFriend(currentUser.id, user.id, function (response) {
+            NotificationProvider.notify({
+                title: 'Amigo borrado',
+                text: 'Has borrado a \'' + user.first_name +' ' + user.last_name + '\' de tus amigos.',
+                type: 'success',
+                addclass: 'custom-success-notify',
+                icon: 'material-icons md-light',
+                icon_class: 'check_circle',
+                styling: 'fontawesome'
+            });
+            callback();
+        }, function (response) {
+            NotificationProvider.notify({
+                title: 'Un error ha ocurrido',
+                text: 'Ha ocurrido un error mientras se borraba de tus amigos. Por favor, intentelo más tarde.',
+                type: 'error',
+                addclass: 'custom-error-notify',
+                icon: 'material-icons md-light',
+                styling: 'fontawesome'
+            });
+        });
+    }
+});
+
 userController.controller('UserAll',
     ['$scope', '$rootScope', '$location', 'UserService', 'NotificationProvider',
     function ($scope, $rootScope, $location, UserService, NotificationProvider) {
@@ -10,7 +59,7 @@ userController.controller('UserAll',
 
         $scope.reloadUsers = function() {
             $scope.users = [];
-            $scope.total = 1;
+            $scope.total = 0;
             $scope.nextPageNumber = 1;
             $scope.getUsers();
         };
@@ -54,11 +103,28 @@ userController.controller('UserAll',
 );
 
 userController.controller('UserShow',
-    ['$scope', '$rootScope', '$location', '$routeParams', '$timeout', 'UserService', 'FileService', 'NotificationProvider',
-    function ($scope, $rootScope, $location, $routeParams, $timeout, UserService, FileService, NotificationProvider) {
+    ['$scope', '$rootScope', '$location', '$routeParams', '$timeout', 'UserService', 'FileService', 'NotificationProvider', 'FRIENDS_FUNCTIONS',
+    function ($scope, $rootScope, $location, $routeParams, $timeout, UserService, FileService, NotificationProvider, FRIENDS_FUNCTIONS) {
         $rootScope.headerTitle = 'Perfil del usuario';
         $rootScope.HasBack = true;
         $scope.commentsActived = false;
+
+        $scope.infiniteScroll = {
+            recipes: {
+                data: [],
+                total: 0,
+                nextPageNumber: 1,
+                loadingNextPage: false,
+            },
+            friends: {
+                data: [],
+                total: 0,
+                nextPageNumber: 1,
+                loadingNextPage: false,
+            },
+        };
+
+        /** Aux **/
         $rootScope.back = function () {
             $location.path('/users');
         };
@@ -77,6 +143,24 @@ userController.controller('UserShow',
             }, 1000);
         };
 
+        $scope.isMe = function(user) {
+            return (user !== undefined && $rootScope.globals.user.user.id == user.id);
+        };
+
+        $scope.checkFriend = function(user) {
+            var i = 0;
+            if (user !== undefined) {
+                while (i < user.friends.length) {
+                    if (user.friends[i].user_id === $rootScope.globals.user.user.id) {
+                        return true;
+                    }
+                    i++;
+                }
+            }
+            return false;
+        };
+
+        /** Personal **/
         $scope.loadPersonalData = function() {
             $rootScope.progressBarActivated = true;
             $scope.setDelay1();
@@ -106,6 +190,15 @@ userController.controller('UserShow',
             });
         };
 
+        $scope.addFriendHome = function (user) {
+            FRIENDS_FUNCTIONS.AddFriend(UserService, NotificationProvider, $rootScope.globals.user.user, user, $scope.loadPersonalData);
+        };
+
+        $scope.deleteFriendHome = function (user) {
+            FRIENDS_FUNCTIONS.DeleteFriend(UserService, NotificationProvider, $rootScope.globals.user.user, user, $scope.loadPersonalData);
+        };
+
+        /** Recipes **/
         $scope.loadUserRecipes = function() {
             $rootScope.progressBarActivated = true;
             UserService.getRecipes($routeParams.id, function (response) {
@@ -123,6 +216,64 @@ userController.controller('UserShow',
                 $rootScope.headerTitle = 'Error';
                 $rootScope.progressBarActivated = false;
             });
+        };
+
+        /** Friends **/
+        $scope.loadFriends = function() {
+            $rootScope.progressBarActivated = true;
+            $scope.infiniteScroll.friends.loadingNextPage = true;
+            UserService.getFriends($routeParams.id, {
+                page: $scope.infiniteScroll.friends.nextPageNumber,
+                size: 10,
+                order: 'firstName',
+            }, function (response) {
+                $scope.infiniteScroll.friends.data = $scope.infiniteScroll.friends.data.concat(response.data.data);
+                $scope.infiniteScroll.friends.total = response.data.total;
+                $rootScope.progressBarActivated = false;
+                $scope.infiniteScroll.friends.nextPageNumber++;
+                $scope.infiniteScroll.friends.loadingNextPage = false;
+            }, function (response) {
+                NotificationProvider.notify({
+                    title: 'Un error ha ocurrido',
+                    text: 'Ha ocurrido un error mientras se cargaban los amigos. Por favor, intentelo más tarde.',
+                    type: 'error',
+                    addclass: 'custom-error-notify',
+                    icon: 'material-icons md-light',
+                    styling: 'fontawesome'
+                });
+                $rootScope.headerTitle = 'Error';
+                $rootScope.progressBarActivated = false;
+                $scope.infiniteScroll.friends.loadingNextPage = false;
+            });
+        };
+
+        $scope.nextPageFriends = function () {
+            if ($scope.infiniteScroll.friends.total > $scope.infiniteScroll.friends.data.length) {
+                $scope.loadFriends();
+            }
+        };
+
+        $scope.reloadFriends = function() {
+            $scope.infiniteScroll.friends.data = [];
+            $scope.infiniteScroll.friends.total = 0;
+            $scope.infiniteScroll.friends.nextPageNumber = 1;
+            $scope.loadFriends();
+        };
+
+        $scope.addFriend = function (user, $event) {
+            if ($event.stopPropagation) $event.stopPropagation();
+            if ($event.preventDefault) $event.preventDefault();
+            $event.cancelBubble = true;
+            $event.returnValue = false;
+            FRIENDS_FUNCTIONS.AddFriend(UserService, NotificationProvider, $rootScope.globals.user.user, user, $scope.reloadFriends);
+        };
+
+        $scope.deleteFriend = function (user, $event) {
+            if ($event.stopPropagation) $event.stopPropagation();
+            if ($event.preventDefault) $event.preventDefault();
+            $event.cancelBubble = true;
+            $event.returnValue = false;
+            FRIENDS_FUNCTIONS.DeleteFriend(UserService, NotificationProvider, $rootScope.globals.user.user, user, $scope.reloadFriends);
         };
     }]
 );

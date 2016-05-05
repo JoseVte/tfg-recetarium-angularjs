@@ -49,7 +49,13 @@ http-server -a localhost -p 8000
 
 ## Changelog
 
-#### [![0.7.3](/app/doc/rocket-blue.png) 0.7.3](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.7.3)
+#### [![0.8.1](/app/doc/rocket-blue.png) 0.8.1](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.8.1)
+
+- Ver tus amigos en el perfil
+- Ver los amigos de otros en su perfil
+- Añadir y borrar amigos mediante botones
+
+###### [![0.7.3](/app/doc/release.png) 0.7.3](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.7.3)
 
 - Seccion de usuarios WIP
 

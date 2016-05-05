@@ -78,6 +78,46 @@ userService.factory('UserService',
             });
         };
 
+        service.addFriend = function(userId, friendId, callbackOk, callbackError) {
+            $http.post(
+                service.apiUrl + '/users/' + userId + '/friends',
+                { id: friendId },
+                { headers: {'Accept': 'application/json', 'Content-Type': 'application/json'} }
+            ).then(function (response) {
+                callbackOk(response);
+            }, function (response) {
+                callbackError(response);
+            });
+        };
+
+        service.getFriends = function (userId, params, callbackOk, callbackError) {
+            $http.get(
+                service.apiUrl + '/users/' + userId + '/friends',
+                {
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    params: params
+                }
+            ).then(function (response) {
+                callbackOk(response);
+            }, function (response) {
+                callbackError(response);
+            });
+        };
+
+        service.deleteFriend = function(userId, friendId, callbackOk, callbackError) {
+            $http.delete(
+                service.apiUrl + '/users/' + userId + '/friends/' + friendId,
+                { headers: {'Accept': 'application/json', 'Content-Type': 'application/json'} }
+            ).then(function (response) {
+                callbackOk(response);
+            }, function (response) {
+                callbackError(response);
+            });
+        };
+
         return service;
     }]
 );
