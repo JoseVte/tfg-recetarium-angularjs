@@ -134,6 +134,7 @@ authController.controller('Logout',
             icon_class: 'cake',
             styling: 'fontawesome'
         });
+        AuthService.StopCronCheckToken();
         AuthService.ClearCredentials();
         $location.path('/');
     }]

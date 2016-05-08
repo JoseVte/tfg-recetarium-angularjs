@@ -104,6 +104,9 @@
                         <md-tooltip md-direction="top">{{ recipe.rating.rating }}</md-tooltip>
                         <md-icon class="material-icons md-yellow">{{ getRatingIcon(recipe.rating.rating) }}</md-icon>
                     </md-button>
+                    <md-button ng-if="rated" ng-click="showRating()" aria-label="Puntuación">
+                        <md-icon class="material-icons md-yellow">{{ getRatingIcon(rated) }}</md-icon> {{ rated }}
+                    </md-button>
                 </md-card-icons-actions>
             </md-card-actions>
         </div>

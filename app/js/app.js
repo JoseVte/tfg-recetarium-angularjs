@@ -118,8 +118,7 @@ recetarium.run(function ($rootScope, $location, $http, AuthService, Notification
 
     if (localStorage.globals) {
         $rootScope.globals = JSON.parse(localStorage.globals);
-        // TODO
-        //AuthService.CheckToken($rootScope.globals.token);
+        AuthService.StartCronCheckToken();
     } else {
         $rootScope.globals = {};
     }
