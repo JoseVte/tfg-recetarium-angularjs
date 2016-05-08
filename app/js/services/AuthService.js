@@ -1,8 +1,8 @@
 var authServices = angular.module('AuthServices', ['ngResource']);
 
 authServices.factory('AuthService',
-    ['$http', '$rootScope', '$timeout', 'envService', '$q',
-    function ($http, $rootScope, $timeout, envService, $q) {
+    ['$http', '$rootScope', '$timeout', '$interval', 'envService', '$q',
+    function ($http, $rootScope, $timeout, $interval, envService, $q) {
         var service = {
             apiUrl: envService.read('apiUrl'),
             OK: 200,
@@ -16,6 +16,9 @@ authServices.factory('AuthService',
                 { email: email, password: password, setExpiration: expiration },
                 { headers: {'Accept': 'application/json', 'Content-Type': 'application/json'} }
             ).then(function (response) {
+                if (!expiration) {
+                    service.StartCronCheckToken();
+                }
                 callbackOk(response);
             }, function (response) {
                 callbackError(response);
@@ -127,6 +130,34 @@ authServices.factory('AuthService',
             var base64Url = token.split('.')[1];
             var base64 = base64Url.replace('-', '+').replace('_', '/');
             return JSON.parse(atob(base64));
+        };
+
+        service.CheckToken = function (user) {
+            $http.post(
+                service.apiUrl + '/auth/check',
+                { email: user.email, expiration: $rootScope.globals.user.setExpiration },
+                { headers: {'Accept': 'application/json', 'Content-Type': 'application/json'} }
+            ).then(function (response) {
+                service.SaveCredentials(response.data.auth_token, JSON.parse(service.ParseJwt(response.data.auth_token).sub))
+            }, function (response) {
+                if (response.status == 401) {
+                    service.ClearCredentials();
+                } else {
+                    console.error(response.status);
+                }
+            });
+        };
+
+        service.StartCronCheckToken = function() {
+            $rootScope.cronToken = $interval(function () {
+                service.CheckToken($rootScope.globals.user.user);
+            }, 1000 * 30 * 60); // 30 min
+        };
+
+        service.StopCronCheckToken = function () {
+            if (angular.isDefined($rootScope.cronToken)) {
+                $interval.cancel($rootScope.cronToken);
+            }
         };
 
         /**

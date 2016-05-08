@@ -49,7 +49,11 @@ http-server -a localhost -p 8000
 
 ## Changelog
 
-#### [![0.8.2](/app/doc/rocket-blue.png) 0.8.2](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.8.2)
+#### [![0.8.3](/app/doc/rocket-blue.png) 0.8.3](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.8.3)
+
+- Recargar el JWT cada 30 minutos si se ha marcado la opcion de 'Recordar'
+
+###### [![0.8.2](/app/doc/release.png) 0.8.2](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.8.2)
 
 - Menus desplegables
 - Buscar usuarios y amigos
