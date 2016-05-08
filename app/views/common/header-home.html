@@ -12,7 +12,7 @@
                 <div hide-xs hide-sm show-gt-sm>
                     <div ng-if="IsAuthed">
                         <md-menu>
-                            <md-button ng-click="openUserDropdrown($mdOpenMenu, $event)">
+                            <md-button ng-click="openDropdrown($mdOpenMenu, $event)">
                                 <div layout="row" layout-align="center center">
                                     <img class="user-image" ng-src="{{ UserLogged | srcImage:UserLogged }}" />
                                     <span>Hola, {{ UserLogged.first_name }}</span>

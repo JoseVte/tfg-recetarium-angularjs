@@ -272,19 +272,19 @@ authController.controller('EditProfile',
         $scope.infiniteScroll = {
             recipes: {
                 data: [],
-                total: 0,
+                total: 1,
                 nextPageNumber: 1,
                 loadingNextPage: false,
             },
             images: {
                 data: [],
-                total: 0,
+                total: 1,
                 nextPageNumber: 1,
                 loadingNextPage: false,
             },
             friends: {
                 data: [],
-                total: 0,
+                total: 1,
                 nextPageNumber: 1,
                 loadingNextPage: false,
             },
@@ -426,7 +426,7 @@ authController.controller('EditProfile',
 
         $scope.reloadFriends = function() {
             $scope.infiniteScroll.friends.data = [];
-            $scope.infiniteScroll.friends.total = 0;
+            $scope.infiniteScroll.friends.total = 1;
             $scope.infiniteScroll.friends.nextPageNumber = 1;
             $scope.loadFriends();
         };

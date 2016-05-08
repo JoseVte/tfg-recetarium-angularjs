@@ -49,7 +49,12 @@ http-server -a localhost -p 8000
 
 ## Changelog
 
-#### [![0.8.1](/app/doc/rocket-blue.png) 0.8.1](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.8.1)
+#### [![0.8.2](/app/doc/rocket-blue.png) 0.8.2](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.8.2)
+
+- Menus desplegables
+- Buscar usuarios y amigos
+
+###### [![0.8.1](/app/doc/release.png) 0.8.1](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.8.1)
 
 - Ver tus amigos en el perfil
 - Ver los amigos de otros en su perfil

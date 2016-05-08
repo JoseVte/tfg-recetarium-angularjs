@@ -9,10 +9,13 @@ homeController.controller('Header',
         $scope.navLinks = [
             { title: '<i class="material-icons">fiber_new</i> Ultimas recetas', url: '/recipes' },
             { title: '<i class="material-icons">stars</i> Top recetas', url: '/top-recipes', class: 'no-implemented'},
+            { title: '<i class="material-icons">perm_identity</i> Todos los usuarios', url: '/users' },
+            { title: '<i class="material-icons">weekend</i> Amigos', url: '/friends' },
             { title: '<i class="material-icons">edit</i> Escribe una receta', url: '/new-recipe' },
         ];
 
-        $scope.openUserDropdrown = function($mdOpenMenu, ev) {
+        var originatorEv;
+        $scope.openDropdrown = function($mdOpenMenu, ev) {
             originatorEv = ev;
             $mdOpenMenu(ev);
         };
