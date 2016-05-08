@@ -219,5 +219,31 @@
                 }
             }
         }
+        .search-block {
+            md-input-container:not(.md-input-invalid).md-input-focused {
+                .md-input {
+                    border-color: $color;
+                }
+                md-icon {
+                    color: $color;
+                }
+            }
+            md-chips .md-chip {
+                background: $backgroundDisabled;
+                color: white;
+                md-icon {
+                    color: white;
+                }
+            }
+            md-chips .md-chips.md-focused {
+                box-shadow: 0 2px $color;
+            }
+            md-chips .md-chip.md-focused {
+                background: $color;
+            }
+            md-progress-linear .md-bar {
+                background-color: $color;
+            }
+        }
     }
 }

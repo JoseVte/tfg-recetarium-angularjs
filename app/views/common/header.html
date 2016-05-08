@@ -17,10 +17,42 @@
                         <a ng-href="/">
                             <img class="img-header" src="../img/header-logo.png" alt="Recetarium">
                         </a>
-                        <md-button ng-href="/recipes" ng-class="getClassActive('/recipes')" class="hide-custom-header-sm">Ultimas recetas</md-button>
-                        <md-button  class="no-implemented hide-custom-header-sm">Top recetas</md-button>
                     </div>
                 </div>
+                <md-menu class="hide-custom-header-sm">
+                    <md-button  ng-class="getClassActive('/recipes')" ng-click="openDropdrown($mdOpenMenu, $event)">
+                        <md-icon class="material-icons">restaurant</md-icon> Recetas
+                    </md-button>
+                    <md-menu-content>
+                        <md-menu-item ng-class="getClassActive('/recipes')">
+                            <md-button ng-href="/recipes">
+                                <md-icon class="material-icons">fiber_new</md-icon> Ultimas recetas
+                            </md-button>
+                        </md-menu-item>
+                        <md-menu-item ng-class="getClassActive('/top-recipes')" class="no-implemented">
+                            <md-button>
+                                <md-icon class="material-icons">stars</md-icon> Top recetas
+                            </md-button>
+                        </md-menu-item>
+                    </md-menu-content>
+                </md-menu>
+                <md-menu class="hide-custom-header-sm">
+                    <md-button ng-class="getClassActive('/users')" ng-click="openDropdrown($mdOpenMenu, $event)">
+                        <md-icon class="material-icons">supervisor_account</md-icon> Usuarios
+                    </md-button>
+                    <md-menu-content>
+                        <md-menu-item ng-class="getClassActive('/users')">
+                            <md-button ng-href="/users">
+                                <md-icon class="material-icons">perm_identity</md-icon> Todos los usuarios
+                            </md-button>
+                        </md-menu-item>
+                        <md-menu-item ng-class="getClassActive('/friends')">
+                            <md-button ng-href="/friends">
+                                <md-icon class="material-icons">weekend</md-icon> Amigos
+                            </md-button>
+                        </md-menu-item>
+                    </md-menu-content>
+                </md-menu>
                 <span flex></span>
                 <div flex class="search-container">
                     <md-input-container md-no-float class="md-has-no-icon-left" flex="100" layout="row" layout-align="start center">
@@ -36,7 +68,7 @@
                             <md-icon class="material-icons md-black">edit</md-icon> Escribe una receta
                         </md-button>
                         <md-menu>
-                            <md-button ng-click="openUserDropdrown($mdOpenMenu, $event)">
+                            <md-button ng-click="openDropdrown($mdOpenMenu, $event)">
                                 <div layout="row" layout-align="center center">
                                     <img class="user-image" ng-src="{{ UserLogged | srcImage:UserLogged }}" />
                                     <span>Hola, {{ UserLogged.first_name }}</span>

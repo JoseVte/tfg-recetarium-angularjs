@@ -47,6 +47,7 @@ recetarium.config(['$routeProvider', '$locationProvider', function($routeProvide
         // Users
         .when('/users', { templateUrl: 'views/user/index.html', controller: 'UserAll', resolver: { access: ["AuthService", function (AuthService) { return AuthService.IsAuthenticated(); }]}})
         .when('/users/:id', { templateUrl: 'views/user/show.html', controller: 'UserShow', resolver: { access: ["AuthService", function (AuthService) { return AuthService.IsAuthenticated(); }]}})
+        .when('/friends', { templateUrl: 'views/user/index.html', controller: 'FriendAll', resolver: { access: ["AuthService", function (AuthService) { return AuthService.IsAuthenticated(); }]}})
         // Errores
         .when('/unauthorized', { templateUrl: 'views/error/401.html', controller: '' })
         .when('/forbidden', { templateUrl: 'views/error/403.html', controller: '' })
@@ -106,7 +107,7 @@ recetarium.config(['envServiceProvider', function (envServiceProvider) {
 recetarium.run(function ($rootScope, $location, $http, AuthService, NotificationProvider, ICONS) {
     var authRegex = /\/login|\/register|\/reset\/password.*/;
     var profileRegex = /\/profile.*/;
-    var userRegex = /\/users.*/;
+    var userRegex = /\/users.*|\/friends/;
     $rootScope.location = $location;
     $rootScope.searchString = '';
     $rootScope.lastSearchParams = [];
@@ -125,6 +126,7 @@ recetarium.run(function ($rootScope, $location, $http, AuthService, Notification
 
     $(document).on('click', '.no-implemented', function (e) {
         e.preventDefault();
+        e.stopPropagation();
         NotificationProvider.notify({
             title: 'No implementado',
             text: 'Esta opcion esta en desarrollo y sera aplicada posteriormente.',

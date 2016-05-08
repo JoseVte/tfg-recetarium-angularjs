@@ -49,26 +49,48 @@ userController.constant('FRIENDS_FUNCTIONS', {
     }
 });
 
-userController.controller('UserAll',
-    ['$scope', '$rootScope', '$location', 'UserService', 'NotificationProvider',
-    function ($scope, $rootScope, $location, UserService, NotificationProvider) {
-        $rootScope.headerTitle = 'Usuarios';
+userController.constant('USER_FUNCTIONS', {
+    CommonFunction: function($scope) {
         $scope.users = [];
+        $scope.searchText = '';
         $scope.total = 1;
         $scope.nextPageNumber = 1;
 
         $scope.reloadUsers = function() {
             $scope.users = [];
-            $scope.total = 0;
+            $scope.total = 1;
             $scope.nextPageNumber = 1;
             $scope.getUsers();
         };
+
+        $scope.$watch(function() {
+            return $scope.searchText;
+        }, function (newVal, oldVal) {
+            $scope.reloadUsers();
+        });
+
+        $scope.nextPage = function () {
+            if ($scope.total > $scope.users.length) {
+                $scope.getUsers();
+            }
+        };
+    }
+})
+
+userController.controller('UserAll',
+['$scope', '$rootScope', 'UserService', 'NotificationProvider', 'USER_FUNCTIONS',
+function ($scope, $rootScope, UserService, NotificationProvider, USER_FUNCTIONS) {
+        $rootScope.headerTitle = 'Usuarios';
+
+        USER_FUNCTIONS.CommonFunction($scope);
 
         $scope.getUsers = function() {
             $scope.loadingNextPage = true;
             UserService.search({
                 page: $scope.nextPageNumber,
                 size: 10,
+                order: 'firstName',
+                search: $scope.searchText,
             }, function (response) {
                 var responseData = response.data;
                 $scope.users = $scope.users.concat(responseData.data);
@@ -93,12 +115,6 @@ userController.controller('UserAll',
                 $scope.loadingNextPage = false;
             });
         };
-
-        $scope.nextPage = function () {
-            if ($scope.total > $scope.users.length) {
-                $scope.getUsers();
-            }
-        };
     }]
 );
 
@@ -112,13 +128,13 @@ userController.controller('UserShow',
         $scope.infiniteScroll = {
             recipes: {
                 data: [],
-                total: 0,
+                total: 1,
                 nextPageNumber: 1,
                 loadingNextPage: false,
             },
             friends: {
                 data: [],
-                total: 0,
+                total: 1,
                 nextPageNumber: 1,
                 loadingNextPage: false,
             },
@@ -255,7 +271,7 @@ userController.controller('UserShow',
 
         $scope.reloadFriends = function() {
             $scope.infiniteScroll.friends.data = [];
-            $scope.infiniteScroll.friends.total = 0;
+            $scope.infiniteScroll.friends.total = 1;
             $scope.infiniteScroll.friends.nextPageNumber = 1;
             $scope.loadFriends();
         };
@@ -274,6 +290,47 @@ userController.controller('UserShow',
             $event.cancelBubble = true;
             $event.returnValue = false;
             FRIENDS_FUNCTIONS.DeleteFriend(UserService, NotificationProvider, $rootScope.globals.user.user, user, $scope.reloadFriends);
+        };
+    }]
+);
+
+userController.controller('FriendAll',
+    ['$scope', '$rootScope', 'UserService', 'NotificationProvider', 'USER_FUNCTIONS',
+    function ($scope, $rootScope, UserService, NotificationProvider, USER_FUNCTIONS) {
+        $rootScope.headerTitle = 'Amigos';
+
+        USER_FUNCTIONS.CommonFunction($scope);
+
+        $scope.getUsers = function() {
+            $scope.loadingNextPage = true;
+            UserService.getFriends($rootScope.globals.user.user.id, {
+                page: $scope.nextPageNumber,
+                size: 10,
+                order: 'firstName',
+                search: $scope.searchText,
+            }, function (response) {
+                var responseData = response.data;
+                $scope.users = $scope.users.concat(responseData.data);
+                $scope.nextPageNumber++;
+                $scope.total = responseData.total;
+                $scope.loadingNextPage = false;
+            }, function (response) {
+                NotificationProvider.notify({
+                    title: 'Un error ha ocurrido',
+                    text: 'Ha ocurrido un error mientras se cargaban los amigos. Por favor, intentelo más tarde.',
+                    type: 'error',
+                    addclass: 'custom-error-notify',
+                    icon: 'material-icons md-light',
+                    styling: 'fontawesome'
+                });
+                $rootScope.error = {
+                    icon: 'error_outline',
+                    title: 'Algo ha ido mal',
+                    msg: 'Ha ocurrido un error mientras se cargaban los amigos.'
+                };
+                $rootScope.errorMsg = true;
+                $scope.loadingNextPage = false;
+            });
         };
     }]
 );
