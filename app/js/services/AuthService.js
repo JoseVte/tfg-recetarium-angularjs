@@ -16,9 +16,6 @@ authServices.factory('AuthService',
                 { email: email, password: password, setExpiration: expiration },
                 { headers: {'Accept': 'application/json', 'Content-Type': 'application/json'} }
             ).then(function (response) {
-                if (!expiration) {
-                    service.StartCronCheckToken();
-                }
                 callbackOk(response);
             }, function (response) {
                 callbackError(response);
@@ -52,6 +49,18 @@ authServices.factory('AuthService',
             $http.put(
                 service.apiUrl + '/auth/reset/password',
                 { email: email, password: password, token: token },
+                { headers: {'Accept': 'application/json', 'Content-Type': 'application/json'} }
+            ).then(function (response) {
+                callbackOk(response);
+            }, function (response) {
+                callbackError(response);
+            });
+        };
+
+        service.ValidateEmail = function (token, callbackOk, callbackError) {
+            $http.put(
+                service.apiUrl + '/auth/active',
+                { token: token },
                 { headers: {'Accept': 'application/json', 'Content-Type': 'application/json'} }
             ).then(function (response) {
                 callbackOk(response);
@@ -138,7 +147,7 @@ authServices.factory('AuthService',
                 { email: user.email, expiration: $rootScope.globals.user.setExpiration },
                 { headers: {'Accept': 'application/json', 'Content-Type': 'application/json'} }
             ).then(function (response) {
-                service.SaveCredentials(response.data.auth_token, JSON.parse(service.ParseJwt(response.data.auth_token).sub))
+                service.SaveCredentials(response.data.auth_token, JSON.parse(service.ParseJwt(response.data.auth_token).sub));
             }, function (response) {
                 if (response.status == 401) {
                     service.ClearCredentials();

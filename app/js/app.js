@@ -38,6 +38,7 @@ recetarium.config(['$routeProvider', '$locationProvider', function($routeProvide
         .when('/register', { templateUrl: 'views/auth/register.html', controller: 'Register', resolve: { access: ["AuthService", function (AuthService) { return AuthService.IsAnonymous(); }]}})
         .when('/reset/password', { templateUrl: 'views/auth/reset-password.html', controller: 'ResetPassword', resolve: { access: ["AuthService", function (AuthService) { return AuthService.IsAnonymous(); }]}})
         .when('/reset/password/:token', { templateUrl: 'views/auth/recover-password.html', controller: 'RecoverPassword', resolve: { access: ["AuthService", function (AuthService) { return AuthService.IsAnonymous(); }]}})
+        .when('/active/:token', { templateUrl: 'views/auth/validate-email.html', controller: 'ValidateEmail', resolve: { access: ["AuthService", function (AuthService) { return AuthService.IsAnonymous(); }]}})
         .when('/profile', { templateUrl: 'views/auth/profile.html', controller: 'EditProfile', resolver: { access: ["AuthService", function (AuthService) { return AuthService.IsAuthenticated(); }]}})
         // Recipes
         .when('/recipes', { templateUrl: 'views/recipe/index.html', controller: 'RecipeAll' })
@@ -105,7 +106,7 @@ recetarium.config(['envServiceProvider', function (envServiceProvider) {
 
 //
 recetarium.run(function ($rootScope, $location, $http, AuthService, NotificationProvider, ICONS) {
-    var authRegex = /\/login|\/register|\/reset\/password.*/;
+    var authRegex = /\/login|\/register|\/active.*|\/reset\/password.*/;
     var profileRegex = /\/profile.*/;
     var userRegex = /\/users.*|\/friends/;
     $rootScope.location = $location;

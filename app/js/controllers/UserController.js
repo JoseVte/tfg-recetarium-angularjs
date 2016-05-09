@@ -75,11 +75,11 @@ userController.constant('USER_FUNCTIONS', {
             }
         };
     }
-})
+});
 
 userController.controller('UserAll',
-['$scope', '$rootScope', 'UserService', 'NotificationProvider', 'USER_FUNCTIONS',
-function ($scope, $rootScope, UserService, NotificationProvider, USER_FUNCTIONS) {
+    ['$scope', '$rootScope', 'UserService', 'NotificationProvider', 'USER_FUNCTIONS',
+    function ($scope, $rootScope, UserService, NotificationProvider, USER_FUNCTIONS) {
         $rootScope.headerTitle = 'Usuarios';
 
         USER_FUNCTIONS.CommonFunction($scope);
@@ -264,7 +264,7 @@ userController.controller('UserShow',
         };
 
         $scope.nextPageFriends = function () {
-            if ($scope.infiniteScroll.friends.total > $scope.infiniteScroll.friends.data.length) {
+            if ($scope.infiniteScroll.friends.total > $scope.infiniteScroll.friends.data.length && !$scope.infiniteScroll.friends.loadingNextPage) {
                 $scope.loadFriends();
             }
         };
