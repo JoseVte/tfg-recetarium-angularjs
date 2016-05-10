@@ -1,4 +1,33 @@
 .profile-card {
+    md-content {
+        overflow: inherit;
+    }
+    md-input-container {
+        margin: 0;
+        padding-bottom: 2px;
+        width: 100%;
+        h4 {
+            margin: 5px 0;
+        }
+    }
+    .img-container {
+        width: auto;
+        vertical-align:top;
+        text-align:center;
+        padding: 0;
+        .image-avatar {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            width: auto;
+            height: auto;
+            max-height: 300px;
+            max-width: 300px;
+            @media(max-width: $layout-breakpoint-md) {
+                overflow: hidden;
+            }
+        }
+    }
     .image-list-card {
         .card-media {
             a.image-recipe-zoomable {
@@ -37,5 +66,39 @@
 .md-dialog-upload-images-images {
     md-toolbar {
         background-color: $blueBackground;
+    }
+}
+
+.md-dialog-gallery-avatar {
+    md-toolbar {
+        background-color: $blueBackground;
+    }
+    .images-recipe-gallery {
+        margin-top: 0px;
+    }
+    md-slider {
+        margin-top: 25px;
+        min-width: 75%;
+        .md-track.md-track-fill {
+            background-color: $blueBackground;
+        }
+        .md-thumb:after {
+            border-color: $blueBackground;
+            background-color: $blueBackground;
+        }
+        .md-sign {
+            background-color: $blueBackground;
+            &::after {
+                border-top-color:  $blueBackground;
+            }
+        }
+    }
+    .md-dialog-content-comment {
+        @media (min-width: $layout-breakpoint-sm) {
+            min-width: 500px;
+        }
+        @media (min-width: $layout-breakpoint-md) {
+            min-width: 700px;
+        }
     }
 }

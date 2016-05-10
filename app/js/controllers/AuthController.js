@@ -25,6 +25,9 @@ authController.controller('Login',
             $scope.setDelay1();
             AuthService.Login($scope.email, $scope.password, !$scope.expiration, function (response) {
                 AuthService.SaveCredentials(response.data.auth_token, JSON.parse(AuthService.ParseJwt(response.data.auth_token).sub));
+                if (!$scope.expiration) {
+                    AuthService.StartCronCheckToken();
+                }
                 $rootScope.progressBarActivated = false;
                 $location.path('/');
             }, function (response) {
@@ -265,6 +268,53 @@ authController.controller('RecoverPassword',
     }]
 );
 
+authController.controller('ValidateEmail',
+    ['$scope', '$rootScope', '$routeParams', '$location', 'AuthService', 'NotificationProvider',
+    function ($scope, $rootScope, $routeParams, $location, AuthService, NotificationProvider) {
+        $rootScope.headerTitle = 'Validando email';
+        $rootScope.errorMsg = false;
+        $rootScope.progressBarActivated = true;
+        $scope.hasMessage = false;
+
+        AuthService.ValidateEmail($routeParams.token, function (response) {
+            NotificationProvider.notify({
+                title: 'Email validado correctamente',
+                type: 'success',
+                addClass: 'material-icons md-light',
+                icon_class: 'check_circle',
+                style: 'fontawesome',
+            });
+            $rootScope.progressBarActivated = false;
+            $location.path('/login');
+        }, function (response) {
+            if (response.status == 400) {
+                $rootScope.error = {
+                    icon: 'error_outline',
+                    title: 'Datos incorrectos',
+                    msg: $.parseError(response.data)
+                };
+            } else {
+                NotificationProvider.notify({
+                    title: 'Un error ha ocurrido',
+                    text: 'Ha ocurrido un error mientras se validaba el email. Por favor, intentelo más tarde.',
+                    type: 'error',
+                    addclass: 'custom-error-notify',
+                    icon: 'material-icons md-light',
+                    styling: 'fontawesome'
+                });
+                $rootScope.error = {
+                    icon: 'error_outline',
+                    title: 'Algo ha ido mal',
+                    msg: 'Ha ocurrido un error mientras se validaba el email.'
+                };
+            }
+            $rootScope.errorMsg = true;
+            $rootScope.progressBarActivated = false;
+            $rootScope.headerTitle = 'Error';
+        });
+    }]
+);
+
 authController.controller('EditProfile',
     ['$scope', '$rootScope', '$location', '$timeout', '$sce', '$mdDialog', 'AuthService', 'FileService', 'NotificationProvider', 'FRIENDS_FUNCTIONS',
     function ($scope, $rootScope, $location, $timeout, $sce, $mdDialog, AuthService, FileService, NotificationProvider, FRIENDS_FUNCTIONS) {
@@ -420,7 +470,7 @@ authController.controller('EditProfile',
         };
 
         $scope.nextPageFriends = function () {
-            if ($scope.infiniteScroll.friends.total > $scope.infiniteScroll.friends.data.length) {
+            if ($scope.infiniteScroll.friends.total > $scope.infiniteScroll.friends.data.length && !$scope.infiniteScroll.friends.loadingNextPage) {
                 $scope.loadFriends();
             }
         };
@@ -452,7 +502,11 @@ authController.controller('EditProfile',
             $rootScope.errorMsg = false;
             $rootScope.progressBarActivated = true;
             $scope.setDelay1();
-            AuthService.EditProfile($scope.user, function (response) {
+            var userObj = angular.copy($scope.user);
+            if (userObj.avatar) {
+                userObj.avatar = userObj.avatar.id;
+            }
+            AuthService.EditProfile(userObj, function (response) {
                 $rootScope.progressBarActivated = false;
                 NotificationProvider.notify({
                     title: 'Datos guardados',
@@ -463,6 +517,8 @@ authController.controller('EditProfile',
                     icon_class: 'backup',
                     styling: 'fontawesome'
                 });
+                $scope.user = response.data;
+                AuthService.CheckToken($scope.user);
                 $scope.setDelay2();
             }, function (response) {
                 if (response.status == 400) {
@@ -618,6 +674,24 @@ authController.controller('EditProfile',
             $event.cancelBubble = true;
             $event.returnValue = false;
             FRIENDS_FUNCTIONS.DeleteFriend(UserService, NotificationProvider, $rootScope.globals.user.user, user, $scope.reloadFriends);
+        };
+
+        $scope.selectAvatar = function(ev) {
+            $mdDialog.show({
+                controller: GalleryDialogController,
+                templateUrl: 'views/user/gallery_dialog.html',
+                parent: angular.element(document.body),
+                locals: { data: {
+                        selectedImages: ($scope.user.avatar) ? [ $scope.user.avatar ] : [],
+                        mode: 'selectAvatar',
+                        user: $scope.user,
+                    }
+                },
+                targetEvent: ev,
+                clickOutsideToClose: true
+            }).then(function(answer) {
+                $scope.user.avatar = answer;
+            }, function() {});
         };
     }]
 );
