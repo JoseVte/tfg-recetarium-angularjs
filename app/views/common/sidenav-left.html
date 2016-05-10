@@ -21,7 +21,7 @@
                     <a class="md-button" ng-click="navTo($event, '/logout')"><md-icon class="material-icons">exit_to_app</md-icon> Logout</a>
                 <li>
             </div>
-            <div ng-if="!IsAuthed" show-xs show-sm hide-gt-sm>
+            <div ng-else show-xs show-sm hide-gt-sm>
                 <li ng-class="getClassActive('/login') || getClassActive('/register')">
                     <a class="md-button" ng-click="navTo($event, '/login')">Login / Registrate</a>
                 </li>

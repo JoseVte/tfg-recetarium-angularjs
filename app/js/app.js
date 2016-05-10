@@ -13,12 +13,13 @@ var recetarium = angular.module('recetariumApp', [
     'textAngular',
     'ui.router',
     'infinite-scroll',
+    'elif',
     // My Javascript
     'Animations', 'TextEditor', 'NotificationProviders',
     'CommentServices', 'FileServices',
     'FileDirectives', 'FormDirectives', 'TimeDirectives', 'ValidatorDirectives',
     'HomeController',
-    'UserServices', 'UserController',
+    'UserServices', 'UserFilters', 'UserController',
     'AuthServices', 'AuthController',
     'RecipeServices', 'RecipeFilters', 'RecipeController',
     'CategoryServices', 'CategoryController',
@@ -37,6 +38,7 @@ recetarium.config(['$routeProvider', '$locationProvider', function($routeProvide
         .when('/register', { templateUrl: 'views/auth/register.html', controller: 'Register', resolve: { access: ["AuthService", function (AuthService) { return AuthService.IsAnonymous(); }]}})
         .when('/reset/password', { templateUrl: 'views/auth/reset-password.html', controller: 'ResetPassword', resolve: { access: ["AuthService", function (AuthService) { return AuthService.IsAnonymous(); }]}})
         .when('/reset/password/:token', { templateUrl: 'views/auth/recover-password.html', controller: 'RecoverPassword', resolve: { access: ["AuthService", function (AuthService) { return AuthService.IsAnonymous(); }]}})
+        .when('/active/:token', { templateUrl: 'views/auth/validate-email.html', controller: 'ValidateEmail', resolve: { access: ["AuthService", function (AuthService) { return AuthService.IsAnonymous(); }]}})
         .when('/profile', { templateUrl: 'views/auth/profile.html', controller: 'EditProfile', resolver: { access: ["AuthService", function (AuthService) { return AuthService.IsAuthenticated(); }]}})
         // Recipes
         .when('/recipes', { templateUrl: 'views/recipe/index.html', controller: 'RecipeAll' })
@@ -46,6 +48,7 @@ recetarium.config(['$routeProvider', '$locationProvider', function($routeProvide
         // Users
         .when('/users', { templateUrl: 'views/user/index.html', controller: 'UserAll', resolver: { access: ["AuthService", function (AuthService) { return AuthService.IsAuthenticated(); }]}})
         .when('/users/:id', { templateUrl: 'views/user/show.html', controller: 'UserShow', resolver: { access: ["AuthService", function (AuthService) { return AuthService.IsAuthenticated(); }]}})
+        .when('/friends', { templateUrl: 'views/user/index.html', controller: 'FriendAll', resolver: { access: ["AuthService", function (AuthService) { return AuthService.IsAuthenticated(); }]}})
         // Errores
         .when('/unauthorized', { templateUrl: 'views/error/401.html', controller: '' })
         .when('/forbidden', { templateUrl: 'views/error/403.html', controller: '' })
@@ -103,9 +106,9 @@ recetarium.config(['envServiceProvider', function (envServiceProvider) {
 
 //
 recetarium.run(function ($rootScope, $location, $http, AuthService, NotificationProvider, ICONS) {
-    var authRegex = /\/login|\/register|\/reset\/password.*/;
+    var authRegex = /\/login|\/register|\/active.*|\/reset\/password.*/;
     var profileRegex = /\/profile.*/;
-    var userRegex = /\/users.*/;
+    var userRegex = /\/users.*|\/friends/;
     $rootScope.location = $location;
     $rootScope.searchString = '';
     $rootScope.lastSearchParams = [];
@@ -116,14 +119,14 @@ recetarium.run(function ($rootScope, $location, $http, AuthService, Notification
 
     if (localStorage.globals) {
         $rootScope.globals = JSON.parse(localStorage.globals);
-        // TODO
-        //AuthService.CheckToken($rootScope.globals.token);
+        AuthService.StartCronCheckToken();
     } else {
         $rootScope.globals = {};
     }
 
     $(document).on('click', '.no-implemented', function (e) {
         e.preventDefault();
+        e.stopPropagation();
         NotificationProvider.notify({
             title: 'No implementado',
             text: 'Esta opcion esta en desarrollo y sera aplicada posteriormente.',
@@ -262,6 +265,14 @@ Array.prototype.contains = function(obj) {
         if (this[i] === obj) { return true; }
     }
     return false;
+};
+
+Array.prototype.removeItem = function(item) {
+    var index = this.indexOf(item);
+    if (index > -1) {
+        return this.splice(item, 1);
+    }
+    return this;
 };
 
 Array.prototype.getById = function(id) {

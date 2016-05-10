@@ -37,7 +37,7 @@
                                 <div data-ng-bind-html="description(recipe.steps)"></div>
                             </span>
                             <md-content layout="row" layout-wrap layout-align="end center">
-                                <img class="user-image" ng-src="{{ recipe.user | srcImage:recipe.user }}" />
+                                <img class="user-image" ng-src="{{ recipe.user | userImage:recipe.user }}" />
                                 <i>{{ recipe.user.username }}</i>
                             </md-content>
                         </md-card-title-text>

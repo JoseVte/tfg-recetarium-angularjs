@@ -195,7 +195,7 @@ describe('Module RecipeController', function() {
             });
             $httpBackend.when('GET', /views\/(.*)/).respond(200, {});
             $httpBackend.when('GET', /http:\/\/localhost:9000\/profile(.*)/).respond(200, {id:1});
-            $httpBackend.when('GET', /http:\/\/localhost:9000\/users\/1\/files(.*)/).respond(200, [{id:1}]);
+            $httpBackend.when('GET', /http:\/\/localhost:9000\/users\/1\/files(.*)/).respond(200, [{id:1, email: 'test'}]);
             $httpBackend.when('PUT', /http:\/\/localhost:9000\/profile(.*)/).respond(200);
         }));
 
@@ -226,15 +226,9 @@ describe('Module RecipeController', function() {
             expect($scope.images[0].id).toEqual(1);
         });
 
-        it('save method', function () {
-            $httpBackend.expectPUT('http://localhost:9000/profile');
-            $scope.save();
-            $scope.$apply();
-            $httpBackend.flush();
-        });
-
-        it('recoverPassword error method', function () {
+        it('save error method', function () {
             $httpBackend.expectPUT('http://localhost:9000/profile').respond(400);
+            $scope.user = { email: 'test' };
             $scope.save();
             $httpBackend.flush();
             expect($rootScope.errorMsg).toBeTruthy();

@@ -49,7 +49,27 @@ http-server -a localhost -p 8000
 
 ## Changelog
 
-#### [![0.7.3](/app/doc/rocket-blue.png) 0.7.3](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.7.3)
+#### [![0.8.4](/app/doc/rocket-blue.png) 0.8.4](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.8.4)
+
+- Validacion del email
+- Avatar para el usuario
+
+###### [![0.8.3](/app/doc/release.png) 0.8.3](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.8.3)
+
+- Recargar el JWT cada 30 minutos si se ha marcado la opcion de 'Recordar'
+
+###### [![0.8.2](/app/doc/release.png) 0.8.2](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.8.2)
+
+- Menus desplegables
+- Buscar usuarios y amigos
+
+###### [![0.8.1](/app/doc/release.png) 0.8.1](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.8.1)
+
+- Ver tus amigos en el perfil
+- Ver los amigos de otros en su perfil
+- Añadir y borrar amigos mediante botones
+
+###### [![0.7.3](/app/doc/release.png) 0.7.3](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.7.3)
 
 - Seccion de usuarios WIP
 

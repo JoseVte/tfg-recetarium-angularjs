@@ -87,24 +87,6 @@
 .md-select-menu-container {
     background-color: white;
 }
-.search-block {
-    md-chips .md-chip {
-        background: $darkOrangeBackgroundDisabled;
-        color: white;
-        md-icon {
-            color: white;
-        }
-    }
-    md-chips .md-chips.md-focused {
-        box-shadow: 0 2px $darkOrangeBackground;
-    }
-    md-chips .md-chip.md-focused {
-        background: $darkOrangeBackground;
-    }
-    md-progress-linear .md-bar {
-        background-color: $darkOrangeBackground;
-    }
-}
 .card-recipe-with-form {
     width: 100%;
     .group-input-right {

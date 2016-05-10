@@ -691,7 +691,7 @@ recipeController.controller('RecipeShow',
             if ($('#replies-' + comment.id).text() === '') {
                 $('#replies-' + comment.id).append($compile('<div ng-repeat="comment in comments.getByIdWithParent(' + comment.id + ').replies | orderBy:created_at:true" flex="100">' +
                     '<md-card class="comment-list-card"><md-card-title><md-card-title-media>' +
-                    '<div class="md-media-md card-media" layout="row" layout-align="center center"><img ng-src="{{ comment.user | srcImage:recipe.user }}" /></div>' +
+                    '<div class="md-media-md card-media" layout="row" layout-align="center center"><img ng-src="{{ comment.user | userImage:recipe.user }}" /></div>' +
                     '</md-card-title-media><md-card-title-text>' +
                         '<span class="md-headline">{{ comment.text }}</span>' +
                         '<span class="md-subhead" ng-if="comment.updated_at != comment.created_at">Ultima modificación el <em>{{ comment.updated_at | date:medium }}</em></span>' +
@@ -1133,7 +1133,9 @@ recipeController.controller('RecipeEdit',
             $rootScope.headerTitle = 'Guardando receta';
             $('html, body').animate({ scrollTop: 0 }, 'slow');
             var recipeObj = angular.copy($scope.recipe);
-            recipeObj.image_main = recipeObj.image_main.id;
+            if (recipeObj.image_main) {
+                recipeObj.image_main = recipeObj.image_main.id;
+            }
             recipeObj.duration += ':00';
             recipeObj.new_tags = RecipeService.getNewTags(recipeObj.chipTags);
             recipeObj.tags = $.getArrayId(recipeObj.chipTags);
@@ -1241,7 +1243,7 @@ function GalleryDialogController($scope, $rootScope, $mdDialog, data, FileServic
             image.selected = false;
         } else {
             // If you click in other image
-            if ($scope.mode == 'selectImageMain') {
+            if ($scope.mode == 'selectImageMain' || $scope.mode == 'selectAvatar') {
                 $scope.selectedImages= [];
                 $scope.checkImagesSelected($scope.images);
             }
@@ -1317,7 +1319,7 @@ function GalleryDialogController($scope, $rootScope, $mdDialog, data, FileServic
     $scope.hide = function() { $mdDialog.hide(); };
     $scope.cancel = function() { $mdDialog.cancel(); };
     $scope.returnSelected = function() {
-        if ($scope.mode == 'selectImageMain') {
+        if ($scope.mode == 'selectImageMain' || $scope.mode == 'selectAvatar') {
             $mdDialog.hide($scope.selectedImages[0]);
         } else {
             $mdDialog.hide($scope.selectedImages);

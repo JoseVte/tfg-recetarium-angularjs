@@ -1,0 +1,16 @@
+<md-content class="md-padding" layout="row" layout-wrap layout-align="center start">
+    <div flex-gt-md="75" flex-gt-lg="50" flex="grow" layout="column">
+        <md-card class="auth-card md-whiteframe-z3">
+            <md-card-title>
+                <md-card-title-text>
+                    <span class="md-headline" ng-class="{'loading': progressBarActivated}">{{ headerTitle }}</span>
+                </md-card-title-text>
+            </md-card-title>
+            <md-card-content>
+                <div flex layout="row" layout-align="center center">
+                    <md-progress-circular md-mode="indeterminate" ng-show="progressBarActivated" class="md-auth zoomAnimation" md-diameter="100"></md-progress-circular>
+                </div>
+            </md-card-content>
+        </md-card>
+    </div>
+</md-content>
