@@ -190,7 +190,9 @@ describe('Module RecipeController', function() {
     describe('Controller EditProfile', function () {
         beforeEach(inject(function($rootScope, $controller) {
             $scope = $rootScope.$new();
+            $rootScope.globals = { user: { user: { id: 1 }}};
             ctrl = $controller('EditProfile', {
+                $rootScope: $rootScope,
                 $scope: $scope
             });
             $httpBackend.when('GET', /views\/(.*)/).respond(200, {});

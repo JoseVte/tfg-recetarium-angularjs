@@ -66,32 +66,64 @@
                             </div>
                         </form>
                     </md-tab>
-                    <md-tab label="Tus recetas" md-on-select="loadUserRecipes()">
-                        <md-content class="md-padding">
-                            <div ng-repeat="recipe in recipes | orderBy:'-created_at'" flex="100">
-                                <md-card class="card-recipe-profile">
-                                    <a ng-href="/recipes/{{ recipe.slug }}">
-                                    <md-card-title>
-                                        <md-card-title-media>
-                                            <div class="md-media-md card-media">
-                                                <img class="recipe-photo-main" data-ng-src="{{ recipe.image_main | srcImage:recipe.user }}" />
-                                            </div>
-                                        </md-card-title-media>
-                                        <md-card-title-text>
-                                                <span class="md-headline">{{ recipe.title }}</span>
-                                                <span class="md-subhead">
-                                                    <div data-ng-bind-html="description(recipe.steps)"></div>
-                                                </span>
-                                        </md-card-title-text>
-                                    </md-card-title>
-                                </a>
-                                    <div layout="row" layout-align="end center">
-                                        <md-button aria-label="Edit" class="md-edit" ng-href="/recipes/{{ recipe.slug }}/edit"><md-icon class="material-icons md-dark">edit</md-icon> Editar</md-button>
-                                        <md-button aria-label="Remove" class="md-remove" ng-click="removeRecipe(recipe, $event)"><md-icon class="material-icons md-dark">delete</md-icon> Borrar</md-button>
-                                    </div>
-                                </md-card>
-                            </div>
-                        </md-content>
+                    <md-tab label="Tus recetas" md-on-select="nextPageRecipes()">
+                        <div infinite-scroll="nextPageRecipes()" infinite-scroll-disabled="infiniteScroll.recipes.loadingNextPage || errorMsg" infinite-scroll-distance="3" layout-wrap>
+                            <md-content class="md-padding">
+                                <div class="animation-card-recipes" ng-repeat="recipe in infiniteScroll.recipes.data" flex="100">
+                                    <md-card class="card-recipe-profile">
+                                        <a ng-href="/recipes/{{ recipe.slug }}">
+                                        <md-card-title>
+                                            <md-card-title-media>
+                                                <div class="md-media-md card-media">
+                                                    <img class="recipe-photo-main" data-ng-src="{{ recipe.image_main | srcImage:recipe.user }}" />
+                                                </div>
+                                            </md-card-title-media>
+                                            <md-card-title-text>
+                                                    <span class="md-headline">{{ recipe.title }}</span>
+                                                    <span class="md-subhead">
+                                                        <div data-ng-bind-html="description(recipe.steps)"></div>
+                                                    </span>
+                                            </md-card-title-text>
+                                        </md-card-title>
+                                    </a>
+                                        <div layout="row" layout-align="end center">
+                                            <md-button aria-label="Edit" class="md-edit" ng-href="/recipes/{{ recipe.slug }}/edit"><md-icon class="material-icons md-dark">edit</md-icon> Editar</md-button>
+                                            <md-button aria-label="Remove" class="md-remove" ng-click="removeRecipe(recipe, $event)"><md-icon class="material-icons md-dark">delete</md-icon> Borrar</md-button>
+                                        </div>
+                                    </md-card>
+                                </div>
+                            </md-content>
+                        </div>
+                    </md-tab>
+                    <md-tab label="Tus recetas favoritas" md-on-select="nextPageRecipesFavorites()">
+                        <div infinite-scroll="nextPageRecipesFavorites()" infinite-scroll-disabled="infiniteScroll.recipesFavorites.loadingNextPage || errorMsg" infinite-scroll-distance="3" layout-wrap>
+                            <md-content class="md-padding">
+                                <div class="animation-card-recipes" ng-repeat="recipe in infiniteScroll.recipesFavorites.data" flex="100">
+                                    <md-card class="card-recipe-profile">
+                                        <a ng-href="/recipes/{{ recipe.slug }}">
+                                        <md-card-title>
+                                            <md-card-title-media>
+                                                <div class="md-media-md card-media">
+                                                    <img class="recipe-photo-main" data-ng-src="{{ recipe.image_main | srcImage:recipe.user }}" />
+                                                </div>
+                                            </md-card-title-media>
+                                            <md-card-title-text>
+                                                    <span class="md-headline">{{ recipe.title }}</span>
+                                                    <span class="md-subhead">
+                                                        <div data-ng-bind-html="description(recipe.steps)"></div>
+                                                    </span>
+                                            </md-card-title-text>
+                                        </md-card-title>
+                                    </a>
+                                        <div layout="row" layout-align="end center">
+                                            <md-button ng-click="removeFavorite(recipe, $event)" class="md-icon-button" aria-label="Favoritos">
+                                                <md-icon class="material-icons md-red">favorite</md-icon>
+                                            </md-button>
+                                        </div>
+                                    </md-card>
+                                </div>
+                            </md-content>
+                        </div>
                     </md-tab>
                     <md-tab label="Tus imagenes" md-on-select="loadUserImages()">
                         <md-content class="md-padding">
@@ -127,7 +159,7 @@
                             </div>
                         </md-content>
                     </md-tab>
-                    <md-tab label="Tus amigos" md-on-select="loadFriends()">
+                    <md-tab label="Tus amigos" md-on-select="nextPageFriends()">
                         <div infinite-scroll="nextPageFriends()" infinite-scroll-disabled="infiniteScroll.friends.loadingNextPage || errorMsg" infinite-scroll-distance="3" layout-wrap>
                             <md-content class="md-padding" layout="row" layout-wrap layout-align="space-around start">
                                 <div class="animation-card-users" ng-repeat="user in infiniteScroll.friends.data" flex="100">
@@ -171,6 +203,6 @@
         </md-card>
     </div>
 </md-content>
-<md-button ng-show="selectedProfileTab == 2" class="md-fab md-fixed-bottom-profile" aria-label="Subir imagenes" ng-click="openUploadImage($event)">
+<md-button ng-show="selectedProfileTab == 0 || selectedProfileTab == 3" class="md-fab md-fixed-bottom-profile" aria-label="Subir imagenes" ng-click="openUploadImage($event)">
     <md-icon class="material-icons md-light">file_upload</md-icon>
 </md-button>

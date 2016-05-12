@@ -50,7 +50,7 @@ userController.constant('FRIENDS_FUNCTIONS', {
 });
 
 userController.constant('USER_FUNCTIONS', {
-    CommonFunction: function($scope) {
+    Users: function($scope) {
         $scope.users = [];
         $scope.searchText = '';
         $scope.total = 1;
@@ -74,7 +74,229 @@ userController.constant('USER_FUNCTIONS', {
                 $scope.getUsers();
             }
         };
-    }
+    },
+    Recipes: function ($scope, $rootScope, $mdDialog, userId, UserService, RecipeService, NotificationProvider) {
+        $scope.loadUserRecipes = function() {
+            $rootScope.progressBarActivated = true;
+            $scope.infiniteScroll.recipes.loadingNextPage = true;
+            UserService.getRecipes(userId, {
+                page: $scope.infiniteScroll.recipes.nextPageNumber,
+                size: 10
+            }, function (response) {
+                $scope.infiniteScroll.recipes.data = $scope.infiniteScroll.recipes.data.concat(response.data.data);
+                $scope.infiniteScroll.recipes.total = response.data.total;
+                $rootScope.progressBarActivated = false;
+                $scope.infiniteScroll.recipes.nextPageNumber++;
+                $scope.infiniteScroll.recipes.loadingNextPage = false;
+            }, function (response) {
+                NotificationProvider.notify({
+                    title: 'Un error ha ocurrido',
+                    text: 'Ha ocurrido un error mientras se cargaban las recetas. Por favor, intentelo más tarde.',
+                    type: 'error',
+                    addclass: 'custom-error-notify',
+                    icon: 'material-icons md-light',
+                    styling: 'fontawesome'
+                });
+                $rootScope.headerTitle = 'Error';
+                $rootScope.progressBarActivated = false;
+            });
+        };
+
+        $scope.nextPageRecipes = function () {
+            if ($scope.infiniteScroll.recipes.total > $scope.infiniteScroll.recipes.data.length && !$scope.infiniteScroll.recipes.loadingNextPage) {
+                $scope.loadUserRecipes();
+            }
+        };
+
+        $scope.reloadUserRecipes = function() {
+            $scope.infiniteScroll.recipes.data = [];
+            $scope.infiniteScroll.recipes.total = 1;
+            $scope.infiniteScroll.recipes.nextPageNumber = 1;
+            $scope.loadUserRecipes();
+        };
+
+        $scope.removeRecipe = function(recipe, $event) {
+            if ($event.stopPropagation) $event.stopPropagation();
+            if ($event.preventDefault) $event.preventDefault();
+            $event.cancelBubble = true;
+            $event.returnValue = false;
+            var confirm = $mdDialog.confirm()
+                .title('Borrar receta')
+                .textContent('¿De verdad que quieres borrar la receta \'' + recipe.title +'\'?\nEsta acción no se puede deshacer.')
+                .ariaLabel('Borrar')
+                .targetEvent($event)
+                .ok('Borrar')
+                .cancel('Cancelar');
+            $mdDialog.show(confirm).then(function () {
+                $rootScope.progressBarActivated = true;
+                $rootScope.errorMsg = false;
+                RecipeService.delete(recipe.id, function(response) {
+                    NotificationProvider.notify({
+                        title: 'Receta borrada',
+                        text: 'Has borrado la receta \'' + recipe.title +'\'.',
+                        type: 'success',
+                        addclass: 'custom-success-notify',
+                        icon: 'material-icons md-light',
+                        icon_class: 'check_circle',
+                        styling: 'fontawesome'
+                    });
+                    $rootScope.progressBarActivated = false;
+                    $scope.reloadUserRecipes();
+                }, function(response) {
+                    if (response.status == 404) {
+                        $rootScope.error = {
+                            icon: 'error_outline',
+                            title: 'Receta no encontrada',
+                            msg: $.parseError(response.data)
+                        };
+                    } else {
+                        NotificationProvider.notify({
+                            title: 'Un error ha ocurrido',
+                            text: 'Ha ocurrido un error mientras se borraba la receta. Por favor, intentelo más tarde.',
+                            type: 'error',
+                            addclass: 'custom-error-notify',
+                            icon: 'material-icons md-light',
+                            styling: 'fontawesome'
+                        });
+                        $rootScope.error = {
+                            icon: 'error_outline',
+                            title: 'Algo ha ido mal',
+                            msg: 'Ha ocurrido un error mientras se borraba la receta.'
+                        };
+                    }
+                    $rootScope.errorMsg = true;
+                    $rootScope.progressBarActivated = false;
+                });
+            }, function() {});
+        };
+    },
+    RecipesFavorites: function ($scope, $rootScope, $mdDialog, userId, UserService, RecipeService, NotificationProvider) {
+        $scope.loadUserRecipesFavorites = function() {
+            $rootScope.progressBarActivated = true;
+            $scope.infiniteScroll.recipesFavorites.loadingNextPage = true;
+            UserService.getRecipesFavorites(userId, {
+                page: $scope.infiniteScroll.recipesFavorites.nextPageNumber,
+                size: 10
+            }, function (response) {
+                $scope.infiniteScroll.recipesFavorites.data = $scope.infiniteScroll.recipesFavorites.data.concat(response.data.data);
+                $scope.infiniteScroll.recipesFavorites.total = response.data.total;
+                $rootScope.progressBarActivated = false;
+                $scope.infiniteScroll.recipesFavorites.nextPageNumber++;
+                $scope.infiniteScroll.recipesFavorites.loadingNextPage = false;
+            }, function (response) {
+                NotificationProvider.notify({
+                    title: 'Un error ha ocurrido',
+                    text: 'Ha ocurrido un error mientras se cargaban las recetas. Por favor, intentelo más tarde.',
+                    type: 'error',
+                    addclass: 'custom-error-notify',
+                    icon: 'material-icons md-light',
+                    styling: 'fontawesome'
+                });
+                $rootScope.headerTitle = 'Error';
+                $rootScope.progressBarActivated = false;
+            });
+        };
+
+        $scope.nextPageRecipesFavorites = function () {
+            if ($scope.infiniteScroll.recipesFavorites.total > $scope.infiniteScroll.recipesFavorites.data.length && !$scope.infiniteScroll.recipesFavorites.loadingNextPage) {
+                $scope.loadUserRecipesFavorites();
+            }
+        };
+
+        $scope.reloadUserRecipesFavorites = function() {
+            $scope.infiniteScroll.recipesFavorites.data = [];
+            $scope.infiniteScroll.recipesFavorites.total = 1;
+            $scope.infiniteScroll.recipesFavorites.nextPageNumber = 1;
+            $scope.loadUserRecipesFavorites();
+        };
+
+        $scope.removeFavorite = function(recipe, $event) {
+            if ($event.stopPropagation) $event.stopPropagation();
+            if ($event.preventDefault) $event.preventDefault();
+            $event.cancelBubble = true;
+            $event.returnValue = false;
+            RecipeService.toggleFav(recipe.id, function (response) {
+                NotificationProvider.notify({
+                    title: 'Guardado',
+                    text: '',
+                    type: 'error',
+                    addclass: 'custom-success-notify',
+                    icon: 'material-icons md-light',
+                    icon_class: $scope.fav ? 'favorite' : 'favorite_border',
+                    styling: 'fontawesome'
+                });
+                $rootScope.progressBarActivated = false;
+                $scope.reloadUserRecipesFavorites();
+            }, function (response) {
+                NotificationProvider.notify({
+                    title: 'Un error ha ocurrido',
+                    text: 'Ha ocurrido un error. Por favor, intentelo más tarde.',
+                    type: 'error',
+                    addclass: 'custom-error-notify',
+                    icon: 'material-icons md-light',
+                    styling: 'fontawesome'
+                });
+            });
+        };
+    },
+    Friends: function ($scope, $rootScope, userId, UserService, NotificationProvider, FRIENDS_FUNCTIONS) {
+        $scope.loadFriends = function() {
+            $rootScope.progressBarActivated = true;
+            $scope.infiniteScroll.friends.loadingNextPage = true;
+            UserService.getFriends(userId, {
+                page: $scope.infiniteScroll.friends.nextPageNumber,
+                size: 10,
+                order: 'firstName',
+            }, function (response) {
+                $scope.infiniteScroll.friends.data = $scope.infiniteScroll.friends.data.concat(response.data.data);
+                $scope.infiniteScroll.friends.total = response.data.total;
+                $rootScope.progressBarActivated = false;
+                $scope.infiniteScroll.friends.nextPageNumber++;
+                $scope.infiniteScroll.friends.loadingNextPage = false;
+            }, function (response) {
+                NotificationProvider.notify({
+                    title: 'Un error ha ocurrido',
+                    text: 'Ha ocurrido un error mientras se cargaban los amigos. Por favor, intentelo más tarde.',
+                    type: 'error',
+                    addclass: 'custom-error-notify',
+                    icon: 'material-icons md-light',
+                    styling: 'fontawesome'
+                });
+                $rootScope.headerTitle = 'Error';
+                $rootScope.progressBarActivated = false;
+                $scope.infiniteScroll.friends.loadingNextPage = false;
+            });
+        };
+
+        $scope.nextPageFriends = function () {
+            if ($scope.infiniteScroll.friends.total > $scope.infiniteScroll.friends.data.length && !$scope.infiniteScroll.friends.loadingNextPage) {
+                $scope.loadFriends();
+            }
+        };
+
+        $scope.reloadFriends = function() {
+            $scope.infiniteScroll.friends.data = [];
+            $scope.infiniteScroll.friends.total = 1;
+            $scope.infiniteScroll.friends.nextPageNumber = 1;
+            $scope.loadFriends();
+        };
+
+        $scope.addFriend = function (user, $event) {
+            if ($event.stopPropagation) $event.stopPropagation();
+            if ($event.preventDefault) $event.preventDefault();
+            $event.cancelBubble = true;
+            $event.returnValue = false;
+            FRIENDS_FUNCTIONS.AddFriend(UserService, NotificationProvider, $rootScope.globals.user.user, user, $scope.reloadFriends);
+        };
+
+        $scope.deleteFriend = function (user, $event) {
+            if ($event.stopPropagation) $event.stopPropagation();
+            if ($event.preventDefault) $event.preventDefault();
+            $event.cancelBubble = true;
+            $event.returnValue = false;
+            FRIENDS_FUNCTIONS.DeleteFriend(UserService, NotificationProvider, $rootScope.globals.user.user, user, $scope.reloadFriends);
+        };
+    },
 });
 
 userController.controller('UserAll',
@@ -82,7 +304,7 @@ userController.controller('UserAll',
     function ($scope, $rootScope, UserService, NotificationProvider, USER_FUNCTIONS) {
         $rootScope.headerTitle = 'Usuarios';
 
-        USER_FUNCTIONS.CommonFunction($scope);
+        USER_FUNCTIONS.Users($scope);
 
         $scope.getUsers = function() {
             $scope.loadingNextPage = true;
@@ -119,14 +341,20 @@ userController.controller('UserAll',
 );
 
 userController.controller('UserShow',
-    ['$scope', '$rootScope', '$location', '$routeParams', '$timeout', 'UserService', 'FileService', 'NotificationProvider', 'FRIENDS_FUNCTIONS',
-    function ($scope, $rootScope, $location, $routeParams, $timeout, UserService, FileService, NotificationProvider, FRIENDS_FUNCTIONS) {
+    ['$scope', '$rootScope', '$location', '$routeParams', '$timeout', '$mdDialog', 'UserService', 'RecipeService', 'NotificationProvider', 'USER_FUNCTIONS', 'FRIENDS_FUNCTIONS',
+    function ($scope, $rootScope, $location, $routeParams, $timeout, $mdDialog, UserService, RecipeService, NotificationProvider, USER_FUNCTIONS, FRIENDS_FUNCTIONS) {
         $rootScope.headerTitle = 'Perfil del usuario';
         $rootScope.HasBack = true;
         $scope.commentsActived = false;
 
         $scope.infiniteScroll = {
             recipes: {
+                data: [],
+                total: 1,
+                nextPageNumber: 1,
+                loadingNextPage: false,
+            },
+            recipesFavorites: {
                 data: [],
                 total: 1,
                 nextPageNumber: 1,
@@ -214,83 +442,11 @@ userController.controller('UserShow',
             FRIENDS_FUNCTIONS.DeleteFriend(UserService, NotificationProvider, $rootScope.globals.user.user, user, $scope.loadPersonalData);
         };
 
-        /** Recipes **/
-        $scope.loadUserRecipes = function() {
-            $rootScope.progressBarActivated = true;
-            UserService.getRecipes($routeParams.id, function (response) {
-                $scope.recipes = response.data;
-                $rootScope.progressBarActivated = false;
-            }, function (response) {
-                NotificationProvider.notify({
-                    title: 'Un error ha ocurrido',
-                    text: 'Ha ocurrido un error mientras se cargaban las recetas. Por favor, intentelo más tarde.',
-                    type: 'error',
-                    addclass: 'custom-error-notify',
-                    icon: 'material-icons md-light',
-                    styling: 'fontawesome'
-                });
-                $rootScope.headerTitle = 'Error';
-                $rootScope.progressBarActivated = false;
-            });
-        };
+        USER_FUNCTIONS.Recipes($scope, $rootScope, $mdDialog, $routeParams.id, UserService, RecipeService, NotificationProvider);
 
-        /** Friends **/
-        $scope.loadFriends = function() {
-            $rootScope.progressBarActivated = true;
-            $scope.infiniteScroll.friends.loadingNextPage = true;
-            UserService.getFriends($routeParams.id, {
-                page: $scope.infiniteScroll.friends.nextPageNumber,
-                size: 10,
-                order: 'firstName',
-            }, function (response) {
-                $scope.infiniteScroll.friends.data = $scope.infiniteScroll.friends.data.concat(response.data.data);
-                $scope.infiniteScroll.friends.total = response.data.total;
-                $rootScope.progressBarActivated = false;
-                $scope.infiniteScroll.friends.nextPageNumber++;
-                $scope.infiniteScroll.friends.loadingNextPage = false;
-            }, function (response) {
-                NotificationProvider.notify({
-                    title: 'Un error ha ocurrido',
-                    text: 'Ha ocurrido un error mientras se cargaban los amigos. Por favor, intentelo más tarde.',
-                    type: 'error',
-                    addclass: 'custom-error-notify',
-                    icon: 'material-icons md-light',
-                    styling: 'fontawesome'
-                });
-                $rootScope.headerTitle = 'Error';
-                $rootScope.progressBarActivated = false;
-                $scope.infiniteScroll.friends.loadingNextPage = false;
-            });
-        };
+        USER_FUNCTIONS.RecipesFavorites($scope, $rootScope, $mdDialog, $routeParams.id, UserService, RecipeService, NotificationProvider);
 
-        $scope.nextPageFriends = function () {
-            if ($scope.infiniteScroll.friends.total > $scope.infiniteScroll.friends.data.length && !$scope.infiniteScroll.friends.loadingNextPage) {
-                $scope.loadFriends();
-            }
-        };
-
-        $scope.reloadFriends = function() {
-            $scope.infiniteScroll.friends.data = [];
-            $scope.infiniteScroll.friends.total = 1;
-            $scope.infiniteScroll.friends.nextPageNumber = 1;
-            $scope.loadFriends();
-        };
-
-        $scope.addFriend = function (user, $event) {
-            if ($event.stopPropagation) $event.stopPropagation();
-            if ($event.preventDefault) $event.preventDefault();
-            $event.cancelBubble = true;
-            $event.returnValue = false;
-            FRIENDS_FUNCTIONS.AddFriend(UserService, NotificationProvider, $rootScope.globals.user.user, user, $scope.reloadFriends);
-        };
-
-        $scope.deleteFriend = function (user, $event) {
-            if ($event.stopPropagation) $event.stopPropagation();
-            if ($event.preventDefault) $event.preventDefault();
-            $event.cancelBubble = true;
-            $event.returnValue = false;
-            FRIENDS_FUNCTIONS.DeleteFriend(UserService, NotificationProvider, $rootScope.globals.user.user, user, $scope.reloadFriends);
-        };
+        USER_FUNCTIONS.Friends($scope, $rootScope, $routeParams.id, UserService, NotificationProvider, FRIENDS_FUNCTIONS);
     }]
 );
 
@@ -299,7 +455,7 @@ userController.controller('FriendAll',
     function ($scope, $rootScope, UserService, NotificationProvider, USER_FUNCTIONS) {
         $rootScope.headerTitle = 'Amigos';
 
-        USER_FUNCTIONS.CommonFunction($scope);
+        USER_FUNCTIONS.Users($scope);
 
         $scope.getUsers = function() {
             $scope.loadingNextPage = true;

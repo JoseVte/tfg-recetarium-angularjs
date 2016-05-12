@@ -316,12 +316,18 @@ authController.controller('ValidateEmail',
 );
 
 authController.controller('EditProfile',
-    ['$scope', '$rootScope', '$location', '$timeout', '$sce', '$mdDialog', 'AuthService', 'FileService', 'NotificationProvider', 'FRIENDS_FUNCTIONS',
-    function ($scope, $rootScope, $location, $timeout, $sce, $mdDialog, AuthService, FileService, NotificationProvider, FRIENDS_FUNCTIONS) {
+    ['$scope', '$rootScope', '$location', '$timeout', '$sce', '$mdDialog', 'AuthService', 'FileService', 'UserService', 'RecipeService', 'NotificationProvider', 'FRIENDS_FUNCTIONS', 'USER_FUNCTIONS',
+    function ($scope, $rootScope, $location, $timeout, $sce, $mdDialog, AuthService, FileService, UserService, RecipeService, NotificationProvider, FRIENDS_FUNCTIONS, USER_FUNCTIONS) {
         $rootScope.headerTitle = 'Editar perfil';
 
         $scope.infiniteScroll = {
             recipes: {
+                data: [],
+                total: 1,
+                nextPageNumber: 1,
+                loadingNextPage: false,
+            },
+            recipesFavorites: {
                 data: [],
                 total: 1,
                 nextPageNumber: 1,
@@ -403,24 +409,11 @@ authController.controller('EditProfile',
             });
         };
 
-        $scope.loadUserRecipes = function() {
-            $rootScope.progressBarActivated = true;
-            AuthService.GetRecipes(function (response) {
-                $scope.recipes = response.data;
-                $rootScope.progressBarActivated = false;
-            }, function (response) {
-                NotificationProvider.notify({
-                    title: 'Un error ha ocurrido',
-                    text: 'Ha ocurrido un error mientras se cargaban las recetas. Por favor, intentelo más tarde.',
-                    type: 'error',
-                    addclass: 'custom-error-notify',
-                    icon: 'material-icons md-light',
-                    styling: 'fontawesome'
-                });
-                $rootScope.headerTitle = 'Error';
-                $rootScope.progressBarActivated = false;
-            });
-        };
+        USER_FUNCTIONS.Recipes($scope, $rootScope, $mdDialog, $rootScope.globals.user.user.id, UserService, RecipeService,NotificationProvider);
+
+        USER_FUNCTIONS.RecipesFavorites($scope, $rootScope, $mdDialog, $rootScope.globals.user.user.id, UserService, RecipeService,NotificationProvider);
+
+        USER_FUNCTIONS.Friends($scope, $rootScope, $rootScope.globals.user.user.id, UserService, NotificationProvider, FRIENDS_FUNCTIONS);
 
         $scope.loadUserImages = function() {
             $rootScope.progressBarActivated = true;
@@ -439,47 +432,6 @@ authController.controller('EditProfile',
                 $rootScope.headerTitle = 'Error';
                 $rootScope.progressBarActivated = false;
             });
-        };
-
-        $scope.loadFriends = function() {
-            $rootScope.progressBarActivated = true;
-            $scope.infiniteScroll.friends.loadingNextPage = true;
-            AuthService.getFriends($rootScope.globals.user.user, {
-                page: $scope.infiniteScroll.friends.nextPageNumber,
-                size: 10,
-                order: 'firstName',
-            }, function (response) {
-                $scope.infiniteScroll.friends.data = $scope.infiniteScroll.friends.data.concat(response.data.data);
-                $scope.infiniteScroll.friends.total = response.data.total;
-                $rootScope.progressBarActivated = false;
-                $scope.infiniteScroll.friends.nextPageNumber++;
-                $scope.infiniteScroll.friends.loadingNextPage = false;
-            }, function (response) {
-                NotificationProvider.notify({
-                    title: 'Un error ha ocurrido',
-                    text: 'Ha ocurrido un error mientras se cargaban los amigos. Por favor, intentelo más tarde.',
-                    type: 'error',
-                    addclass: 'custom-error-notify',
-                    icon: 'material-icons md-light',
-                    styling: 'fontawesome'
-                });
-                $rootScope.headerTitle = 'Error';
-                $rootScope.progressBarActivated = false;
-                $scope.infiniteScroll.friends.loadingNextPage = false;
-            });
-        };
-
-        $scope.nextPageFriends = function () {
-            if ($scope.infiniteScroll.friends.total > $scope.infiniteScroll.friends.data.length && !$scope.infiniteScroll.friends.loadingNextPage) {
-                $scope.loadFriends();
-            }
-        };
-
-        $scope.reloadFriends = function() {
-            $scope.infiniteScroll.friends.data = [];
-            $scope.infiniteScroll.friends.total = 1;
-            $scope.infiniteScroll.friends.nextPageNumber = 1;
-            $scope.loadFriends();
         };
 
         $scope.openUploadImage = function($event) {
@@ -552,61 +504,6 @@ authController.controller('EditProfile',
             if (steps) return $sce.trustAsHtml(steps.trunc(260, true));
         };
 
-        $scope.removeRecipe = function(recipe, $event) {
-            if ($event.stopPropagation) $event.stopPropagation();
-            if ($event.preventDefault) $event.preventDefault();
-            $event.cancelBubble = true;
-            $event.returnValue = false;
-            var confirm = $mdDialog.confirm()
-                .title('Borrar receta')
-                .textContent('¿De verdad que quieres borrar la receta \'' + recipe.title +'\'?\nEsta acción no se puede deshacer.')
-                .ariaLabel('Borrar')
-                .targetEvent($event)
-                .ok('Borrar')
-                .cancel('Cancelar');
-            $mdDialog.show(confirm).then(function () {
-                $rootScope.progressBarActivated = true;
-                $rootScope.errorMsg = false;
-                RecipeService.delete(recipe.id, function(response) {
-                    NotificationProvider.notify({
-                        title: 'Receta borrada',
-                        text: 'Has borrado la receta \'' + recipe.title +'\'.',
-                        type: 'success',
-                        addclass: 'custom-success-notify',
-                        icon: 'material-icons md-light',
-                        icon_class: 'check_circle',
-                        styling: 'fontawesome'
-                    });
-                    $rootScope.progressBarActivated = false;
-                    $scope.getRecipes();
-                }, function(response) {
-                    if (response.status == 404) {
-                        $rootScope.error = {
-                            icon: 'error_outline',
-                            title: 'Receta no encontrada',
-                            msg: $.parseError(response.data)
-                        };
-                    } else {
-                        NotificationProvider.notify({
-                            title: 'Un error ha ocurrido',
-                            text: 'Ha ocurrido un error mientras se borraba la receta. Por favor, intentelo más tarde.',
-                            type: 'error',
-                            addclass: 'custom-error-notify',
-                            icon: 'material-icons md-light',
-                            styling: 'fontawesome'
-                        });
-                        $rootScope.error = {
-                            icon: 'error_outline',
-                            title: 'Algo ha ido mal',
-                            msg: 'Ha ocurrido un error mientras se borraba la receta.'
-                        };
-                    }
-                    $rootScope.errorMsg = true;
-                    $rootScope.progressBarActivated = false;
-                });
-            }, function() {});
-        };
-
         $scope.remove = function(image, $event) {
             var msg = '¿De verdad que quieres borrar la imagen \'' + image.title +'\'?\r\nEsta acción no se puede deshacer.';
             if (image.recipes > 0) msg += '\r\nLa imagen desaparecerá de todas las recetas';
@@ -660,22 +557,6 @@ authController.controller('EditProfile',
             }, function() {});
         };
 
-        $scope.addFriend = function (user, $event) {
-            if ($event.stopPropagation) $event.stopPropagation();
-            if ($event.preventDefault) $event.preventDefault();
-            $event.cancelBubble = true;
-            $event.returnValue = false;
-            FRIENDS_FUNCTIONS.AddFriend(UserService, NotificationProvider, $rootScope.globals.user.user, user, $scope.reloadFriends);
-        };
-
-        $scope.deleteFriend = function (user, $event) {
-            if ($event.stopPropagation) $event.stopPropagation();
-            if ($event.preventDefault) $event.preventDefault();
-            $event.cancelBubble = true;
-            $event.returnValue = false;
-            FRIENDS_FUNCTIONS.DeleteFriend(UserService, NotificationProvider, $rootScope.globals.user.user, user, $scope.reloadFriends);
-        };
-
         $scope.selectAvatar = function(ev) {
             $mdDialog.show({
                 controller: GalleryDialogController,
@@ -704,7 +585,6 @@ function UserUploadDialogController($scope, $rootScope, $mdDialog, data, FileSer
     $scope.successUpload = function(file, response) {
         $scope.images.push(response);
     };
-
     $scope.hide = function() { $mdDialog.hide(); };
     $scope.cancel = function() { $mdDialog.cancel(); };
     $scope.returnUploaded = function() {
