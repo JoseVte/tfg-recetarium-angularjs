@@ -99,6 +99,7 @@ gulp.task('lib-js', function() {
         paths.src.bower + '/dropzone/dist/dropzone.js',
         paths.src.bower + '/js-md5/src/md5.js',
         paths.src.bower + '/ng-elif/src/elif.js',
+        paths.src.bower + '/pusher-websocket-iso/dist/web/pusher.js'
     ])
     .pipe(concat('app-lib.js'))
     .pipe(rename({ suffix: '.min' }))

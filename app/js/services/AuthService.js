@@ -1,8 +1,8 @@
 var authServices = angular.module('AuthServices', ['ngResource']);
 
 authServices.factory('AuthService',
-    ['$http', '$rootScope', '$timeout', '$interval', 'envService', '$q',
-    function ($http, $rootScope, $timeout, $interval, envService, $q) {
+    ['$http', '$rootScope', '$timeout', '$interval', 'envService', '$q', 'NotificationProvider',
+    function ($http, $rootScope, $timeout, $interval, envService, $q, NotificationProvider) {
         var service = {
             apiUrl: envService.read('apiUrl'),
             OK: 200,
@@ -115,10 +115,19 @@ authServices.factory('AuthService',
                 user: user
             };
 
+            $rootScope.channel = $rootScope.pusher.subscribe('user_' + user.user.id);
+            $rootScope.channel.bind('recipe_favorite', function(data) { NotificationProvider.notificateFavorite(data) });
+            $rootScope.channel.bind('recipe_comment', function(data) { NotificationProvider.notificateComment(data) });
+            $rootScope.channel.bind('comment_reply', function(data) { NotificationProvider.notificateReply(data) });
+
             localStorage.globals = JSON.stringify($rootScope.globals);
         };
 
         service.ClearCredentials = function () {
+            if (!!$rootScope.globals.user && !!$rootScope.globals.user.user && !!$rootScope.globals.user.user.id && !!$rootScope.channel) {
+                $rootScope.channel.unbind();
+                $rootScope.pusher.unsubscribe('user_' + $rootScope.globals.user.user.id);
+            }
             $rootScope.globals = {};
             localStorage.removeItem('globals');
         };
@@ -130,6 +139,7 @@ authServices.factory('AuthService',
         };
 
         service.CheckToken = function (user) {
+            console.log(user);
             $http.post(
                 service.apiUrl + '/auth/check',
                 { email: user.email, expiration: $rootScope.globals.user.setExpiration },

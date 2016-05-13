@@ -52,7 +52,24 @@ notificationProvider.provider('NotificationProvider',
                     notification.get().click(function () {
                         notification.remove();
                     });
-                }
+                },
+                notificateFavorite: function(data){
+                    console.log(data);
+                    return this.notify({
+                        title: data._children.msg._value,
+                        type: 'primary',
+                        addclass: 'custom-primary-notify',
+                        icon: 'material-icons md-light',
+                        icon_class: 'favorite',
+                        styling: 'fontawesome'
+                    })
+                },
+                notificateComment: function(data){
+                    console.log(data);
+                },
+                notificateReply: function(data){
+                    console.log(data);
+                },
             };
         }];
     }]

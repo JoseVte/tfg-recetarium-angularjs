@@ -94,10 +94,14 @@ recetarium.config(['envServiceProvider', function (envServiceProvider) {
         },
         vars: {
             development: {
-                apiUrl: 'http://localhost:9000'
+                apiUrl: 'http://localhost:9000',
+                pusherKey: 'c0d58893e757f42fedf3',
+                pusherLog: true,
             },
             production: {
-                apiUrl: 'https://recetarium.herokuapp.com'
+                apiUrl: 'https://recetarium.herokuapp.com',
+                pusherKey: 'c0d58893e757f42fedf3',
+                pusherLog: false,
             }
         }
     });
@@ -105,20 +109,25 @@ recetarium.config(['envServiceProvider', function (envServiceProvider) {
 }]);
 
 //
-recetarium.run(function ($rootScope, $location, $http, AuthService, NotificationProvider, ICONS) {
+recetarium.run(function ($rootScope, $location, $http, AuthService, NotificationProvider, envService, ICONS) {
     var authRegex = /\/login|\/register|\/active.*|\/reset\/password.*/;
     var profileRegex = /\/profile.*/;
     var userRegex = /\/users.*|\/friends/;
     $rootScope.location = $location;
     $rootScope.searchString = '';
-    $rootScope.lastSearchParams = [];
-    $rootScope.lastSearchParams['/recipes'] = {
-        page: 1,
-        size: 10
-    };
+
+    // Enable pusher logging
+    Pusher.logToConsole = envService.read('pusherLog');
+    // Initialize pusher
+    $rootScope.pusher = new Pusher(envService.read('pusherKey'), {
+        cluster: 'eu',
+        encrypted: true
+    });
 
     if (localStorage.globals) {
         $rootScope.globals = JSON.parse(localStorage.globals);
+        $http.defaults.headers.common['X-Auth-Token'] = $rootScope.globals.token;
+        AuthService.CheckToken($rootScope.globals.user.user);
         AuthService.StartCronCheckToken();
     } else {
         $rootScope.globals = {};
@@ -159,10 +168,6 @@ recetarium.run(function ($rootScope, $location, $http, AuthService, Notification
         $rootScope.HasBack = false;
         $rootScope.errorMsg = false;
         $rootScope.progressBarActivated = false;
-
-        if (!$location.search() && $rootScope.lastSearchParams[$path]) {
-            $location.search($rootScope.lastSearchParams[$path]);
-        }
 
         // Remove the params into URI
         if ($path !== '/recipes') {

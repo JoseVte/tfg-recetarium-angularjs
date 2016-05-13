@@ -1,5 +1,5 @@
 //*** Custom notification ***//
-@each $type, $color in (error, $errorColor), (success, $successColor) {
+@each $type, $color in (error, $errorColor), (success, $successColor), (primary, $primaryColor) {
     .ui-pnotify{
         &.custom-#{$type}-notify {
             background-color: $color !important;
