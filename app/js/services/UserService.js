@@ -67,10 +67,27 @@ userService.factory('UserService',
             });
         };
 
-        service.getRecipes = function (userId, callbackOk, callbackError) {
+        service.getRecipes = function (userId, params, callbackOk, callbackError) {
             $http.get(
                 service.apiUrl + '/users/' + userId + '/recipes',
-                { headers: {'Accept': 'application/json', 'Content-Type': 'application/json'} }
+                {
+                    headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+                    params: params
+                }
+            ).then(function (response) {
+                callbackOk(response);
+            }, function (response) {
+                callbackError(response);
+            });
+        };
+
+        service.getRecipesFavorites = function (userId, params, callbackOk, callbackError) {
+            $http.get(
+                service.apiUrl + '/users/' + userId + '/favorites',
+                {
+                    headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+                    params: params
+                }
             ).then(function (response) {
                 callbackOk(response);
             }, function (response) {
