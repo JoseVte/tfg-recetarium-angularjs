@@ -54,21 +54,34 @@ notificationProvider.provider('NotificationProvider',
                     });
                 },
                 notificateFavorite: function(data){
-                    console.log(data);
                     return this.notify({
-                        title: data._children.msg._value,
+                        title: data.msg,
                         type: 'primary',
                         addclass: 'custom-primary-notify',
                         icon: 'material-icons md-light',
                         icon_class: 'favorite',
                         styling: 'fontawesome'
-                    })
+                    });
                 },
                 notificateComment: function(data){
-                    console.log(data);
+                    return this.notify({
+                        title: data.msg,
+                        type: 'primary',
+                        addclass: 'custom-primary-notify',
+                        icon: 'material-icons md-light',
+                        icon_class: 'comment',
+                        styling: 'fontawesome'
+                    });
                 },
                 notificateReply: function(data){
-                    console.log(data);
+                    return this.notify({
+                        title: data.msg,
+                        type: 'primary',
+                        addclass: 'custom-primary-notify',
+                        icon: 'material-icons md-light',
+                        icon_class: 'reply',
+                        styling: 'fontawesome'
+                    });
                 },
             };
         }];

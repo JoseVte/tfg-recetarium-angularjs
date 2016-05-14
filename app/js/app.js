@@ -95,12 +95,10 @@ recetarium.config(['envServiceProvider', function (envServiceProvider) {
         vars: {
             development: {
                 apiUrl: 'http://localhost:9000',
-                pusherKey: 'c0d58893e757f42fedf3',
                 pusherLog: true,
             },
             production: {
                 apiUrl: 'https://recetarium.herokuapp.com',
-                pusherKey: 'c0d58893e757f42fedf3',
                 pusherLog: false,
             }
         }
@@ -118,11 +116,6 @@ recetarium.run(function ($rootScope, $location, $http, AuthService, Notification
 
     // Enable pusher logging
     Pusher.logToConsole = envService.read('pusherLog');
-    // Initialize pusher
-    $rootScope.pusher = new Pusher(envService.read('pusherKey'), {
-        cluster: 'eu',
-        encrypted: true
-    });
 
     if (localStorage.globals) {
         $rootScope.globals = JSON.parse(localStorage.globals);

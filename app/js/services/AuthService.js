@@ -109,17 +109,26 @@ authServices.factory('AuthService',
             });
         };
 
-        service.SaveCredentials = function (token, user) {
+        service.SaveCredentials = function (token, user, pusherKey) {
             $rootScope.globals = {
                 token: token,
                 user: user
             };
 
-            $rootScope.channel = $rootScope.pusher.subscribe('user_' + user.user.id);
-            $rootScope.channel.bind('recipe_favorite', function(data) { NotificationProvider.notificateFavorite(data) });
-            $rootScope.channel.bind('recipe_comment', function(data) { NotificationProvider.notificateComment(data) });
-            $rootScope.channel.bind('comment_reply', function(data) { NotificationProvider.notificateReply(data) });
+            if (!!pusherKey) {
+                // Initialize pusher
+                if ($rootScope.pusher === null || $rootScope.pusher === undefined) {
+                    $rootScope.pusher = new Pusher(pusherKey, {
+                        cluster: 'eu',
+                        encrypted: true
+                    });
+                }
 
+                $rootScope.channel = $rootScope.pusher.subscribe('user_' + user.user.id);
+                $rootScope.channel.bind('recipe_favorite', function(data) { NotificationProvider.notificateFavorite(JSON.parse(data)); });
+                $rootScope.channel.bind('recipe_comment', function(data) { NotificationProvider.notificateComment(JSON.parse(data)); });
+                $rootScope.channel.bind('comment_reply', function(data) { NotificationProvider.notificateReply(JSON.parse(data)); });
+            }
             localStorage.globals = JSON.stringify($rootScope.globals);
         };
 
@@ -139,13 +148,12 @@ authServices.factory('AuthService',
         };
 
         service.CheckToken = function (user) {
-            console.log(user);
             $http.post(
                 service.apiUrl + '/auth/check',
                 { email: user.email, expiration: $rootScope.globals.user.setExpiration },
                 { headers: {'Accept': 'application/json', 'Content-Type': 'application/json'} }
             ).then(function (response) {
-                service.SaveCredentials(response.data.auth_token, JSON.parse(service.ParseJwt(response.data.auth_token).sub));
+                service.SaveCredentials(response.data.auth_token, JSON.parse(service.ParseJwt(response.data.auth_token).sub), response.data.pusher_key);
             }, function (response) {
                 if (response.status == 401) {
                     service.ClearCredentials();

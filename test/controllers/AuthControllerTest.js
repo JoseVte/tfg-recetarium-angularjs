@@ -51,6 +51,7 @@ describe('Module RecipeController', function() {
         });
 
         it('login error method', function () {
+            $httpBackend.expectPOST(/http:\/\/localhost:9000\/auth\/check(.*)/).respond(400);
             $httpBackend.expectPOST('http://localhost:9000/auth/login').respond(400);
             $scope.login();
             $httpBackend.flush();
