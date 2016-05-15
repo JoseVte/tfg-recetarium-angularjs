@@ -1,8 +1,8 @@
 var authServices = angular.module('AuthServices', ['ngResource']);
 
 authServices.factory('AuthService',
-    ['$http', '$rootScope', '$timeout', '$interval', 'envService', '$q', 'NotificationProvider',
-    function ($http, $rootScope, $timeout, $interval, envService, $q, NotificationProvider) {
+    ['$http', '$rootScope', '$timeout', '$interval', '$location', 'envService', '$q', 'NotificationProvider',
+    function ($http, $rootScope, $timeout, $interval, $location, envService, $q, NotificationProvider) {
         var service = {
             apiUrl: envService.read('apiUrl'),
             OK: 200,
@@ -124,10 +124,31 @@ authServices.factory('AuthService',
                     });
                 }
 
-                $rootScope.channel = $rootScope.pusher.subscribe('user_' + user.user.id);
-                $rootScope.channel.bind('recipe_favorite', function(data) { NotificationProvider.notificateFavorite(JSON.parse(data)); });
-                $rootScope.channel.bind('recipe_comment', function(data) { NotificationProvider.notificateComment(JSON.parse(data)); });
-                $rootScope.channel.bind('comment_reply', function(data) { NotificationProvider.notificateReply(JSON.parse(data)); });
+                if (!$rootScope.isBinded) {
+                    $rootScope.channel = $rootScope.pusher.subscribe('user_' + user.user.id);
+                    $rootScope.channel.bind('recipe_favorite', function(data) {
+                        NotificationProvider.notificateFavorite(JSON.parse(data), function() {
+                            $rootScope.$apply(function() {
+                                $location.path(JSON.parse(data).redirect);
+                            });
+                        });
+                    });
+                    $rootScope.channel.bind('recipe_comment', function(data) {
+                        NotificationProvider.notificateComment(JSON.parse(data), function() {
+                            $rootScope.$apply(function() {
+                                $location.path(JSON.parse(data).redirect);
+                            });
+                        });
+                    });
+                    $rootScope.channel.bind('comment_reply', function(data) {
+                        NotificationProvider.notificateReply(JSON.parse(data), function() {
+                            $rootScope.$apply(function() {
+                                $location.path(JSON.parse(data).redirect);
+                            });
+                        });
+                    });
+                    $rootScope.isBinded = true;
+                }
             }
             localStorage.globals = JSON.stringify($rootScope.globals);
         };
@@ -136,6 +157,7 @@ authServices.factory('AuthService',
             if (!!$rootScope.globals.user && !!$rootScope.globals.user.user && !!$rootScope.globals.user.user.id && !!$rootScope.channel) {
                 $rootScope.channel.unbind();
                 $rootScope.pusher.unsubscribe('user_' + $rootScope.globals.user.user.id);
+                $rootScope.isBinded = false;
             }
             $rootScope.globals = {};
             localStorage.removeItem('globals');
