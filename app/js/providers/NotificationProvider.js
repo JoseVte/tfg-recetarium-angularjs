@@ -4,7 +4,7 @@ notificationProvider.provider('NotificationProvider',
     [function () {
         var settings = { styling: 'bootstrap3' };
         this.setDefaults = function(defaults) { settings = defaults; };
-        PNotify.desktop.permission();
+        // PNotify.desktop.permission();
 
         this.$get = [ function() {
             return {
@@ -51,8 +51,45 @@ notificationProvider.provider('NotificationProvider',
 
                     notification.get().click(function () {
                         notification.remove();
+                        if (!!hash.callback && !!hash.callback.function) {
+                            hash.callback.function();
+                        }
                     });
-                }
+                },
+                notificateFavorite: function(data, callback){
+                    return this.notify({
+                        title: data.msg,
+                        type: 'primary',
+                        addclass: 'custom-primary-notify notify-clickable',
+                        icon: 'material-icons md-light',
+                        icon_class: 'favorite',
+                        styling: 'fontawesome',
+                        hide: false,
+                        callback: {
+                            function: callback,
+                        }
+                    });
+                },
+                notificateComment: function(data){
+                    return this.notify({
+                        title: data.msg,
+                        type: 'primary',
+                        addclass: 'custom-primary-notify',
+                        icon: 'material-icons md-light',
+                        icon_class: 'comment',
+                        styling: 'fontawesome'
+                    });
+                },
+                notificateReply: function(data){
+                    return this.notify({
+                        title: data.msg,
+                        type: 'primary',
+                        addclass: 'custom-primary-notify',
+                        icon: 'material-icons md-light',
+                        icon_class: 'reply',
+                        styling: 'fontawesome'
+                    });
+                },
             };
         }];
     }]

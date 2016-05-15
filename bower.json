@@ -36,7 +36,9 @@
     "angular-xeditable": "~0.1.12",
     "angular-mocks": "~1.5.5",
     "ngInfiniteScroll": "~1.2.2",
-    "angulargrid": "~0.5.5",
-    "js-md5": "md5#^0.4.1"
+    "angulargrid": "~0.6.0",
+    "js-md5": "md5#^0.4.1",
+    "ng-elif": "^0.1.5",
+    "pusher-websocket-iso": "pusher#^3.1.0"
   }
 }

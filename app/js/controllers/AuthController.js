@@ -24,7 +24,7 @@ authController.controller('Login',
             $rootScope.progressBarActivated = true;
             $scope.setDelay1();
             AuthService.Login($scope.email, $scope.password, !$scope.expiration, function (response) {
-                AuthService.SaveCredentials(response.data.auth_token, JSON.parse(AuthService.ParseJwt(response.data.auth_token).sub));
+                AuthService.SaveCredentials(response.data.auth_token, JSON.parse(AuthService.ParseJwt(response.data.auth_token).sub), response.data.pusher_key);
                 if (!$scope.expiration) {
                     AuthService.StartCronCheckToken();
                 }
@@ -92,7 +92,15 @@ authController.controller('Register',
                 last_name: $scope.last_name
             };
             AuthService.Register(user, function (response) {
-                AuthService.SaveCredentials(response.data.auth_token, JSON.parse(AuthService.ParseJwt(response.data.auth_token).sub));
+                NotificationProvider.notify({
+                    title: 'Revisa tu correo',
+                    text: 'Hemos enviado un email para validar tu cuenta.',
+                    type: 'success',
+                    addclass: 'custom-success-notify',
+                    icon: 'material-icons md-light',
+                    icon_class: 'mail_outline',
+                    styling: 'fontawesome'
+                });
                 $rootScope.progressBarActivated = false;
                 $location.path('/');
             }, function (response) {
