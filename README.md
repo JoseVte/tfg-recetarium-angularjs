@@ -49,7 +49,15 @@ http-server -a localhost -p 8000
 
 ## Changelog
 
-#### [![0.9.1](/app/doc/rocket-blue.png) 0.9.1](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.9.1)
+#### [![0.9.3](/app/doc/rocket-blue.png) 0.9.3](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.9.3)
+
+- Internacionalización
+
+###### [![0.9.2](/app/doc/release.png) 0.9.2](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.9.2)
+
+- Añadido [pusher](https://github.com/pusher/pusher-js) para las notificaciones
+
+###### [![0.9.1](/app/doc/release.png) 0.9.1](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.9.1)
 
 - Ver las recetas favoritas en el perfil
 

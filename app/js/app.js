@@ -14,6 +14,7 @@ var recetarium = angular.module('recetariumApp', [
     'ui.router',
     'infinite-scroll',
     'elif',
+    'pascalprecht.translate',
     // My Javascript
     'Animations', 'TextEditor', 'NotificationProviders',
     'CommentServices', 'FileServices',
@@ -83,6 +84,21 @@ recetarium.config(['$httpProvider', function($httpProvider) {
 // Themes
 recetarium.config(['$mdThemingProvider', function($mdThemingProvider) {
     //
+}]);
+
+// Internationalization
+recetarium.config(['$translateProvider', function($translateProvider) {
+    $translateProvider.translations('en', {
+        'msg.incompatible': 'You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.',
+    'FOO': 'This is a paragraph'
+  });
+
+  $translateProvider.translations('de', {
+    'TITLE': 'Hallo',
+    'FOO': 'Dies ist ein Absatz'
+  });
+
+  $translateProvider.preferredLanguage('en');
 }]);
 
 // Environment configuration
