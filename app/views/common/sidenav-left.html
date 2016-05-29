@@ -3,7 +3,7 @@
         <div class="md-toolbar-tools">
             <div layout="column">
                 <a ng-href="/"><img class="img-header" src="../img/header-logo.png" alt="Recetarium"></a>
-                <h1 ng-if="IsAuthed">Hola, {{ UserLogged.first_name }}</h1>
+                <h1 ng-if="IsAuthed">{{ 'menu.salutation' | translate }}, {{ userLogged.first_name }}</h1>
             </div>
         </div>
     </md-toolbar>
@@ -15,18 +15,17 @@
             <hr show-xs show-sm hide-gt-sm />
             <div ng-if="IsAuthed" show-xs show-sm hide-gt-sm>
                 <li ng-class="getClassActive('/profile')">
-                    <a class="md-button" ng-click="navTo($event, '/profile')"><md-icon class="material-icons">person</md-icon> Perfil</a>
+                    <a class="md-button" ng-click="navTo($event, '/profile')"><md-icon class="material-icons">person</md-icon> {{ 'menu.profile' | translate }}</a>
                 </li>
                 <li ng-class="getClassActive('/logout')">
-                    <a class="md-button" ng-click="navTo($event, '/logout')"><md-icon class="material-icons">exit_to_app</md-icon> Logout</a>
+                    <a class="md-button" ng-click="navTo($event, '/logout')"><md-icon class="material-icons">exit_to_app</md-icon> {{ 'menu.logout' | translate }}</a>
                 <li>
             </div>
             <div ng-else show-xs show-sm hide-gt-sm>
                 <li ng-class="getClassActive('/login') || getClassActive('/register')">
-                    <a class="md-button" ng-click="navTo($event, '/login')">Login / Registrate</a>
+                    <a class="md-button" ng-click="navTo($event, '/login')">{{ 'menu.login' | translate }}</a>
                 </li>
             </div>
         </ul>
-
     </md-content>
 </md-sidenav>

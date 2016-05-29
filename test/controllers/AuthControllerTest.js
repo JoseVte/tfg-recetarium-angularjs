@@ -1,6 +1,6 @@
 'use strict';
 
-describe('Module RecipeController', function() {
+describe('Module AuthController', function() {
     beforeEach(function () {
         module('recetariumApp');
     });
@@ -39,7 +39,6 @@ describe('Module RecipeController', function() {
         });
 
         it('initialize controller', function() {
-            expect($rootScope.headerTitle).toEqual('Login');
         });
 
         it('login method', function () {
@@ -77,7 +76,6 @@ describe('Module RecipeController', function() {
         });
 
         it('initialize controller', function() {
-            expect($rootScope.headerTitle).toEqual('Registro');
         });
 
         it('register method', function () {
@@ -133,7 +131,6 @@ describe('Module RecipeController', function() {
         });
 
         it('initialize controller', function() {
-            expect($rootScope.headerTitle).toEqual('Recuperar contraseña');
         });
 
         it('resetPassword method', function () {
@@ -169,7 +166,6 @@ describe('Module RecipeController', function() {
         });
 
         it('initialize controller', function() {
-            expect($rootScope.headerTitle).toEqual('Recuperar contraseña');
         });
 
         it('recoverPassword method', function () {
@@ -208,7 +204,6 @@ describe('Module RecipeController', function() {
         });
 
         it('initialize controller', function() {
-            expect($rootScope.headerTitle).toEqual('Editar perfil');
         });
 
         it('loadPersonalData method', function () {

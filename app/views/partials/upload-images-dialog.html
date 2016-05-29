@@ -2,7 +2,7 @@
     <form>
         <md-toolbar>
             <div class="md-toolbar-tools">
-                <h2>Sube una imagen</h2>
+                <h2>{{ 'dialog-upload.header-title' | translate }}</h2>
                 <span flex></span>
                 <md-button class="md-icon-button" ng-click="cancel()">
                     <md-icon class="material-icons" aria-label="Close dialog">close</md-icon>
@@ -11,14 +11,13 @@
         </md-toolbar>
         <md-dialog-content layout="row"  layout-sm="column" layout-wrap layout-align="space-between stretch">
             <md-content flex>
-                <h3 flex="100" class="text-center">Sube una nueva imagen</h3>
                 <div class="dropzone theme-profile" dropzone data-url="{{ urlUpload }}" images="images"></div>
             </md-content>
         </md-dialog-content>
         <md-dialog-actions layout="row">
             <span flex></span>
-            <md-button ng-click="cancel()">Cancelar</md-button>
-            <md-button ng-click="returnUploaded()">Aceptar</md-button>
+            <md-button ng-click="cancel()">{{ 'btn.cancel-text' | translate }}</md-button>
+            <md-button ng-click="returnUploaded()">{{ 'btn.confirm-text' | translate }}</md-button>
         </md-dialog-actions>
     </form>
 </md-dialog>

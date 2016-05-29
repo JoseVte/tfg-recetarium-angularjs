@@ -16,7 +16,8 @@ var recetarium = angular.module('recetariumApp', [
     'elif',
     'pascalprecht.translate',
     // My Javascript
-    'Animations', 'TextEditor', 'NotificationProviders',
+    'Animations', 'Internationalization', 'TextEditor', 'AnimationDirectives',
+    'CommentProviders', 'FileProviders', 'NotificationProviders', 'RatingProviders',
     'CommentServices', 'FileServices',
     'FileDirectives', 'FormDirectives', 'TimeDirectives', 'ValidatorDirectives',
     'HomeController',
@@ -84,21 +85,6 @@ recetarium.config(['$httpProvider', function($httpProvider) {
 // Themes
 recetarium.config(['$mdThemingProvider', function($mdThemingProvider) {
     //
-}]);
-
-// Internationalization
-recetarium.config(['$translateProvider', function($translateProvider) {
-    $translateProvider.translations('en', {
-        'msg.incompatible': 'You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.',
-    'FOO': 'This is a paragraph'
-  });
-
-  $translateProvider.translations('de', {
-    'TITLE': 'Hallo',
-    'FOO': 'Dies ist ein Absatz'
-  });
-
-  $translateProvider.preferredLanguage('en');
 }]);
 
 // Environment configuration
@@ -171,9 +157,10 @@ recetarium.run(function ($rootScope, $location, $http, AuthService, Notification
 
         $rootScope.IsAuthed = AuthService.IsAuthed();
         if ($rootScope.IsAuthed) {
-            $rootScope.UserLogged = $rootScope.globals.user.user;
+            $rootScope.userLogged = $rootScope.globals.user.user;
         }
         $rootScope.IsHome = ($path == '/');
+        $rootScope.scrollInTop = $rootScope.IsHome;
         $rootScope.HasBack = false;
         $rootScope.errorMsg = false;
         $rootScope.progressBarActivated = false;
@@ -375,9 +362,13 @@ $.parseError = function(error) {
         msg += '</ul>';
     } else if (angular.isObject(error)) {
         for (var field in error) {
-            msg += '<ul>';
-            msg += '<li>' + field + '</li>' + $.parseError(error[field]);
-            msg += '</ul>';
+            if (field === 'error') {
+                msg += '<ul><li>' + error[field] + '</li></ul>';
+            } else {
+                msg += '<ul>';
+                msg += '<li>' + field + '</li>' + $.parseError(error[field]);
+                msg += '</ul>';
+            }
         }
     } else {
         msg += error;
@@ -410,3 +401,25 @@ $.scrollbarWidth = function() {
     }
     return width;
 };
+
+$.getFullName = function(user) {
+    var name = '';
+    if (!!user) {
+        if (!!user.first_name) {
+            name += user.first_name;
+        }
+        if (user.last_name) {
+            name += ' ' + user.last_name;
+        }
+        if (name === '') {
+            return user.username;
+        }
+        return name;
+    }
+    return name;
+};
+
+function nl2br (str, isXhtml) {
+    var breakTag = (isXhtml || typeof isXhtml === 'undefined') ? '<br ' + '/>' : '<br>';
+    return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1' + breakTag + '$2');
+}

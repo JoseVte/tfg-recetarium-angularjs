@@ -4,7 +4,7 @@
             <form name="form" role="form" ng-submit="login()">
                 <md-card-title>
                     <md-card-title-text>
-                        <span class="md-headline">Bienvenido de nuevo!</span>
+                        <span class="md-headline">{{ 'login.header-title' | translate }}</span>
                     </md-card-title-text>
                 </md-card-title>
                 <md-card-content>
@@ -13,19 +13,17 @@
                             <label>Email</label>
                             <input required type="email" name="email" ng-model="email" />
                             <div ng-messages="form.email.$error" role="alert" multiple>
-                                <div ng-message="required">
-                                    Your email must be between 10 and 100 characters long and look like an e-mail address.
-                                </div>
+                                <div ng-message="required">{{ 'form.error-email' | translate }}</div>
                             </div>
                         </md-input-container>
                         <md-input-container class="md-block">
-                            <label>Password</label>
-                            <input type="password" name="password" ng-model="password" required>
+                            <label>{{ 'field.password' | translate }}</label>
+                            <input type="password" name="password" ng-model="password" >
                             <div ng-messages="form.password.$error" role="alert" multiple>
-                                <div ng-message="required">Este campo es obligatorio.</div>
+                                <div ng-message="required">{{ 'form.error-required' | translate }}</div>
                             </div>
                         </md-input-container>
-                        <md-checkbox ng-model="expiration" arial-label="Expiration">Recordar sesión</md-checkbox>
+                        <md-checkbox ng-model="expiration" arial-label="Expiration">{{ 'field.remember-me' | translate }}</md-checkbox>
                     </md-content>
                 </md-card-content>
                 <md-card-actions layout="column" layout-align="space-around stretch" layout-padding>
@@ -33,10 +31,10 @@
                         <md-button type="submit" class="md-raised md-auth-button zoomAnimation" ng-disabled="form.$invalid" ng-hide="progressBarActivated || delay2">Login</md-button>
                         <div flex layout="row" layout-align="space-between center" layout-padding layout-wrap ng-hide="progressBarActivated || delay2">
                             <md-button md-ripple-size="partial" layout="column" layout-wrap layout-align="center center" flex class="zoomAnimation md-options" ng-href="register" ng-hide="progressBarActivated || delay2">
-                                <div flex>¿No tienes cuenta? Registrate</div>
+                                <div flex>{{ 'login.btn-register' | translate }}</div>
                             </md-button>
                             <md-button md-ripple-size="partial" layout="column" layout-wrap layout-align="center center" flex class="zoomAnimation md-options" ng-href="reset/password" ng-hide="progressBarActivated || delay2">
-                                <div flex>¿Has olvidado tu contraseña?</div>
+                                <div flex>{{ 'login.btn-recover' | translate }}</div>
                             </md-button>
                         </div>
                         <div flex layout="row" layout-align="center center">

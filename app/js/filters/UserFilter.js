@@ -13,16 +13,6 @@ userFilter.filter('userImage', function(envService) {
 
 userFilter.filter('fullname', function() {
     return function(input) {
-        var name = '';
-        if (!!input) {
-            if (!!input.first_name) {
-                name += input.first_name;
-            }
-            if (input.last_name) {
-                name += ' ' + input.last_name;
-            }
-            return name;
-        }
-        return name;
+        return $getFullName(input);
     };
 });

@@ -1,104 +1,100 @@
-<section layout="row" ng-controller="Header" class="{{ headerTheme }}">
-    <div ng-include="'views/common/sidenav-left.html'"></div>
-
-    <header md-page-header class="fixed-top">
-        <md-toolbar layout="row" flex class="md-whiteframe-z1" md-scroll-shrink>
-            <div class="md-toolbar-tools">
-                <div hide-gt-sm>
-                    <button ng-if="!HasBack" type="button" ng-click="toggleLeft()" aria-label="Toogle menu" class="menuBtn">
-                        <i class="material-icons md-light">menu</i>
-                    </button>
-                    <button ng-if="HasBack" type="button" ng-click="back()" aria-label="Toogle menu" class="menuBtn">
-                        <i class="material-icons md-light">arrow_back</i>
-                    </button>
-                </div>
-                <div flex="nogrow">
-                    <div layout="row" layout-align="center center">
-                        <a ng-href="/">
-                            <img class="img-header" src="../img/header-logo.png" alt="Recetarium">
-                        </a>
-                    </div>
-                </div>
-                <md-menu class="hide-custom-header-sm">
-                    <md-button  ng-class="getClassActive('/recipes')" ng-click="openDropdrown($mdOpenMenu, $event)">
-                        <md-icon class="material-icons">restaurant</md-icon> Recetas
-                    </md-button>
-                    <md-menu-content>
-                        <md-menu-item ng-class="getClassActive('/recipes')">
-                            <md-button ng-href="/recipes">
-                                <md-icon class="material-icons">fiber_new</md-icon> Ultimas recetas
-                            </md-button>
-                        </md-menu-item>
-                        <md-menu-item ng-class="getClassActive('/top-recipes')" class="no-implemented">
-                            <md-button>
-                                <md-icon class="material-icons">stars</md-icon> Top recetas
-                            </md-button>
-                        </md-menu-item>
-                    </md-menu-content>
-                </md-menu>
-                <md-menu class="hide-custom-header-sm">
-                    <md-button ng-class="getClassActive('/users')" ng-click="openDropdrown($mdOpenMenu, $event)">
-                        <md-icon class="material-icons">supervisor_account</md-icon> Usuarios
-                    </md-button>
-                    <md-menu-content>
-                        <md-menu-item ng-class="getClassActive('/users')">
-                            <md-button ng-href="/users">
-                                <md-icon class="material-icons">perm_identity</md-icon> Todos los usuarios
-                            </md-button>
-                        </md-menu-item>
-                        <md-menu-item ng-class="getClassActive('/friends')">
-                            <md-button ng-href="/friends">
-                                <md-icon class="material-icons">weekend</md-icon> Amigos
-                            </md-button>
-                        </md-menu-item>
-                    </md-menu-content>
-                </md-menu>
-                <span flex></span>
-                <div flex class="search-container">
-                    <md-input-container md-no-float class="md-has-no-icon-left" flex="100" layout="row" layout-align="start center">
-                        <md-button class="md-icon-button md-mini" ng-click="searchRecipe()" aria-label="Search">
-                            <md-icon class="material-icons">search</md-icon>
-                        </md-button>
-                        <input ng-keyup="$event.keyCode == 13 ? searchRecipe() : null" type="text" ng-model="search" aria-label="Buscar recetas" />
-                    </md-input-container>
-                </div>
-                <div hide-xs hide-sm show-gt-sm>
-                    <div ng-if="IsAuthed" layout="row">
-                        <md-button ng-href="/new-recipe" ng-class="getClassActive('/new-recipe')" class="md-raised hide-custom-header-md">
-                            <md-icon class="material-icons md-black">edit</md-icon> Escribe una receta
-                        </md-button>
-                        <md-menu>
-                            <md-button ng-click="openDropdrown($mdOpenMenu, $event)">
-                                <div layout="row" layout-align="center center">
-                                    <img class="user-image" ng-src="{{ UserLogged | userImage:UserLogged }}" />
-                                    <span>Hola, {{ UserLogged.first_name }}</span>
-                                </div>
-                            </md-button>
-                            <md-menu-content>
-                                <md-menu-item ng-class="getClassActive('/new-recipe')" class="show-custom-header-md">
-                                    <md-button ng-href="/new-recipe">
-                                        <md-icon class="material-icons md-black">edit</md-icon> Escribe una receta
-                                    </md-button>
-                                </md-menu-item>
-                                <md-menu-item ng-class="getClassActive('/profile')">
-                                    <md-button ng-href="/profile">
-                                        <md-icon class="material-icons md-black">person</md-icon> Perfil
-                                    </md-button>
-                                </md-menu-item>
-                                <md-menu-divider></md-menu-divider>
-                                <md-menu-item>
-                                    <md-button ng-href="/logout">
-                                        <md-icon class="material-icons md-black">exit_to_app</md-icon> Logout
-                                    </md-button>
-                                </md-menu-item>
-                            </md-menu-content>
-                        </md-menu>
-                    </div>
-                    <div ng-if="!IsAuthed">
-                        <md-button ng-href="/login" ng-class="getClassActive('/login') || getClassActive('/register')">Login / Registrate</md-button>
-                    </div>
+<header md-page-header class="fixed-top">
+    <md-toolbar layout="row" flex class="md-whiteframe-z1" md-scroll-shrink>
+        <div class="md-toolbar-tools">
+            <div hide-gt-sm>
+                <button ng-if="!HasBack" type="button" ng-click="toggleLeft()" aria-label="Toogle menu" class="menuBtn">
+                    <i class="material-icons md-light">menu</i>
+                </button>
+                <button ng-if="HasBack" type="button" ng-click="back()" aria-label="Toogle menu" class="menuBtn">
+                    <i class="material-icons md-light">arrow_back</i>
+                </button>
+            </div>
+            <div flex="nogrow">
+                <div layout="row" layout-align="center center">
+                    <a ng-href="/">
+                        <img class="img-header" src="../img/header-logo.png" alt="Recetarium">
+                    </a>
                 </div>
             </div>
-        </md-toolbar>
-    </header>
-</section>
+            <md-menu class="hide-custom-header-sm">
+                <md-button  ng-class="getClassActive('/recipes')" ng-click="openDropdrown($mdOpenMenu, $event)">
+                    <md-icon class="material-icons">restaurant</md-icon> {{ 'menu.recipes' | translate }}
+                </md-button>
+                <md-menu-content>
+                    <md-menu-item ng-class="getClassActive('/recipes')">
+                        <md-button ng-href="/recipes">
+                            <md-icon class="material-icons">fiber_new</md-icon> {{ 'menu.last-recipes' | translate }}
+                        </md-button>
+                    </md-menu-item>
+                    <md-menu-item ng-class="getClassActive('/top-recipes')" class="no-implemented">
+                        <md-button>
+                            <md-icon class="material-icons">stars</md-icon> {{ 'menu.top-recipes' | translate }}
+                        </md-button>
+                    </md-menu-item>
+                </md-menu-content>
+            </md-menu>
+            <md-menu class="hide-custom-header-sm">
+                <md-button ng-class="getClassActive('/users')" ng-click="openDropdrown($mdOpenMenu, $event)">
+                    <md-icon class="material-icons">supervisor_account</md-icon> {{ 'menu.users' | translate }}
+                </md-button>
+                <md-menu-content>
+                    <md-menu-item ng-class="getClassActive('/users')">
+                        <md-button ng-href="/users">
+                            <md-icon class="material-icons">perm_identity</md-icon> {{ 'menu.all-users' | translate }}
+                        </md-button>
+                    </md-menu-item>
+                    <md-menu-item ng-class="getClassActive('/friends')">
+                        <md-button ng-href="/friends">
+                            <md-icon class="material-icons">weekend</md-icon> {{ 'menu.friends' | translate }}
+                        </md-button>
+                    </md-menu-item>
+                </md-menu-content>
+            </md-menu>
+            <span flex></span>
+            <div flex class="search-container">
+                <md-input-container md-no-float class="md-has-no-icon-left" flex="100" layout="row" layout-align="start center">
+                    <md-button class="md-icon-button md-mini" ng-click="searchRecipe()" aria-label="Search">
+                        <md-icon class="material-icons">search</md-icon>
+                    </md-button>
+                    <input ng-keyup="$event.keyCode == 13 ? searchRecipe() : null" type="text" ng-model="search" aria-label="Buscar recetas" />
+                </md-input-container>
+            </div>
+            <div hide-xs hide-sm show-gt-sm>
+                <div ng-if="IsAuthed" layout="row">
+                    <md-button ng-href="/new-recipe" ng-class="getClassActive('/new-recipe')" class="md-raised hide-custom-header-md">
+                        <md-icon class="material-icons md-black">edit</md-icon> {{ 'menu.write-recipe' | translate }}
+                    </md-button>
+                    <md-menu>
+                        <md-button ng-click="openDropdrown($mdOpenMenu, $event)">
+                            <div layout="row" layout-align="center center">
+                                <img class="user-image" ng-src="{{ userLogged | userImage:userLogged }}" />
+                                <span>{{ 'menu.salutation' | translate }}, {{ userLogged.first_name }}</span>
+                            </div>
+                        </md-button>
+                        <md-menu-content>
+                            <md-menu-item ng-class="getClassActive('/new-recipe')" class="show-custom-header-md">
+                                <md-button ng-href="/new-recipe">
+                                    <md-icon class="material-icons md-black">edit</md-icon> {{ 'menu.write-recipe' | translate }}
+                                </md-button>
+                            </md-menu-item>
+                            <md-menu-item ng-class="getClassActive('/profile')">
+                                <md-button ng-href="/profile">
+                                    <md-icon class="material-icons md-black">person</md-icon> {{ 'menu.profile' | translate }}
+                                </md-button>
+                            </md-menu-item>
+                            <md-menu-divider></md-menu-divider>
+                            <md-menu-item>
+                                <md-button ng-href="/logout">
+                                    <md-icon class="material-icons md-black">exit_to_app</md-icon> {{ 'menu.logout' | translate }}
+                                </md-button>
+                            </md-menu-item>
+                        </md-menu-content>
+                    </md-menu>
+                </div>
+                <div ng-if="!IsAuthed">
+                    <md-button ng-href="/login" ng-class="getClassActive('/login') || getClassActive('/register')">{{ 'menu.login' | translate }}</md-button>
+                </div>
+            </div>
+        </div>
+    </md-toolbar>
+</header>

@@ -37,7 +37,7 @@ fileDirective.directive('fileThumbnail',function () {
     };
 });
 
-fileDirective.directive('dropzone', function (NotificationProvider) {
+fileDirective.directive('dropzone', function ($rootScope, $translate, NotificationProvider, NOTIFICATION) {
     return {
         restrict: 'A',
         scope: false,
@@ -48,16 +48,16 @@ fileDirective.directive('dropzone', function (NotificationProvider) {
                 uploadMultiple: false,
                 headers: {'X-Auth-Token': JSON.parse(localStorage.globals).token },
                 acceptedFiles: 'image/*',
-                dictDefaultMessage: 'Arrastra y suelta las imágenes aquí',
+                dictDefaultMessage: $translate.instant('dropzone.text'),
                 success: scope.successUpload,
                 error: function (file, response) {
-                    NotificationProvider.notify({
-                        title: 'Un error ha ocurrido',
-                        text: 'Ha ocurrido un error mientras se guardaban las imágenes. Por favor, intentelo más tarde.',
-                        type: 'error',
-                        addclass: 'custom-error-notify',
-                        icon: 'material-icons md-light',
-                        styling: 'fontawesome'
+                    NOTIFICATION.ParseErrorResponse(response, [400, 401], $translate, $rootScope, NotificationProvider);
+                    $rootScope.progressBarActivated = false;
+                },
+                init: function() {
+                    this.on('sending', function() {
+                        $rootScope.errorMsg = false;
+                        $rootScope.progressBarActivated = true;
                     });
                 }
             });

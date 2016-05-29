@@ -12,13 +12,36 @@
                 padding-left: 40px !important;
                 line-height: 1 !important;
                 text-rendering: geometricPrecision !important;
+                &:first-letter {
+                    text-transform: capitalize;
+                }
             }
             .ui-pnotify-title {
-                font-weight: bold;
+                font-weight: 500;
+                &:first-letter {
+                    text-transform: capitalize;
+                }
             }
             .ui-pnotify-icon {
                 float: left;
             }
         }
+    }
+}
+
+//*** Error alerts ***//
+.error-container {
+    background: $alertBackground;
+    color: white;
+    overflow-y: hidden;
+    padding: 15px;
+    .title {
+        font-size: 18px;
+        span {
+            margin-left: 5px;
+        }
+    }
+    ul li:first-letter {
+        text-transform: capitalize;
     }
 }

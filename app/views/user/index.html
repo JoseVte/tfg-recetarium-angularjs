@@ -1,9 +1,9 @@
 <md-content class="md-padding search-block" layout="row" layout-wrap layout-align="space-between center">
     <md-input-container md-no-float class="md-has-no-icon-left" flex="100" flex-gt-md="30" layout="row" layout-align="start center">
-        <md-button class="md-icon-button md-mini" ng-click="search()" aria-label="Search">
+        <md-button class="md-icon-button md-mini" ng-click="search()" aria-label="{{ 'placeholder.search' | translate }}">
             <md-icon class="material-icons md-dark">search</md-icon>
         </md-button>
-        <input type="text" ng-model="searchText" placeholder="Buscar..." aria-label="Buscar" />
+        <input type="text" ng-model="searchText" placeholder="{{ 'placeholder.search' | translate }}..." aria-label="{{ 'placeholder.search' | translate }}" />
     </md-input-container>
 </md-content>
 

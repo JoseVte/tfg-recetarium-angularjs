@@ -7,7 +7,7 @@
     <base href="/">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Recetarium - {{ title }}</title>
+    <title>Recetarium</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Chrome, Firefox OS and Opera -->
@@ -25,24 +25,26 @@
     <![endif]-->
 
     <div layout="column" ng-cloak>
-        <div ng-if="IsHome">
-            <div ng-include="'views/common/header-home.html'"></div>
-        </div>
-        <div ng-if="!IsHome">
-            <div ng-include="'views/common/header.html'"></div>
-        </div>
+        <section layout="row" ng-controller="Header" class="{{ headerTheme }}">
+            <div ng-if="IsHome">
+                <div ng-include="'views/common/header-home.html'" ng-show="scrollInTop"></div>
+            </div>
+            <div ng-include="'views/common/header.html'" ng-show="!scrollInTop"></div>
+            <div ng-include="'views/common/sidenav-left.html'"></div>
+        </section>
 
         <div class="container" ng-show="progressBarActivated">
             <md-progress-linear md-mode="indeterminate" class="{{ loaderTheme }}"></md-progress-linear>
         </div>
 
-        <md-content class="md-padding" layout="row" layout-wrap layout-align="space-around start" ng-cloak>
-            <div class="container" ng-show="errorMsg">
-                <h2><i class="material-icons md-dark">{{ error.icon }}</i> {{ error.title}}</h2>
+        <md-content class="md-padding error-container" layout="row" layout-wrap layout-align="space-around start" ng-cloak ng-show-with-animation="errorMsg" style="display: none;">
+            <div flex-offset-gt-sm="10" flex-offset-sm="5"></div>
+            <div flex>
+                <div class="title" layout="row" layout-align="start center"><i class="material-icons md-white">{{ error.icon }}</i> <span>{{ error.title | capitalize }}</span></div>
                 <div ng-bind-html="error.msg"></div>
             </div>
+            <div flex-offset-gt-sm="10" flex-offset-sm="5"></div>
         </md-content>
-
 
         <div layout="row" layout-wrap ng-cloak>
             <div flex-offset-gt-sm="10" flex-offset-sm="5"></div>

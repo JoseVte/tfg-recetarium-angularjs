@@ -1,9 +1,9 @@
 'use strict';
 
 describe('Module RecipeFilters', function() {
-    beforeEach(function () {
-        module('recetariumApp');
-    });
+    beforeEach(module('recetariumApp', function ($translateProvider) {
+        $translateProvider.translations('en', {});
+    }));
 
     describe('Filter capitalize', function () {
         it('capitalize the first letter of sentence when is capital letter', inject (function (capitalizeFilter) {
@@ -37,13 +37,13 @@ describe('Module RecipeFilters', function() {
     describe('Filter duration', function () {
         it('duration is a date', inject ( function (durationFilter) {
             moment.locale('en');
-            expect(durationFilter('00:00')).toEqual('a few seconds');
+            expect(durationFilter('00:00')).toEqual('');
             expect(durationFilter('00:10')).toEqual('10 minutes');
-            expect(durationFilter('02:20')).toEqual('2 hours y 20 minutes');
+            expect(durationFilter('02:20')).toEqual('2 hours and 20 minutes');
         }));
 
         it('duration isn\'t a date', inject ( function (durationFilter) {
-            expect(durationFilter('string')).toEqual('a few seconds');
+            expect(durationFilter('string')).toEqual('');
         }));
     });
 });

@@ -40,7 +40,6 @@ describe('Module RecipeController', function() {
         it('initialize controller', function() {
             $httpBackend.expectGET(/http:\/\/localhost:9000\/recipes(.*)/).respond({data: []});
             $httpBackend.flush();
-            expect($rootScope.headerTitle).toEqual('Recetas');
             expect($scope.recipes).toEqual([]);
         });
 
@@ -57,10 +56,6 @@ describe('Module RecipeController', function() {
             $location.path('/recipes');
             $scope.$apply();
             $httpBackend.flush();
-            expect($rootScope.errorMsg).toBeTruthy();
-            expect($rootScope.error.icon).toBe('error_outline');
-            expect($rootScope.error.title).toBe('Algo ha ido mal');
-            expect($rootScope.error.msg).toBe('Ha ocurrido un error mientras se cargaban las recetas.');
             expect($location.url()).toBe('/recipes');
         });
 
@@ -121,7 +116,6 @@ describe('Module RecipeController', function() {
         });
 
         it('initialize controller', function() {
-            expect($rootScope.headerTitle).toEqual('Cargando');
             expect($rootScope.progressBarActivated).toBeTruthy();
             expect($rootScope.HasBack).toBeTruthy();
 
@@ -129,7 +123,6 @@ describe('Module RecipeController', function() {
             $location.path('/recipes/test');
             $scope.$apply();
             $httpBackend.flush();
-            expect($rootScope.headerTitle).toEqual('Test');
             expect($rootScope.progressBarActivated).toBeFalsy();
         });
 
@@ -200,7 +193,6 @@ describe('Module RecipeController', function() {
         });
 
         it('initialize controller', function() {
-            expect($rootScope.headerTitle).toEqual('Editar receta');
             expect($rootScope.progressBarActivated).toBeTruthy();
             expect($rootScope.HasBack).toBeTruthy();
 
@@ -208,7 +200,6 @@ describe('Module RecipeController', function() {
             $location.path('/recipes/test/edit');
             $scope.$apply();
             $httpBackend.flush();
-            expect($rootScope.headerTitle).toEqual('Editar receta');
             expect($rootScope.progressBarActivated).toBeFalsy();
         });
 
@@ -245,7 +236,6 @@ describe('Module RecipeController', function() {
             $scope.edit();
             $httpBackend.flush();
 
-            expect($rootScope.headerTitle).toEqual('Editar receta');
             expect($rootScope.progressBarActivated).toBeFalsy();
             expect($rootScope.errorMsg).toBeFalsy();
         });
@@ -259,7 +249,6 @@ describe('Module RecipeController', function() {
             $scope.edit();
             $httpBackend.flush();
 
-            expect($rootScope.headerTitle).toEqual('Editar receta');
             expect($rootScope.progressBarActivated).toBeFalsy();
             expect($rootScope.errorMsg).toBeTruthy();
         });
@@ -312,7 +301,6 @@ describe('Module RecipeController', function() {
         });
 
         it('initialize controller', function() {
-            expect($rootScope.headerTitle).toEqual('Nueva receta (borrador)');
             expect($rootScope.progressBarActivated).toBeTruthy();
             expect($rootScope.HasBack).toBeTruthy();
 
@@ -320,7 +308,6 @@ describe('Module RecipeController', function() {
             $location.path('/new-recipe');
             $scope.$apply();
             $httpBackend.flush();
-            expect($rootScope.headerTitle).toEqual('Nueva receta (borrador)');
             expect($rootScope.progressBarActivated).toBeFalsy();
         });
 
@@ -356,7 +343,6 @@ describe('Module RecipeController', function() {
             $httpBackend.expectPUT('http://localhost:9000/recipes/1');
             $scope.save();
             $httpBackend.flush();
-            expect($rootScope.headerTitle).toEqual('Nueva receta (borrador)');
             expect($rootScope.progressBarActivated).toBeFalsy();
         });
 
@@ -369,7 +355,6 @@ describe('Module RecipeController', function() {
             $scope.save();
             $httpBackend.flush();
 
-            expect($rootScope.headerTitle).toEqual('Nueva receta (borrador)');
             expect($rootScope.progressBarActivated).toBeFalsy();
             expect($rootScope.errorMsg).toBeTruthy();
         });
@@ -384,7 +369,6 @@ describe('Module RecipeController', function() {
             $scope.$apply();
             $httpBackend.flush();
 
-            expect($rootScope.headerTitle).toEqual('Nueva receta (borrador)');
             expect($rootScope.progressBarActivated).toBeFalsy();
             expect($rootScope.errorMsg).toBeFalsy();
         });
@@ -398,7 +382,6 @@ describe('Module RecipeController', function() {
             $scope.publish();
             $httpBackend.flush();
 
-            expect($rootScope.headerTitle).toEqual('Nueva receta (borrador)');
             expect($rootScope.progressBarActivated).toBeFalsy();
             expect($rootScope.errorMsg).toBeTruthy();
         });
