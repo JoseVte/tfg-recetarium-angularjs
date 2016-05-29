@@ -1,8 +1,8 @@
 var authServices = angular.module('AuthServices', ['ngResource']);
 
 authServices.factory('AuthService',
-    ['$http', '$rootScope', '$timeout', '$interval', 'envService', '$q',
-    function ($http, $rootScope, $timeout, $interval, envService, $q) {
+    ['$http', '$rootScope', '$timeout', '$interval', '$location', 'envService', '$q', 'NotificationProvider',
+    function ($http, $rootScope, $timeout, $interval, $location, envService, $q, NotificationProvider) {
         var service = {
             apiUrl: envService.read('apiUrl'),
             OK: 200,
@@ -10,7 +10,7 @@ authServices.factory('AuthService',
             FORBIDDEN: 403
         };
 
-        service.Login = function (email, password, expiration, callbackOk, callbackError) {
+        service.login = function (email, password, expiration, callbackOk, callbackError) {
             $http.post(
                 service.apiUrl + '/auth/login',
                 { email: email, password: password, setExpiration: expiration },
@@ -22,7 +22,7 @@ authServices.factory('AuthService',
             });
         };
 
-        service.Register = function (user, callbackOk, callbackError) {
+        service.register = function (user, callbackOk, callbackError) {
             $http.post(
                 service.apiUrl + '/auth/register',
                 user, { headers: {'Accept': 'application/json', 'Content-Type': 'application/json'} }
@@ -33,7 +33,7 @@ authServices.factory('AuthService',
             });
         };
 
-        service.ResetPassword = function (email, callbackOk, callbackError) {
+        service.resetPassword = function (email, callbackOk, callbackError) {
             $http.post(
                 service.apiUrl + '/auth/reset/password',
                 { email: email },
@@ -45,7 +45,7 @@ authServices.factory('AuthService',
             });
         };
 
-        service.RecoverPassword = function (email, password, token, callbackOk, callbackError) {
+        service.recoverPassword = function (email, password, token, callbackOk, callbackError) {
             $http.put(
                 service.apiUrl + '/auth/reset/password',
                 { email: email, password: password, token: token },
@@ -92,18 +92,6 @@ authServices.factory('AuthService',
             });
         };
 
-        service.GetRecipes = function (callbackOk, callbackError) {
-            var user = $rootScope.globals.user.user;
-            $http.get(
-                service.apiUrl + '/users/' + user.id + '/recipes',
-                { headers: {'Accept': 'application/json', 'Content-Type': 'application/json'} }
-            ).then(function (response) {
-                callbackOk(response);
-            }, function (response) {
-                callbackError(response);
-            });
-        };
-
         service.getFriends = function (user, params, callbackOk, callbackError) {
             $http.get(
                 service.apiUrl + '/users/' + user.id + '/friends',
@@ -121,16 +109,56 @@ authServices.factory('AuthService',
             });
         };
 
-        service.SaveCredentials = function (token, user) {
+        service.SaveCredentials = function (token, user, pusherKey) {
             $rootScope.globals = {
                 token: token,
                 user: user
             };
 
+            if (!!pusherKey) {
+                // Initialize pusher
+                if ($rootScope.pusher === null || $rootScope.pusher === undefined) {
+                    $rootScope.pusher = new Pusher(pusherKey, {
+                        cluster: 'eu',
+                        encrypted: true
+                    });
+                }
+
+                if (!$rootScope.isBinded) {
+                    $rootScope.channel = $rootScope.pusher.subscribe('user_' + user.user.id);
+                    $rootScope.channel.bind('recipe_favorite', function(data) {
+                        NotificationProvider.notificateFavorite(JSON.parse(data), function() {
+                            $rootScope.$apply(function() {
+                                $location.path(JSON.parse(data).redirect);
+                            });
+                        });
+                    });
+                    $rootScope.channel.bind('recipe_comment', function(data) {
+                        NotificationProvider.notificateComment(JSON.parse(data), function() {
+                            $rootScope.$apply(function() {
+                                $location.path(JSON.parse(data).redirect);
+                            });
+                        });
+                    });
+                    $rootScope.channel.bind('comment_reply', function(data) {
+                        NotificationProvider.notificateReply(JSON.parse(data), function() {
+                            $rootScope.$apply(function() {
+                                $location.path(JSON.parse(data).redirect);
+                            });
+                        });
+                    });
+                    $rootScope.isBinded = true;
+                }
+            }
             localStorage.globals = JSON.stringify($rootScope.globals);
         };
 
         service.ClearCredentials = function () {
+            if (!!$rootScope.globals.user && !!$rootScope.globals.user.user && !!$rootScope.globals.user.user.id && !!$rootScope.channel) {
+                $rootScope.channel.unbind();
+                $rootScope.pusher.unsubscribe('user_' + $rootScope.globals.user.user.id);
+                $rootScope.isBinded = false;
+            }
             $rootScope.globals = {};
             localStorage.removeItem('globals');
         };
@@ -147,7 +175,7 @@ authServices.factory('AuthService',
                 { email: user.email, expiration: $rootScope.globals.user.setExpiration },
                 { headers: {'Accept': 'application/json', 'Content-Type': 'application/json'} }
             ).then(function (response) {
-                service.SaveCredentials(response.data.auth_token, JSON.parse(service.ParseJwt(response.data.auth_token).sub));
+                service.SaveCredentials(response.data.auth_token, JSON.parse(service.ParseJwt(response.data.auth_token).sub), response.data.pusher_key);
             }, function (response) {
                 if (response.status == 401) {
                     service.ClearCredentials();

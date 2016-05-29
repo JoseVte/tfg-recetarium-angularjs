@@ -1,6 +1,6 @@
 var animationModule = angular.module('Animations', []);
 
-animationModule.animation('.animation-card-recipes', function () {
+animationModule.animation('.animation-card-recipes, .animation-card-users', function () {
     return {
         enter: function (element, done) {
             element.css({

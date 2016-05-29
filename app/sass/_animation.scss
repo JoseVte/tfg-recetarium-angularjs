@@ -1,19 +1,21 @@
-.animation-card-recipes.ng-enter, .animation-card-recipes.ng-move {
-    -webkit-animation: 1s zoomIn all;
-    -moz-animation: 1s zoomIn all;
-    -o-animation: 1s zoomIn all;
-    animation: 1s zoomIn all;
-    opacity: 0;
-}
-.animation-card-recipes.ng-enter.ng-enter-active,
-.animation-card-recipes.ng-move.ng-move-active {
-    opacity:1;
-}
-.animation-card-recipes.ng-leave {
-    -webkit-animation: 1s zoomOut;
-    -moz-animation: 1s zoomOut;
-    -o-animation: 1s zoomOut;
-    animation: 1s zoomOut;
+.animation-card-recipes, .animation-card-users {
+    &.ng-enter, &.ng-move {
+        -webkit-animation: 1s zoomIn all;
+        -moz-animation: 1s zoomIn all;
+        -o-animation: 1s zoomIn all;
+        animation: 1s zoomIn all;
+        opacity: 0;
+    }
+    &.ng-enter.ng-enter-active,
+    &.ng-move.ng-move-active {
+        opacity:1;
+    }
+    &.ng-leave {
+        -webkit-animation: 1s zoomOut;
+        -moz-animation: 1s zoomOut;
+        -o-animation: 1s zoomOut;
+        animation: 1s zoomOut;
+    }
 }
 
 .zoomAnimation {
@@ -81,7 +83,6 @@
 }
 
 /* loading dots */
-
 .loading:after {
     content: ' .';
     animation: dots 1s steps(5, end) infinite;

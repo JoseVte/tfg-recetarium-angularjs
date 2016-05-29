@@ -272,40 +272,6 @@
     }
 }
 
-.md-dialog-gallery-images, .md-dialog-rating, .md-dialog-comment {
-    md-toolbar {
-        background-color: $darkOrangeBackground;
-    }
-    .images-recipe-gallery {
-        margin-top: 0px;
-    }
-    md-slider {
-        margin-top: 25px;
-        min-width: 75%;
-        .md-track.md-track-fill {
-            background-color: $darkOrangeBackground;
-        }
-        .md-thumb:after {
-            border-color: $darkOrangeBackground;
-            background-color: $darkOrangeBackground;
-        }
-        .md-sign {
-            background-color: $darkOrangeBackground;
-            &::after {
-                border-top-color:  $darkOrangeBackground;
-            }
-        }
-    }
-    .md-dialog-content-comment {
-        @media (min-width: $layout-breakpoint-sm) {
-            min-width: 500px;
-        }
-        @media (min-width: $layout-breakpoint-md) {
-            min-width: 700px;
-        }
-    }
-}
-
 .card-recipe-comments {
     width: 100%;
     .comment-list-card md-card-title {

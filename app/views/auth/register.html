@@ -4,56 +4,56 @@
             <form name="form" role="form" ng-submit="register()">
                 <md-card-title>
                     <md-card-title-text>
-                        <span class="md-headline">Registrate</span>
+                        <span class="md-headline">{{ 'register.header-title' | translate }}</span>
                     </md-card-title-text>
                 </md-card-title>
                 <md-card-content>
                     <md-content>
-                        <em flex>Los campos con * son <u>requeridos</u>.</em>
+                        <em flex ng-bind-html="'field.required-text' | translate"></em>
                         <md-input-container class="md-block">
-                            <label>* Nombre del usuario</label>
+                            <label>* {{ ' field.username' | translate }}</label>
                             <input required type="text" name="username" ng-model="username" />
                             <div ng-messages="form.username.$error" role="alert" multiple>
-                                <div ng-message="required">El nombre de usuario es requerido.</div>
+                                <div ng-message="required">{{ 'form.error-required' | translate }}</div>
                             </div>
                         </md-input-container>
                         <md-input-container class="md-block">
                             <label>* Email</label>
                             <input required type="email" name="email" ng-model="email" />
                             <div ng-messages="form.email.$error" role="alert" multiple>
-                                <div ng-message="required">Tu email debe ser un email valido.</div>
+                                <div ng-message="required">{{ 'form.error-email' | translate }}</div>
                             </div>
                         </md-input-container>
                         <md-input-container class="md-block">
-                            <label>* Contraseña</label>
+                            <label>* {{ ' field.password' | translate }}</label>
                             <input type="password" name="password" ng-model="password" required>
                             <div ng-messages="form.password.$error" role="alert" multiple>
-                                <div ng-message="required">Este campo es obligatorio.</div>
+                                <div ng-message="required">{{ 'form.error-required' | translate }}</div>
                             </div>
                         </md-input-container>
                         <md-input-container class="md-block">
-                            <label>* Confirmar contraseña</label>
+                            <label>* {{ ' field.password-repeat' | translate }}</label>
                             <input type="password" name="passwordRepeat" ng-model="passwordRepeat" required data-password-verify="password">
                             <div ng-messages="form.passwordRepeat.$error" role="alert" multiple>
-                                <div ng-message="required">Este campo es obligatorio.</div>
-                                <div ng-message="passwordVerify">Las contraseñas deben coincidir</div>
+                                <div ng-message="required">{{ 'form.error-required' | translate }}</div>
+                                <div ng-message="passwordVerify">{{ 'form.error-password' | translate }}</div>
                             </div>
                         </md-input-container>
                         <md-input-container class="md-block">
-                            <label>Nombre completo</label>
+                            <label>{{ ' field.first-name' | translate }}</label>
                             <input type="text" name="first_name" ng-model="first_name" />
                         </md-input-container>
                         <md-input-container class="md-block">
-                            <label>Apellidos</label>
+                            <label>{{ ' field.last-name' | translate }}</label>
                             <input type="text" name="last_name" ng-model="last_name" />
                         </md-input-container>
                     </md-content>
                 </md-card-content>
                 <md-card-actions layout="column" layout-align="space-around stretch" layout-padding>
                     <div layout="column" layout-align="space-around stretch" layout-wrap>
-                        <md-button type="submit" class="md-raised md-auth-button zoomAnimation" ng-disabled="form.$invalid" ng-hide="progressBarActivated || delay2">Registro</md-button>
+                        <md-button type="submit" class="md-raised md-auth-button zoomAnimation" ng-disabled="form.$invalid" ng-hide="progressBarActivated || delay2">{{ 'register.btn-sign-up' | translate }}</md-button>
                         <div flex layout="row" layout-align="space-between center" layout-padding layout-wrap ng-hide="progressBarActivated || delay2">
-                            <md-button flex class="zoomAnimation md-auth-button without-padding" ng-href="/login" ng-hide="progressBarActivated || delay2">¿Tienes cuenta? Logueate</md-button>
+                            <md-button flex class="zoomAnimation md-auth-button without-padding" ng-href="/login" ng-hide="progressBarActivated || delay2">{{ 'register.btn-login' | translate }}</md-button>
                         </div>
                         <div flex layout="row" layout-align="center center">
                             <md-progress-circular md-mode="indeterminate" ng-show="progressBarActivated && !delay1" class="md-auth zoomAnimation" md-diameter="100"></md-progress-circular>

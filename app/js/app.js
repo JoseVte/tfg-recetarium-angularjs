@@ -14,8 +14,10 @@ var recetarium = angular.module('recetariumApp', [
     'ui.router',
     'infinite-scroll',
     'elif',
+    'pascalprecht.translate',
     // My Javascript
-    'Animations', 'TextEditor', 'NotificationProviders',
+    'Animations', 'Internationalization', 'TextEditor', 'AnimationDirectives',
+    'CommentProviders', 'FileProviders', 'NotificationProviders', 'RatingProviders',
     'CommentServices', 'FileServices',
     'FileDirectives', 'FormDirectives', 'TimeDirectives', 'ValidatorDirectives',
     'HomeController',
@@ -39,16 +41,16 @@ recetarium.config(['$routeProvider', '$locationProvider', function($routeProvide
         .when('/reset/password', { templateUrl: 'views/auth/reset-password.html', controller: 'ResetPassword', resolve: { access: ["AuthService", function (AuthService) { return AuthService.IsAnonymous(); }]}})
         .when('/reset/password/:token', { templateUrl: 'views/auth/recover-password.html', controller: 'RecoverPassword', resolve: { access: ["AuthService", function (AuthService) { return AuthService.IsAnonymous(); }]}})
         .when('/active/:token', { templateUrl: 'views/auth/validate-email.html', controller: 'ValidateEmail', resolve: { access: ["AuthService", function (AuthService) { return AuthService.IsAnonymous(); }]}})
-        .when('/profile', { templateUrl: 'views/auth/profile.html', controller: 'EditProfile', resolver: { access: ["AuthService", function (AuthService) { return AuthService.IsAuthenticated(); }]}})
+        .when('/profile', { templateUrl: 'views/auth/profile.html', controller: 'EditProfile', permission: 'logged', resolve: { access: ["AuthService", function (AuthService) { return AuthService.IsAuthenticated(); }]}})
         // Recipes
         .when('/recipes', { templateUrl: 'views/recipe/index.html', controller: 'RecipeAll' })
         .when('/recipes/:slug', { templateUrl: 'views/recipe/show.html', controller: 'RecipeShow' })
         .when('/recipes/:slug/edit', { templateUrl: 'views/recipe/edit.html', controller: 'RecipeEdit', resolve: { access: ["AuthService", "$route", "$rootScope", function (AuthService, $route, $rootScope) { $rootScope.progressBarActivated = true; return AuthService.IsMyRecipe($route.current.params.slug); }]}})
         .when('/new-recipe', { templateUrl: 'views/recipe/create.html', controller: 'RecipeCreate', resolve: { access: ["AuthService", function (AuthService) { return AuthService.IsAuthenticated(); }]}})
         // Users
-        .when('/users', { templateUrl: 'views/user/index.html', controller: 'UserAll', resolver: { access: ["AuthService", function (AuthService) { return AuthService.IsAuthenticated(); }]}})
-        .when('/users/:id', { templateUrl: 'views/user/show.html', controller: 'UserShow', resolver: { access: ["AuthService", function (AuthService) { return AuthService.IsAuthenticated(); }]}})
-        .when('/friends', { templateUrl: 'views/user/index.html', controller: 'FriendAll', resolver: { access: ["AuthService", function (AuthService) { return AuthService.IsAuthenticated(); }]}})
+        .when('/users', { templateUrl: 'views/user/index.html', controller: 'UserAll', resolve: { access: ["AuthService", function (AuthService) { return AuthService.IsAuthenticated(); }]}})
+        .when('/users/:id', { templateUrl: 'views/user/show.html', controller: 'UserShow', resolve: { access: ["AuthService", function (AuthService) { return AuthService.IsAuthenticated(); }]}})
+        .when('/friends', { templateUrl: 'views/user/index.html', controller: 'FriendAll', resolve: { access: ["AuthService", function (AuthService) { return AuthService.IsAuthenticated(); }]}})
         // Errores
         .when('/unauthorized', { templateUrl: 'views/error/401.html', controller: '' })
         .when('/forbidden', { templateUrl: 'views/error/403.html', controller: '' })
@@ -94,10 +96,12 @@ recetarium.config(['envServiceProvider', function (envServiceProvider) {
         },
         vars: {
             development: {
-                apiUrl: 'http://localhost:9000'
+                apiUrl: 'http://localhost:9000',
+                pusherLog: true,
             },
             production: {
-                apiUrl: 'https://recetarium.herokuapp.com'
+                apiUrl: 'https://recetarium.herokuapp.com',
+                pusherLog: false,
             }
         }
     });
@@ -105,20 +109,20 @@ recetarium.config(['envServiceProvider', function (envServiceProvider) {
 }]);
 
 //
-recetarium.run(function ($rootScope, $location, $http, AuthService, NotificationProvider, ICONS) {
+recetarium.run(function ($rootScope, $location, $http, AuthService, NotificationProvider, envService, ICONS) {
     var authRegex = /\/login|\/register|\/active.*|\/reset\/password.*/;
     var profileRegex = /\/profile.*/;
     var userRegex = /\/users.*|\/friends/;
     $rootScope.location = $location;
     $rootScope.searchString = '';
-    $rootScope.lastSearchParams = [];
-    $rootScope.lastSearchParams['/recipes'] = {
-        page: 1,
-        size: 10
-    };
+
+    // Enable pusher logging
+    Pusher.logToConsole = envService.read('pusherLog');
 
     if (localStorage.globals) {
         $rootScope.globals = JSON.parse(localStorage.globals);
+        $http.defaults.headers.common['X-Auth-Token'] = $rootScope.globals.token;
+        AuthService.CheckToken($rootScope.globals.user.user);
         AuthService.StartCronCheckToken();
     } else {
         $rootScope.globals = {};
@@ -153,16 +157,13 @@ recetarium.run(function ($rootScope, $location, $http, AuthService, Notification
 
         $rootScope.IsAuthed = AuthService.IsAuthed();
         if ($rootScope.IsAuthed) {
-            $rootScope.UserLogged = $rootScope.globals.user.user;
+            $rootScope.userLogged = $rootScope.globals.user.user;
         }
         $rootScope.IsHome = ($path == '/');
+        $rootScope.scrollInTop = $rootScope.IsHome;
         $rootScope.HasBack = false;
         $rootScope.errorMsg = false;
         $rootScope.progressBarActivated = false;
-
-        if (!$location.search() && $rootScope.lastSearchParams[$path]) {
-            $location.search($rootScope.lastSearchParams[$path]);
-        }
 
         // Remove the params into URI
         if ($path !== '/recipes') {
@@ -361,9 +362,13 @@ $.parseError = function(error) {
         msg += '</ul>';
     } else if (angular.isObject(error)) {
         for (var field in error) {
-            msg += '<ul>';
-            msg += '<li>' + field + '</li>' + $.parseError(error[field]);
-            msg += '</ul>';
+            if (field === 'error') {
+                msg += '<ul><li>' + error[field] + '</li></ul>';
+            } else {
+                msg += '<ul>';
+                msg += '<li>' + field + '</li>' + $.parseError(error[field]);
+                msg += '</ul>';
+            }
         }
     } else {
         msg += error;
@@ -396,3 +401,25 @@ $.scrollbarWidth = function() {
     }
     return width;
 };
+
+$.getFullName = function(user) {
+    var name = '';
+    if (!!user) {
+        if (!!user.first_name) {
+            name += user.first_name;
+        }
+        if (user.last_name) {
+            name += ' ' + user.last_name;
+        }
+        if (name === '') {
+            return user.username;
+        }
+        return name;
+    }
+    return name;
+};
+
+function nl2br (str, isXhtml) {
+    var breakTag = (isXhtml || typeof isXhtml === 'undefined') ? '<br ' + '/>' : '<br>';
+    return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1' + breakTag + '$2');
+}

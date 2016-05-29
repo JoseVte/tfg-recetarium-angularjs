@@ -1,0 +1,81 @@
+.md-dialog-gallery, .md-dialog-rating, .md-dialog-comment  {
+    .images-dialog-gallery {
+        margin-top: 10px;
+        padding: 5px 5px 20px;
+        &.md-whiteframe-2dp .image-removable {
+            img {
+                max-height: 250px;
+                max-width: 250px;
+                z-index: 1;
+            }
+        }
+        md-card {
+            position: relative;
+        }
+        button.md-button {
+            z-index: 2;
+            position: absolute;
+            &.md-remove {
+                top: 0;
+                right: 0;
+                background-color: #9C0000;
+                &:not([disabled]):hover {
+                    background-color: #B52603;
+                }
+                &:not([disabled]).md-focused {
+                    background-color: #F44336;
+                }
+                md-icon.material-icons {
+                    color: white;
+                }
+            }
+            &.md-selected {
+                top: 0;
+                left: 0;
+                &, &:not([disabled]):hover, &:not([disabled]).md-focused {
+                    background-color: hsla(176, 60%, 49%, 0.5);
+                }
+                md-icon.material-icons {
+                    color: white;
+                }
+            }
+        }
+    }
+    &.selectAvatar md-toolbar {
+        background-color: $blueBackground;
+    }
+    md-toolbar {
+        background-color: $darkOrangeBackground;
+    }
+    md-slider {
+        margin-top: 25px;
+        min-width: 75%;
+        .md-track.md-track-fill {
+            background-color: $darkOrangeBackground;
+        }
+        .md-thumb:after {
+            border-color: $darkOrangeBackground;
+            background-color: $darkOrangeBackground;
+        }
+        .md-sign {
+            background-color: $darkOrangeBackground;
+            &::after {
+                border-top-color:  $darkOrangeBackground;
+            }
+        }
+    }
+    .md-dialog-content-comment {
+        @media (min-width: $layout-breakpoint-sm) {
+            min-width: 500px;
+        }
+        @media (min-width: $layout-breakpoint-md) {
+            min-width: 700px;
+        }
+    }
+}
+
+.md-dialog-upload-images {
+    md-toolbar {
+        background-color: $blueBackground;
+    }
+}

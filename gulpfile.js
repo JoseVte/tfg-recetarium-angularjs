@@ -87,6 +87,7 @@ gulp.task('lib-js', function() {
         paths.src.bower + '/pnotify/dist/pnotify.nonblock.js',
         paths.src.bower + '/angular-environment/dist/angular-environment.js',
         paths.src.bower + '/angular-route/angular-route.js',
+        paths.src.bower + '/angular-translate/angular-translate.js',
         paths.src.bower + '/angular-resource/angular-resource.js',
         paths.src.bower + '/angular-animate/angular-animate.js',
         paths.src.bower + '/angular-aria/angular-aria.js',
@@ -99,6 +100,7 @@ gulp.task('lib-js', function() {
         paths.src.bower + '/dropzone/dist/dropzone.js',
         paths.src.bower + '/js-md5/src/md5.js',
         paths.src.bower + '/ng-elif/src/elif.js',
+        paths.src.bower + '/pusher-websocket-iso/dist/web/pusher.js'
     ])
     .pipe(concat('app-lib.js'))
     .pipe(rename({ suffix: '.min' }))

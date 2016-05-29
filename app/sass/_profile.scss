@@ -9,6 +9,9 @@
         h4 {
             margin: 5px 0;
         }
+        &.md-password{
+            margin: 18px 0;
+        }
     }
     .img-container {
         width: auto;
@@ -60,45 +63,5 @@
     }
     .md-card-actions .md-button.md-raised.md-profile-button {
         margin: 12px 0;
-    }
-}
-
-.md-dialog-upload-images-images {
-    md-toolbar {
-        background-color: $blueBackground;
-    }
-}
-
-.md-dialog-gallery-avatar {
-    md-toolbar {
-        background-color: $blueBackground;
-    }
-    .images-recipe-gallery {
-        margin-top: 0px;
-    }
-    md-slider {
-        margin-top: 25px;
-        min-width: 75%;
-        .md-track.md-track-fill {
-            background-color: $blueBackground;
-        }
-        .md-thumb:after {
-            border-color: $blueBackground;
-            background-color: $blueBackground;
-        }
-        .md-sign {
-            background-color: $blueBackground;
-            &::after {
-                border-top-color:  $blueBackground;
-            }
-        }
-    }
-    .md-dialog-content-comment {
-        @media (min-width: $layout-breakpoint-sm) {
-            min-width: 500px;
-        }
-        @media (min-width: $layout-breakpoint-md) {
-            min-width: 700px;
-        }
     }
 }

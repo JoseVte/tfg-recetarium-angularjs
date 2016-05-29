@@ -1,17 +1,17 @@
 var homeController = angular.module('HomeController', []);
 
 homeController.controller('Header',
-    ['$scope', '$rootScope', '$mdSidenav', '$timeout', '$location', '$route', 'RecipeService',
-    function ($scope, $rootScope, $mdSidenav, $timeout, $location, $route, RecipeService) {
+    ['$scope', '$rootScope', '$mdSidenav', '$timeout', '$location', '$route', '$translate', 'RecipeService',
+    function ($scope, $rootScope, $mdSidenav, $timeout, $location, $route, $translate, RecipeService) {
         $scope.toggleLeft = buildDelayedToggler('left');
         $scope.search = $rootScope.searchString;
 
         $scope.navLinks = [
-            { title: '<i class="material-icons">fiber_new</i> Ultimas recetas', url: '/recipes' },
-            { title: '<i class="material-icons">stars</i> Top recetas', url: '/top-recipes', class: 'no-implemented'},
-            { title: '<i class="material-icons">perm_identity</i> Todos los usuarios', url: '/users' },
-            { title: '<i class="material-icons">weekend</i> Amigos', url: '/friends' },
-            { title: '<i class="material-icons">edit</i> Escribe una receta', url: '/new-recipe' },
+            { title: '<i class="material-icons">fiber_new</i> ' + $translate.instant('menu.last-recipes'), url: '/recipes' },
+            { title: '<i class="material-icons">stars</i> ' + $translate.instant('menu.top-recipes'), url: '/top-recipes', class: 'no-implemented'},
+            { title: '<i class="material-icons">perm_identity</i> ' + $translate.instant('menu.all-users'), url: '/users' },
+            { title: '<i class="material-icons">weekend</i> ' + $translate.instant('menu.friends'), url: '/friends' },
+            { title: '<i class="material-icons">edit</i> ' + $translate.instant('menu.write-recipe'), url: '/new-recipe' },
         ];
 
         var originatorEv;
@@ -67,287 +67,58 @@ homeController.controller('Header',
             $mdSidenav(navID).close().then(function () {});
         }
 
-        function desktopEvent(e) {
-            var img = $('.img-logo');
-            var motto = $('.motto');
-            var search = $('.search-home');
-            var button = $('.menuHome');
-            var header = $('header md-toolbar.md-tall');
-            var toolbar = $('.md-toolbar-tools');
-            var heightForMove = 125;
-            toolbar.css('display', 'flex');
-            search.removeClass('hide');
-            var distanceY = window.pageYOffset || document.documentElement.scrollTop;
-            if (distanceY <= heightForMove) {
-                var height = $.calcHeightDesktop(distanceY);
-                img.css('height', height/2);
-                img.css({
-                    position: '',
-                    top: '',
-                    left: '',
-                    'max-height': ''
-                });
-                search.css({
-                    top: '',
-                    position: '',
-                    right: '',
-                    margin: ''
-                });
-                header.css('max-height', height);
-                header.css('height', height);
-                motto.removeClass('hide');
-                button.addClass('hide');
-                closeSideNav('left');
-            }
-            if (distanceY > heightForMove) {
-                img.css({
-                    position: 'absolute',
-                    top: 0,
-                    left: 16,
-                    'max-height': 64
-                });
-                var position = ($rootScope.IsAuthed ? 170  : 190);
-                search.css({
-                    top: 0,
-                    position: 'absolute',
-                    right: position,
-                    margin: 10
-                });
-                header.css('max-height', 64);
-                header.css('height', 64);
-                motto.addClass('hide');
-                button.removeClass('hide');
-            }
-        }
-
-        function tableEvent(e) {
-            var img = $('.img-logo');
-            var motto = $('.motto');
-            var search = $('.search-home');
-            var button = $('.menuHome');
-            var header = $('header md-toolbar.md-tall');
-            var toolbar = $('.md-toolbar-tools');
+        function changeHeader(e) {
             var heightForMove = 125;
             var distanceY = window.pageYOffset || document.documentElement.scrollTop;
-            toolbar.css('display', 'flex');
-            search.removeClass('hide');
-            if (distanceY === 0) {
-                motto.removeClass('hide');
-            } else if (distanceY <= heightForMove) {
-                var height = $.calcHeightTablet(distanceY);
-                img.css('height', height/2);
-                img.css({
-                    position: '',
-                    top: '',
-                    left: '',
-                    'max-height': ''
-                });
-                search.css({
-                    top: '',
-                    position: '',
-                    left: '',
-                    margin: ''
-                });
-                header.css('max-height', height);
-                header.css('height', height);
-                motto.addClass('hide');
-                button.addClass('hide');
-                closeSideNav('left');
-            }
-            if (distanceY > heightForMove) {
-                img.css({
-                    position: 'absolute',
-                    top: 0,
-                    left: 64,
-                    'max-height': 64
-                });
-                search.css({
-                    top: 0,
-                    position: 'absolute',
-                    left: 300,
-                    margin: 10
-                });
-                header.css('max-height', 64);
-                header.css('height', 64);
-                motto.addClass('hide');
-                button.removeClass('hide');
+            if (distanceY <= heightForMove && $rootScope.IsHome) {
+                $rootScope.scrollInTop = true;
+            } else {
+                $rootScope.scrollInTop = false;
             }
         }
-
-        function mobileEvent(e) {
-            var img = $('.img-logo');
-            var motto = $('.motto');
-            var search = $('.search-home');
-            var button = $('.menuHome');
-            var header = $('header md-toolbar.md-tall');
-            var toolbar = $('.md-toolbar-tools');
-            var heightForMove = 125;
-            var distanceY = window.pageYOffset || document.documentElement.scrollTop;
-            if (distanceY === 0) {
-                motto.removeClass('hide');
-            } else if (distanceY <= heightForMove) {
-                var height = $.calcHeightMobile(distanceY);
-                img.css('height', height/2);
-                img.css({
-                    position: '',
-                    top: '',
-                    left: '',
-                    'max-height': ''
-                });
-                search.css({
-                    top: '',
-                    position: '',
-                    left: '',
-                    margin: ''
-                });
-                search.removeClass('hide');
-                header.css('max-height', height);
-                header.css('height', height);
-                motto.addClass('hide');
-                button.addClass('hide');
-                toolbar.css('display', 'none');
-                closeSideNav('left');
-            }
-            if (distanceY > heightForMove) {
-                img.css({
-                    position: 'absolute',
-                    top: 0,
-                    left: 64,
-                    'max-height': 64
-                });
-                search.addClass('hide');
-                header.css('max-height', 64);
-                header.css('height', 64);
-                motto.addClass('hide');
-                button.removeClass('hide');
-                toolbar.css('display', 'flex');
-            }
-        }
-
         $scope.$on('$includeContentLoaded', function() {
-            $('.img-logo').exists(function () {
-                var button = $('.menuHome');
-                var header = $('header md-toolbar.md-tall');
-
-                if ($(window).width() > (960 - $.scrollbarWidth())) {
-                    $rootScope.size = 'desktop';
-                    window.addEventListener('scroll', desktopEvent, false);
-                } else if($(window).width() <= (599 - $.scrollbarWidth())) {
-                    $rootScope.size = 'mobile';
-                    window.addEventListener('scroll', mobileEvent, false);
-                } else {
-                    $rootScope.size = 'table';
-                    window.addEventListener('scroll', tableEvent, false);
-                }
-
-                // Check size
-                $(window).resize(function() {
-                    if ($(window).width() > (960 - $.scrollbarWidth())) {
-                        if ($rootScope.size != 'desktop') {
-                            window.removeEventListener('scroll', tableEvent, false);
-                            window.removeEventListener('scroll', mobileEvent, false);
-                        }
-                        $rootScope.size = 'desktop';
-                        header.css('max-height', 400);
-                        header.css('height', 400);
-                        button.addClass('hide');
-                        desktopEvent();
-                        window.addEventListener('scroll', desktopEvent, false);
-                    } else if($(window).width() <= (599 - $.scrollbarWidth())) {
-                        if ($rootScope.size != 'mobile') {
-                            window.removeEventListener('scroll', desktopEvent, false);
-                            window.removeEventListener('scroll', tableEvent, false);
-                        }
-                        $rootScope.size = 'mobile';
-                        header.css('max-height', 200);
-                        header.css('height', 200);
-                        button.addClass('hide');
-                        mobileEvent();
-                        window.addEventListener('scroll', mobileEvent, false);
-                    } else {
-                        if ($rootScope.size != 'table') {
-                            window.removeEventListener('scroll', desktopEvent, false);
-                            window.removeEventListener('scroll', mobileEvent, false);
-                        }
-                        $rootScope.size = 'table';
-                        header.css('max-height', 300);
-                        header.css('height', 300);
-                        button.addClass('hide');
-                        tableEvent();
-                        window.addEventListener('scroll', tableEvent, false);
-                    }
-                });
-            });
+            if ($rootScope.IsHome) {
+                window.addEventListener('scroll', changeHeader, false);
+            }
         });
     }
 ]);
 
 homeController.controller('Home',
-    ['$scope', '$rootScope', '$location', 'RecipeService', 'NotificationProvider', 'DIFF',
-    function ($scope, $rootScope, $location, RecipeService, NotificationProvider, DIFF) {
+    ['$scope', '$rootScope', '$location', '$translate', 'RecipeService', 'NotificationProvider', 'DIFF', 'NOTIFICATION',
+    function ($scope, $rootScope, $location, $translate, RecipeService, NotificationProvider, DIFF, NOTIFICATION) {
         $scope.recipes = [];
         $scope.total = 1;
         $scope.nextPageNumber = 1;
-        $scope.loadingNextPage = true;
+        $scope.loadingNextPage = false;
+        $scope.hasError = false;
 
-        RecipeService.search({
-            page: $scope.nextPageNumber,
-            size: 10
-        }, function (response) {
-            var responseData = response.data;
-            $scope.recipes = responseData.data;
-            $scope.nextPageNumber++;
-            $scope.total = responseData.total;
-            $scope.loadingNextPage = false;
-        }, function (response) {
-            NotificationProvider.notify({
-                title: 'Un error ha ocurrido',
-                text: 'Ha ocurrido un error mientras se cargaban las recetas. Por favor, intentelo más tarde.',
-                type: 'error',
-                addclass: 'custom-error-notify',
-                icon: 'material-icons md-light',
-                styling: 'fontawesome'
+        $scope.getRecipes = function() {
+            $scope.loadingNextPage = true;
+            $rootScope.progressBarActivated = true;
+            RecipeService.search({
+                page: $scope.nextPageNumber,
+                size: 10
+            }, function (response) {
+                var responseData = response.data;
+                $scope.recipes = responseData.data;
+                $scope.nextPageNumber++;
+                $scope.total = responseData.total;
+                $scope.loadingNextPage = false;
+                $rootScope.progressBarActivated = false;
+            }, function (response) {
+                NOTIFICATION.ParseErrorResponse(response, [], $translate, $rootScope, NotificationProvider);
+                $scope.hasError = true;
+                $scope.loadingNextPage = false;
+                $rootScope.progressBarActivated = false;
             });
-            $rootScope.error = {
-                icon: 'error_outline',
-                title: 'Algo ha ido mal',
-                msg: 'Ha ocurrido un error mientras se cargaban las recetas.'
-            };
-            $rootScope.errorMsg = true;
-            $scope.loadingNextPage = false;
-        });
+        };
 
         $scope.getDifficulty = function (diff) { return DIFF.class[diff]; };
 
         $scope.nextPage = function () {
-            if ($scope.total > $scope.recipes.length) {
-                $scope.loadingNextPage = true;
-                RecipeService.search({
-                    page: $scope.nextPageNumber,
-                    size: 10
-                }, function (response) {
-                    var responseData = response.data;
-                    $scope.recipes = $scope.recipes.concat(responseData.data);
-                    $scope.nextPageNumber++;
-                    $scope.total = responseData.total;
-                    $scope.loadingNextPage = false;
-                }, function (response) {
-                    NotificationProvider.notify({
-                        title: 'Un error ha ocurrido',
-                        text: 'Ha ocurrido un error mientras se cargaban las recetas. Por favor, intentelo más tarde.',
-                        type: 'error',
-                        addclass: 'custom-error-notify',
-                        icon: 'material-icons md-light',
-                        styling: 'fontawesome'
-                    });
-                    $rootScope.error = {
-                        icon: 'error_outline',
-                        title: 'Algo ha ido mal',
-                        msg: 'Ha ocurrido un error mientras se cargaban las recetas.'
-                    };
-                    $rootScope.errorMsg = true;
-                    $scope.loadingNextPage = false;
-                });
+            if ($scope.total > $scope.recipes.length && !$scope.loadingNextPage && !$scope.hasError) {
+                $scope.getRecipes();
             }
         };
 

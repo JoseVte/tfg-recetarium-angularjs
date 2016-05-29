@@ -1,8 +1,8 @@
-<md-dialog class="md-dialog-rating" aria-label="Puntúa la receta" ng-cloak>
+<md-dialog class="md-dialog-rating" aria-label="{{ 'dialog-select.header-title' | translate }}" ng-cloak>
     <form>
         <md-toolbar>
             <div class="md-toolbar-tools">
-                <h2>Puntúa la receta</h2>
+                <h2>{{ 'dialog-rating.header-title' | translate }}</h2>
                 <span flex></span>
                 <md-button class="md-icon-button" ng-click="cancel()">
                     <md-icon class="material-icons" aria-label="Close dialog">close</md-icon>
@@ -16,8 +16,8 @@
         </md-dialog-content>
         <md-dialog-actions layout="row">
             <span flex></span>
-            <md-button ng-click="cancel()">Cancelar</md-button>
-            <md-button ng-click="rating()">Aceptar</md-button>
+            <md-button ng-click="cancel()">{{ 'btn.cancel-text' | translate }}</md-button>
+            <md-button ng-click="rating()">{{ 'btn.confirm-text' | translate }}</md-button>
         </md-dialog-actions>
     </form>
 </md-dialog>

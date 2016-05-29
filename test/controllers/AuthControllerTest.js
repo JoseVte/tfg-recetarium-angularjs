@@ -1,6 +1,6 @@
 'use strict';
 
-describe('Module RecipeController', function() {
+describe('Module AuthController', function() {
     beforeEach(function () {
         module('recetariumApp');
     });
@@ -39,7 +39,6 @@ describe('Module RecipeController', function() {
         });
 
         it('initialize controller', function() {
-            expect($rootScope.headerTitle).toEqual('Login');
         });
 
         it('login method', function () {
@@ -51,6 +50,7 @@ describe('Module RecipeController', function() {
         });
 
         it('login error method', function () {
+            $httpBackend.expectPOST(/http:\/\/localhost:9000\/auth\/check(.*)/).respond(400);
             $httpBackend.expectPOST('http://localhost:9000/auth/login').respond(400);
             $scope.login();
             $httpBackend.flush();
@@ -76,7 +76,6 @@ describe('Module RecipeController', function() {
         });
 
         it('initialize controller', function() {
-            expect($rootScope.headerTitle).toEqual('Registro');
         });
 
         it('register method', function () {
@@ -132,7 +131,6 @@ describe('Module RecipeController', function() {
         });
 
         it('initialize controller', function() {
-            expect($rootScope.headerTitle).toEqual('Recuperar contraseña');
         });
 
         it('resetPassword method', function () {
@@ -168,7 +166,6 @@ describe('Module RecipeController', function() {
         });
 
         it('initialize controller', function() {
-            expect($rootScope.headerTitle).toEqual('Recuperar contraseña');
         });
 
         it('recoverPassword method', function () {
@@ -190,7 +187,9 @@ describe('Module RecipeController', function() {
     describe('Controller EditProfile', function () {
         beforeEach(inject(function($rootScope, $controller) {
             $scope = $rootScope.$new();
+            $rootScope.globals = { user: { user: { id: 1 }}};
             ctrl = $controller('EditProfile', {
+                $rootScope: $rootScope,
                 $scope: $scope
             });
             $httpBackend.when('GET', /views\/(.*)/).respond(200, {});
@@ -205,7 +204,6 @@ describe('Module RecipeController', function() {
         });
 
         it('initialize controller', function() {
-            expect($rootScope.headerTitle).toEqual('Editar perfil');
         });
 
         it('loadPersonalData method', function () {
