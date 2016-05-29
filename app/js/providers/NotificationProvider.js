@@ -1,5 +1,34 @@
 var notificationProvider = angular.module('NotificationProviders', []);
 
+notificationProvider.constant('NOTIFICATION', {
+    ParseErrorResponse: function(response, httpCodes, $translate, $rootScope, NotificationProvider) {
+        if (httpCodes.contains(response.status)) {
+            if (response.status == 400) {
+                $rootScope.error = {
+                    icon: 'error_outline',
+                    title: $translate.instant('error.400.title'),
+                    msg: $.parseError(response.data)
+                };
+            } else {
+                $rootScope.error = {
+                    icon: 'error_outline',
+                    title: response.data.error,
+                };
+            }
+            $rootScope.errorMsg = true;
+        } else {
+            NotificationProvider.notify({
+                title: ((!response || !response.data || !response.data.error) ? $translate.instant('error.500.title') : response.data.error),
+                type: 'error',
+                addclass: 'custom-error-notify',
+                icon: 'material-icons md-light',
+                styling: 'fontawesome'
+            });
+        }
+    }
+});
+
+
 notificationProvider.provider('NotificationProvider',
     [function () {
         var settings = { styling: 'bootstrap3' };

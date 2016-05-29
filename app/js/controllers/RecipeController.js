@@ -23,67 +23,6 @@ recipeController.constant('VISIBILITY', {
     'name': ['PUBLIC', 'FRIENDS', 'PRIVATE']
 });
 
-recipeController.constant('FILE_DROPZONE', {
-    FileDragOver: function(e, scope) {
-        e.stopPropagation();
-        e.preventDefault();
-        e.target.className = (e.type == "dragover" ? "hover" : "");
-    },
-    FileHandler: function(e, scope, compile, upload, RecipeService, NotificationProvider) {
-        this.FileDragOver(e);
-        var files = e.target.files || e.dataTransfer.files;
-        var index = 0;
-        /* jshint ignore:start */
-        for (var i = 0, f; f = files[i]; i++) {
-            index = scope.images.index;
-            this.ParseFile(f, scope, compile, index, upload, RecipeService, NotificationProvider);
-            scope.images.index++;
-        }
-        /* jshint ignore:end */
-    },
-    ParseFile: function(file, scope, compile, index, upload, RecipeService, NotificationProvider) {
-        var reader = new FileReader();
-        reader.onload = function(e) {
-            $('.images-recipe-gallery').append(compile('<div class="image-removable" ng-if="images.show[' + index + ']" id="image-removable-' + index + '">' +
-                '<img class="img-thumbnail" src="' + e.target.result + '" />' +
-                '<md-button ng-click="removeImage(' + index + ')" class="md-fab md-mini md-remove" aria-label="Close"><md-icon class="material-icons">close</md-icon></md-button></div>')(scope));
-        };
-        reader.readAsDataURL(file);
-        scope.images.recipe[index] = file;
-        scope.images.show[index] = false;
-        if (upload) {
-            RecipeService.uploadFile(file, scope.recipe.id, false, false, function (response) {
-                scope.images.show[index] = true;
-                NotificationProvider.notify({
-                    title: 'Image añadida',
-                    text: '',
-                    type: 'success',
-                    addclass: 'custom-success-notify',
-                    icon: 'material-icons md-light',
-                    icon_class: 'photo',
-                    styling: 'fontawesome'
-                });
-            }, function (response) {
-                NotificationProvider.notify({
-                    title: 'Un error ha ocurrido',
-                    text: 'Ha ocurrido un error mientras se guardaban las imágenes. Por favor, intentelo más tarde.',
-                    type: 'error',
-                    addclass: 'custom-error-notify',
-                    icon: 'material-icons md-light',
-                    styling: 'fontawesome'
-                });
-                $('#image-removable-' + index).exists(function () {
-                    $('#image-removable-' + index).remove();
-                    $scope.images.recipe.splice(index, 1);
-                    $scope.images.show.splice(index, 1);
-                });
-            });
-        } else {
-            scope.images.show[index] = true;
-        }
-    }
-});
-
 recipeController.constant('EDIT_FUNCTIONS', {
     LoadScope: function ($scope, DIFF, VISIBILITY) {
         $scope.requestSlug = null;
@@ -100,7 +39,7 @@ recipeController.constant('EDIT_FUNCTIONS', {
         };
         $scope.imagesLink = {};
     },
-    LoadRecipe: function($scope, $rootScope, RecipeService, CategoryService, NotificationProvider, response) {
+    LoadRecipe: function($scope, $rootScope, $translate, RecipeService, CategoryService, NotificationProvider, NOTIFICATION, response) {
         try {
             $scope.recipe = response.data;
             $scope.recipe.chipTags = response.data.tags;
@@ -110,31 +49,19 @@ recipeController.constant('EDIT_FUNCTIONS', {
                 $scope.categories.unshift({ id: null, text: 'Ninguna'});
                 if ($scope.recipe.category) $scope.recipe.category_id = $scope.recipe.category.id;
             }, function (response) {
-                NotificationProvider.notify({
-                    title: 'Un error ha ocurrido',
-                    text: 'Ha ocurrido un error mientras se cargaban las categorias. Por favor, intentelo más tarde.',
-                    type: 'error',
-                    addclass: 'custom-error-notify',
-                    icon: 'material-icons md-light',
-                    styling: 'fontawesome'
-                });
+                NOTIFICATION.ParseErrorResponse(response, [], $translate, $rootScope, NotificationProvider);
             });
 
             $rootScope.progressBarActivated = false;
         } catch (err) {
+            NOTIFICATION.ParseErrorResponse(response, [], $translate, $rootScope, NotificationProvider);
             console.error(err);
-            $rootScope.error = {
-                icon: 'error_outline',
-                title: 'Algo ha ido mal',
-                msg: 'Ha ocurrido un error mientras se cargaba la receta.'
-            };
-            $rootScope.errorMsg = true;
             $rootScope.progressBarActivated = false;
         }
     },
-    CommonFunctions: function($scope, $rootScope, $location, $timeout, $compile, $mdDialog,
+    CommonFunctions: function($scope, $rootScope, $location, $timeout, $compile, $mdDialog, $translate,
         RecipeService, CategoryService, TagService, IngredientService,
-        NotificationProvider, DIFF, VISIBILITY, FILE_DROPZONE, EDIT_FUNCTIONS) {
+        NotificationProvider, FileProvider, DIFF, VISIBILITY, EDIT_FUNCTIONS, NOTIFICATION) {
             /**
              * Auxiliars
              */
@@ -143,8 +70,8 @@ recipeController.constant('EDIT_FUNCTIONS', {
             $scope.getVisibilityClass = function (visibility) { return VISIBILITY.class[visibility]; };
 
             /**
-            * Ingredients
-            */
+             * Ingredients
+             */
             $scope.$watch(function() {
                 return $scope.recipe.newIngredient ?
                 $scope.recipe.newIngredient.name:
@@ -155,14 +82,14 @@ recipeController.constant('EDIT_FUNCTIONS', {
 
             $scope.addIngredient = function() {
                 if ($scope.recipe.newIngredient && $scope.recipe.newIngredient !== null && $scope.recipe.newIngredient.name !== null && $scope.recipe.newIngredient.name !== '') {
-                    EDIT_FUNCTIONS.AddIngredient($scope, IngredientService, NotificationProvider);
+                    EDIT_FUNCTIONS.AddIngredient($scope, $rootScope, $translate, IngredientService, NotificationProvider, NOTIFICATION);
                 } else {
                     $scope.formRecipe.newIngredientName.$error.customRequired = true;
                 }
             };
 
             $scope.removeIngredient = function(index) {
-                EDIT_FUNCTIONS.DeleteIngredient($scope, IngredientService, NotificationProvider, index);
+                EDIT_FUNCTIONS.DeleteIngredient($scope, $rootScope, $translate, IngredientService, NotificationProvider, NOTIFICATION, index);
             };
 
             /**
@@ -214,7 +141,7 @@ recipeController.constant('EDIT_FUNCTIONS', {
              * Categories
              */
             $scope.loadCategories = function() {
-                EDIT_FUNCTIONS.AllCategories($scope, CategoryService, NotificationProvider);
+                EDIT_FUNCTIONS.AllCategories($scope, $rootScope, $translate, CategoryService, NotificationProvider, NOTIFICATION);
             };
 
             $scope.$watch(function() {
@@ -227,7 +154,7 @@ recipeController.constant('EDIT_FUNCTIONS', {
              * Tags
              */
             $scope.loadTags = function(search) {
-                return EDIT_FUNCTIONS.SearchTag($scope, TagService, NotificationProvider, search);
+                return EDIT_FUNCTIONS.SearchTag($scope, $rootScope, $translate, TagService, NotificationProvider, NOTIFICATION, search);
             };
 
             $scope.transformChip = function(chip) {
@@ -250,8 +177,8 @@ recipeController.constant('EDIT_FUNCTIONS', {
              */
             $scope.selectImageMain = function(ev) {
                 $mdDialog.show({
-                    controller: GalleryDialogController,
-                    templateUrl: 'views/recipe/gallery_dialog.html',
+                    controller: FileProvider.openGalleryDialog,
+                    templateUrl: 'views/partials/gallery-dialog.html',
                     parent: angular.element(document.body),
                     locals: { data: {
                             selectedImages: ($scope.recipe.image_main) ? [ $scope.recipe.image_main ] : [],
@@ -268,8 +195,8 @@ recipeController.constant('EDIT_FUNCTIONS', {
 
             $scope.selectImages = function(ev) {
                 $mdDialog.show({
-                    controller: GalleryDialogController,
-                    templateUrl: 'views/recipe/gallery_dialog.html',
+                    controller: FileProvider.openGalleryDialog,
+                    templateUrl: 'views/partials/gallery-dialog.html',
                     parent: angular.element(document.body),
                     locals: { data: {
                         selectedImages: $scope.recipe.files,
@@ -288,19 +215,21 @@ recipeController.constant('EDIT_FUNCTIONS', {
             $scope.recipe.files.splice(index, 1);
         };
     },
-    AddIngredient: function($scope, IngredientService, NotificationProvider) {
+    AddIngredient: function($scope, $rootScope, $translate, IngredientService, NotificationProvider, NOTIFICATION) {
         $scope.formRecipe.newIngredientName.$error = {};
+        $rootScope.errorMsg = false;
+        $rootScope.progressBarActivated = true;
         var ingredient = {
             name: $scope.recipe.newIngredient.name,
             count: $scope.recipe.newIngredient.count
         };
         IngredientService.add($scope.recipe.id, ingredient, function (response) {
             $scope.recipe.ingredients.push(response.data);
+            $rootScope.progressBarActivated = false;
             $scope.recipe.newIngredient.name = null;
             $scope.recipe.newIngredient.count = null;
             NotificationProvider.notify({
-                title: 'Ingrediente añadido',
-                text: '',
+                title: $translate.instant('response.added'),
                 type: 'success',
                 addclass: 'custom-success-notify',
                 icon: 'material-icons md-light',
@@ -308,104 +237,61 @@ recipeController.constant('EDIT_FUNCTIONS', {
                 styling: 'fontawesome'
             });
         }, function (response) {
-            if (response.status == 400) {
-                NotificationProvider.notify({
-                    title: 'Datos incorrectos',
-                    text: $.parseError(response.data),
-                    type: 'error',
-                    addclass: 'custom-error-notify',
-                    icon: 'material-icons md-light',
-                    styling: 'fontawesome'
-                });
-            } else {
-                NotificationProvider.notify({
-                    title: 'Un error ha ocurrido',
-                    text: 'Ha ocurrido un error mientras se añadía el ingrediente. Por favor, intentelo más tarde.',
-                    type: 'error',
-                    addclass: 'custom-error-notify',
-                    icon: 'material-icons md-light',
-                    styling: 'fontawesome'
-                });
-            }
+            NOTIFICATION.ParseErrorResponse(response, [400, 401], $translate, $rootScope, NotificationProvider);
+            $rootScope.progressBarActivated = false;
             $scope.recipe.newIngredient.name = null;
             $scope.recipe.newIngredient.count = null;
         });
     },
-    DeleteIngredient: function($scope, IngredientService, NotificationProvider, index) {
+    DeleteIngredient: function($scope, $rootScope, $translate, IngredientService, NotificationProvider, NOTIFICATION, index) {
         var ingredient = $scope.recipe.ingredients[index];
+        $rootScope.errorMsg = false;
+        $rootScope.progressBarActivated = true;
         IngredientService.delete($scope.recipe.id, ingredient.id, function (response) {
             $scope.recipe.ingredients.splice(index, 1);
             NotificationProvider.notify({
-                title: 'Ingrediente borrado',
-                text: '',
+                title: $translate.instant('response.deleted'),
                 type: 'success',
                 addclass: 'custom-success-notify',
                 icon: 'material-icons md-light',
                 icon_class: 'restaurant_menu',
                 styling: 'fontawesome'
             });
+            $rootScope.progressBarActivated = false;
         }, function (response) {
-            if (response.status == 400) {
-                NotificationProvider.notify({
-                    title: 'Datos incorrectos',
-                    text: $.parseError(response.data),
-                    type: 'error',
-                    addclass: 'custom-error-notify',
-                    icon: 'material-icons md-light',
-                    styling: 'fontawesome'
-                });
-            } else {
-                NotificationProvider.notify({
-                    title: 'Un error ha ocurrido',
-                    text: 'Ha ocurrido un error mientras se borraba el ingrediente. Por favor, intentelo más tarde.',
-                    type: 'error',
-                    addclass: 'custom-error-notify',
-                    icon: 'material-icons md-light',
-                    styling: 'fontawesome'
-                });
-            }
+            NOTIFICATION.ParseErrorResponse(response, [400, 401, 404], $translate, $rootScope, NotificationProvider);
+            $rootScope.progressBarActivated = false;
         });
     },
-    AllCategories: function($scope, CategoryService, NotificationProvider) {
+    AllCategories: function($scope, $rootScope, $translate, CategoryService, NotificationProvider, NOTIFICATION) {
         CategoryService.all(function (response) {
             $scope.categories = response.data;
             $scope.categories.unshift({ id: null, text: 'Ninguna'});
+            $rootScope.errorMsg = false;
         }, function (response) {
-            NotificationProvider.notify({
-                title: 'Un error ha ocurrido',
-                text: 'Ha ocurrido un error mientras se cargaban las categorias. Por favor, intentelo más tarde.',
-                type: 'error',
-                addclass: 'custom-error-notify',
-                icon: 'material-icons md-light',
-                styling: 'fontawesome'
-            });
+            NOTIFICATION.ParseErrorResponse(response, [], $translate, $rootScope, NotificationProvider);
         });
     },
-    SearchTag: function ($scope, TagService, NotificationProvider, search) {
+    SearchTag: function ($scope, $rootScope, $translate, TagService, NotificationProvider, NOTIFICATION, search) {
         return TagService.search(search, function (response) {
+            $rootScope.errorMsg = false;
             return response.data;
         }, function (response) {
-            NotificationProvider.notify({
-                title: 'Un error ha ocurrido',
-                text: 'Ha ocurrido un error mientras se cargaban las etiquetas. Por favor, intentelo más tarde.',
-                type: 'error',
-                addclass: 'custom-error-notify',
-                icon: 'material-icons md-light',
-                styling: 'fontawesome'
-            });
+            NOTIFICATION.ParseErrorResponse(response, [], $translate, $rootScope, NotificationProvider);
             return [];
         });
     },
 });
 
 recipeController.controller('RecipeAll',
-    ['$scope', '$rootScope', '$location', '$sce', '$mdDialog', 'RecipeService', 'TagService', 'NotificationProvider', 'EDIT_FUNCTIONS',
-    function ($scope, $rootScope, $location, $sce, $mdDialog, RecipeService, TagService, NotificationProvider, EDIT_FUNCTIONS) {
-        $rootScope.headerTitle = 'Recetas';
+    ['$scope', '$rootScope', '$location', '$sce', '$mdDialog', '$translate', 'RecipeService', 'TagService', 'NotificationProvider', 'EDIT_FUNCTIONS', 'NOTIFICATION',
+    function ($scope, $rootScope, $location, $sce, $mdDialog, $translate, RecipeService, TagService, NotificationProvider, EDIT_FUNCTIONS, NOTIFICATION) {
         $scope.recipes = [];
         $scope.tags = [];
         $scope.total = 1;
         $scope.nextPageNumber = 1;
+        $scope.hasError = false;
+        $scope.loadingNextPage = false;
 
         $scope.$watchCollection('tags', function (newVal, oldVal) {
             $scope.reloadRecipes();
@@ -415,10 +301,13 @@ recipeController.controller('RecipeAll',
             $scope.recipes = [];
             $scope.total = 1;
             $scope.nextPageNumber = 1;
+            $scope.hasError = false;
             $scope.getRecipes();
         };
 
         $scope.getRecipes = function() {
+            $rootScope.progressBarActivated = true;
+            $rootScope.errorMsg = false;
             $scope.loadingNextPage = true;
             RecipeService.search({
                 page: $scope.nextPageNumber,
@@ -431,27 +320,17 @@ recipeController.controller('RecipeAll',
                 $scope.nextPageNumber++;
                 $scope.total = responseData.total;
                 $scope.loadingNextPage = false;
+                $rootScope.progressBarActivated = false;
             }, function (response) {
-                NotificationProvider.notify({
-                    title: 'Un error ha ocurrido',
-                    text: 'Ha ocurrido un error mientras se cargaban las recetas. Por favor, intentelo más tarde.',
-                    type: 'error',
-                    addclass: 'custom-error-notify',
-                    icon: 'material-icons md-light',
-                    styling: 'fontawesome'
-                });
-                $rootScope.error = {
-                    icon: 'error_outline',
-                    title: 'Algo ha ido mal',
-                    msg: 'Ha ocurrido un error mientras se cargaban las recetas.'
-                };
-                $rootScope.errorMsg = true;
+                NOTIFICATION.ParseErrorResponse(response, [], $translate, $rootScope, NotificationProvider);
+                $scope.hasError = true;
                 $scope.loadingNextPage = false;
+                $rootScope.progressBarActivated = false;
             });
         };
 
         $scope.nextPage = function () {
-            if ($scope.total > $scope.recipes.length) {
+            if ($scope.total > $scope.recipes.length && !$scope.loadingNextPage && !$scope.hasError) {
                 $scope.getRecipes();
             }
         };
@@ -466,7 +345,7 @@ recipeController.controller('RecipeAll',
         };
 
         $scope.loadTags = function(search) {
-            return EDIT_FUNCTIONS.SearchTag($scope, TagService, NotificationProvider, search);
+            return EDIT_FUNCTIONS.SearchTag($scope, $rootScope, $translate, TagService, NotificationProvider, NOTIFICATION, search);
         };
 
         $scope.description = function(steps) {
@@ -486,20 +365,20 @@ recipeController.controller('RecipeAll',
             if ($event.preventDefault) $event.preventDefault();
             $event.cancelBubble = true;
             $event.returnValue = false;
+            var msg = $translate.instant('dialog.remove-recipe', { title: recipe.title });
             var confirm = $mdDialog.confirm()
-                .title('Borrar receta')
-                .textContent('¿De verdad que quieres borrar la receta \'' + recipe.title +'\'?\nEsta acción no se puede deshacer.')
-                .ariaLabel('Borrar')
+                .title($translate.instant('btn.delete-text'))
+                .htmlContent(nl2br(msg))
+                .ariaLabel($translate.instant('btn.delete-text'))
                 .targetEvent($event)
-                .ok('Borrar')
-                .cancel('Cancelar');
+                .ok($translate.instant('btn.delete-text'))
+                .cancel($translate.instant('btn.cancel-text'));
             $mdDialog.show(confirm).then(function () {
                 $rootScope.progressBarActivated = true;
                 $rootScope.errorMsg = false;
                 RecipeService.delete(recipe.id, function(response) {
                     NotificationProvider.notify({
-                        title: 'Receta borrada',
-                        text: 'Has borrado la receta \'' + recipe.title +'\'.',
+                        title: response.data.msg,
                         type: 'success',
                         addclass: 'custom-success-notify',
                         icon: 'material-icons md-light',
@@ -509,28 +388,7 @@ recipeController.controller('RecipeAll',
                     $rootScope.progressBarActivated = false;
                     $scope.reloadRecipes();
                 }, function(response) {
-                    if (response.status == 404) {
-                        $rootScope.error = {
-                            icon: 'error_outline',
-                            title: 'Receta no encontrada',
-                            msg: $.parseError(response.data)
-                        };
-                    } else {
-                        NotificationProvider.notify({
-                            title: 'Un error ha ocurrido',
-                            text: 'Ha ocurrido un error mientras se borraba la receta. Por favor, intentelo más tarde.',
-                            type: 'error',
-                            addclass: 'custom-error-notify',
-                            icon: 'material-icons md-light',
-                            styling: 'fontawesome'
-                        });
-                        $rootScope.error = {
-                            icon: 'error_outline',
-                            title: 'Algo ha ido mal',
-                            msg: 'Ha ocurrido un error mientras se borraba la receta.'
-                        };
-                    }
-                    $rootScope.errorMsg = true;
+                    NOTIFICATION.ParseErrorResponse(response, [404], $translate, $rootScope, NotificationProvider);
                     $rootScope.progressBarActivated = false;
                 });
             }, function() {});
@@ -539,9 +397,8 @@ recipeController.controller('RecipeAll',
 );
 
 recipeController.controller('RecipeShow',
-    ['$scope', '$rootScope', '$location', '$routeParams', '$sce', '$compile', '$mdDialog', '$window', 'RecipeService', 'CommentService', 'NotificationProvider', 'DIFF', 'VISIBILITY',
-    function ($scope, $rootScope, $location, $routeParams, $sce, $compile, $mdDialog, $window, RecipeService, CommentService, NotificationProvider, DIFF, VISIBILITY) {
-        $rootScope.headerTitle = 'Cargando';
+    ['$scope', '$rootScope', '$location', '$routeParams', '$sce', '$compile', '$mdDialog', '$translate', '$window', 'RecipeService', 'CommentService', 'CommentProvider', 'NotificationProvider', 'RatingProvider', 'DIFF', 'VISIBILITY', 'NOTIFICATION',
+    function ($scope, $rootScope, $location, $routeParams, $sce, $compile, $mdDialog, $translate, $window, RecipeService, CommentService, CommentProvider, NotificationProvider, RatingProvider, DIFF, VISIBILITY, NOTIFICATION) {
         $rootScope.progressBarActivated = true;
         $rootScope.HasBack = true;
         $scope.commentsActived = false;
@@ -567,45 +424,11 @@ recipeController.controller('RecipeShow',
                 $rootScope.progressBarActivated = false;
             } catch (err) {
                 console.error(err);
-                $rootScope.error = {
-                    icon: 'error_outline',
-                    title: 'Algo ha ido mal',
-                    msg: 'Ha ocurrido un error mientras se cargaba la receta.'
-                };
-                $rootScope.errorMsg = true;
-                $rootScope.headerTitle = 'Error';
+                NOTIFICATION.ParseErrorResponse(response, [], $translate, $rootScope, NotificationProvider);
                 $rootScope.progressBarActivated = false;
             }
         }, function (response) {
-            if (response.status == 404) {
-                $rootScope.error = {
-                    icon: 'error_outline',
-                    title: 'Error 404',
-                    msg: 'La receta \'' + $routeParams.slug + '\' no existe.'
-                };
-            } else if (response.status == 403) {
-                $rootScope.error = {
-                    icon: 'lock',
-                    title: 'Receta privada',
-                    msg: 'No tiene permisos suficientes para ver la receta \'' + $routeParams.slug + '\'.'
-                };
-            } else {
-                NotificationProvider.notify({
-                    title: 'Un error ha ocurrido',
-                    text: 'Ha ocurrido un error mientras se cargaba la receta. Por favor, intentelo más tarde.',
-                    type: 'error',
-                    addclass: 'custom-error-notify',
-                    icon: 'material-icons md-light',
-                    styling: 'fontawesome'
-                });
-                $rootScope.error = {
-                    icon: 'error_outline',
-                    title: 'Algo ha ido mal',
-                    msg: 'Ha ocurrido un error mientras se cargaba la receta.'
-                };
-            }
-            $rootScope.errorMsg = true;
-            $rootScope.headerTitle = 'Error';
+            NOTIFICATION.ParseErrorResponse(response, [403, 404], $translate, $rootScope, NotificationProvider);
             $rootScope.progressBarActivated = false;
         });
 
@@ -636,8 +459,8 @@ recipeController.controller('RecipeShow',
         $scope.shareBy = function(via) {
             switch (via) {
                 case 'email':
-                    var subject = 'Has visto la receta \'' + $scope.recipe.title + '\'?';
-                    var message = 'Echale un vistazo: ' + $location.absUrl();
+                    var subject = $translate.instant('share.title', { title: $scope.recipe.title });
+                    var message = $translate.instant('share.body', { url: $location.absUrl() });
                     $window.open('mailto:?subject=' + subject + '&body=' + message, '_blank');
                     break;
             }
@@ -649,8 +472,7 @@ recipeController.controller('RecipeShow',
                     $scope.fav = response.data.fav;
                     $scope.favorites = response.data.favorites;
                     NotificationProvider.notify({
-                        title: 'Guardado',
-                        text: '',
+                        title: $translate.instant('response.saved'),
                         type: 'error',
                         addclass: 'custom-success-notify',
                         icon: 'material-icons md-light',
@@ -658,14 +480,7 @@ recipeController.controller('RecipeShow',
                         styling: 'fontawesome'
                     });
                 }, function (response) {
-                    NotificationProvider.notify({
-                        title: 'Un error ha ocurrido',
-                        text: 'Ha ocurrido un error. Por favor, intentelo más tarde.',
-                        type: 'error',
-                        addclass: 'custom-error-notify',
-                        icon: 'material-icons md-light',
-                        styling: 'fontawesome'
-                    });
+                    NOTIFICATION.ParseErrorResponse(response, [], $translate, $rootScope, NotificationProvider);
                 });
             } else {
                 $location.path('/login');
@@ -674,8 +489,8 @@ recipeController.controller('RecipeShow',
 
         $scope.showRating = function(ev) {
             $mdDialog.show({
-                controller: RatingDialogController,
-                templateUrl: 'views/recipe/rating_dialog.html',
+                controller: RatingProvider.openRatingDialog,
+                templateUrl: 'views/partials/rating-dialog.html',
                 parent: angular.element(document.body),
                 targetEvent: ev,
                 clickOutsideToClose:true
@@ -694,14 +509,14 @@ recipeController.controller('RecipeShow',
                     '<div class="md-media-md card-media" layout="row" layout-align="center center"><img ng-src="{{ comment.user | userImage:recipe.user }}" /></div>' +
                     '</md-card-title-media><md-card-title-text>' +
                         '<span class="md-headline">{{ comment.text }}</span>' +
-                        '<span class="md-subhead" ng-if="comment.updated_at != comment.created_at">Ultima modificación el <em>{{ comment.updated_at | date:medium }}</em></span>' +
-                        '<span class="md-subhead">Creado el <em>{{ comment.created_at | date:medium }}</em></span>' +
+                        '<span class="md-subhead" ng-if="comment.updated_at != comment.created_at">' + $translate.instant('comment.last-update') + ' <em>{{ comment.updated_at | date:medium }}</em></span>' +
+                        '<span class="md-subhead">' + $translate.instant('comment.created-at') + ' <em>{{ comment.created_at | date:medium }}</em></span>' +
                         '<span class="md-subhead"><strong>{{ comment.user.first_name + " " + comment.user.last_name }}</strong></span>' +
                     '</md-card-title-text></md-card-title><md-card-actions layout="row" layout-align="end end" flex><md-card-icons-actions>' +
-                        '<md-button class="md-icon-button" aria-label="Comentar" ng-click="addComment(comment.id, $event)" ng-if="IsAuthed"><md-icon class="material-icons md-dark">reply</md-icon></md-button>' +
-                        '<md-button class="md-icon-button-lg" aria-label="Respuestas" ng-click="toggleReplies(comment, $event)" ng-if="comment.replies.length > 0"><md-icon class="material-icons md-dark">expand_more</md-icon> {{ comment.replies.length }}</md-button>' +
-                        '<md-button class="md-icon-button" aria-label="Editar" ng-click="editComment(comment.id, comment.text, $event)" ng-if="isMine(comment.user)"><md-icon class="material-icons md-green">edit</md-icon></md-button>' +
-                        '<md-button class="md-icon-button" aria-label="Borrar" ng-click="deleteComment(comment, $event)" ng-if="isMine(comment.user)"><md-icon class="material-icons md-red">delete_forever</md-icon></md-button>' +
+                        '<md-button class="md-icon-button" aria-label="' + $translate.instant('btn.comment-text') + '" ng-click="addComment(comment.id, $event)" ng-if="IsAuthed"><md-icon class="material-icons md-dark">reply</md-icon></md-button>' +
+                        '<md-button class="md-icon-button-lg" aria-label="' + $translate.instant('btn.replies-text') + '" ng-click="toggleReplies(comment, $event)" ng-if="comment.replies.length > 0"><md-icon class="material-icons md-dark">expand_more</md-icon> {{ comment.replies.length }}</md-button>' +
+                        '<md-button class="md-icon-button" aria-label="' + $translate.instant('btn.edit-text') + '" ng-click="editComment(comment.id, comment.text, $event)" ng-if="isMine(comment.user)"><md-icon class="material-icons md-green">edit</md-icon></md-button>' +
+                        '<md-button class="md-icon-button" aria-label="' + $translate.instant('btn.delete-text') + '" ng-click="deleteComment(comment, $event)" ng-if="isMine(comment.user)"><md-icon class="material-icons md-red">delete_forever</md-icon></md-button>' +
                     '</md-card-icons-actions></md-card-actions><md-content id="replies-{{ comment.id }}"></md-content></md-card></div>')($scope));
             } else {
                 $('#replies-' + comment.id).empty();
@@ -710,152 +525,98 @@ recipeController.controller('RecipeShow',
 
         $scope.addComment = function(parent, ev) {
             $mdDialog.show({
-                controller: CommentDialogController,
-                templateUrl: 'views/recipe/comment_dialog.html',
+                controller: CommentProvider.openCommentDialog,
+                templateUrl: 'views/partials/comment-dialog.html',
                 parent: angular.element(document.body),
                 locals: { data: { text: '' } },
                 targetEvent: ev,
                 clickOutsideToClose: true
             })
             .then(function(answer) {
+                $rootScope.progressBarActivated = true;
+                $rootScope.errorMsg = false;
                 CommentService.create($scope.recipe.id, parent, answer, function(response) {
                     if (parent === null) {
                         $scope.comments.push(response.data);
                     } else {
                         $scope.comments.getByIdWithParent(parent).replies.push(response.data);
                     }
-
                     NotificationProvider.notify({
-                        title: 'Comentario añadido',
-                        text: '',
+                        title: $translate.instant('response.saved'),
                         type: 'success',
                         addclass: 'custom-success-notify',
                         icon: 'material-icons md-light',
                         icon_class: 'check_circle',
                         styling: 'fontawesome'
                     });
+                    $rootScope.progressBarActivated = false;
                 },  function(response) {
-                    var icon = 'error_outline';
-                    var title = 'Un error ha ocurrido';
-                    var msg = 'Ha ocurrido un error mientras se guardaba el comentario. Por favor, intentelo más tarde.';
-                    if (response.status == 404) {
-                        title = 'Error 404';
-                        msg = 'La receta \'' + $scope.recipe.id + '\' no existe.';
-                    } else if (response.status == 403) {
-                        icon = 'lock';
-                        title = 'Acceso prohibido';
-                        msg = 'Necesitas estar logueado para comentar.';
-                    } else if (response.status == 400) {
-                        icon = 'lock';
-                        title = 'Error en el formulario';
-                        msg = 'El texto del comentario el obligatorio.';
-                    }
-                    NotificationProvider.notify({
-                        title: title,
-                        text: msg,
-                        type: 'error',
-                        addclass: 'custom-error-notify',
-                        icon: 'material-icons md-light',
-                        icon_class: icon,
-                        styling: 'fontawesome'
-                    });
+                    NOTIFICATION.ParseErrorResponse(response, [400, 403, 404], $translate, $rootScope, NotificationProvider);
+                    $rootScope.progressBarActivated = false;
                 });
             }, function() {});
         };
 
         $scope.editComment = function(id, text, ev) {
             $mdDialog.show({
-                controller: CommentDialogController,
-                templateUrl: 'views/recipe/comment_dialog.html',
+                controller: CommentProvider.openCommentDialog,
+                templateUrl: 'views/partials/comment-dialog.html',
                 parent: angular.element(document.body),
                 locals: { data: { text: text } },
                 targetEvent: ev,
                 clickOutsideToClose: true
             })
             .then(function(answer) {
+                $rootScope.progressBarActivated = true;
+                $rootScope.errorMsg = false;
                 CommentService.edit($scope.recipe.id, id, answer, function(response) {
                     $scope.comments.getByIdWithParent(id).text = response.data.text;
-
                     NotificationProvider.notify({
-                        title: 'Comentario editado',
-                        text: '',
+                        title: $translate.instant('response.saved'),
                         type: 'success',
                         addclass: 'custom-success-notify',
                         icon: 'material-icons md-light',
                         icon_class: 'comment',
                         styling: 'fontawesome'
                     });
+                    $rootScope.progressBarActivated = false;
                 },  function(response) {
-                    var icon = 'error_outline';
-                    var title = 'Un error ha ocurrido';
-                    var msg = 'Ha ocurrido un error mientras se guardaba el comentario. Por favor, intentelo más tarde.';
-                    if (response.status == 404) {
-                        title = 'Error 404';
-                        msg = 'El comentario \'' + id + '\' no existe.';
-                    } else if (response.status == 403) {
-                        icon = 'lock';
-                        title = 'Acceso prohibido';
-                        msg = 'Necesitas estar logueado para comentar.';
-                    } else if (response.status == 400) {
-                        icon = 'lock';
-                        title = 'Error en el formulario';
-                        msg = 'El texto del comentario el obligatorio.';
-                    }
-                    NotificationProvider.notify({
-                        title: title,
-                        text: msg,
-                        type: 'error',
-                        addclass: 'custom-error-notify',
-                        icon: 'material-icons md-light',
-                        icon_class: icon,
-                        styling: 'fontawesome'
-                    });
+                    NOTIFICATION.ParseErrorResponse(response, [400, 403, 404], $translate, $rootScope, NotificationProvider);
+                    $rootScope.progressBarActivated = false;
                 });
             }, function() {});
         };
 
         $scope.deleteComment = function(comment, $event) {
+            var msg = $translate.instant('dialog.remove-comment');
             var confirm = $mdDialog.confirm()
-                .title('Borrar receta')
-                .textContent('¿De verdad que quieres borrar el comentario?\nEsta acción no se puede deshacer.\nSe borraran las respuestas.')
-                .ariaLabel('Borrar')
+                .title($translate.instant('btn.delete-text'))
+                .htmlContent(nl2br(msg))
+                .ariaLabel($translate.instant('btn.delete-text'))
                 .targetEvent($event)
-                .ok('Borrar')
-                .cancel('Cancelar');
+                .ok($translate.instant('btn.delete-text'))
+                .cancel($translate.instant('btn.cancel-text'));
             $mdDialog.show(confirm).then(function () {
+                $rootScope.progressBarActivated = true;
+                $rootScope.errorMsg = false;
                 CommentService.delete($scope.recipe.id, comment.id, function(response) {
                     if (comment.parent === null) {
                         $scope.comments.removeById(comment.id);
                     } else {
                         $scope.comments.getByIdWithParent(comment.parent.id).replies.removeById(comment.id);
                     }
-
                     NotificationProvider.notify({
-                        title: 'Comentario borrado',
-                        text: '',
+                        title: response.data.msg,
                         type: 'success',
                         addclass: 'custom-success-notify',
                         icon: 'material-icons md-light',
                         icon_class: 'comment',
                         styling: 'fontawesome'
                     });
+                    $rootScope.progressBarActivated = false;
                 }, function(response) {
-                    var icon = 'error_outline';
-                    var title = 'Un error ha ocurrido';
-                    var msg = 'Ha ocurrido un error mientras se borraba el comentario. Por favor, intentelo más tarde.';
-                    if (response.status == 404) {
-                        title = 'Error 404';
-                        msg = 'El comentario \'' + id + '\' no existe.';
-                    }
-                    NotificationProvider.notify({
-                        title: title,
-                        text: msg,
-                        type: 'error',
-                        addclass: 'custom-error-notify',
-                        icon: 'material-icons md-light',
-                        icon_class: icon,
-                        styling: 'fontawesome'
-                    });
+                    NOTIFICATION.ParseErrorResponse(response, [400, 404], $translate, $rootScope, NotificationProvider);
+                    $rootScope.progressBarActivated = false;
                 });
             }, function() {});
         };
@@ -871,13 +632,12 @@ recipeController.controller('RecipeShow',
 );
 
 recipeController.controller('RecipeCreate',
-    ['$scope', '$rootScope', '$location', '$timeout', '$compile', '$mdDialog',
+    ['$scope', '$rootScope', '$location', '$timeout', '$compile', '$mdDialog', '$translate',
     'RecipeService', 'CategoryService', 'TagService', 'IngredientService',
-    'NotificationProvider', 'DIFF', 'VISIBILITY', 'FILE_DROPZONE', 'EDIT_FUNCTIONS',
-    function ($scope, $rootScope, $location, $timeout, $compile, $mdDialog,
+    'NotificationProvider', 'FileProvider', 'DIFF', 'VISIBILITY', 'EDIT_FUNCTIONS', 'NOTIFICATION',
+    function ($scope, $rootScope, $location, $timeout, $compile, $mdDialog, $translate,
         RecipeService, CategoryService, TagService, IngredientService,
-        NotificationProvider, DIFF, VISIBILITY, FILE_DROPZONE, EDIT_FUNCTIONS) {
-        $rootScope.headerTitle = 'Nueva receta (borrador)';
+        NotificationProvider, FileProvider, DIFF, VISIBILITY, EDIT_FUNCTIONS, NOTIFICATION) {
         $rootScope.progressBarActivated = true;
         $rootScope.HasBack = true;
         $rootScope.back = function () {
@@ -886,30 +646,17 @@ recipeController.controller('RecipeCreate',
 
         EDIT_FUNCTIONS.LoadScope($scope, DIFF, VISIBILITY);
 
-        EDIT_FUNCTIONS.CommonFunctions($scope, $rootScope, $location, $timeout, $compile, $mdDialog,
+        EDIT_FUNCTIONS.CommonFunctions($scope, $rootScope, $location, $timeout, $compile, $mdDialog, $translate,
             RecipeService, CategoryService, TagService, IngredientService,
-            NotificationProvider, DIFF, VISIBILITY, FILE_DROPZONE, EDIT_FUNCTIONS);
+            NotificationProvider, FileProvider, DIFF, VISIBILITY, EDIT_FUNCTIONS, NOTIFICATION);
 
         /**
          * Get
          */
         RecipeService.getDraft(function (response) {
-            EDIT_FUNCTIONS.LoadRecipe($scope, $rootScope, RecipeService, CategoryService, NotificationProvider, response);
+            EDIT_FUNCTIONS.LoadRecipe($scope, $rootScope, $translate, RecipeService, CategoryService, NotificationProvider, NOTIFICATION, response);
         }, function (response) {
-            NotificationProvider.notify({
-                title: 'Un error ha ocurrido',
-                text: 'Ha ocurrido un error mientras se cargaba el borrador de la receta. Por favor, intentelo más tarde.',
-                type: 'error',
-                addclass: 'custom-error-notify',
-                icon: 'material-icons md-light',
-                styling: 'fontawesome'
-            });
-            $rootScope.error = {
-                icon: 'error_outline',
-                title: 'Algo ha ido mal',
-                msg: 'Ha ocurrido un error mientras se cargaba el borrador de la receta.'
-            };
-            $rootScope.errorMsg = true;
+            NOTIFICATION.ParseErrorResponse(response, [], $translate, $rootScope, NotificationProvider);
             $rootScope.progressBarActivated = false;
         });
 
@@ -919,7 +666,6 @@ recipeController.controller('RecipeCreate',
         $scope.save = function() {
             $rootScope.progressBarActivated = true;
             $rootScope.errorMsg = false;
-            $rootScope.headerTitle = 'Guardando borrador';
             $('html, body').animate({ scrollTop: 0 }, 'slow');
             var recipeObj = angular.copy($scope.recipe);
             if (recipeObj.image_main) {
@@ -931,8 +677,7 @@ recipeController.controller('RecipeCreate',
             recipeObj.files = $.getArrayId(recipeObj.files);
             RecipeService.edit(recipeObj, function (response) {
                 NotificationProvider.notify({
-                    title: 'Receta guardada',
-                    text: '',
+                    title: $translate.instant('response.saved'),
                     type: 'success',
                     addclass: 'custom-success-notify',
                     icon: 'material-icons md-light',
@@ -940,33 +685,9 @@ recipeController.controller('RecipeCreate',
                     styling: 'fontawesome'
                 });
                 $rootScope.progressBarActivated = false;
-                $rootScope.errorMsg = false;
-                $rootScope.headerTitle = 'Nueva receta (borrador)';
             }, function (response) {
-                if (response.status == 400) {
-                    $rootScope.error = {
-                        icon: 'error_outline',
-                        title: 'Datos incorrectos',
-                        msg: $.parseError(response.data)
-                    };
-                } else {
-                    NotificationProvider.notify({
-                        title: 'Un error ha ocurrido',
-                        text: 'Ha ocurrido un error mientras se guardaba la receta. Por favor, intentelo más tarde.',
-                        type: 'error',
-                        addclass: 'custom-error-notify',
-                        icon: 'material-icons md-light',
-                        styling: 'fontawesome'
-                    });
-                    $rootScope.error = {
-                        icon: 'error_outline',
-                        title: 'Algo ha ido mal',
-                        msg: 'Ha ocurrido un error mientras se guardaba la receta.'
-                    };
-                }
-                $rootScope.errorMsg = true;
+                NOTIFICATION.ParseErrorResponse(response, [400, 401], $translate, $rootScope, NotificationProvider);
                 $rootScope.progressBarActivated = false;
-                $rootScope.headerTitle = 'Nueva receta (borrador)';
             });
         };
 
@@ -976,7 +697,6 @@ recipeController.controller('RecipeCreate',
         $scope.publish = function($event) {
             $rootScope.progressBarActivated = true;
             $rootScope.errorMsg = false;
-            $rootScope.headerTitle = 'Guardando borrador';
             $("html, body").animate({ scrollTop: 0 }, "slow");
             var recipeObj = angular.copy($scope.recipe);
             recipeObj.image_main = recipeObj.image_main.id;
@@ -986,29 +706,21 @@ recipeController.controller('RecipeCreate',
             recipeObj.files = $.getArrayId(recipeObj.files);
             RecipeService.edit(recipeObj, function (response) {
                 $rootScope.progressBarActivated = false;
-                $rootScope.headerTitle = 'Nueva receta (borrador)';
+                var msg = $translate.instant('dialog.publish', { title: recipeObj.title });
                 var confirm = $mdDialog.confirm()
-                    .title('Publicar receta')
-                    .textContent('¿Quiere publicar la receta \'' +recipeObj.title +'\'?')
-                    .ariaLabel('Publicar')
+                    .title($translate.instant('btn.publish'))
+                    .textContent(msg)
+                    .ariaLabel($translate.instant('btn.publish'))
                     .targetEvent($event)
-                    .openFrom({
-                        top: -50,
-                        width: 50
-                    })
-                    .closeTo({
-                        top: 50,
-                        width: 50
-                    })
-                    .ok('Publicar')
-                    .cancel('Cancelar');
+                    .openFrom({ top: -50, width: 50 })
+                    .closeTo({ top: 50, width: 50 })
+                    .ok($translate.instant('btn.publish'))
+                    .cancel($translate.instant('btn.cancel-text'));
                 $mdDialog.show(confirm).then(function () {
                     $rootScope.progressBarActivated = true;
-                    $rootScope.headerTitle = 'Publicando receta';
                     RecipeService.createFromDraft(function (response) {
                         NotificationProvider.notify({
-                            title: 'Receta publicada',
-                            text: '',
+                            title: $translate.instant('response.published'),
                             type: 'success',
                             addclass: 'custom-success-notify',
                             icon: 'material-icons md-light',
@@ -1017,70 +729,25 @@ recipeController.controller('RecipeCreate',
                         });
                         $location.path('/recipes/' + response.data.slug);
                     }, function(response) {
-                        if (response.status == 404) {
-                            $rootScope.error = {
-                                icon: 'error_outline',
-                                title: 'Datos incorrectos',
-                                msg: $.parseError(response.data)
-                            };
-                        } else {
-                            NotificationProvider.notify({
-                                title: 'Un error ha ocurrido',
-                                text: 'Ha ocurrido un error mientras se publicaba la receta. Por favor, intentelo más tarde.',
-                                type: 'error',
-                                addclass: 'custom-error-notify',
-                                icon: 'material-icons md-light',
-                                styling: 'fontawesome'
-                            });
-                            $rootScope.error = {
-                                icon: 'error_outline',
-                                title: 'Algo ha ido mal',
-                                msg: 'Ha ocurrido un error mientras se publicaba la receta.'
-                            };
-                        }
-                        $rootScope.errorMsg = true;
+                        NOTIFICATION.ParseErrorResponse(response, [], $translate, $rootScope, NotificationProvider);
                         $rootScope.progressBarActivated = false;
-                        $rootScope.headerTitle = 'Nueva receta (borrador)';
                     });
                 }, function() {});
             }, function (response) {
-                if (response.status == 400) {
-                    $rootScope.error = {
-                        icon: 'error_outline',
-                        title: 'Datos incorrectos',
-                        msg: $.parseError(response.data)
-                    };
-                } else {
-                    NotificationProvider.notify({
-                        title: 'Un error ha ocurrido',
-                        text: 'Ha ocurrido un error mientras se guardaba la receta. Por favor, intentelo más tarde.',
-                        type: 'error',
-                        addclass: 'custom-error-notify',
-                        icon: 'material-icons md-light',
-                        styling: 'fontawesome'
-                    });
-                    $rootScope.error = {
-                        icon: 'error_outline',
-                        title: 'Algo ha ido mal',
-                        msg: 'Ha ocurrido un error mientras se guardaba la receta.'
-                    };
-                }
-                $rootScope.errorMsg = true;
+                NOTIFICATION.ParseErrorResponse(response, [400, 401], $translate, $rootScope, NotificationProvider);
                 $rootScope.progressBarActivated = false;
-                $rootScope.headerTitle = 'Nueva receta (borrador)';
             });
         };
     }]
 );
 
 recipeController.controller('RecipeEdit',
-    ['$scope', '$rootScope', '$location', '$timeout', '$compile', '$routeParams', '$mdDialog',
+    ['$scope', '$rootScope', '$location', '$timeout', '$compile', '$routeParams', '$mdDialog', '$translate',
     'RecipeService', 'CategoryService', 'TagService', 'IngredientService',
-    'NotificationProvider', 'DIFF', 'VISIBILITY', 'FILE_DROPZONE', 'EDIT_FUNCTIONS',
-    function ($scope, $rootScope, $location, $timeout, $compile, $routeParams, $mdDialog,
+    'NotificationProvider', 'FileProvider', 'DIFF', 'VISIBILITY', 'EDIT_FUNCTIONS', 'NOTIFICATION',
+    function ($scope, $rootScope, $location, $timeout, $compile, $routeParams, $mdDialog, $translate,
         RecipeService, CategoryService, TagService, IngredientService,
-        NotificationProvider, DIFF, VISIBILITY, FILE_DROPZONE, EDIT_FUNCTIONS) {
-        $rootScope.headerTitle = 'Editar receta';
+        NotificationProvider, FileProvider, DIFF, VISIBILITY, EDIT_FUNCTIONS, NOTIFICATION) {
         $rootScope.progressBarActivated = true;
         $rootScope.HasBack = true;
         $rootScope.back = function () {
@@ -1089,38 +756,17 @@ recipeController.controller('RecipeEdit',
 
         EDIT_FUNCTIONS.LoadScope($scope, DIFF, VISIBILITY);
 
-        EDIT_FUNCTIONS.CommonFunctions($scope, $rootScope, $location, $timeout, $compile, $mdDialog,
+        EDIT_FUNCTIONS.CommonFunctions($scope, $rootScope, $location, $timeout, $compile, $mdDialog, $translate,
             RecipeService, CategoryService, TagService, IngredientService,
-            NotificationProvider, DIFF, VISIBILITY, FILE_DROPZONE, EDIT_FUNCTIONS);
+            NotificationProvider, FileProvider, DIFF, VISIBILITY, EDIT_FUNCTIONS, NOTIFICATION);
 
         /**
          * Get
          */
         RecipeService.get($routeParams.slug, function (response) {
-            EDIT_FUNCTIONS.LoadRecipe($scope, $rootScope, RecipeService, CategoryService, NotificationProvider, response);
+            EDIT_FUNCTIONS.LoadRecipe($scope, $rootScope, $translate, RecipeService, CategoryService, NotificationProvider, NOTIFICATION, response);
         }, function (response) {
-            if (response.status == 404) {
-                $rootScope.error = {
-                    icon: 'error_outline',
-                    title: 'Error 404',
-                    msg: 'La receta \'' + $routeParams.slug + '\' no existe.'
-                };
-            } else {
-                NotificationProvider.notify({
-                    title: 'Un error ha ocurrido',
-                    text: 'Ha ocurrido un error mientras se cargaba la receta. Por favor, intentelo más tarde.',
-                    type: 'error',
-                    addclass: 'custom-error-notify',
-                    icon: 'material-icons md-light',
-                    styling: 'fontawesome'
-                });
-                $rootScope.error = {
-                    icon: 'error_outline',
-                    title: 'Algo ha ido mal',
-                    msg: 'Ha ocurrido un error mientras se cargaba la receta.'
-                };
-            }
-            $rootScope.errorMsg = true;
+            NOTIFICATION.ParseErrorResponse(response, [404], $translate, $rootScope, NotificationProvider);
             $rootScope.progressBarActivated = false;
         });
 
@@ -1130,7 +776,6 @@ recipeController.controller('RecipeEdit',
         $scope.edit = function() {
             $rootScope.progressBarActivated = true;
             $rootScope.errorMsg = false;
-            $rootScope.headerTitle = 'Guardando receta';
             $('html, body').animate({ scrollTop: 0 }, 'slow');
             var recipeObj = angular.copy($scope.recipe);
             if (recipeObj.image_main) {
@@ -1142,8 +787,7 @@ recipeController.controller('RecipeEdit',
             recipeObj.files = $.getArrayId(recipeObj.files);
             RecipeService.edit(recipeObj, function (response) {
                 NotificationProvider.notify({
-                    title: 'Receta guardada',
-                    text: '',
+                    title: $translate.instant('response.saved'),
                     type: 'success',
                     addclass: 'custom-success-notify',
                     icon: 'material-icons md-light',
@@ -1151,188 +795,10 @@ recipeController.controller('RecipeEdit',
                     styling: 'fontawesome'
                 });
                 $rootScope.progressBarActivated = false;
-                $rootScope.errorMsg = false;
-                $rootScope.headerTitle = 'Editar receta';
             }, function (response) {
-                if (response.status == 400) {
-                    $rootScope.error = {
-                        icon: 'error_outline',
-                        title: 'Datos incorrectos',
-                        msg: $.parseError(response.data)
-                    };
-                } else {
-                    NotificationProvider.notify({
-                        title: 'Un error ha ocurrido',
-                        text: 'Ha ocurrido un error mientras se guardaba la receta. Por favor, intentelo más tarde.',
-                        type: 'error',
-                        addclass: 'custom-error-notify',
-                        icon: 'material-icons md-light',
-                        styling: 'fontawesome'
-                    });
-                    $rootScope.error = {
-                        icon: 'error_outline',
-                        title: 'Algo ha ido mal',
-                        msg: 'Ha ocurrido un error mientras se guardaba la receta.'
-                    };
-                }
-                $rootScope.errorMsg = true;
+                NOTIFICATION.ParseErrorResponse(response, [400, 401], $translate, $rootScope, NotificationProvider);
                 $rootScope.progressBarActivated = false;
-                $rootScope.headerTitle = 'Editar receta';
             });
         };
     }]
 );
-
-function RatingDialogController($scope, $rootScope, $location, $mdDialog, RecipeService, NotificationProvider) {
-    $scope.rated = $rootScope.globals.rated;
-    $scope.recipe = $rootScope.globals.recipe;
-    $scope.hide = function() { $mdDialog.hide(); };
-    $scope.cancel = function() { $mdDialog.cancel(); };
-    $scope.rating = function() {
-        if ($rootScope.globals.user) {
-            RecipeService.rating($scope.recipe.id, $scope.rated, function (response) {
-                NotificationProvider.notify({
-                    title: 'Guardado',
-                    text: '',
-                    type: 'error',
-                    addclass: 'custom-success-notify',
-                    icon: 'material-icons md-light',
-                    icon_class: 'star',
-                    styling: 'fontawesome'
-                });
-                $mdDialog.cancel();
-                $location.path('/recipes/' + $scope.recipe.slug);
-            }, function (response) {
-                NotificationProvider.notify({
-                    title: 'Un error ha ocurrido',
-                    text: 'Ha ocurrido un error. Por favor, intentelo más tarde.',
-                    type: 'error',
-                    addclass: 'custom-error-notify',
-                    icon: 'material-icons md-light',
-                    styling: 'fontawesome'
-                });
-            });
-        } else {
-            $location.path('/login');
-        }
-    };
-}
-
-function GalleryDialogController($scope, $rootScope, $mdDialog, data, FileService, NotificationProvider) {
-    $scope.selectedImages = data.selectedImages;
-    $scope.mode = data.mode;
-    $scope.user = data.user;
-    $scope.urlUpload = FileService.getUrlUpload($scope.user);
-    FileService.loadUserImages($scope.user, function(response) {
-        $scope.images = response.data;
-        $scope.checkImagesSelected($scope.images);
-    }, function(response) {
-        NotificationProvider.notify({
-            title: 'Un error ha ocurrido',
-            text: 'Ha ocurrido un error mientras se cargaban las imagenes. Por favor, intentelo más tarde.',
-            type: 'error',
-            addclass: 'custom-error-notify',
-            icon: 'material-icons md-light',
-            styling: 'fontawesome'
-        });
-    });
-
-    $scope.toggleImageSelected = function(image) {
-        if (image.selected) {
-            $scope.selectedImages.splice($scope.selectedImages.findIndex(function(imageInArray) { return image.id == imageInArray.id; }), 1);
-            image.selected = false;
-        } else {
-            // If you click in other image
-            if ($scope.mode == 'selectImageMain' || $scope.mode == 'selectAvatar') {
-                $scope.selectedImages= [];
-                $scope.checkImagesSelected($scope.images);
-            }
-            $scope.selectedImages.push(image);
-            image.selected = true;
-        }
-    };
-
-    $scope.checkImagesSelected = function(images) {
-        for (var image in images) {
-            if ($scope.images.hasOwnProperty(image)) {
-                $scope.images[image].selected = $.containsId($scope.images[image], $scope.selectedImages);
-            }
-        }
-    };
-
-    $scope.removeImage = function(image, $event) {
-        if ($event.stopPropagation) $event.stopPropagation();
-        if ($event.preventDefault) $event.preventDefault();
-        $event.cancelBubble = true;
-        $event.returnValue = false;
-        var confirm = $mdDialog.confirm()
-            .title('Borrar imagen')
-            .textContent('¿De verdad que quieres borrar la imagen \'' + image.title +'\'? \nEsta acción no se puede deshacer.')
-            .ariaLabel('Borrar')
-            .targetEvent($event)
-            .ok('Borrar')
-            .cancel('Cancelar');
-        $scope.returnSelected();
-        $mdDialog.show(confirm).then(function () {
-            if (image.selected) {
-                $scope.selectedImages.splice($scope.selectedImages.findIndex(function(imageInArray) { return image.id == imageInArray.id; }), 1);
-                image.selected = false;
-            }
-            FileService.deleteFile($scope.user, image.id, function(response) {
-                NotificationProvider.notify({
-                    title: 'Imagen borrada',
-                    text: 'Has borrado la imagen \'' + image.title +'\'.',
-                    type: 'success',
-                    addclass: 'custom-success-notify',
-                    icon: 'material-icons md-light',
-                    icon_class: 'check_circle',
-                    styling: 'fontawesome'
-                });
-            }, function(response) {
-                if (response.status == 400 || response.status == 404) {
-                    NotificationProvider.notify({
-                        title: 'Un error ha ocurrido',
-                        text: response.data.error,
-                        type: 'error',
-                        addclass: 'custom-error-notify',
-                        icon: 'material-icons md-light',
-                        styling: 'fontawesome'
-                    });
-                } else {
-                    NotificationProvider.notify({
-                        title: 'Un error ha ocurrido',
-                        text: 'Ha ocurrido un error mientras se borraba la receta. Por favor, intentelo más tarde.',
-                        type: 'error',
-                        addclass: 'custom-error-notify',
-                        icon: 'material-icons md-light',
-                        styling: 'fontawesome'
-                    });
-                }
-            });
-        }, function() {});
-    };
-
-    $scope.successUpload = function(file, response) {
-        $scope.images.push(response);
-    };
-
-    $scope.hide = function() { $mdDialog.hide(); };
-    $scope.cancel = function() { $mdDialog.cancel(); };
-    $scope.returnSelected = function() {
-        if ($scope.mode == 'selectImageMain' || $scope.mode == 'selectAvatar') {
-            $mdDialog.hide($scope.selectedImages[0]);
-        } else {
-            $mdDialog.hide($scope.selectedImages);
-        }
-    };
-}
-
-function CommentDialogController($scope, $rootScope, $mdDialog, data, NotificationProvider) {
-    $scope.text = data.text;
-
-    $scope.hide = function() { $mdDialog.hide(); };
-    $scope.cancel = function() { $mdDialog.cancel(); };
-    $scope.save = function() {
-        $mdDialog.hide($scope.text);
-    };
-}

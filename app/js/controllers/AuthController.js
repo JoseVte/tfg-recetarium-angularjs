@@ -1,10 +1,7 @@
 var authController = angular.module('AuthController', []);
 
-authController.controller('Login',
-    ['$scope', '$rootScope', '$location', 'AuthService', '$timeout', 'NotificationProvider',
-    function ($scope, $rootScope, $location, AuthService, $timeout, NotificationProvider) {
-        $rootScope.headerTitle = 'Login';
-
+authController.constant('DELAY_FUNCTIONS', {
+    'initDelays': function($scope, $timeout) {
         $scope.setDelay1 = function(){
             $scope.delay1 = true;
             $scope.delay2 = true;
@@ -18,41 +15,35 @@ authController.controller('Login',
                 $scope.delay2 = false;
             }, 1000);
         };
+    }
+});
+
+authController.controller('Login',
+    ['$scope', '$rootScope', '$location', '$translate', '$timeout', 'AuthService', 'NotificationProvider', 'NOTIFICATION', 'DELAY_FUNCTIONS',
+    function ($scope, $rootScope, $location, $translate, $timeout, AuthService, NotificationProvider, NOTIFICATION, DELAY_FUNCTIONS) {
+        DELAY_FUNCTIONS.initDelays($scope, $timeout);
 
         $scope.login = function () {
             $rootScope.errorMsg = false;
             $rootScope.progressBarActivated = true;
             $scope.setDelay1();
-            AuthService.Login($scope.email, $scope.password, !$scope.expiration, function (response) {
+            AuthService.login($scope.email, $scope.password, !$scope.expiration, function (response) {
                 AuthService.SaveCredentials(response.data.auth_token, JSON.parse(AuthService.ParseJwt(response.data.auth_token).sub), response.data.pusher_key);
                 if (!$scope.expiration) {
                     AuthService.StartCronCheckToken();
                 }
+                NotificationProvider.notify({
+                    title: $translate.instant('login.header-title'),
+                    type: 'success',
+                    addclass: 'custom-success-notify',
+                    icon: 'material-icons md-light',
+                    icon_class: 'cake',
+                    styling: 'fontawesome'
+                });
                 $rootScope.progressBarActivated = false;
                 $location.path('/');
             }, function (response) {
-                if (response.status == 400 || response.status == 401) {
-                    $rootScope.error = {
-                        icon: 'error_outline',
-                        title: 'Datos incorrectos',
-                        msg: $.parseError(response.data)
-                    };
-                } else {
-                    NotificationProvider.notify({
-                        title: 'Un error ha ocurrido',
-                        text: 'Ha ocurrido un error mientras se logueaba. Por favor, intentelo más tarde.',
-                        type: 'error',
-                        addclass: 'custom-error-notify',
-                        icon: 'material-icons md-light',
-                        styling: 'fontawesome'
-                    });
-                    $rootScope.error = {
-                        icon: 'error_outline',
-                        title: 'Algo ha ido mal',
-                        msg: 'Ha ocurrido un error mientras se logueaba.'
-                    };
-                }
-                $rootScope.errorMsg = true;
+                NOTIFICATION.ParseErrorResponse(response, [400, 401], $translate, $rootScope, NotificationProvider);
                 $rootScope.progressBarActivated = false;
                 $scope.setDelay2();
             });
@@ -61,23 +52,9 @@ authController.controller('Login',
 );
 
 authController.controller('Register',
-    ['$scope', '$rootScope','$location', 'AuthService', '$timeout', 'NotificationProvider',
-    function ($scope, $rootScope, $location, AuthService, $timeout, NotificationProvider) {
-        $rootScope.headerTitle = 'Registro';
-
-        $scope.setDelay1 = function(){
-            $scope.delay1 = true;
-            $scope.delay2 = true;
-            $timeout(function(){
-                $scope.delay1 = false;
-            }, 1000);
-        };
-
-        $scope.setDelay2 = function(){
-            $timeout(function(){
-                $scope.delay2 = false;
-            }, 1000);
-        };
+    ['$scope', '$rootScope', '$location', '$translate', '$timeout', 'AuthService', 'NotificationProvider', 'NOTIFICATION', 'DELAY_FUNCTIONS',
+    function ($scope, $rootScope, $location, $translate, $timeout, AuthService, NotificationProvider, NOTIFICATION, DELAY_FUNCTIONS) {
+        DELAY_FUNCTIONS.initDelays($scope, $timeout);
 
         $scope.register = function () {
             $rootScope.errorMsg = false;
@@ -91,10 +68,10 @@ authController.controller('Register',
                 first_name: $scope.first_name,
                 last_name: $scope.last_name
             };
-            AuthService.Register(user, function (response) {
+            AuthService.register(user, function (response) {
                 NotificationProvider.notify({
-                    title: 'Revisa tu correo',
-                    text: 'Hemos enviado un email para validar tu cuenta.',
+                    title: $translate.instant('register.thanks-title'),
+                    text: $translate.instant('register.thanks-text'),
                     type: 'success',
                     addclass: 'custom-success-notify',
                     icon: 'material-icons md-light',
@@ -104,28 +81,7 @@ authController.controller('Register',
                 $rootScope.progressBarActivated = false;
                 $location.path('/');
             }, function (response) {
-                if (response.status == 400) {
-                    $rootScope.error = {
-                        icon: 'error_outline',
-                        title: 'Datos incorrectos',
-                        msg: $.parseError(response.data)
-                    };
-                } else {
-                    NotificationProvider.notify({
-                        title: 'Un error ha ocurrido',
-                        text: 'Ha ocurrido un error mientras se registraba. Por favor, intentelo más tarde.',
-                        type: 'error',
-                        addclass: 'custom-error-notify',
-                        icon: 'material-icons md-light',
-                        styling: 'fontawesome'
-                    });
-                    $rootScope.error = {
-                        icon: 'error_outline',
-                        title: 'Algo ha ido mal',
-                        msg: 'Ha ocurrido un error mientras se registraba.'
-                    };
-                }
-                $rootScope.errorMsg = true;
+                NOTIFICATION.ParseErrorResponse(response, [400, 401], $translate, $rootScope, NotificationProvider);
                 $rootScope.progressBarActivated = false;
                 $scope.setDelay2();
             });
@@ -134,11 +90,11 @@ authController.controller('Register',
 );
 
 authController.controller('Logout',
-    ['$scope', '$location', 'AuthService', 'NotificationProvider',
-    function ($scope,$location, AuthService, NotificationProvider) {
+    ['$scope', '$location', '$translate', 'AuthService', 'NotificationProvider', 'NOTIFICATION', 'DELAY_FUNCTIONS',
+    function ($scope, $location, $translate, AuthService, NotificationProvider, NOTIFICATION) {
         NotificationProvider.notify({
-            title: 'Adios :)',
-            text: 'Gracias por venir. Vuelve pronto.',
+            title: $translate.instant('logout.title'),
+            text: $translate.instant('logout.text'),
             type: 'success',
             addclass: 'custom-success-notify',
             icon: 'material-icons md-light',
@@ -152,57 +108,30 @@ authController.controller('Logout',
 );
 
 authController.controller('ResetPassword',
-    ['$scope', '$rootScope', '$location', 'AuthService', '$timeout', 'NotificationProvider',
-    function ($scope, $rootScope, $location, AuthService, $timeout, NotificationProvider) {
-        $rootScope.headerTitle = 'Recuperar contraseña';
-
-        $scope.setDelay1 = function(){
-            $scope.delay1 = true;
-            $scope.delay2 = true;
-            $timeout(function(){
-                $scope.delay1 = false;
-            }, 1000);
-        };
-
-        $scope.setDelay2 = function(){
-            $timeout(function(){
-                $scope.delay2 = false;
-            }, 1000);
-        };
+    ['$scope', '$rootScope', '$location', '$translate', '$timeout', 'AuthService', 'NotificationProvider', 'NOTIFICATION', 'DELAY_FUNCTIONS',
+    function ($scope, $rootScope, $location, $translate, $timeout, AuthService, NotificationProvider, NOTIFICATION, DELAY_FUNCTIONS) {
+        DELAY_FUNCTIONS.initDelays($scope, $timeout);
 
         $scope.resetPassword = function () {
             $rootScope.errorMsg = false;
             $rootScope.progressBarActivated = true;
             $scope.hasMessage = false;
             $scope.setDelay1();
-            AuthService.ResetPassword($scope.email, function (response) {
+            AuthService.resetPassword($scope.email, function (response) {
                 $scope.msg = response.data.msg;
+                NotificationProvider.notify({
+                    title: response.data.msg,
+                    type: 'success',
+                    addclass: 'custom-success-notify',
+                    icon: 'material-icons md-light',
+                    icon_class: 'mail_outline',
+                    styling: 'fontawesome'
+                });
                 $scope.hasMessage = true;
                 $rootScope.progressBarActivated = false;
                 $scope.setDelay2();
             }, function (response) {
-                if (response.status == 400 || response.status == 404) {
-                    $rootScope.error = {
-                        icon: 'error_outline',
-                        title: 'Datos incorrectos',
-                        msg: $.parseError(response.data)
-                    };
-                } else {
-                    NotificationProvider.notify({
-                        title: 'Un error ha ocurrido',
-                        text: 'Ha ocurrido un error mientras se enviaba el email. Por favor, intentelo más tarde.',
-                        type: 'error',
-                        addclass: 'custom-error-notify',
-                        icon: 'material-icons md-light',
-                        styling: 'fontawesome'
-                    });
-                    $rootScope.error = {
-                        icon: 'error_outline',
-                        title: 'Algo ha ido mal',
-                        msg: 'Ha ocurrido un error mientras se enviaba el email.'
-                    };
-                }
-                $rootScope.errorMsg = true;
+                NOTIFICATION.ParseErrorResponse(response, [400, 404], $translate, $rootScope, NotificationProvider);
                 $rootScope.progressBarActivated = false;
                 $scope.setDelay2();
             });
@@ -211,33 +140,17 @@ authController.controller('ResetPassword',
 );
 
 authController.controller('RecoverPassword',
-    ['$scope', '$rootScope', '$routeParams', '$location', 'AuthService', '$timeout', 'NotificationProvider',
-    function ($scope, $rootScope, $routeParams, $location, AuthService, $timeout, NotificationProvider) {
-        $rootScope.headerTitle = 'Recuperar contraseña';
-
-        $scope.setDelay1 = function(){
-            $scope.delay1 = true;
-            $scope.delay2 = true;
-            $timeout(function(){
-                $scope.delay1 = false;
-            }, 1000);
-        };
-
-        $scope.setDelay2 = function(){
-            $timeout(function(){
-                $scope.delay2 = false;
-            }, 1000);
-        };
+    ['$scope', '$rootScope', '$routeParams', '$location', '$translate', '$timeout', 'AuthService', 'NotificationProvider', 'NOTIFICATION', 'DELAY_FUNCTIONS',
+    function ($scope, $rootScope, $routeParams, $location, $translate, $timeout, AuthService, NotificationProvider, NOTIFICATION, DELAY_FUNCTIONS) {
+        DELAY_FUNCTIONS.initDelays($scope, $timeout);
 
         $scope.recoverPassword = function () {
             $rootScope.errorMsg = false;
             $rootScope.progressBarActivated = true;
-            $scope.hasMessage = false;
             $scope.setDelay1();
-            AuthService.RecoverPassword($scope.email, $scope.password, $routeParams.token, function (response) {
+            AuthService.recoverPassword($scope.email, $scope.password, $routeParams.token, function (response) {
                 NotificationProvider.notify({
-                    title: 'Contraseña cambiada con existo',
-                    text: '',
+                    title: $translate.instant('recover.changed'),
                     type: 'success',
                     addclass: 'custom-success-notify',
                     icon: 'material-icons md-light',
@@ -247,28 +160,7 @@ authController.controller('RecoverPassword',
                 $rootScope.progressBarActivated = false;
                 $location.path('/login');
             }, function (response) {
-                if (response.status == 400) {
-                    $rootScope.error = {
-                        icon: 'error_outline',
-                        title: 'Datos incorrectos',
-                        msg: $.parseError(response.data)
-                    };
-                } else {
-                    NotificationProvider.notify({
-                        title: 'Un error ha ocurrido',
-                        text: 'Ha ocurrido un error mientras se cambiaba la contraseña. Por favor, intentelo más tarde.',
-                        type: 'error',
-                        addclass: 'custom-error-notify',
-                        icon: 'material-icons md-light',
-                        styling: 'fontawesome'
-                    });
-                    $rootScope.error = {
-                        icon: 'error_outline',
-                        title: 'Algo ha ido mal',
-                        msg: 'Ha ocurrido un error mientras se cambiaba la contraseña.'
-                    };
-                }
-                $rootScope.errorMsg = true;
+                NOTIFICATION.ParseErrorResponse(response, [400, 404], $translate, $rootScope, NotificationProvider);
                 $rootScope.progressBarActivated = false;
                 $scope.setDelay2();
             });
@@ -277,16 +169,14 @@ authController.controller('RecoverPassword',
 );
 
 authController.controller('ValidateEmail',
-    ['$scope', '$rootScope', '$routeParams', '$location', 'AuthService', 'NotificationProvider',
-    function ($scope, $rootScope, $routeParams, $location, AuthService, NotificationProvider) {
-        $rootScope.headerTitle = 'Validando email';
+    ['$scope', '$rootScope', '$routeParams', '$location', '$translate', 'AuthService', 'NotificationProvider', 'NOTIFICATION',
+    function ($scope, $rootScope, $routeParams, $location, $translate, AuthService, NotificationProvider, NOTIFICATION) {
         $rootScope.errorMsg = false;
         $rootScope.progressBarActivated = true;
-        $scope.hasMessage = false;
 
         AuthService.ValidateEmail($routeParams.token, function (response) {
             NotificationProvider.notify({
-                title: 'Email validado correctamente',
+                title: $translate.instant('active.actived'),
                 type: 'success',
                 addClass: 'material-icons md-light',
                 icon_class: 'check_circle',
@@ -295,79 +185,47 @@ authController.controller('ValidateEmail',
             $rootScope.progressBarActivated = false;
             $location.path('/login');
         }, function (response) {
-            if (response.status == 400) {
-                $rootScope.error = {
-                    icon: 'error_outline',
-                    title: 'Datos incorrectos',
-                    msg: $.parseError(response.data)
-                };
-            } else {
-                NotificationProvider.notify({
-                    title: 'Un error ha ocurrido',
-                    text: 'Ha ocurrido un error mientras se validaba el email. Por favor, intentelo más tarde.',
-                    type: 'error',
-                    addclass: 'custom-error-notify',
-                    icon: 'material-icons md-light',
-                    styling: 'fontawesome'
-                });
-                $rootScope.error = {
-                    icon: 'error_outline',
-                    title: 'Algo ha ido mal',
-                    msg: 'Ha ocurrido un error mientras se validaba el email.'
-                };
-            }
-            $rootScope.errorMsg = true;
+            NOTIFICATION.ParseErrorResponse(response, [400, 404], $translate, $rootScope, NotificationProvider);
             $rootScope.progressBarActivated = false;
-            $rootScope.headerTitle = 'Error';
         });
     }]
 );
 
 authController.controller('EditProfile',
-    ['$scope', '$rootScope', '$location', '$timeout', '$sce', '$mdDialog', 'AuthService', 'FileService', 'UserService', 'RecipeService', 'NotificationProvider', 'FRIENDS_FUNCTIONS', 'USER_FUNCTIONS',
-    function ($scope, $rootScope, $location, $timeout, $sce, $mdDialog, AuthService, FileService, UserService, RecipeService, NotificationProvider, FRIENDS_FUNCTIONS, USER_FUNCTIONS) {
-        $rootScope.headerTitle = 'Editar perfil';
-
+    ['$scope', '$rootScope', '$location', '$timeout', '$sce', '$mdDialog', '$translate', 'AuthService', 'FileService', 'UserService', 'RecipeService', 'NotificationProvider', 'FileProvider', 'FRIENDS_FUNCTIONS', 'USER_FUNCTIONS', 'DELAY_FUNCTIONS', 'NOTIFICATION',
+    function ($scope, $rootScope, $location, $timeout, $sce, $mdDialog, $translate, AuthService, FileService, UserService, RecipeService, NotificationProvider, FileProvider, FRIENDS_FUNCTIONS, USER_FUNCTIONS, DELAY_FUNCTIONS, NOTIFICATION) {
         $scope.infiniteScroll = {
             recipes: {
                 data: [],
                 total: 1,
                 nextPageNumber: 1,
                 loadingNextPage: false,
+                hasError: false,
             },
             recipesFavorites: {
                 data: [],
                 total: 1,
                 nextPageNumber: 1,
                 loadingNextPage: false,
+                hasError: false,
             },
             images: {
                 data: [],
                 total: 1,
                 nextPageNumber: 1,
                 loadingNextPage: false,
+                hasError: false,
             },
             friends: {
                 data: [],
                 total: 1,
                 nextPageNumber: 1,
                 loadingNextPage: false,
+                hasError: false,
             },
         };
 
-        $scope.setDelay1 = function(){
-            $scope.delay1 = true;
-            $scope.delay2 = true;
-            $timeout(function(){
-                $scope.delay1 = false;
-            }, 1000);
-        };
-
-        $scope.setDelay2 = function(){
-            $timeout(function(){
-                $scope.delay2 = false;
-            }, 1000);
-        };
+        DELAY_FUNCTIONS.initDelays($scope, $timeout);
 
         $scope.isMe = function(user) {
             return (user !== undefined && $rootScope.globals.user.user.id == user.id);
@@ -395,57 +253,34 @@ authController.controller('EditProfile',
                 $rootScope.progressBarActivated = false;
                 $scope.setDelay2();
             }, function (response) {
-                if (response.status !== 401){
-                    NotificationProvider.notify({
-                        title: 'Un error ha ocurrido',
-                        text: 'Ha ocurrido un error mientras se cargaba el perfil. Por favor, intentelo más tarde.',
-                        type: 'error',
-                        addclass: 'custom-error-notify',
-                        icon: 'material-icons md-light',
-                        styling: 'fontawesome'
-                    });
-                    $rootScope.error = {
-                        icon: 'error_outline',
-                        title: 'Algo ha ido mal',
-                        msg: 'Ha ocurrido un error mientras se cargaba el perfil.'
-                    };
-                }
-                $rootScope.errorMsg = true;
-                $rootScope.headerTitle = 'Error';
+                NOTIFICATION.ParseErrorResponse(response, [401], $translate, $rootScope, NotificationProvider);
                 $rootScope.progressBarActivated = false;
                 $scope.setDelay2();
             });
         };
 
-        USER_FUNCTIONS.Recipes($scope, $rootScope, $mdDialog, $rootScope.globals.user.user.id, UserService, RecipeService,NotificationProvider);
+        USER_FUNCTIONS.Recipes($scope, $rootScope, $translate, $mdDialog, $rootScope.globals.user.user.id, UserService, RecipeService, NotificationProvider, NOTIFICATION);
 
-        USER_FUNCTIONS.RecipesFavorites($scope, $rootScope, $mdDialog, $rootScope.globals.user.user.id, UserService, RecipeService,NotificationProvider);
+        USER_FUNCTIONS.RecipesFavorites($scope, $rootScope, $translate, $mdDialog, $rootScope.globals.user.user.id, UserService, RecipeService, NotificationProvider, NOTIFICATION);
 
-        USER_FUNCTIONS.Friends($scope, $rootScope, $rootScope.globals.user.user.id, UserService, NotificationProvider, FRIENDS_FUNCTIONS);
+        USER_FUNCTIONS.Friends($scope, $rootScope, $translate, $rootScope.globals.user.user.id, UserService, NotificationProvider, FRIENDS_FUNCTIONS, NOTIFICATION);
 
+        // TODO Refactor with infinite scroll
         $scope.loadUserImages = function() {
             $rootScope.progressBarActivated = true;
             FileService.loadUserImages($rootScope.globals.user.user, function (response) {
                 $scope.images = response.data;
                 $rootScope.progressBarActivated = false;
             }, function (response) {
-                NotificationProvider.notify({
-                    title: 'Un error ha ocurrido',
-                    text: 'Ha ocurrido un error mientras se cargaban las imagenes. Por favor, intentelo más tarde.',
-                    type: 'error',
-                    addclass: 'custom-error-notify',
-                    icon: 'material-icons md-light',
-                    styling: 'fontawesome'
-                });
-                $rootScope.headerTitle = 'Error';
+                NOTIFICATION.ParseErrorResponse(response, [], $translate, $rootScope, NotificationProvider);
                 $rootScope.progressBarActivated = false;
             });
         };
 
         $scope.openUploadImage = function($event) {
             $mdDialog.show({
-                controller: UserUploadDialogController,
-                templateUrl: 'views/auth/upload_images_dialog.html',
+                controller: FileProvider.openUploadDialog,
+                templateUrl: 'views/partials/upload-images-dialog.html',
                 parent: angular.element(document.body),
                 locals: { data: {
                         user: $scope.user,
@@ -469,8 +304,7 @@ authController.controller('EditProfile',
             AuthService.EditProfile(userObj, function (response) {
                 $rootScope.progressBarActivated = false;
                 NotificationProvider.notify({
-                    title: 'Datos guardados',
-                    text: '',
+                    title: $translate.instant('response.saved'),
                     type: 'success',
                     addclass: 'custom-success-notify',
                     icon: 'material-icons md-light',
@@ -481,28 +315,7 @@ authController.controller('EditProfile',
                 AuthService.CheckToken($scope.user);
                 $scope.setDelay2();
             }, function (response) {
-                if (response.status == 400) {
-                    $rootScope.error = {
-                        icon: 'error_outline',
-                        title: 'Datos incorrectos',
-                        msg: $.parseError(response.data)
-                    };
-                } else {
-                    NotificationProvider.notify({
-                        title: 'Un error ha ocurrido',
-                        text: 'Ha ocurrido un error mientras se guardaba el perfil. Por favor, intentelo más tarde.',
-                        type: 'error',
-                        addclass: 'custom-error-notify',
-                        icon: 'material-icons md-light',
-                        styling: 'fontawesome'
-                    });
-                    $rootScope.error = {
-                        icon: 'error_outline',
-                        title: 'Algo ha ido mal',
-                        msg: 'Ha ocurrido un error mientras se guardaba el perfil.'
-                    };
-                }
-                $rootScope.errorMsg = true;
+                NOTIFICATION.ParseErrorResponse(response, [400], $translate, $rootScope, NotificationProvider);
                 $rootScope.progressBarActivated = false;
                 $scope.setDelay2();
             });
@@ -513,22 +326,21 @@ authController.controller('EditProfile',
         };
 
         $scope.remove = function(image, $event) {
-            var msg = '¿De verdad que quieres borrar la imagen \'' + image.title +'\'?\r\nEsta acción no se puede deshacer.';
-            if (image.recipes > 0) msg += '\r\nLa imagen desaparecerá de todas las recetas';
+            var msg = $translate.instant('dialog.remove-image-1',{ title: image.title });
+            if (image.recipes > 0) msg += '<br><br>' + $translate.instant('dialog.remove-image-2');
             var confirm = $mdDialog.confirm()
-                .title('Borrar imagen')
-                .textContent(msg)
-                .ariaLabel('Borrar')
+                .title($translate.instant('btn.delete-text'))
+                .htmlContent(nl2br(msg))
+                .ariaLabel($translate.instant('btn.delete-text'))
                 .targetEvent($event)
-                .ok('Borrar')
-                .cancel('Cancelar');
+                .ok($translate.instant('btn.delete-text'))
+                .cancel($translate.instant('btn.cancel-text'));
             $mdDialog.show(confirm).then(function () {
                 $rootScope.progressBarActivated = true;
                 $rootScope.errorMsg = false;
                 FileService.deleteFile($scope.user, image.id, function(response) {
                     NotificationProvider.notify({
-                        title: 'Receta borrada',
-                        text: 'Has borrado la imagen \'' + image.title +'\'.',
+                        title: response.data.msg,
                         type: 'success',
                         addclass: 'custom-success-notify',
                         icon: 'material-icons md-light',
@@ -538,28 +350,7 @@ authController.controller('EditProfile',
                     $rootScope.progressBarActivated = false;
                     $scope.images.splice($scope.images.findIndex(function(imageInArray) { return image.id == imageInArray.id; }), 1);
                 }, function(response) {
-                    if (response.status == 404) {
-                        $rootScope.error = {
-                            icon: 'error_outline',
-                            title: 'Receta no encontrada',
-                            msg: $.parseError(response.data)
-                        };
-                    } else {
-                        NotificationProvider.notify({
-                            title: 'Un error ha ocurrido',
-                            text: 'Ha ocurrido un error mientras se borraba la imagen. Por favor, intentelo más tarde.',
-                            type: 'error',
-                            addclass: 'custom-error-notify',
-                            icon: 'material-icons md-light',
-                            styling: 'fontawesome'
-                        });
-                        $rootScope.error = {
-                            icon: 'error_outline',
-                            title: 'Algo ha ido mal',
-                            msg: 'Ha ocurrido un error mientras se borraba la imagen.'
-                        };
-                    }
-                    $rootScope.errorMsg = true;
+                    NOTIFICATION.ParseErrorResponse(response, [400, 404], $translate, $rootScope, NotificationProvider);
                     $rootScope.progressBarActivated = false;
                 });
             }, function() {});
@@ -567,10 +358,11 @@ authController.controller('EditProfile',
 
         $scope.selectAvatar = function(ev) {
             $mdDialog.show({
-                controller: GalleryDialogController,
-                templateUrl: 'views/user/gallery_dialog.html',
+                controller: FileProvider.openGalleryDialog,
+                templateUrl: 'views/partials/gallery-dialog.html',
                 parent: angular.element(document.body),
-                locals: { data: {
+                locals: {
+                    data: {
                         selectedImages: ($scope.user.avatar) ? [ $scope.user.avatar ] : [],
                         mode: 'selectAvatar',
                         user: $scope.user,
@@ -584,18 +376,3 @@ authController.controller('EditProfile',
         };
     }]
 );
-
-function UserUploadDialogController($scope, $rootScope, $mdDialog, data, FileService, NotificationProvider) {
-    $scope.user = data.user;
-    $scope.images = [];
-    $scope.urlUpload = FileService.getUrlUpload($scope.user);
-
-    $scope.successUpload = function(file, response) {
-        $scope.images.push(response);
-    };
-    $scope.hide = function() { $mdDialog.hide(); };
-    $scope.cancel = function() { $mdDialog.cancel(); };
-    $scope.returnUploaded = function() {
-        $mdDialog.hide($scope.images);
-    };
-}

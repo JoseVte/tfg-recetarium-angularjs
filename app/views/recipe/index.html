@@ -8,7 +8,7 @@
             md-item-text="tag.text"
             md-search-text="searchText"
             md-items="tag in tagSearch(searchText)"
-            placeholder="Busca una etiqueta">
+            placeholder="{{ 'tooltip.search-tag' | translate }}">
             <span md-highlight-text="searchText">{{ tag.text }}</span>
         </md-autocomplete>
         <md-chip-template>
@@ -44,13 +44,13 @@
                     </md-card-title>
                 </a>
                 <md-card-actions layout="row" layout-align="end center" ng-if="isMine(recipe.user)">
-                    <md-button aria-label="Edit" class="md-edit" ng-href="/recipes/{{ recipe.slug }}/edit"><md-icon class="material-icons md-dark">edit</md-icon> Editar</md-button>
-                    <md-button aria-label="Remove" class="md-remove" ng-click="remove(recipe, $event)"><md-icon class="material-icons md-dark">delete</md-icon> Borrar</md-button>
+                    <md-button aria-label="{{ 'btn.edit-text' | translate }}" class="md-edit" ng-href="/recipes/{{ recipe.slug }}/edit"><md-icon class="material-icons md-dark">edit</md-icon> {{ 'btn.edit-text' | translate }}</md-button>
+                    <md-button aria-label="{{ 'btn.delete-text' | translate }}" class="md-remove" ng-click="remove(recipe, $event)"><md-icon class="material-icons md-dark">delete</md-icon> {{ 'btn.delete-text' | translate }}</md-button>
                 </md-card-actions>
             </md-card>
         </div>
     </md-content>
 </div>
-<md-button ng-show="IsAuthed" class="md-fab md-fixed-bottom-default" aria-label="Nueva receta" ng-href="/new-recipe">
+<md-button ng-show="IsAuthed" class="md-fab md-fixed-bottom-default" ng-href="/new-recipe">
     <md-icon class="material-icons md-light">create</md-icon>
 </md-button>

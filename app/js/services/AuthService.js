@@ -10,7 +10,7 @@ authServices.factory('AuthService',
             FORBIDDEN: 403
         };
 
-        service.Login = function (email, password, expiration, callbackOk, callbackError) {
+        service.login = function (email, password, expiration, callbackOk, callbackError) {
             $http.post(
                 service.apiUrl + '/auth/login',
                 { email: email, password: password, setExpiration: expiration },
@@ -22,7 +22,7 @@ authServices.factory('AuthService',
             });
         };
 
-        service.Register = function (user, callbackOk, callbackError) {
+        service.register = function (user, callbackOk, callbackError) {
             $http.post(
                 service.apiUrl + '/auth/register',
                 user, { headers: {'Accept': 'application/json', 'Content-Type': 'application/json'} }
@@ -33,7 +33,7 @@ authServices.factory('AuthService',
             });
         };
 
-        service.ResetPassword = function (email, callbackOk, callbackError) {
+        service.resetPassword = function (email, callbackOk, callbackError) {
             $http.post(
                 service.apiUrl + '/auth/reset/password',
                 { email: email },
@@ -45,7 +45,7 @@ authServices.factory('AuthService',
             });
         };
 
-        service.RecoverPassword = function (email, password, token, callbackOk, callbackError) {
+        service.recoverPassword = function (email, password, token, callbackOk, callbackError) {
             $http.put(
                 service.apiUrl + '/auth/reset/password',
                 { email: email, password: password, token: token },

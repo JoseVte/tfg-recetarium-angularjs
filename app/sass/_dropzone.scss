@@ -3,16 +3,15 @@
     margin: 1em;
     font-weight: bold;
     text-align: center;
-    padding: 1em 0;
+    padding: 1em;
+    color: $darkOrangeBackground;
+    border: 2px dashed $darkOrangeBackground;
+    cursor: pointer;
     &.dz-drag-hover {
     	border-style: solid;
     	box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 2px 1px -1px rgba(0, 0, 0, 0.12);
     }
-    &.theme-default {
-        color: $darkOrangeBackground;
-        border: 2px dashed $darkOrangeBackground;
-    }
-    &.theme-profile {
+    &.theme-profile, &.selectAvatar {
         color: $blueBackground;
         border: 2px dashed $blueBackground;
     }
