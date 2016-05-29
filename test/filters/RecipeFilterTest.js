@@ -2,7 +2,7 @@
 
 describe('Module RecipeFilters', function() {
     beforeEach(module('recetariumApp', function ($translateProvider) {
-        $translateProvider.translations('en', {});
+        $translateProvider.preferredLanguage('en');
     }));
 
     describe('Filter capitalize', function () {
@@ -21,12 +21,12 @@ describe('Module RecipeFilters', function() {
 
     describe('Filter humanized', function () {
         it('humanize existing difficulty', inject ( function (humanizedFilter) {
-            expect(humanizedFilter('EASY')).toEqual('Fácil');
-            expect(humanizedFilter('MEDIUM')).toEqual('Media');
-            expect(humanizedFilter('HARD')).toEqual('Difícil');
-            expect(humanizedFilter('PUBLIC')).toEqual('Pública');
-            expect(humanizedFilter('FRIENDS')).toEqual('Solo amigos');
-            expect(humanizedFilter('PRIVATE')).toEqual('Privada');
+            expect(humanizedFilter('EASY')).toEqual('Easy');
+            expect(humanizedFilter('MEDIUM')).toEqual('Medium');
+            expect(humanizedFilter('HARD')).toEqual('Hard');
+            expect(humanizedFilter('PUBLIC')).toEqual('Public');
+            expect(humanizedFilter('FRIENDS')).toEqual('Only friends');
+            expect(humanizedFilter('PRIVATE')).toEqual('Private');
         }));
 
         it('humanize no existing difficulty', inject ( function (humanizedFilter) {
