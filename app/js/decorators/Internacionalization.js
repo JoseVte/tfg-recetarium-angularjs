@@ -46,6 +46,10 @@ recetarium.config(['$translateProvider', function($translateProvider) {
         'user.fav-title': 'Favorite recipes',
         'user.friends-title': 'Friends',
 
+        'settings.header-title': 'Settings',
+        'settings.password-title': 'Change password',
+        'settings.language-title': 'Change language',
+
         'friend.added': 'You have added  \'{{ name }}\' as friend.',
         'friend.deleted': 'You have deleted \'{{ name }}\' as friend.',
 
@@ -58,8 +62,10 @@ recetarium.config(['$translateProvider', function($translateProvider) {
         'menu.write-recipe': 'Write a new recipe',
         'menu.profile': 'Profile',
         'menu.salutation': 'Hi',
+        'menu.settings': 'Settings',
         'menu.logout': 'Logout',
         'menu.login': 'Sign in/up',
+        'menu.motto': 'Recetarium: Your recipes always with you.',
 
         'recipe-create.header-title': 'New recipe (draft)',
         'recipe-edit.header-title': 'Edit recipe',
@@ -192,6 +198,10 @@ recetarium.config(['$translateProvider', function($translateProvider) {
         'profile.image-text-count-total': 'Nº total de veces usada:',
         'profile.friends-title': 'Tus amigos',
 
+        'settings.header-title': 'Configuración',
+        'settings.password-title': 'Cambiar contraseña',
+        'settings.language-title': 'Cambiar idioma',
+
         'user.header-title': 'Perfil de {{ name }}',
         'user.personal-data-title': 'Datos personales',
         'user.recipes-title': 'Recetas publicadas',
@@ -213,8 +223,10 @@ recetarium.config(['$translateProvider', function($translateProvider) {
         'menu.write-recipe': 'Escribe una receta',
         'menu.profile': 'Perfil',
         'menu.salutation': 'Hola',
+        'menu.settings': 'Configuración',
         'menu.logout': 'Logout',
         'menu.login': 'Login / Registro',
+        'menu.motto': 'Recetarium: Tus recetas siempre contigo.',
 
         'dropzone.text': 'Arrastra y suelta las imágenes aquí',
         'dialog-select.header-title': 'Elige una imagen',

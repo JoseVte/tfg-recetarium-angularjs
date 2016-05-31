@@ -191,9 +191,10 @@ authController.controller('ValidateEmail',
     }]
 );
 
-authController.controller('EditProfile',
+authController.controller('Profile',
     ['$scope', '$rootScope', '$location', '$timeout', '$sce', '$mdDialog', '$translate', 'AuthService', 'FileService', 'UserService', 'RecipeService', 'NotificationProvider', 'FileProvider', 'FRIENDS_FUNCTIONS', 'USER_FUNCTIONS', 'DELAY_FUNCTIONS', 'NOTIFICATION',
     function ($scope, $rootScope, $location, $timeout, $sce, $mdDialog, $translate, AuthService, FileService, UserService, RecipeService, NotificationProvider, FileProvider, FRIENDS_FUNCTIONS, USER_FUNCTIONS, DELAY_FUNCTIONS, NOTIFICATION) {
+        $scope.user = $rootScope.globals.user.user;
         $scope.infiniteScroll = {
             recipes: {
                 data: [],
@@ -244,21 +245,6 @@ authController.controller('EditProfile',
             return false;
         };
 
-        $scope.loadPersonalData = function() {
-            $rootScope.progressBarActivated = true;
-            $scope.setDelay1();
-            AuthService.GetProfile(function (response) {
-                $scope.user = response.data;
-                $rootScope.errorMsg = false;
-                $rootScope.progressBarActivated = false;
-                $scope.setDelay2();
-            }, function (response) {
-                NOTIFICATION.ParseErrorResponse(response, [401], $translate, $rootScope, NotificationProvider);
-                $rootScope.progressBarActivated = false;
-                $scope.setDelay2();
-            });
-        };
-
         USER_FUNCTIONS.Recipes($scope, $rootScope, $translate, $mdDialog, $rootScope.globals.user.user.id, UserService, RecipeService, NotificationProvider, NOTIFICATION);
 
         USER_FUNCTIONS.RecipesFavorites($scope, $rootScope, $translate, $mdDialog, $rootScope.globals.user.user.id, UserService, RecipeService, NotificationProvider, NOTIFICATION);
@@ -291,34 +277,6 @@ authController.controller('EditProfile',
             }).then(function(answer) {
                 $scope.images = $scope.images.concat(answer);
             }, function() {});
-        };
-
-        $scope.save = function () {
-            $rootScope.errorMsg = false;
-            $rootScope.progressBarActivated = true;
-            $scope.setDelay1();
-            var userObj = angular.copy($scope.user);
-            if (userObj.avatar) {
-                userObj.avatar = userObj.avatar.id;
-            }
-            AuthService.EditProfile(userObj, function (response) {
-                $rootScope.progressBarActivated = false;
-                NotificationProvider.notify({
-                    title: $translate.instant('response.saved'),
-                    type: 'success',
-                    addclass: 'custom-success-notify',
-                    icon: 'material-icons md-light',
-                    icon_class: 'backup',
-                    styling: 'fontawesome'
-                });
-                $scope.user = response.data;
-                AuthService.CheckToken($scope.user);
-                $scope.setDelay2();
-            }, function (response) {
-                NOTIFICATION.ParseErrorResponse(response, [400], $translate, $rootScope, NotificationProvider);
-                $rootScope.progressBarActivated = false;
-                $scope.setDelay2();
-            });
         };
 
         $scope.description = function(steps) {
@@ -355,6 +313,60 @@ authController.controller('EditProfile',
                 });
             }, function() {});
         };
+    }]
+);
+
+authController.controller('Settings',
+    ['$scope', '$rootScope', '$location', '$translate', '$mdDialog', '$timeout', 'AuthService', 'FileProvider', 'NotificationProvider', 'NOTIFICATION', 'DELAY_FUNCTIONS',
+    function ($scope, $rootScope, $location, $translate, $mdDialog, $timeout, AuthService, FileProvider, NotificationProvider, NOTIFICATION, DELAY_FUNCTIONS) {
+        $rootScope.errorMsg = false;
+        $rootScope.progressBarActivated = true;
+
+        DELAY_FUNCTIONS.initDelays($scope, $timeout);
+
+        $scope.setDelay1();
+        AuthService.GetProfile(function (response) {
+            $scope.user = response.data;
+            if (!$scope.user.language) {
+                $scope.user.language = (window.navigator.userLanguage || window.navigator.language);
+            }
+            $rootScope.errorMsg = false;
+            $rootScope.progressBarActivated = false;
+            $scope.setDelay2();
+        }, function (response) {
+            NOTIFICATION.ParseErrorResponse(response, [401], $translate, $rootScope, NotificationProvider);
+            $rootScope.progressBarActivated = false;
+            $scope.setDelay2();
+        });
+
+        $scope.save = function () {
+            $rootScope.errorMsg = false;
+            $rootScope.progressBarActivated = true;
+            $scope.setDelay1();
+            var userObj = angular.copy($scope.user);
+            if (userObj.avatar) {
+                userObj.avatar = userObj.avatar.id;
+            }
+            AuthService.EditProfile(userObj, function (response) {
+                $rootScope.progressBarActivated = false;
+                NotificationProvider.notify({
+                    title: $translate.instant('response.saved'),
+                    type: 'success',
+                    addclass: 'custom-success-notify',
+                    icon: 'material-icons md-light',
+                    icon_class: 'backup',
+                    styling: 'fontawesome'
+                });
+                $scope.user = response.data;
+                AuthService.CheckToken($scope.user);
+                $scope.setDelay2();
+            }, function (response) {
+                NOTIFICATION.ParseErrorResponse(response, [400], $translate, $rootScope, NotificationProvider);
+                $rootScope.progressBarActivated = false;
+                $scope.setDelay2();
+            });
+        };
+
 
         $scope.selectAvatar = function(ev) {
             $mdDialog.show({
