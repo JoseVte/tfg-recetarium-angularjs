@@ -49,7 +49,12 @@ http-server -a localhost -p 8000
 
 ## Changelog
 
-#### [![0.9.3](/app/doc/rocket-blue.png) 0.9.3](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.9.3)
+#### [![0.10.1](/app/doc/rocket-blue.png) 0.10.1](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.10.1)
+
+- Seleccionar el idioma en el perfil
+- Cambiar el layout del perfil
+
+###### [![0.9.3](/app/doc/release.png) 0.9.3](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.9.3)
 
 - Internacionalización
 

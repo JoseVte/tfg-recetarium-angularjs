@@ -30,6 +30,9 @@ describe('Module RecipeController', function() {
             $httpBackend.when('HEAD', /http:\/\/localhost:9000\/recipes\/(.*)/).respond(200, {});
             $httpBackend.when('GET', /http:\/\/localhost:9000\/recipes\?(.*)/).respond(200, {});
             $httpBackend.when('GET', /views\/(.*)/).respond(200, {});
+            $httpBackend.when('POST', /http:\/\/localhost:9000\/auth\/check(.*)/).respond(200, {
+                auth_token: 'eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE0NTU0MzgxMzIsImp0aSI6ImVHejVlUGVzZ3cwcURBT3UtbU9FS2ciLCJpYXQiOjE0NTUzNTE3MzIsIm5iZiI6MTQ1NTM1MTYxMiwic3ViIjoie1widXNlclwiOntcImlkXCI6MSxcInVzZXJuYW1lXCI6XCJKb3Nyb21cIixcImVtYWlsXCI6XCJqdm9ydHNyb21lcm9AZ21haWwuY29tXCIsXCJmaXJzdF9uYW1lXCI6XCJKb3NlIFZpY2VudGVcIixcImxhc3RfbmFtZVwiOlwiT3J0cyBSb21lcm9cIixcInR5cGVcIjpcIkFETUlOXCIsXCJjcmVhdGVkX2F0XCI6MTQ1MjM2NjMyNzAwMCxcInVwZGF0ZWRfYXRcIjoxNDU0Njk0MDk2MDAwfSxcInNldEV4cGlyYXRpb25cIjp0cnVlfSJ9.hjYH9aa0_rE6AfR-uQLLWHB-X64Au0Vd_5kLvVrFj44'
+            });
         }));
 
         afterEach(function() {
@@ -38,12 +41,14 @@ describe('Module RecipeController', function() {
         });
 
         it('initialize controller', function() {
+            $httpBackend.expectPOST('http://localhost:9000/auth/check');
             $httpBackend.expectGET(/http:\/\/localhost:9000\/recipes(.*)/).respond({data: []});
             $httpBackend.flush();
             expect($scope.recipes).toEqual([]);
         });
 
         it('loading recipes', function() {
+            $httpBackend.expectPOST('http://localhost:9000/auth/check');
             $httpBackend.expectGET(/http:\/\/localhost:9000\/recipes(.*)/).respond({});
             $location.path('/recipes');
             $scope.$apply();
@@ -52,6 +57,7 @@ describe('Module RecipeController', function() {
         });
 
         it('error loading', function() {
+            $httpBackend.expectPOST('http://localhost:9000/auth/check');
             $httpBackend.expectGET(/http:\/\/localhost:9000\/recipes(.*)/).respond(404, {});
             $location.path('/recipes');
             $scope.$apply();
@@ -60,6 +66,7 @@ describe('Module RecipeController', function() {
         });
 
         it('description method', function () {
+            $httpBackend.expectPOST('http://localhost:9000/auth/check');
             $httpBackend.expectGET(/http:\/\/localhost:9000\/recipes(.*)/).respond({});
             $httpBackend.flush();
             expect($scope.description('<div>Code HTML with more than 260 characters. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>').$$unwrapTrustedValue()).toEqual('<div>Code HTML with more than 260 characters. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea&hellip;');
@@ -67,6 +74,7 @@ describe('Module RecipeController', function() {
         });
 
         it('isMine recipe', function () {
+            $httpBackend.expectPOST('http://localhost:9000/auth/check');
             $httpBackend.expectGET(/http:\/\/localhost:9000\/recipes(.*)/).respond({});
             $httpBackend.flush();
             var user = {
@@ -81,10 +89,10 @@ describe('Module RecipeController', function() {
                 type: 'ADMIN'
             };
 
-            $rootScope.globals = { user: { user: user } };
+            $rootScope.globals = { user: user };
             expect($scope.isMine(user)).toBeTruthy();
             expect($scope.isMine(userAdmin)).toBeFalsy();
-            $rootScope.globals = { user: { user: userAdmin } };
+            $rootScope.globals = { user: userAdmin };
             expect($scope.isMine(user)).toBeTruthy();
         });
     });
@@ -108,6 +116,9 @@ describe('Module RecipeController', function() {
                     ratings: {}
                 }
             });
+            $httpBackend.when('POST', /http:\/\/localhost:9000\/auth\/check(.*)/).respond(200, {
+                auth_token: 'eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE0NTU0MzgxMzIsImp0aSI6ImVHejVlUGVzZ3cwcURBT3UtbU9FS2ciLCJpYXQiOjE0NTUzNTE3MzIsIm5iZiI6MTQ1NTM1MTYxMiwic3ViIjoie1widXNlclwiOntcImlkXCI6MSxcInVzZXJuYW1lXCI6XCJKb3Nyb21cIixcImVtYWlsXCI6XCJqdm9ydHNyb21lcm9AZ21haWwuY29tXCIsXCJmaXJzdF9uYW1lXCI6XCJKb3NlIFZpY2VudGVcIixcImxhc3RfbmFtZVwiOlwiT3J0cyBSb21lcm9cIixcInR5cGVcIjpcIkFETUlOXCIsXCJjcmVhdGVkX2F0XCI6MTQ1MjM2NjMyNzAwMCxcInVwZGF0ZWRfYXRcIjoxNDU0Njk0MDk2MDAwfSxcInNldEV4cGlyYXRpb25cIjp0cnVlfSJ9.hjYH9aa0_rE6AfR-uQLLWHB-X64Au0Vd_5kLvVrFj44'
+            });
         }));
 
         afterEach(function() {
@@ -119,6 +130,7 @@ describe('Module RecipeController', function() {
             expect($rootScope.progressBarActivated).toBeTruthy();
             expect($rootScope.HasBack).toBeTruthy();
 
+            $httpBackend.expectPOST('http://localhost:9000/auth/check');
             $httpBackend.expectGET('http://localhost:9000/recipes/test');
             $location.path('/recipes/test');
             $scope.$apply();
@@ -127,6 +139,7 @@ describe('Module RecipeController', function() {
         });
 
         it('description method', function () {
+            $httpBackend.expectPOST('http://localhost:9000/auth/check');
             $httpBackend.expectGET('http://localhost:9000/recipes/test');
             $httpBackend.flush();
             expect($scope.description('<div>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</div>').$$unwrapTrustedValue()).toEqual('<div>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</div>');
@@ -134,6 +147,7 @@ describe('Module RecipeController', function() {
         });
 
         it('difficulty method', function () {
+            $httpBackend.expectPOST('http://localhost:9000/auth/check');
             $httpBackend.expectGET('http://localhost:9000/recipes/test');
             $httpBackend.flush();
             expect($scope.getDifficulty('EASY')).toEqual('md-green');
@@ -142,6 +156,7 @@ describe('Module RecipeController', function() {
         });
 
         it('visibility class method', function () {
+            $httpBackend.expectPOST('http://localhost:9000/auth/check');
             $httpBackend.expectGET('http://localhost:9000/recipes/test');
             $httpBackend.flush();
             expect($scope.getVisibilityClass('PUBLIC')).toEqual('md-green');
@@ -150,6 +165,7 @@ describe('Module RecipeController', function() {
         });
 
         it('visibility icon method', function () {
+            $httpBackend.expectPOST('http://localhost:9000/auth/check');
             $httpBackend.expectGET('http://localhost:9000/recipes/test');
             $httpBackend.flush();
             expect($scope.getVisibilityIcon('PUBLIC')).toEqual('lock_open');
@@ -185,6 +201,9 @@ describe('Module RecipeController', function() {
                 slug: 'test',
                 media: []
             });
+            $httpBackend.when('POST', /http:\/\/localhost:9000\/auth\/check(.*)/).respond(200, {
+                auth_token: 'eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE0NTU0MzgxMzIsImp0aSI6ImVHejVlUGVzZ3cwcURBT3UtbU9FS2ciLCJpYXQiOjE0NTUzNTE3MzIsIm5iZiI6MTQ1NTM1MTYxMiwic3ViIjoie1widXNlclwiOntcImlkXCI6MSxcInVzZXJuYW1lXCI6XCJKb3Nyb21cIixcImVtYWlsXCI6XCJqdm9ydHNyb21lcm9AZ21haWwuY29tXCIsXCJmaXJzdF9uYW1lXCI6XCJKb3NlIFZpY2VudGVcIixcImxhc3RfbmFtZVwiOlwiT3J0cyBSb21lcm9cIixcInR5cGVcIjpcIkFETUlOXCIsXCJjcmVhdGVkX2F0XCI6MTQ1MjM2NjMyNzAwMCxcInVwZGF0ZWRfYXRcIjoxNDU0Njk0MDk2MDAwfSxcInNldEV4cGlyYXRpb25cIjp0cnVlfSJ9.hjYH9aa0_rE6AfR-uQLLWHB-X64Au0Vd_5kLvVrFj44'
+            });
         }));
 
         afterEach(function() {
@@ -196,6 +215,7 @@ describe('Module RecipeController', function() {
             expect($rootScope.progressBarActivated).toBeTruthy();
             expect($rootScope.HasBack).toBeTruthy();
 
+            $httpBackend.expectPOST('http://localhost:9000/auth/check');
             $httpBackend.expectGET('http://localhost:9000/recipes/test');
             $location.path('/recipes/test/edit');
             $scope.$apply();
@@ -204,6 +224,7 @@ describe('Module RecipeController', function() {
         });
 
         it('difficulty method', function () {
+            $httpBackend.expectPOST('http://localhost:9000/auth/check');
             $httpBackend.expectGET('http://localhost:9000/recipes/test');
             $httpBackend.flush();
             expect($scope.getDifficulty('EASY')).toEqual('md-green');
@@ -212,6 +233,7 @@ describe('Module RecipeController', function() {
         });
 
         it('visibility class method', function () {
+            $httpBackend.expectPOST('http://localhost:9000/auth/check');
             $httpBackend.expectGET('http://localhost:9000/recipes/test');
             $httpBackend.flush();
             expect($scope.getVisibilityClass('PUBLIC')).toEqual('md-green');
@@ -220,6 +242,7 @@ describe('Module RecipeController', function() {
         });
 
         it('visibility icon method', function () {
+            $httpBackend.expectPOST('http://localhost:9000/auth/check');
             $httpBackend.expectGET('http://localhost:9000/recipes/test');
             $httpBackend.flush();
             expect($scope.getVisibilityIcon('PUBLIC')).toEqual('lock_open');
@@ -228,6 +251,7 @@ describe('Module RecipeController', function() {
         });
 
         it('edit method', function () {
+            $httpBackend.expectPOST('http://localhost:9000/auth/check');
             $httpBackend.expectGET('http://localhost:9000/recipes/test');
             $scope.$apply();
             $httpBackend.flush();
@@ -241,6 +265,7 @@ describe('Module RecipeController', function() {
         });
 
         it('edit error method', function () {
+            $httpBackend.expectPOST('http://localhost:9000/auth/check');
             $httpBackend.expectGET('http://localhost:9000/recipes/test');
             $scope.$apply();
             $httpBackend.flush();
@@ -293,6 +318,9 @@ describe('Module RecipeController', function() {
                 slug: 'test',
                 media: []
             });
+            $httpBackend.when('POST', /http:\/\/localhost:9000\/auth\/check(.*)/).respond(200, {
+                auth_token: 'eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE0NTU0MzgxMzIsImp0aSI6ImVHejVlUGVzZ3cwcURBT3UtbU9FS2ciLCJpYXQiOjE0NTUzNTE3MzIsIm5iZiI6MTQ1NTM1MTYxMiwic3ViIjoie1widXNlclwiOntcImlkXCI6MSxcInVzZXJuYW1lXCI6XCJKb3Nyb21cIixcImVtYWlsXCI6XCJqdm9ydHNyb21lcm9AZ21haWwuY29tXCIsXCJmaXJzdF9uYW1lXCI6XCJKb3NlIFZpY2VudGVcIixcImxhc3RfbmFtZVwiOlwiT3J0cyBSb21lcm9cIixcInR5cGVcIjpcIkFETUlOXCIsXCJjcmVhdGVkX2F0XCI6MTQ1MjM2NjMyNzAwMCxcInVwZGF0ZWRfYXRcIjoxNDU0Njk0MDk2MDAwfSxcInNldEV4cGlyYXRpb25cIjp0cnVlfSJ9.hjYH9aa0_rE6AfR-uQLLWHB-X64Au0Vd_5kLvVrFj44'
+            });
         }));
 
         afterEach(function() {
@@ -304,6 +332,7 @@ describe('Module RecipeController', function() {
             expect($rootScope.progressBarActivated).toBeTruthy();
             expect($rootScope.HasBack).toBeTruthy();
 
+            $httpBackend.expectPOST('http://localhost:9000/auth/check');
             $httpBackend.expectPOST('http://localhost:9000/recipes/draft');
             $location.path('/new-recipe');
             $scope.$apply();
@@ -312,6 +341,7 @@ describe('Module RecipeController', function() {
         });
 
         it('difficulty method', function () {
+            $httpBackend.expectPOST('http://localhost:9000/auth/check');
             $httpBackend.expectPOST('http://localhost:9000/recipes/draft');
             $httpBackend.flush();
             expect($scope.getDifficulty('EASY')).toEqual('md-green');
@@ -320,6 +350,7 @@ describe('Module RecipeController', function() {
         });
 
         it('visibility class method', function () {
+            $httpBackend.expectPOST('http://localhost:9000/auth/check');
             $httpBackend.expectPOST('http://localhost:9000/recipes/draft');
             $httpBackend.flush();
             expect($scope.getVisibilityClass('PUBLIC')).toEqual('md-green');
@@ -328,6 +359,7 @@ describe('Module RecipeController', function() {
         });
 
         it('visibility icon method', function () {
+            $httpBackend.expectPOST('http://localhost:9000/auth/check');
             $httpBackend.expectPOST('http://localhost:9000/recipes/draft');
             $httpBackend.flush();
             expect($scope.getVisibilityIcon('PUBLIC')).toEqual('lock_open');
@@ -336,6 +368,7 @@ describe('Module RecipeController', function() {
         });
 
         it('save method', function () {
+            $httpBackend.expectPOST('http://localhost:9000/auth/check');
             $httpBackend.expectPOST('http://localhost:9000/recipes/draft');
             $scope.$apply();
             $httpBackend.flush();
@@ -347,6 +380,7 @@ describe('Module RecipeController', function() {
         });
 
         it('save error method', function () {
+            $httpBackend.expectPOST('http://localhost:9000/auth/check');
             $httpBackend.expectPOST('http://localhost:9000/recipes/draft');
             $scope.$apply();
             $httpBackend.flush();
@@ -360,6 +394,7 @@ describe('Module RecipeController', function() {
         });
 
         it('publish method', function () {
+            $httpBackend.expectPOST('http://localhost:9000/auth/check');
             $httpBackend.expectPOST('http://localhost:9000/recipes/draft');
             $scope.$apply();
             $httpBackend.flush();
@@ -374,6 +409,7 @@ describe('Module RecipeController', function() {
         });
 
         it('publish error method', function () {
+            $httpBackend.expectPOST('http://localhost:9000/auth/check');
             $httpBackend.expectPOST('http://localhost:9000/recipes/draft');
             $scope.$apply();
             $httpBackend.flush();

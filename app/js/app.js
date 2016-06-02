@@ -1,5 +1,3 @@
-moment.locale('es');
-
 /* jshint ignore:start */
 'use strict';
 /* jshint ignore:end */
@@ -41,7 +39,8 @@ recetarium.config(['$routeProvider', '$locationProvider', function($routeProvide
         .when('/reset/password', { templateUrl: 'views/auth/reset-password.html', controller: 'ResetPassword', resolve: { access: ["AuthService", function (AuthService) { return AuthService.IsAnonymous(); }]}})
         .when('/reset/password/:token', { templateUrl: 'views/auth/recover-password.html', controller: 'RecoverPassword', resolve: { access: ["AuthService", function (AuthService) { return AuthService.IsAnonymous(); }]}})
         .when('/active/:token', { templateUrl: 'views/auth/validate-email.html', controller: 'ValidateEmail', resolve: { access: ["AuthService", function (AuthService) { return AuthService.IsAnonymous(); }]}})
-        .when('/profile', { templateUrl: 'views/auth/profile.html', controller: 'EditProfile', permission: 'logged', resolve: { access: ["AuthService", function (AuthService) { return AuthService.IsAuthenticated(); }]}})
+        .when('/profile', { templateUrl: 'views/auth/profile.html', controller: 'Profile', permission: 'logged', resolve: { access: ["AuthService", function (AuthService) { return AuthService.IsAuthenticated(); }]}})
+        .when('/settings', { templateUrl: 'views/auth/settings.html', controller: 'Settings', permission: 'logged', resolve: { access: ["AuthService", function (AuthService) { return AuthService.IsAuthenticated(); }]}})
         // Recipes
         .when('/recipes', { templateUrl: 'views/recipe/index.html', controller: 'RecipeAll' })
         .when('/recipes/:slug', { templateUrl: 'views/recipe/show.html', controller: 'RecipeShow' })
@@ -111,7 +110,7 @@ recetarium.config(['envServiceProvider', function (envServiceProvider) {
 //
 recetarium.run(function ($rootScope, $location, $http, AuthService, NotificationProvider, envService, ICONS) {
     var authRegex = /\/login|\/register|\/active.*|\/reset\/password.*/;
-    var profileRegex = /\/profile.*/;
+    var profileRegex = /\/profile.*|\/settings.*/;
     var userRegex = /\/users.*|\/friends/;
     $rootScope.location = $location;
     $rootScope.searchString = '';
@@ -122,7 +121,7 @@ recetarium.run(function ($rootScope, $location, $http, AuthService, Notification
     if (localStorage.globals) {
         $rootScope.globals = JSON.parse(localStorage.globals);
         $http.defaults.headers.common['X-Auth-Token'] = $rootScope.globals.token;
-        AuthService.CheckToken($rootScope.globals.user.user);
+        AuthService.CheckToken($rootScope.globals.user);
         AuthService.StartCronCheckToken();
     } else {
         $rootScope.globals = {};
@@ -157,7 +156,7 @@ recetarium.run(function ($rootScope, $location, $http, AuthService, Notification
 
         $rootScope.IsAuthed = AuthService.IsAuthed();
         if ($rootScope.IsAuthed) {
-            $rootScope.userLogged = $rootScope.globals.user.user;
+            $rootScope.userLogged = $rootScope.globals.user;
         }
         $rootScope.IsHome = ($path == '/');
         $rootScope.scrollInTop = $rootScope.IsHome;

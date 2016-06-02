@@ -10,62 +10,6 @@
                 <md-tabs class="md-info" md-border-bottom="true" md-stretch-tabs="auto" md-swipe-content="true"
                 md-enable-disconnect="true" md-selected="selectedProfileTab" md-align-tabs="top"
                 md-dynamic-height md-border-bottom>
-                    <md-tab label="{{ 'profile.personal-data-title' | translate }}" md-on-select="loadPersonalData()">
-                        <form name="form" role="form" ng-submit="save()">
-                            <div layout="column" layout-wrap layout-gt-sm="row">
-                                <md-content flex="nogrow" class="md-padding">
-                                    <md-input-container class="md-has-no-icon-left">
-                                        <h4><md-icon class="material-icons">panorama</md-icon> * {{ 'field.image-main' | translate }}</h4>
-                                        <input type="hidden" ng-required="true" name="avatar" ng-model="user.avatar.id" aria-label="Foto principal">
-                                    </md-input-container>
-                                    <div layout="row" layout-align="center center">
-                                        <md-button class="img-container" ng-click="selectAvatar($event)">
-                                            <md-tooltip>{{ 'tooltip.select-image' | translate }}</md-tooltip>
-                                            <img src="{{ user | userImage:user }}"  id="image-main" class="image-avatar" />
-                                        </md-button>
-                                    </div>
-                                </md-content>
-                                <md-content flex class="md-padding">
-                                    <div class="md-block without-input">
-                                        <label>{{ 'field.username' | translate }}</label>
-                                        <div class="value">{{ user.username }}</div>
-                                    </div>
-                                    <div class="md-block without-input">
-                                        <label>Email</label>
-                                        <div class="value">{{ user.email }}</div>
-                                    </div>
-                                    <md-input-container class="md-block">
-                                        <label>{{ 'field.first-name' | translate }}</label>
-                                        <input type="text" name="first_name" ng-model="user.first_name" />
-                                    </md-input-container>
-                                    <md-input-container class="md-block">
-                                        <label>{{ 'field.last-name' | translate }}</label>
-                                        <input type="text" name="last_name" ng-model="user.last_name" />
-                                    </md-input-container>
-                                    <div class="md-card-subtitle">{{ 'profile.password-title' | translate }}</div>
-                                    <md-input-container class="md-block md-password">
-                                        <label>{{ 'field.password' | translate }}</label>
-                                        <input type="password" name="password" ng-model="user.password">
-                                    </md-input-container>
-                                    <md-input-container class="md-block md-password">
-                                        <label>{{ 'field.password-repeat' | translate }}</label>
-                                        <input type="password" name="passwordRepeat" ng-model="user.passwordRepeat" data-password-verify="user.password">
-                                        <div ng-messages="form.passwordRepeat.$error" role="alert" multiple>
-                                            <div ng-message="passwordVerify">{{ 'form.error-password' | translate }}</div>
-                                        </div>
-                                    </md-input-container>
-                                </md-content>
-                            </div>
-                            <div class="md-card-actions" layout="column" layout-align="space-around stretch">
-                                <div layout="column" layout-align="space-around stretch" layout-wrap layout-padding>
-                                    <md-button type="submit" class="md-raised md-profile-button zoomAnimation" ng-disabled="form.$invalid" ng-hide="progressBarActivated || delay2">{{ 'btn.save-text' | translate }}</md-button>
-                                    <div flex layout="row" layout-align="center center">
-                                        <md-progress-circular md-mode="indeterminate" ng-show="progressBarActivated && !delay1" class="md-profile zoomAnimation" md-diameter="100"></md-progress-circular>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                    </md-tab>
                     <md-tab label="{{ 'profile.recipes-title' | translate }}" md-on-select="nextPageRecipes()">
                         <div infinite-scroll="nextPageRecipes()" infinite-scroll-disabled="infiniteScroll.recipes.loadingNextPage || errorMsg" infinite-scroll-distance="3" layout-wrap>
                             <md-content class="md-padding">
@@ -203,6 +147,6 @@
         </md-card>
     </div>
 </md-content>
-<md-button ng-show="selectedProfileTab == 3" class="md-fab md-fixed-bottom-profile" aria-label="Subir imagenes" ng-click="openUploadImage($event)">
+<md-button ng-show="selectedProfileTab == 2" class="md-fab md-fixed-bottom-profile" aria-label="Subir imagenes" ng-click="openUploadImage($event)">
     <md-icon class="material-icons md-light">file_upload</md-icon>
 </md-button>
