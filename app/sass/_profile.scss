@@ -64,4 +64,7 @@
     .md-card-actions .md-button.md-raised.md-profile-button {
         margin: 12px 0;
     }
+    md-radio-group md-radio-button:first-child {
+        margin-top: 16px;
+    }
 }

@@ -354,7 +354,7 @@ recipeController.controller('RecipeAll',
 
         $scope.isMine = function(user) {
             if ($rootScope.globals.user) {
-                var auth = $rootScope.globals.user.user;
+                var auth = $rootScope.globals.user;
                 return (auth.id == user.id && auth.email == user.email && auth.username == user.username) || auth.type == 'ADMIN';
             }
             return false;
@@ -414,8 +414,8 @@ recipeController.controller('RecipeShow',
                 $scope.comments = response.data.comments;
                 $scope.favorites = response.data.favorites.length;
                 if ($rootScope.globals.user) {
-                    $scope.fav = response.data.favorites.contains($rootScope.globals.user.user.id);
-                    $scope.rated = response.data.rating.ratings[$rootScope.globals.user.user.id];
+                    $scope.fav = response.data.favorites.contains($rootScope.globals.user.id);
+                    $scope.rated = response.data.rating.ratings[$rootScope.globals.user.id];
                     $rootScope.globals.rated = $scope.rated;
                     $rootScope.globals.recipe = $scope.recipe;
                 }
@@ -623,7 +623,7 @@ recipeController.controller('RecipeShow',
 
         $scope.isMine = function(user) {
             if ($rootScope.globals.user) {
-                var auth = $rootScope.globals.user.user;
+                var auth = $rootScope.globals.user;
                 return (auth.id == user.id && auth.email == user.email && auth.username == user.username) || auth.type == 'ADMIN';
             }
             return false;

@@ -11,8 +11,8 @@
                     <div layout="column" layout-wrap layout-gt-sm="row">
                         <md-content flex="nogrow" class="md-padding">
                             <md-input-container class="md-has-no-icon-left">
-                                <h4><md-icon class="material-icons">panorama</md-icon> * {{ 'field.image-main' | translate }}</h4>
-                                <input type="hidden" ng-required="true" name="avatar" ng-model="user.avatar.id" aria-label="Foto principal">
+                                <h4><md-icon class="material-icons">panorama</md-icon> {{ 'field.image-main' | translate }}</h4>
+                                <input type="hidden" name="avatar" ng-model="user.avatar.id" aria-label="Foto principal">
                             </md-input-container>
                             <div layout="row" layout-align="center center">
                                 <md-button class="img-container" ng-click="selectAvatar($event)">

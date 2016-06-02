@@ -121,7 +121,7 @@ recetarium.run(function ($rootScope, $location, $http, AuthService, Notification
     if (localStorage.globals) {
         $rootScope.globals = JSON.parse(localStorage.globals);
         $http.defaults.headers.common['X-Auth-Token'] = $rootScope.globals.token;
-        AuthService.CheckToken($rootScope.globals.user.user);
+        AuthService.CheckToken($rootScope.globals.user);
         AuthService.StartCronCheckToken();
     } else {
         $rootScope.globals = {};
@@ -156,7 +156,7 @@ recetarium.run(function ($rootScope, $location, $http, AuthService, Notification
 
         $rootScope.IsAuthed = AuthService.IsAuthed();
         if ($rootScope.IsAuthed) {
-            $rootScope.userLogged = $rootScope.globals.user.user;
+            $rootScope.userLogged = $rootScope.globals.user;
         }
         $rootScope.IsHome = ($path == '/');
         $rootScope.scrollInTop = $rootScope.IsHome;

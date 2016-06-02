@@ -28,7 +28,7 @@ authController.controller('Login',
             $rootScope.progressBarActivated = true;
             $scope.setDelay1();
             AuthService.login($scope.email, $scope.password, !$scope.expiration, function (response) {
-                AuthService.SaveCredentials(response.data.auth_token, JSON.parse(AuthService.ParseJwt(response.data.auth_token).sub), response.data.pusher_key);
+                AuthService.SaveCredentials(response.data.auth_token, JSON.parse(AuthService.ParseJwt(response.data.auth_token).sub), response.data.pusher_key, response.data.language);
                 if (!$scope.expiration) {
                     AuthService.StartCronCheckToken();
                 }
@@ -194,7 +194,7 @@ authController.controller('ValidateEmail',
 authController.controller('Profile',
     ['$scope', '$rootScope', '$location', '$timeout', '$sce', '$mdDialog', '$translate', 'AuthService', 'FileService', 'UserService', 'RecipeService', 'NotificationProvider', 'FileProvider', 'FRIENDS_FUNCTIONS', 'USER_FUNCTIONS', 'DELAY_FUNCTIONS', 'NOTIFICATION',
     function ($scope, $rootScope, $location, $timeout, $sce, $mdDialog, $translate, AuthService, FileService, UserService, RecipeService, NotificationProvider, FileProvider, FRIENDS_FUNCTIONS, USER_FUNCTIONS, DELAY_FUNCTIONS, NOTIFICATION) {
-        $scope.user = $rootScope.globals.user.user;
+        $scope.user = $rootScope.globals.user;
         $scope.infiniteScroll = {
             recipes: {
                 data: [],
@@ -229,14 +229,14 @@ authController.controller('Profile',
         DELAY_FUNCTIONS.initDelays($scope, $timeout);
 
         $scope.isMe = function(user) {
-            return (user !== undefined && $rootScope.globals.user.user.id == user.id);
+            return (user !== undefined && $rootScope.globals.user.id == user.id);
         };
 
         $scope.checkFriend = function(user) {
             var i = 0;
             if (user !== undefined) {
                 while (i < user.friends.length) {
-                    if (user.friends[i].user_id === $rootScope.globals.user.user.id) {
+                    if (user.friends[i].user_id === $rootScope.globals.user.id) {
                         return true;
                     }
                     i++;
@@ -245,16 +245,16 @@ authController.controller('Profile',
             return false;
         };
 
-        USER_FUNCTIONS.Recipes($scope, $rootScope, $translate, $mdDialog, $rootScope.globals.user.user.id, UserService, RecipeService, NotificationProvider, NOTIFICATION);
+        USER_FUNCTIONS.Recipes($scope, $rootScope, $translate, $mdDialog, $rootScope.globals.user.id, UserService, RecipeService, NotificationProvider, NOTIFICATION);
 
-        USER_FUNCTIONS.RecipesFavorites($scope, $rootScope, $translate, $mdDialog, $rootScope.globals.user.user.id, UserService, RecipeService, NotificationProvider, NOTIFICATION);
+        USER_FUNCTIONS.RecipesFavorites($scope, $rootScope, $translate, $mdDialog, $rootScope.globals.user.id, UserService, RecipeService, NotificationProvider, NOTIFICATION);
 
-        USER_FUNCTIONS.Friends($scope, $rootScope, $translate, $rootScope.globals.user.user.id, UserService, NotificationProvider, FRIENDS_FUNCTIONS, NOTIFICATION);
+        USER_FUNCTIONS.Friends($scope, $rootScope, $translate, $rootScope.globals.user.id, UserService, NotificationProvider, FRIENDS_FUNCTIONS, NOTIFICATION);
 
         // TODO Refactor with infinite scroll
         $scope.loadUserImages = function() {
             $rootScope.progressBarActivated = true;
-            FileService.loadUserImages($rootScope.globals.user.user, function (response) {
+            FileService.loadUserImages($rootScope.globals.user, function (response) {
                 $scope.images = response.data;
                 $rootScope.progressBarActivated = false;
             }, function (response) {
@@ -349,6 +349,8 @@ authController.controller('Settings',
             }
             AuthService.EditProfile(userObj, function (response) {
                 $rootScope.progressBarActivated = false;
+                $scope.user = response.data;
+                $translate.use($scope.user.language);
                 NotificationProvider.notify({
                     title: $translate.instant('response.saved'),
                     type: 'success',
@@ -357,7 +359,6 @@ authController.controller('Settings',
                     icon_class: 'backup',
                     styling: 'fontawesome'
                 });
-                $scope.user = response.data;
                 AuthService.CheckToken($scope.user);
                 $scope.setDelay2();
             }, function (response) {

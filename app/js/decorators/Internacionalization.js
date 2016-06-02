@@ -49,6 +49,8 @@ recetarium.config(['$translateProvider', function($translateProvider) {
         'settings.header-title': 'Settings',
         'settings.password-title': 'Change password',
         'settings.language-title': 'Change language',
+        'settings.language-spanish': 'Spanish',
+        'settings.language-english': 'English',
 
         'friend.added': 'You have added  \'{{ name }}\' as friend.',
         'friend.deleted': 'You have deleted \'{{ name }}\' as friend.',
@@ -201,6 +203,8 @@ recetarium.config(['$translateProvider', function($translateProvider) {
         'settings.header-title': 'Configuración',
         'settings.password-title': 'Cambiar contraseña',
         'settings.language-title': 'Cambiar idioma',
+        'settings.language-spanish': 'Español',
+        'settings.language-english': 'Inglés',
 
         'user.header-title': 'Perfil de {{ name }}',
         'user.personal-data-title': 'Datos personales',
