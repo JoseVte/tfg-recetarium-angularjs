@@ -281,20 +281,58 @@ recipeController.constant('EDIT_FUNCTIONS', {
             return [];
         });
     },
+    AddTagById: function ($rootScope, $translate, TagService, NotificationProvider, NOTIFICATION, array, id) {
+        TagService.searchById(id, function (response) {
+            $rootScope.errorMsg = false;
+            array.push(response.data);
+        }, function (response) {
+            NOTIFICATION.ParseErrorResponse(response, [404], $translate, $rootScope, NotificationProvider);
+        });
+    },
 });
 
 recipeController.controller('RecipeAll',
-    ['$scope', '$rootScope', '$location', '$sce', '$mdDialog', '$translate', 'RecipeService', 'TagService', 'NotificationProvider', 'EDIT_FUNCTIONS', 'NOTIFICATION',
-    function ($scope, $rootScope, $location, $sce, $mdDialog, $translate, RecipeService, TagService, NotificationProvider, EDIT_FUNCTIONS, NOTIFICATION) {
+    ['$scope', '$rootScope', '$location', '$routeParams', '$sce', '$mdDialog', '$translate', 'RecipeService', 'TagService', 'NotificationProvider', 'EDIT_FUNCTIONS', 'NOTIFICATION',
+    function ($scope, $rootScope, $location, $routeParams, $sce, $mdDialog, $translate, RecipeService, TagService, NotificationProvider, EDIT_FUNCTIONS, NOTIFICATION) {
         $scope.recipes = [];
         $scope.tags = [];
-        $scope.total = 1;
+        $scope.tagsFromURI = [];
+        $scope.total = 0;
         $scope.nextPageNumber = 1;
+        $rootScope.progressBarActivated = true;
         $scope.hasError = false;
         $scope.loadingNextPage = false;
+        var numTags = 0;
+        var recipesLoaded = false;
+
+        if ($routeParams !== null && !angular.equals({}, $routeParams) && $routeParams.hasOwnProperty('tag')) {
+            if (angular.isArray($routeParams.tag)) {
+                numTags = $routeParams.tag.length;
+                for (var tagText in $routeParams.tag) {
+                    if ($routeParams.tag.hasOwnProperty(tagText)) {
+                        EDIT_FUNCTIONS.AddTagById($rootScope, $translate, TagService, NotificationProvider, NOTIFICATION, $scope.tagsFromURI, $routeParams.tag[tagText]);
+                    }
+                }
+            } else {
+                numTags = 1;
+                EDIT_FUNCTIONS.AddTagById($rootScope, $translate, TagService, NotificationProvider, NOTIFICATION, $scope.tagsFromURI, $routeParams.tag);
+            }
+        }
+
+        $scope.$watchCollection('tagsFromURI', function (newVal, oldVal) {
+            if ($scope.tagsFromURI.length == numTags) {
+                $scope.tags = angular.copy($scope.tagsFromURI);
+            }
+        });
 
         $scope.$watchCollection('tags', function (newVal, oldVal) {
-            $scope.reloadRecipes();
+            if (recipesLoaded) {
+                $location.search({tag: $.getArrayId($scope.tags)});
+                recipesLoaded = false;
+            } else if ($scope.tagsFromURI.length == numTags) {
+                $scope.reloadRecipes();
+                recipesLoaded = true;
+            }
         });
 
         $scope.reloadRecipes = function() {
@@ -321,11 +359,13 @@ recipeController.controller('RecipeAll',
                 $scope.total = responseData.total;
                 $scope.loadingNextPage = false;
                 $rootScope.progressBarActivated = false;
+                $('.md-scroll-mask').remove();
             }, function (response) {
                 NOTIFICATION.ParseErrorResponse(response, [], $translate, $rootScope, NotificationProvider);
                 $scope.hasError = true;
                 $scope.loadingNextPage = false;
                 $rootScope.progressBarActivated = false;
+                $('.md-scroll-mask').remove();
             });
         };
 
@@ -627,6 +667,10 @@ recipeController.controller('RecipeShow',
                 return (auth.id == user.id && auth.email == user.email && auth.username == user.username) || auth.type == 'ADMIN';
             }
             return false;
+        };
+
+        $scope.searchByTag = function(tag) {
+            $location.path('/recipes').search({tag: tag});
         };
     }]
 );
