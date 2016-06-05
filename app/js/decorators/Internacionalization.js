@@ -46,6 +46,10 @@ recetarium.config(['$translateProvider', function($translateProvider) {
         'user.fav-title': 'Favorite recipes',
         'user.friends-title': 'Friends',
 
+        'categories.header-title': 'Categories',
+        'categories.field-name': 'Name',
+        'categories.field-recipes': 'Nº Recipes',
+
         'settings.header-title': 'Settings',
         'settings.password-title': 'Change password',
         'settings.language-title': 'Change language',
@@ -65,6 +69,7 @@ recetarium.config(['$translateProvider', function($translateProvider) {
         'menu.profile': 'Profile',
         'menu.salutation': 'Hi',
         'menu.settings': 'Settings',
+        'menu.categories': 'Categories',
         'menu.logout': 'Logout',
         'menu.login': 'Sign in/up',
         'menu.motto': 'Recetarium: Your recipes always with you.',
@@ -212,6 +217,10 @@ recetarium.config(['$translateProvider', function($translateProvider) {
         'user.fav-title': 'Recetas favoritas',
         'user.friends-title': 'Amigos',
 
+        'categories.header-title': 'Categorias',
+        'categories.field-name': 'Nombre',
+        'categories.field-recipes': 'Nº Recetas',
+
         'friend.added': 'Has añadido a \'{{ name }}\' como amigo.',
         'friend.deleted': 'Has borrado a \'{{ name }}\' como amigo.',
 
@@ -228,6 +237,7 @@ recetarium.config(['$translateProvider', function($translateProvider) {
         'menu.profile': 'Perfil',
         'menu.salutation': 'Hola',
         'menu.settings': 'Configuración',
+        'menu.categories': 'Categorias',
         'menu.logout': 'Logout',
         'menu.login': 'Login / Registro',
         'menu.motto': 'Recetarium: Tus recetas siempre contigo.',

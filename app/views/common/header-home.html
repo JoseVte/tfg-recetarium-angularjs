@@ -67,6 +67,12 @@
                                 </md-button>
                             </md-menu-item>
                             <md-menu-divider></md-menu-divider>
+                            <md-menu-item ng-if="isAdmin">
+                                <md-button ng-href="/categories">
+                                    <md-icon class="material-icons md-black">bookmark</md-icon> {{ 'menu.categories' | translate }}
+                                </md-button>
+                            </md-menu-item>
+                            <md-menu-divider ng-if="isAdmin"></md-menu-divider>
                             <md-menu-item>
                                 <md-button ng-href="/logout">
                                     <md-icon class="material-icons md-black">exit_to_app</md-icon> {{ 'menu.logout' | translate }}

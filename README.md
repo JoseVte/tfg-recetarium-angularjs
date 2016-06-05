@@ -49,7 +49,15 @@ http-server -a localhost -p 8000
 
 ## Changelog
 
-#### [![0.10.1](/app/doc/rocket-blue.png) 0.10.1](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.10.1)
+#### [![0.10.3](/app/doc/rocket-blue.png) 0.10.3](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.10.3)
+
+- Gestionar las categorias de una receta
+
+###### [![0.10.2](/app/doc/release.png) 0.10.2](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.10.2)
+
+- Buscar recetas por etiqueta al hacer click en la pagina de una receta
+
+###### [![0.10.1](/app/doc/release.png) 0.10.1](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.10.1)
 
 - Seleccionar el idioma en el perfil
 - Cambiar el layout del perfil

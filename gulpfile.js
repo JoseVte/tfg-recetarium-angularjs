@@ -97,6 +97,7 @@ gulp.task('lib-js', function() {
         paths.src.bower + '/angular-mocks/angular-mocks.js',
         paths.src.bower + '/ngInfiniteScroll/build/ng-infinite-scroll.js',
         paths.src.bower + '/angulargrid/angulargrid.js',
+        paths.src.bower + '/angular-material-data-table/dist/md-data-table.js',
         paths.src.bower + '/dropzone/dist/dropzone.js',
         paths.src.bower + '/js-md5/src/md5.js',
         paths.src.bower + '/ng-elif/src/elif.js',
