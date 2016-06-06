@@ -228,7 +228,7 @@ authServices.factory('AuthService',
         };
 
         service.isAdmin = function() {
-            return service.IsAuthed && $rootScope.globals.user.type == 'ADMIN';
+            return service.IsAuthed && !!$rootScope.globals.user && $rootScope.globals.user.type == 'ADMIN';
         };
 
         service.IsAnonymous = function() {
