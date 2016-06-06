@@ -227,6 +227,10 @@ authServices.factory('AuthService',
             }
         };
 
+        service.isAdmin = function() {
+            return service.IsAuthed && !!$rootScope.globals.user && $rootScope.globals.user.type == 'ADMIN';
+        };
+
         service.IsAnonymous = function() {
             var deferred = $q.defer();
             if (service.GetJwt() === (null || undefined)) deferred.resolve(service.OK);

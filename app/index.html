@@ -24,7 +24,7 @@
     <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
 
-    <div layout="column" ng-cloak>
+    <div layout="column" ng-cloak class="padding-body">
         <section layout="row" ng-controller="Header" class="{{ headerTheme }}">
             <div ng-if="IsHome">
                 <div ng-include="'views/common/header-home.html'" ng-show="scrollInTop"></div>

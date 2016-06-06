@@ -13,6 +13,7 @@ var recetarium = angular.module('recetariumApp', [
     'infinite-scroll',
     'elif',
     'pascalprecht.translate',
+    'md.data.table',
     // My Javascript
     'Animations', 'Internationalization', 'TextEditor', 'AnimationDirectives',
     'CommentProviders', 'FileProviders', 'NotificationProviders', 'RatingProviders',
@@ -22,7 +23,7 @@ var recetarium = angular.module('recetariumApp', [
     'UserServices', 'UserFilters', 'UserController',
     'AuthServices', 'AuthController',
     'RecipeServices', 'RecipeFilters', 'RecipeController',
-    'CategoryServices', 'CategoryController',
+    'CategoryServices', 'CategoryController', 'CategoryProviders',
     'TagServices', 'IngredientServices'
 ]);
 
@@ -50,6 +51,8 @@ recetarium.config(['$routeProvider', '$locationProvider', function($routeProvide
         .when('/users', { templateUrl: 'views/user/index.html', controller: 'UserAll', resolve: { access: ["AuthService", function (AuthService) { return AuthService.IsAuthenticated(); }]}})
         .when('/users/:id', { templateUrl: 'views/user/show.html', controller: 'UserShow', resolve: { access: ["AuthService", function (AuthService) { return AuthService.IsAuthenticated(); }]}})
         .when('/friends', { templateUrl: 'views/user/index.html', controller: 'FriendAll', resolve: { access: ["AuthService", function (AuthService) { return AuthService.IsAuthenticated(); }]}})
+        // Admin - Categories
+        .when('/categories', { templateUrl: 'views/categories/index.html', controller: 'CategoryAll', resolve: { access: ["AuthService", function (AuthService) { return AuthService.isAdmin(); }]}})
         // Errores
         .when('/unauthorized', { templateUrl: 'views/error/401.html', controller: '' })
         .when('/forbidden', { templateUrl: 'views/error/403.html', controller: '' })
@@ -155,6 +158,7 @@ recetarium.run(function ($rootScope, $location, $http, AuthService, Notification
         var $path = $location.path();
 
         $rootScope.IsAuthed = AuthService.IsAuthed();
+        $rootScope.isAdmin = AuthService.isAdmin();
         if ($rootScope.IsAuthed) {
             $rootScope.userLogged = $rootScope.globals.user;
         }

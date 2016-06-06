@@ -1,0 +1,30 @@
+<md-dialog class="md-dialog-category" aria-label="{{ 'dialog-category.header-title' | translate }}" ng-cloak>
+    <form name="categoryForm">
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>{{ 'dialog-category.header-title' | translate }}</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="cancel()">
+                    <md-icon class="material-icons" aria-label="Close dialog">close</md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+        <md-dialog-content class="md-dialog-content-category">
+            <div layout="column" layout-align="center strech" layout-padding>
+                <md-input-container class="md-block" flex=100>
+                    <label>{{ 'field.name' | translate }}</label>
+                    <textarea ng-model="text" md-maxlength="140" rows="5" required></textarea>
+                    <div ng-messages="categoryForm.text.$error">
+                        <div ng-message="required">{{ 'form.error-required' | translate }}</div>
+                        <div ng-message="md-maxlength">{{ 'form.error-category-length' | translate }}</div>
+                    </div>
+                </md-input-container>
+            </div>
+        </md-dialog-content>
+        <md-dialog-actions layout="row">
+            <span flex></span>
+            <md-button ng-click="cancel()">{{ 'btn.cancel-text' | translate }}</md-button>
+            <md-button ng-click="save()"  ng-disabled="categoryForm.$invalid">{{ 'btn.save-text' | translate }}</md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>
