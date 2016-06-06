@@ -1,26 +1,45 @@
-<md-toolbar class="md-table-toolbar md-default">
-    <div class="md-toolbar-tools">
-        <span>{{ 'categories.header-title' | translate }}</span>
-    </div>
-</md-toolbar>
+<md-card>
+    <md-toolbar class="md-table-toolbar md-default" ng-show="!selected.length">
+        <div class="md-toolbar-tools">
+            <span>{{ 'categories.header-title' | translate }}</span>
+            <span flex></span>
+            <md-button class="md-icon-button" ng-click="reloadCategories()">
+                <md-icon class="material-icons">refresh</md-icon>
+            </md-button>
+            <md-button class="md-icon-button" ng-click="add()">
+                <md-icon class="material-icons">add_circle</md-icon>
+            </md-button>
+        </div>
+    </md-toolbar>
 
-<md-table-container>
-    <table md-table md-row-select multiple ng-model="selected" md-progress="promise">
-        <thead md-head md-order="pagination.order" md-on-reorder="getCategories">
-            <tr md-row>
-                <th md-column md-numeric md-order-by="id">ID</th>
-                <th md-column md-order-by="text"><span>{{ 'categories.field-name' | translate }}</span></th>
-                <th md-column md-numeric md-order-by="recipes"><span>{{ 'categories.field-recipes' | translate }}</span></th>
-            </tr>
-        </thead>
-        <tbody md-body>
-            <tr md-row md-select="category" md-select-id="name" md-auto-select ng-repeat="category in categories">
-                <td md-cell>{{ category.id }}</td>
-                <td md-cell >{{ category.text }}</td>
-                <td md-cell>{{ category.recipes }}</td>
-            </tr>
-        </tbody>
-    </table>
-</md-table-container>
+    <md-toolbar class="md-table-toolbar md-selected" ng-show="selected.length">
+        <div class="md-toolbar-tools">
+            <span>{{selected.length}} {{selected.length > 1 ? 'items' : 'item'}} selected</span>
+            <span flex></span>
+            <md-button class="md-icon-button" ng-click="delete($event)">
+                <md-icon class="material-icons">delete</md-icon>
+            </md-button>
+        </div>
+    </md-toolbar>
 
-<md-table-pagination md-limit="pagination.size" md-limit-options="[10, 25, 50]" md-page="pagination.page" md-total="{{ total }}" md-on-paginate="getCategories" md-page-select></md-table-pagination>
+    <md-table-container>
+        <table md-table md-row-select multiple ng-model="selected">
+            <thead md-head md-order="pagination.order" md-on-reorder="getCategories">
+                <tr md-row>
+                    <th md-column md-numeric md-order-by="id">ID</th>
+                    <th md-column md-order-by="text"><span>{{ 'categories.field-name' | translate }}</span></th>
+                    <th md-column md-numeric md-order-by="recipes"><span>{{ 'categories.field-recipes' | translate }}</span></th>
+                </tr>
+            </thead>
+            <tbody md-body>
+                <tr md-row md-select="category" md-select-id="name" md-auto-select ng-repeat="category in categories">
+                    <td md-cell>{{ category.id }}</td>
+                    <td md-cell ng-click="edit($event, category)">{{ category.text }}</td>
+                    <td md-cell>{{ category.recipes }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </md-table-container>
+
+    <md-table-pagination md-limit="pagination.size" md-limit-options="[10, 25, 50]" md-page="pagination.page" md-total="{{ total }}" md-on-paginate="getCategories" md-page-select></md-table-pagination>
+</md-card>

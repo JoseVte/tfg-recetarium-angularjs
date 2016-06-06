@@ -12,14 +12,19 @@ body {
     -ms-transition: all 0.3s;
     -o-transition: all 0.3s;
     transition: all 0.3s;
-    padding-top: 64px;
+    & > .padding-body {
+        padding-top: 64px;
+    }
+
     &.body-home {
-        padding-top: 400px;
-        @media (max-width: $layout-breakpoint-sm) {
-            padding-top: 300px;
-        }
-        @media (max-width: $layout-breakpoint-xs) {
-            padding-top: 200px;
+        & > .padding-body {
+            padding-top: 400px;
+            @media (max-width: $layout-breakpoint-sm) {
+                padding-top: 300px;
+            }
+            @media (max-width: $layout-breakpoint-xs) {
+                padding-top: 200px;
+            }
         }
     }
 }

@@ -78,6 +78,20 @@ categoryService.factory('CategoryService',
             });
         };
 
+        service.deleteMultiple = function(ids, callbackOk, callbackError) {
+            $http.delete(
+                service.apiUrl + '/categories',
+                {
+                    headers: { 'Accept': 'application/json', 'Content-Type': 'application/json', 'Accept-Pagination': true },
+                    params: { ids: ids }
+                }
+            ).then(function(response) {
+                callbackOk(response);
+            }, function(response) {
+                callbackError(response);
+            });
+        };
+
         return service;
     }]
 );

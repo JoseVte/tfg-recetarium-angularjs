@@ -23,7 +23,7 @@ var recetarium = angular.module('recetariumApp', [
     'UserServices', 'UserFilters', 'UserController',
     'AuthServices', 'AuthController',
     'RecipeServices', 'RecipeFilters', 'RecipeController',
-    'CategoryServices', 'CategoryController',
+    'CategoryServices', 'CategoryController', 'CategoryProviders',
     'TagServices', 'IngredientServices'
 ]);
 
