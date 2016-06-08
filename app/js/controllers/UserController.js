@@ -238,7 +238,7 @@ userController.constant('USER_FUNCTIONS', {
             if ($event.preventDefault) $event.preventDefault();
             $event.cancelBubble = true;
             $event.returnValue = false;
-            FRIENDS_FUNCTIONS.AddFriend($rootScope, $translate, UserService, NotificationProvider, NOTIFICATION, $rootScope.globals.user.user, user, $scope.loadPersonalData);
+            FRIENDS_FUNCTIONS.AddFriend($rootScope, $translate, UserService, NotificationProvider, NOTIFICATION, $rootScope.globals.user, user, $scope.loadPersonalData);
         };
 
         $scope.deleteFriend = function (user, $event) {
@@ -246,7 +246,7 @@ userController.constant('USER_FUNCTIONS', {
             if ($event.preventDefault) $event.preventDefault();
             $event.cancelBubble = true;
             $event.returnValue = false;
-            FRIENDS_FUNCTIONS.DeleteFriend($rootScope, $translate, UserService, NotificationProvider, NOTIFICATION, $rootScope.globals.user.user, user, $scope.loadPersonalData);
+            FRIENDS_FUNCTIONS.DeleteFriend($rootScope, $translate, UserService, NotificationProvider, NOTIFICATION, $rootScope.globals.user, user, $scope.loadPersonalData);
         };
     },
 });
@@ -320,14 +320,14 @@ userController.controller('UserShow',
         DELAY_FUNCTIONS.initDelays($scope, $timeout);
 
         $scope.isMe = function(user) {
-            return (user !== undefined && $rootScope.globals.user.user.id == user.id);
+            return (user !== undefined && $rootScope.globals.user.id == user.id);
         };
 
         $scope.checkFriend = function(user) {
             var i = 0;
             if (user !== undefined) {
                 while (i < user.friends.length) {
-                    if (user.friends[i].user_id === $rootScope.globals.user.user.id) {
+                    if (user.friends[i].user_id === $rootScope.globals.user.id) {
                         return true;
                     }
                     i++;
@@ -356,11 +356,11 @@ userController.controller('UserShow',
         };
 
         $scope.addFriendHome = function (user) {
-            FRIENDS_FUNCTIONS.AddFriend($rootScope, $translate, UserService, NotificationProvider, NOTIFICATION, $rootScope.globals.user.user, user, $scope.loadPersonalData);
+            FRIENDS_FUNCTIONS.AddFriend($rootScope, $translate, UserService, NotificationProvider, NOTIFICATION, $rootScope.globals.user, user, $scope.loadPersonalData);
         };
 
         $scope.deleteFriendHome = function (user) {
-            FRIENDS_FUNCTIONS.DeleteFriend($rootScope, $translate, UserService, NotificationProvider, NOTIFICATION, $rootScope.globals.user.user, user, $scope.loadPersonalData);
+            FRIENDS_FUNCTIONS.DeleteFriend($rootScope, $translate, UserService, NotificationProvider, NOTIFICATION, $rootScope.globals.user, user, $scope.loadPersonalData);
         };
 
         USER_FUNCTIONS.Recipes($scope, $rootScope, $translate, $mdDialog, $routeParams.id, UserService, RecipeService, NotificationProvider, NOTIFICATION);
@@ -382,7 +382,7 @@ userController.controller('FriendAll',
             $scope.loadingNextPage = true;
             $rootScope.errorMsg = false;
             $scope.loadingNextPage = true;
-            UserService.getFriends($rootScope.globals.user.user.id, {
+            UserService.getFriends($rootScope.globals.user.id, {
                 page: $scope.nextPageNumber,
                 size: 10,
                 order: 'firstName',

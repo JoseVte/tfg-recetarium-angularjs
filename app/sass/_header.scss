@@ -37,6 +37,9 @@ md-sidenav {
     md-toolbar {
         max-height: 128px;
     }
+    & > md-content {
+        overflow: hidden;
+    }
 }
 header md-toolbar {
     &.md-tall {

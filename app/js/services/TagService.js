@@ -21,6 +21,19 @@ tagService.factory('TagService',
             });
         };
 
+        service.searchById = function (id, callbackOk, callbackError) {
+            return $http.get(
+                service.apiUrl + '/tags/' + id,
+                {
+                    headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' }
+                }
+            ).then(function (response) {
+                return callbackOk(response);
+            }, function (response) {
+                return callbackError(response);
+            });
+        };
+
         return service;
     }]
 );

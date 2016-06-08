@@ -80,7 +80,7 @@
                 </div>
             </md-card-content>
             <md-card-content layout="row" layout-align="start center">
-                <div class="tag" ng-repeat="tag in tags" ng-click="">{{ tag.text }}</div>
+                <div class="tag" ng-repeat="tag in tags" ng-click="searchByTag(tag.id)">{{ tag.text }}</div>
             </md-card-content>
             <md-card-actions flex="100" layout="row" layout-align="space-between center">
                 <md-button ng-click="toggleComments()">

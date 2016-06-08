@@ -47,31 +47,42 @@
                         <md-button ng-click="openDropdrown($mdOpenMenu, $event)">
                             <div layout="row" layout-align="center center">
                                 <img class="user-image" ng-src="{{ userLogged | userImage:userLogged }}" />
-                                <span>Hola, {{ userLogged.first_name }}</span>
+                                <span>{{ 'menu.salutation' | translate }}, {{ userLogged.first_name }}</span>
                             </div>
                         </md-button>
                         <md-menu-content>
-                            <md-menu-item>
+                            <md-menu-item ng-class="getClassActive('/new-recipe')" class="show-custom-header-md">
                                 <md-button ng-href="/new-recipe">
-                                    <md-icon class="material-icons md-black">edit</md-icon> Escribe una receta
+                                    <md-icon class="material-icons md-black">edit</md-icon> {{ 'menu.write-recipe' | translate }}
+                                </md-button>
+                            </md-menu-item>
+                            <md-menu-item ng-class="getClassActive('/profile')">
+                                <md-button ng-href="/profile">
+                                    <md-icon class="material-icons md-black">person</md-icon> {{ 'menu.profile' | translate }}
                                 </md-button>
                             </md-menu-item>
                             <md-menu-item>
-                                <md-button ng-href="/profile">
-                                    <md-icon class="material-icons">person</md-icon> Perfil
+                                <md-button ng-href="/settings">
+                                    <md-icon class="material-icons md-black">settings</md-icon> {{ 'menu.settings' | translate }}
                                 </md-button>
                             </md-menu-item>
                             <md-menu-divider></md-menu-divider>
+                            <md-menu-item ng-if="isAdmin">
+                                <md-button ng-href="/categories">
+                                    <md-icon class="material-icons md-black">bookmark</md-icon> {{ 'menu.categories' | translate }}
+                                </md-button>
+                            </md-menu-item>
+                            <md-menu-divider ng-if="isAdmin"></md-menu-divider>
                             <md-menu-item>
                                 <md-button ng-href="/logout">
-                                    <md-icon class="material-icons">exit_to_app</md-icon> Logout
+                                    <md-icon class="material-icons md-black">exit_to_app</md-icon> {{ 'menu.logout' | translate }}
                                 </md-button>
                             </md-menu-item>
                         </md-menu-content>
                     </md-menu>
                 </div>
                 <div ng-if="!IsAuthed">
-                    <md-button ng-href="/login">Login / Registrate</md-button>
+                    <md-button ng-href="/login">{{ 'menu.login' | translate }}</md-button>
                 </div>
             </div>
         </div>
@@ -79,7 +90,7 @@
             <div flex>
                 <img class="img-logo" src="../img/header-logo.png" alt="Logo Recetarium">
             </div>
-            <div flex class="motto">Recetario: Tus recetas siempre contigo.</div>
+            <div flex class="motto">{{ 'menu.motto' | translate }}</div>
             <div flex>
                 <md-input-container md-no-float class="md-has-no-icon-left search-home" flex="100" layout="row" layout-align="start center">
                     <md-button class="md-icon-button md-mini" ng-click="searchRecipe()" aria-label="Search">

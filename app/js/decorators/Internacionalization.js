@@ -46,6 +46,16 @@ recetarium.config(['$translateProvider', function($translateProvider) {
         'user.fav-title': 'Favorite recipes',
         'user.friends-title': 'Friends',
 
+        'categories.header-title': 'Categories',
+        'categories.field-name': 'Name',
+        'categories.field-recipes': 'Nº Recipes',
+
+        'settings.header-title': 'Settings',
+        'settings.password-title': 'Change password',
+        'settings.language-title': 'Change language',
+        'settings.language-spanish': 'Spanish',
+        'settings.language-english': 'English',
+
         'friend.added': 'You have added  \'{{ name }}\' as friend.',
         'friend.deleted': 'You have deleted \'{{ name }}\' as friend.',
 
@@ -58,8 +68,11 @@ recetarium.config(['$translateProvider', function($translateProvider) {
         'menu.write-recipe': 'Write a new recipe',
         'menu.profile': 'Profile',
         'menu.salutation': 'Hi',
+        'menu.settings': 'Settings',
+        'menu.categories': 'Categories',
         'menu.logout': 'Logout',
         'menu.login': 'Sign in/up',
+        'menu.motto': 'Recetarium: Your recipes always with you.',
 
         'recipe-create.header-title': 'New recipe (draft)',
         'recipe-edit.header-title': 'Edit recipe',
@@ -72,6 +85,7 @@ recetarium.config(['$translateProvider', function($translateProvider) {
         'dialog.remove-image-1': 'Do you really want to delete the image \'{{ title }}\'?<br>This action can\'t be undo.',
         'dialog.remove-image-2': 'The image disappears from all recipes',
         'dialog.remove-recipe': 'Do you really want to delete the recipe \'{{ title }}\'?<br>This action can\'t be undo.',
+        'dialog.remove-categories': 'Do  you really want to delete {{ total }} categories?<br>This action can\'t be undo.<br>All recipes will be updated without category.',
         'dialog.remove-comment': 'Do you really want to delete the comment?<br>This action can\'t be undo.<br>The replies also will be deleted.',
         'dialog.publish': 'Do you want publish the recipe \'{{ title }}\'?',
         'dialog-comment.header-title': 'Write a comment',
@@ -192,11 +206,21 @@ recetarium.config(['$translateProvider', function($translateProvider) {
         'profile.image-text-count-total': 'Nº total de veces usada:',
         'profile.friends-title': 'Tus amigos',
 
+        'settings.header-title': 'Configuración',
+        'settings.password-title': 'Cambiar contraseña',
+        'settings.language-title': 'Cambiar idioma',
+        'settings.language-spanish': 'Español',
+        'settings.language-english': 'Inglés',
+
         'user.header-title': 'Perfil de {{ name }}',
         'user.personal-data-title': 'Datos personales',
         'user.recipes-title': 'Recetas publicadas',
         'user.fav-title': 'Recetas favoritas',
         'user.friends-title': 'Amigos',
+
+        'categories.header-title': 'Categorias',
+        'categories.field-name': 'Nombre',
+        'categories.field-recipes': 'Nº Recetas',
 
         'friend.added': 'Has añadido a \'{{ name }}\' como amigo.',
         'friend.deleted': 'Has borrado a \'{{ name }}\' como amigo.',
@@ -213,8 +237,11 @@ recetarium.config(['$translateProvider', function($translateProvider) {
         'menu.write-recipe': 'Escribe una receta',
         'menu.profile': 'Perfil',
         'menu.salutation': 'Hola',
+        'menu.settings': 'Configuración',
+        'menu.categories': 'Categorias',
         'menu.logout': 'Logout',
         'menu.login': 'Login / Registro',
+        'menu.motto': 'Recetarium: Tus recetas siempre contigo.',
 
         'dropzone.text': 'Arrastra y suelta las imágenes aquí',
         'dialog-select.header-title': 'Elige una imagen',
@@ -224,6 +251,7 @@ recetarium.config(['$translateProvider', function($translateProvider) {
         'dialog.remove-image-1': '¿De verdad que quieres borrar la imagen \'{{ title }}\'?<br>Esta acción no se puede deshacer.',
         'dialog.remove-image-2': 'La imagen desaparecerá de todas las recetas',
         'dialog.remove-recipe': '¿De verdad que quieres borrar la receta \'{{ title }}\'?<br>Esta acción no se puede deshacer.',
+        'dialog.remove-categories': '¿De verdad que quieres borrar {{ total }} categorias?<br>Esta acción no se puede deshacer.<br>Todas las recetas se modificarán sin categoria',
         'dialog.remove-comment': '¿De verdad que quieres borrar el comentario?<br>Esta acción no se puede deshacer.<br>Se borrarán las respuestas.',
         'dialog.publish': '¿Quieres publicar la receta \'{{ title }}\'?',
         'dialog-comment.header-title': 'Escribe un comentario',

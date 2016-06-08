@@ -1,8 +1,8 @@
 var authServices = angular.module('AuthServices', ['ngResource']);
 
 authServices.factory('AuthService',
-    ['$http', '$rootScope', '$timeout', '$interval', '$location', 'envService', '$q', 'NotificationProvider',
-    function ($http, $rootScope, $timeout, $interval, $location, envService, $q, NotificationProvider) {
+    ['$http', '$rootScope', '$timeout', '$interval', '$location', '$translate', 'envService', '$q', 'NotificationProvider',
+    function ($http, $rootScope, $timeout, $interval, $location, $translate, envService, $q, NotificationProvider) {
         var service = {
             apiUrl: envService.read('apiUrl'),
             OK: 200,
@@ -109,11 +109,14 @@ authServices.factory('AuthService',
             });
         };
 
-        service.SaveCredentials = function (token, user, pusherKey) {
+        service.SaveCredentials = function (token, user, pusherKey, language) {
             $rootScope.globals = {
                 token: token,
-                user: user
+                user: user.user,
+                language: language,
             };
+
+            $translate.use(language);
 
             if (!!pusherKey) {
                 // Initialize pusher
@@ -154,9 +157,9 @@ authServices.factory('AuthService',
         };
 
         service.ClearCredentials = function () {
-            if (!!$rootScope.globals.user && !!$rootScope.globals.user.user && !!$rootScope.globals.user.user.id && !!$rootScope.channel) {
+            if (!!$rootScope.globals.user && !!$rootScope.globals.user.id && !!$rootScope.channel) {
                 $rootScope.channel.unbind();
-                $rootScope.pusher.unsubscribe('user_' + $rootScope.globals.user.user.id);
+                $rootScope.pusher.unsubscribe('user_' + $rootScope.globals.user.id);
                 $rootScope.isBinded = false;
             }
             $rootScope.globals = {};
@@ -175,7 +178,7 @@ authServices.factory('AuthService',
                 { email: user.email, expiration: $rootScope.globals.user.setExpiration },
                 { headers: {'Accept': 'application/json', 'Content-Type': 'application/json'} }
             ).then(function (response) {
-                service.SaveCredentials(response.data.auth_token, JSON.parse(service.ParseJwt(response.data.auth_token).sub), response.data.pusher_key);
+                service.SaveCredentials(response.data.auth_token, JSON.parse(service.ParseJwt(response.data.auth_token).sub), response.data.pusher_key, response.data.language);
             }, function (response) {
                 if (response.status == 401) {
                     service.ClearCredentials();
@@ -187,7 +190,7 @@ authServices.factory('AuthService',
 
         service.StartCronCheckToken = function() {
             $rootScope.cronToken = $interval(function () {
-                service.CheckToken($rootScope.globals.user.user);
+                service.CheckToken($rootScope.globals.user);
             }, 1000 * 30 * 60); // 30 min
         };
 
@@ -222,6 +225,10 @@ authServices.factory('AuthService',
             } else {
                 return false;
             }
+        };
+
+        service.isAdmin = function() {
+            return service.IsAuthed && !!$rootScope.globals.user && $rootScope.globals.user.type == 'ADMIN';
         };
 
         service.IsAnonymous = function() {

@@ -1,5 +1,3 @@
-moment.locale('es');
-
 /* jshint ignore:start */
 'use strict';
 /* jshint ignore:end */
@@ -15,6 +13,7 @@ var recetarium = angular.module('recetariumApp', [
     'infinite-scroll',
     'elif',
     'pascalprecht.translate',
+    'md.data.table',
     // My Javascript
     'Animations', 'Internationalization', 'TextEditor', 'AnimationDirectives',
     'CommentProviders', 'FileProviders', 'NotificationProviders', 'RatingProviders',
@@ -24,7 +23,7 @@ var recetarium = angular.module('recetariumApp', [
     'UserServices', 'UserFilters', 'UserController',
     'AuthServices', 'AuthController',
     'RecipeServices', 'RecipeFilters', 'RecipeController',
-    'CategoryServices', 'CategoryController',
+    'CategoryServices', 'CategoryController', 'CategoryProviders',
     'TagServices', 'IngredientServices'
 ]);
 
@@ -41,7 +40,8 @@ recetarium.config(['$routeProvider', '$locationProvider', function($routeProvide
         .when('/reset/password', { templateUrl: 'views/auth/reset-password.html', controller: 'ResetPassword', resolve: { access: ["AuthService", function (AuthService) { return AuthService.IsAnonymous(); }]}})
         .when('/reset/password/:token', { templateUrl: 'views/auth/recover-password.html', controller: 'RecoverPassword', resolve: { access: ["AuthService", function (AuthService) { return AuthService.IsAnonymous(); }]}})
         .when('/active/:token', { templateUrl: 'views/auth/validate-email.html', controller: 'ValidateEmail', resolve: { access: ["AuthService", function (AuthService) { return AuthService.IsAnonymous(); }]}})
-        .when('/profile', { templateUrl: 'views/auth/profile.html', controller: 'EditProfile', permission: 'logged', resolve: { access: ["AuthService", function (AuthService) { return AuthService.IsAuthenticated(); }]}})
+        .when('/profile', { templateUrl: 'views/auth/profile.html', controller: 'Profile', permission: 'logged', resolve: { access: ["AuthService", function (AuthService) { return AuthService.IsAuthenticated(); }]}})
+        .when('/settings', { templateUrl: 'views/auth/settings.html', controller: 'Settings', permission: 'logged', resolve: { access: ["AuthService", function (AuthService) { return AuthService.IsAuthenticated(); }]}})
         // Recipes
         .when('/recipes', { templateUrl: 'views/recipe/index.html', controller: 'RecipeAll' })
         .when('/recipes/:slug', { templateUrl: 'views/recipe/show.html', controller: 'RecipeShow' })
@@ -51,6 +51,8 @@ recetarium.config(['$routeProvider', '$locationProvider', function($routeProvide
         .when('/users', { templateUrl: 'views/user/index.html', controller: 'UserAll', resolve: { access: ["AuthService", function (AuthService) { return AuthService.IsAuthenticated(); }]}})
         .when('/users/:id', { templateUrl: 'views/user/show.html', controller: 'UserShow', resolve: { access: ["AuthService", function (AuthService) { return AuthService.IsAuthenticated(); }]}})
         .when('/friends', { templateUrl: 'views/user/index.html', controller: 'FriendAll', resolve: { access: ["AuthService", function (AuthService) { return AuthService.IsAuthenticated(); }]}})
+        // Admin - Categories
+        .when('/categories', { templateUrl: 'views/categories/index.html', controller: 'CategoryAll', resolve: { access: ["AuthService", function (AuthService) { return AuthService.isAdmin(); }]}})
         // Errores
         .when('/unauthorized', { templateUrl: 'views/error/401.html', controller: '' })
         .when('/forbidden', { templateUrl: 'views/error/403.html', controller: '' })
@@ -111,7 +113,7 @@ recetarium.config(['envServiceProvider', function (envServiceProvider) {
 //
 recetarium.run(function ($rootScope, $location, $http, AuthService, NotificationProvider, envService, ICONS) {
     var authRegex = /\/login|\/register|\/active.*|\/reset\/password.*/;
-    var profileRegex = /\/profile.*/;
+    var profileRegex = /\/profile.*|\/settings.*/;
     var userRegex = /\/users.*|\/friends/;
     $rootScope.location = $location;
     $rootScope.searchString = '';
@@ -122,7 +124,7 @@ recetarium.run(function ($rootScope, $location, $http, AuthService, Notification
     if (localStorage.globals) {
         $rootScope.globals = JSON.parse(localStorage.globals);
         $http.defaults.headers.common['X-Auth-Token'] = $rootScope.globals.token;
-        AuthService.CheckToken($rootScope.globals.user.user);
+        AuthService.CheckToken($rootScope.globals.user);
         AuthService.StartCronCheckToken();
     } else {
         $rootScope.globals = {};
@@ -156,8 +158,9 @@ recetarium.run(function ($rootScope, $location, $http, AuthService, Notification
         var $path = $location.path();
 
         $rootScope.IsAuthed = AuthService.IsAuthed();
+        $rootScope.isAdmin = AuthService.isAdmin();
         if ($rootScope.IsAuthed) {
-            $rootScope.userLogged = $rootScope.globals.user.user;
+            $rootScope.userLogged = $rootScope.globals.user;
         }
         $rootScope.IsHome = ($path == '/');
         $rootScope.scrollInTop = $rootScope.IsHome;
