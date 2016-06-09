@@ -101,7 +101,7 @@ homeController.controller('Home',
                 size: 10
             }, function (response) {
                 var responseData = response.data;
-                $scope.recipes = responseData.data;
+                $scope.recipes =  $scope.recipes.concat(responseData.data);
                 $scope.nextPageNumber++;
                 $scope.total = responseData.total;
                 $scope.loadingNextPage = false;

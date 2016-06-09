@@ -13,7 +13,7 @@
                 <a class="md-button {{ navLink.class }}" ng-click="navTo($event, navLink.url)"><div layout="row" layout-align="start center" data-ng-bind-html="navLink.title"></div></a>
             </li>
             <li ng-if="isAdmin" ng-class="getClassActive('categories')">
-                <a ng-click="navTo($event, 'categories')"><div layout="row" layout-align="start center"><i class="material-icons">bookmark</i> {{ 'menu.categories' | translate }}</div></a>
+                <a class="md-button" ng-click="navTo($event, 'categories')"><div layout="row" layout-align="start center"><i class="material-icons">bookmark</i> {{ 'menu.categories' | translate }}</div></a>
             </li>
             <hr show-xs show-sm hide-gt-sm />
             <div ng-if="IsAuthed" show-xs show-sm hide-gt-sm>

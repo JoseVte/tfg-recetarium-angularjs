@@ -63,7 +63,10 @@ header md-toolbar {
             height: 200px;
             max-height: 200px;
             .md-toolbar-tools {
-                display: none;
+                z-index: 1;
+            }
+            .motto {
+                font-size: 14px;
             }
         }
     }
@@ -118,6 +121,8 @@ md-input-container.search-home {
     }
     @media (max-width: $layout-breakpoint-xs) {
         max-height: 100px;
+        margin-top: -35px;
+        z-index: 0;
     }
 }
 

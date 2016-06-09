@@ -110,7 +110,7 @@ recipeController.constant('EDIT_FUNCTIONS', {
                     $scope.loadingSlug = true;
                     $scope.validSlugIcon = 'autorenew';
                     $timeout(function() {
-                        requestSlug = RecipeService.checkSlugWithId(newVal, $scope.recipe.id).then(
+                        var requestSlug = RecipeService.checkSlugWithId(newVal, $scope.recipe.id).then(
                             function (response) {
                                 $scope.loadingSlug = false;
                                 if (response.status == 200) {
