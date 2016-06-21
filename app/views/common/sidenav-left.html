@@ -20,6 +20,14 @@
                 <li ng-class="getClassActive('/profile')">
                     <a class="md-button" ng-click="navTo($event, '/profile')"><md-icon class="material-icons">person</md-icon> {{ 'menu.profile' | translate }}</a>
                 </li>
+                <li ng-class="getClassActive('/settings')">
+                    <a class="md-button" ng-click="navTo($event, '/settings')"><md-icon class="material-icons md-black">settings</md-icon> {{ 'menu.settings' | translate }}</a>
+                </li>
+                <hr show-xs show-sm hide-gt-sm />
+                <li ng-class="getClassActive('/categories')"  ng-if="isAdmin">
+                    <a class="md-button" ng-click="navTo($event, '/categories')"><md-icon class="material-icons md-black">bookmark</md-icon> {{ 'menu.categories' | translate }}</a>
+                </li>
+                <hr show-xs show-sm hide-gt-sm ng-if="isAdmin" />
                 <li ng-class="getClassActive('/logout')">
                     <a class="md-button" ng-click="navTo($event, '/logout')"><md-icon class="material-icons">exit_to_app</md-icon> {{ 'menu.logout' | translate }}</a>
                 <li>

@@ -130,6 +130,7 @@ md-input-container.search-home {
     max-height: 64px;
     @media (max-width: $layout-breakpoint-sm) {
         margin-left: 10px;
+        max-height: 48px;
     }
 }
 
