@@ -72,7 +72,7 @@ recetarium.config(['$httpProvider', function($httpProvider) {
             },
             responseError: function (response) {
                 if (response.status === 401) {
-                    if ($rootScope.globals.token) {
+                    if ($rootScope.globals.token && !!$rootScope.IsAuthed) {
                         $location.path('/unauthorized');
                     } else {
                         $location.path('/login');
@@ -112,6 +112,7 @@ recetarium.config(['envServiceProvider', function (envServiceProvider) {
 
 //
 recetarium.run(function ($rootScope, $location, $http, AuthService, NotificationProvider, envService, ICONS) {
+    angular.module('infinite-scroll').value('THROTTLE_MILLISECONDS', 500);
     var authRegex = /\/login|\/register|\/active.*|\/reset\/password.*/;
     var profileRegex = /\/profile.*|\/settings.*/;
     var userRegex = /\/users.*|\/friends/;
@@ -163,6 +164,8 @@ recetarium.run(function ($rootScope, $location, $http, AuthService, Notification
             $rootScope.userLogged = $rootScope.globals.user;
         }
         $rootScope.IsHome = ($path == '/');
+        $rootScope.IsRecipeListPage = ($path == '/recipes');
+        $rootScope.IsUserListPage = ($path == '/users');
         $rootScope.scrollInTop = $rootScope.IsHome;
         $rootScope.HasBack = false;
         $rootScope.errorMsg = false;

@@ -47,7 +47,7 @@
                     </md-content>
                 </md-tab>
                 <md-tab label="{{ 'user.recipes-title' | translate }}" md-on-select="nextPageRecipes()">
-                    <div infinite-scroll="nextPageRecipes()" infinite-scroll-disabled="infiniteScroll.recipes.loadingNextPage || errorMsg" infinite-scroll-distance="3" layout-wrap>
+                    <div infinite-scroll="nextPageRecipes()" infinite-scroll-disabled="infiniteScroll.recipes.loadingNextPage || errorMsg || selectedProfileTab !== 2" infinite-scroll-distance="4" layout-wrap>
                         <md-content class="md-padding">
                             <div class="animation-card-recipes" ng-repeat="recipe in infiniteScroll.recipes.data" flex="100">
                                 <md-card class="card-recipe-profile">
@@ -76,7 +76,7 @@
                     </div>
                 </md-tab>
                 <md-tab label="{{ 'user.fav-title' | translate }}" md-on-select="nextPageRecipesFavorites()">
-                    <div infinite-scroll="nextPageRecipesFavorites()" infinite-scroll-disabled="infiniteScroll.recipesFavorites.loadingNextPage || errorMsg" infinite-scroll-distance="3" layout-wrap>
+                    <div infinite-scroll="nextPageRecipesFavorites()" infinite-scroll-disabled="infiniteScroll.recipesFavorites.loadingNextPage || errorMsg || selectedProfileTab !== 3" infinite-scroll-distance="4" layout-wrap>
                         <md-content class="md-padding">
                             <div class="animation-card-recipes" ng-repeat="recipe in infiniteScroll.recipesFavorites.data" flex="100">
                                 <md-card class="card-recipe-profile">
@@ -106,7 +106,7 @@
                     </div>
                 </md-tab>
                 <md-tab label="{{ 'user.friends-title' | translate }}" md-on-select="loadFriends()">
-                    <div infinite-scroll="nextPageFriends()" infinite-scroll-disabled="infiniteScroll.friends.loadingNextPage || errorMsg" infinite-scroll-distance="3" layout-wrap>
+                    <div infinite-scroll="nextPageFriends()" infinite-scroll-disabled="infiniteScroll.friends.loadingNextPage || errorMsg || selectedProfileTab !== 4" infinite-scroll-distance="4" layout-wrap>
                         <md-content class="md-padding" layout="row" layout-wrap layout-align="space-around start">
                             <div class="animation-card-users" ng-repeat="user in infiniteScroll.friends.data" flex="100">
                                 <md-card class="card-user-main">

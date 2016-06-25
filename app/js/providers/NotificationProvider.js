@@ -3,11 +3,21 @@ var notificationProvider = angular.module('NotificationProviders', []);
 notificationProvider.constant('NOTIFICATION', {
     ParseErrorResponse: function(response, httpCodes, $translate, $rootScope, NotificationProvider) {
         if (httpCodes.contains(response.status)) {
-            if (response.status == 400) {
+            if (response.status === 400) {
                 $rootScope.error = {
                     icon: 'error_outline',
                     title: $translate.instant('error.400.title'),
                     msg: $.parseError(response.data)
+                };
+            } else if (response.status === 401) {
+                $rootScope.error = {
+                    icon: 'warning',
+                    title: $translate.instant('error.401.title')
+                };
+            } else if (response.status === 403) {
+                $rootScope.error = {
+                    icon: 'warning',
+                    title: $translate.instant('error.403.title')
                 };
             } else {
                 $rootScope.error = {

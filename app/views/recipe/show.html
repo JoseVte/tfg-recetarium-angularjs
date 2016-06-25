@@ -74,7 +74,7 @@
             </md-card-title>
             <md-card-content layout="row" layout-align="start center">
                 <div ng-repeat="image in images">
-                    <a class="image-recipe-zoomable fancybox" rel="gallery" title="{{ image.title }}" ng-href="{{ image | srcImage:recipe.user }}" >
+                    <a class="image-recipe-zoomable fancybox" rel="gallery" title="{{ image.title }}" href="{{ image | srcImage:recipe.user }}" >
                         <img ng-src="{{ image | srcImage:recipe.user }}" />
                     </a>
                 </div>
