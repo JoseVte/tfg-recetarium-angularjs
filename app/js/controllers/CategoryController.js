@@ -15,7 +15,7 @@ categoryController.controller('CategoryAll', [
         $scope.reloadCategories = function() {
             $scope.pagination.page = 1;
             $scope.getCategories();
-        }
+        };
 
         $scope.getCategories = function() {
             $rootScope.progressBarActivated = true;

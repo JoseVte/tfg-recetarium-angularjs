@@ -4,7 +4,9 @@ homeController.controller('Header',
     ['$scope', '$rootScope', '$mdSidenav', '$timeout', '$location', '$route', '$translate', 'RecipeService',
     function ($scope, $rootScope, $mdSidenav, $timeout, $location, $route, $translate, RecipeService) {
         $scope.toggleLeft = buildDelayedToggler('left');
-        $scope.search = $rootScope.searchString;
+        $scope.data = {
+            'search': $rootScope.searchString,
+        };
 
         $scope.navLinks = [
             { title: '<i class="material-icons">fiber_new</i> ' + $translate.instant('menu.last-recipes'), url: '/recipes' },
@@ -40,7 +42,7 @@ homeController.controller('Header',
         };
 
         $scope.searchRecipe = function() {
-            $rootScope.searchString = $scope.search;
+            $rootScope.searchString = $scope.data.search;
             $location.path('recipes');
             $route.reload();
         };

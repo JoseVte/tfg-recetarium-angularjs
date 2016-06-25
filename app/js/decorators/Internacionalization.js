@@ -125,6 +125,8 @@ recetarium.config(['$translateProvider', function($translateProvider) {
         'form.error-duration': 'The duration should be more than 1 min.',
 
         'error.400.title': 'Wrong data',
+        'error.401.title': 'Unauthorized',
+        'error.403.title': 'Forbidden',
         'error.500.title': 'Something went wrong. Please, try it later.',
 
         'tooltip.image-used-text': 'The image is used in some recipe as main',
@@ -291,6 +293,8 @@ recetarium.config(['$translateProvider', function($translateProvider) {
         'form.error-duration': 'La duración debe de ser de más de 1 min.',
 
         'error.400.title': 'Datos incorrectos',
+        'error.401.title': 'No autorizado',
+        'error.403.title': 'Acceso prohibido',
         'error.500.title': 'Ha ocurrido un error. Por favor, intentelo más tarde.',
 
         'tooltip.image-used-text': 'La imagen se usa en alguna receta como principal',
