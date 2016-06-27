@@ -102,6 +102,9 @@
                     color: white;
                     margin: 4px -16px;
                     padding: 16px;
+                    @media (max-width: $layout-breakpoint-sm) {
+                        margin: 4px -8px;
+                    }
                 }
             }
             md-content {
