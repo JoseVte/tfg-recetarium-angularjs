@@ -30,7 +30,7 @@
                             <h4>
                                 <md-icon class="material-icons" ng-class="getDifficulty(recipe.difficulty)">stars</md-icon> {{ 'field.difficulty' | translate }}: {{ recipe.difficulty | humanized }}
                             </h4>
-                            <h4>
+                            <h4 ng-if="isMine(recipe.user)">
                                 <md-icon class="material-icons" ng-class="getVisibilityClass(recipe.visibility)">{{ getVisibilityIcon(recipe.visibility) }}</md-icon> {{ 'field.visibility' | translate }}: {{ recipe.visibility | humanized }}
                             </h4>
                             <h4 ng-if="recipe.category">

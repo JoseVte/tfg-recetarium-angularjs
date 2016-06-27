@@ -165,7 +165,7 @@ recetarium.run(function ($rootScope, $location, $http, AuthService, Notification
         }
         $rootScope.IsHome = ($path == '/');
         $rootScope.IsRecipeListPage = ($path == '/recipes');
-        $rootScope.IsUserListPage = ($path == '/users');
+        $rootScope.IsUserListPage = ($path == '/users' || $path == '/friends');
         $rootScope.scrollInTop = $rootScope.IsHome;
         $rootScope.HasBack = false;
         $rootScope.errorMsg = false;
