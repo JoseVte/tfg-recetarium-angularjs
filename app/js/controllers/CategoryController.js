@@ -11,6 +11,11 @@ categoryController.controller('CategoryAll', [
             search: '',
             order: 'id',
         };
+        $scope.labels = {
+            page: $translate.instant('pagination.page'),
+            rowsPerPage: $translate.instant('pagination.rows-per-page'),
+            of: $translate.instant('pagination.of'),
+        };
 
         $scope.reloadCategories = function() {
             $scope.pagination.page = 1;

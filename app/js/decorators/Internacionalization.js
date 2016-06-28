@@ -90,6 +90,7 @@ recetarium.config(['$translateProvider', function($translateProvider) {
         'dialog.publish': 'Do you want publish the recipe \'{{ title }}\'?',
         'dialog-comment.header-title': 'Write a comment',
         'dialog-rating.header-title': 'Rate the recipe',
+        'dialog-category.header-title': 'Write the name',
 
         'comment.last-update': 'Last modification',
         'comment.created-at': 'Created',
@@ -162,6 +163,13 @@ recetarium.config(['$translateProvider', function($translateProvider) {
         'field.username': 'Username',
 
         'conjuntion.and': 'and',
+
+        'pagination.page': 'Page:',
+        'pagination.rows-per-page': 'Rows per page:',
+        'pagination.of': 'of',
+
+        'selected.item': 'row selected',
+        'selected.items': 'rows selected',
 
         'humanized.EASY': 'Easy',
         'humanized.MEDIUM': 'Medium',
@@ -258,6 +266,7 @@ recetarium.config(['$translateProvider', function($translateProvider) {
         'dialog.publish': '¿Quieres publicar la receta \'{{ title }}\'?',
         'dialog-comment.header-title': 'Escribe un comentario',
         'dialog-rating.header-title': 'Puntúa la receta',
+        'dialog-category.header-title': 'Escribe el nombre',
 
         'comment.last-update': 'Ultima modificación el',
         'comment.created-at': 'Creado el',
@@ -330,6 +339,13 @@ recetarium.config(['$translateProvider', function($translateProvider) {
         'field.username': 'Nombre del usuario',
 
         'conjuntion.and': 'y',
+
+        'pagination.page': 'Página:',
+        'pagination.rows-per-page': 'Filas por página:',
+        'pagination.of': 'de',
+
+        'selected.item': 'fila seleccionada',
+        'selected.items': 'filas seleccionadas',
 
         'humanized.EASY': 'Fácil',
         'humanized.MEDIUM': 'Media',

@@ -116,6 +116,7 @@ recetarium.run(function ($rootScope, $location, $http, AuthService, Notification
     var authRegex = /\/login|\/register|\/active.*|\/reset\/password.*/;
     var profileRegex = /\/profile.*|\/settings.*/;
     var userRegex = /\/users.*|\/friends/;
+    var adminRegex = /\/categories/;
     $rootScope.location = $location;
     $rootScope.searchString = '';
 
@@ -192,11 +193,18 @@ recetarium.run(function ($rootScope, $location, $http, AuthService, Notification
                 $rootScope.htmlTheme = 'html-theme-profile';
                 break;
             case (userRegex).test($path):
-                $rootScope.tabColor = '#304FFE';
+                $rootScope.tabColor = '#FFC107';
                 $rootScope.headerTheme = 'header-theme-user';
                 $rootScope.loaderTheme = 'md-user';
                 $rootScope.bodyTheme = 'body-theme-user';
                 $rootScope.htmlTheme = 'html-theme-user';
+                break;
+            case (adminRegex).test($path):
+                $rootScope.tabColor = '#03acac';
+                $rootScope.headerTheme = 'header-theme-admin';
+                $rootScope.loaderTheme = 'md-admin';
+                $rootScope.bodyTheme = 'body-theme-admin';
+                $rootScope.htmlTheme = 'html-theme-admin';
                 break;
             default:
                 $rootScope.tabColor = '#DD2C00';
