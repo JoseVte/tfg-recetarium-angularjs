@@ -169,22 +169,20 @@
                     ta-toolbar-button-class="md-button md-icon-button" ta-toolbar-button-active-class="active"></div>
             </div>
 
-            <div layout="row" layout-wrap layout-padding>
-                <div flex layout-align="center" layout="column" layout-wrap>
-                    <div flex layout-align="center center" layout="column" layout-wrap>
-                        <md-button class="md-primary md-raised" ng-click="selectImages($event)">
-                            <md-icon class="material-icons md-light">file_upload</md-icon> {{ 'btn.select-images' | translate }}
-                        </md-button>
-                    </div>
-                    <div class="images-recipe-gallery md-whiteframe-2dp" ng-show="recipe.files.length > 0"
-                        layout="row" layout-wrap layout-align="space-around center" flex>
-                        <div flex="nogrow" class="image-removable" ng-repeat="image in recipe.files">
-                            <md-card>
-                                <md-tooltip>{{ image.title }}</md-tooltip>
-                                <img src="{{ image | srcImage:recipe.user }}" class="md-card-image" alt="{{ image.title }}">
-                                <md-button ng-click="removeImageFromRecipe($index)" class="md-fab md-mini md-remove" aria-label="Remove"><md-icon class="material-icons">close</md-icon></md-button>
-                            </md-card>
-                        </div>
+            <div layout-align="center stretch" layout="column" layout-wrap layout-padding>
+                <div flex layout-align="center center" layout="row" layout-wrap>
+                    <md-button class="md-primary md-raised" ng-click="selectImages($event)">
+                        <md-icon class="material-icons md-light">file_upload</md-icon> {{ 'btn.select-images' | translate }}
+                    </md-button>
+                </div>
+                <div class="images-recipe-gallery md-whiteframe-2dp" ng-show="recipe.files.length > 0"
+                    layout="row" layout-wrap layout-align="space-around center">
+                    <div flex="nogrow" class="image-removable" ng-repeat="image in recipe.files">
+                        <md-card>
+                            <md-tooltip>{{ image.title }}</md-tooltip>
+                            <img src="{{ image | srcImage:recipe.user }}" class="md-card-image" alt="{{ image.title }}">
+                            <md-button ng-click="removeImageFromRecipe($index)" class="md-fab md-mini md-remove" aria-label="Remove"><md-icon class="material-icons">close</md-icon></md-button>
+                        </md-card>
                     </div>
                 </div>
             </div>

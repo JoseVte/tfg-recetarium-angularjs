@@ -3,7 +3,9 @@
 (default, $darkOrangeBackground, $darkOrangeBackgroundDisabled, $darkOrangeColorDisabled),
 (auth, $tealBackground, $tealBackgroundDisabled, $tealColorDisabled),
 (profile, $blueBackground, $blueBackgroundDisabled, $blueColorDisabled),
-(user, $amberBackground, $amberBackgroundDisabled, $amberColorDisabled) {
+(user, $amberBackground, $amberBackgroundDisabled, $amberColorDisabled),
+(admin, $cyanBackground, $cyanBackgroundDisabled, $cyanColorDisabled),
+ {
     .html-theme-#{$theme} {
         md-menu-content md-menu-item.active {
             background: $color;
@@ -74,6 +76,10 @@
         }
     }
     .body-theme-#{$theme} {
+        md-toolbar.md-table-toolbar.md-selected {
+            background-color: $color;
+            color: white;
+        }
         md-card-actions {
             background-color: white;
             color: $color;
@@ -102,6 +108,9 @@
                     color: white;
                     margin: 4px -16px;
                     padding: 16px;
+                    @media (max-width: $layout-breakpoint-sm) {
+                        margin: 4px -8px;
+                    }
                 }
             }
             md-content {

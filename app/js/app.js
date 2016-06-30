@@ -72,7 +72,7 @@ recetarium.config(['$httpProvider', function($httpProvider) {
             },
             responseError: function (response) {
                 if (response.status === 401) {
-                    if ($rootScope.globals.token) {
+                    if ($rootScope.globals.token && !!$rootScope.IsAuthed) {
                         $location.path('/unauthorized');
                     } else {
                         $location.path('/login');
@@ -112,9 +112,11 @@ recetarium.config(['envServiceProvider', function (envServiceProvider) {
 
 //
 recetarium.run(function ($rootScope, $location, $http, AuthService, NotificationProvider, envService, ICONS) {
+    angular.module('infinite-scroll').value('THROTTLE_MILLISECONDS', 500);
     var authRegex = /\/login|\/register|\/active.*|\/reset\/password.*/;
     var profileRegex = /\/profile.*|\/settings.*/;
     var userRegex = /\/users.*|\/friends/;
+    var adminRegex = /\/categories/;
     $rootScope.location = $location;
     $rootScope.searchString = '';
 
@@ -163,6 +165,8 @@ recetarium.run(function ($rootScope, $location, $http, AuthService, Notification
             $rootScope.userLogged = $rootScope.globals.user;
         }
         $rootScope.IsHome = ($path == '/');
+        $rootScope.IsRecipeListPage = ($path == '/recipes');
+        $rootScope.IsUserListPage = ($path == '/users' || $path == '/friends');
         $rootScope.scrollInTop = $rootScope.IsHome;
         $rootScope.HasBack = false;
         $rootScope.errorMsg = false;
@@ -189,11 +193,18 @@ recetarium.run(function ($rootScope, $location, $http, AuthService, Notification
                 $rootScope.htmlTheme = 'html-theme-profile';
                 break;
             case (userRegex).test($path):
-                $rootScope.tabColor = '#304FFE';
+                $rootScope.tabColor = '#FFC107';
                 $rootScope.headerTheme = 'header-theme-user';
                 $rootScope.loaderTheme = 'md-user';
                 $rootScope.bodyTheme = 'body-theme-user';
                 $rootScope.htmlTheme = 'html-theme-user';
+                break;
+            case (adminRegex).test($path):
+                $rootScope.tabColor = '#03acac';
+                $rootScope.headerTheme = 'header-theme-admin';
+                $rootScope.loaderTheme = 'md-admin';
+                $rootScope.bodyTheme = 'body-theme-admin';
+                $rootScope.htmlTheme = 'html-theme-admin';
                 break;
             default:
                 $rootScope.tabColor = '#DD2C00';

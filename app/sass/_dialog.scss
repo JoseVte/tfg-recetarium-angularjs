@@ -74,8 +74,10 @@
     }
 }
 
-.md-dialog-upload-images {
-    md-toolbar {
-        background-color: $blueBackground;
-    }
+.md-dialog-upload-images md-toolbar {
+    background-color: $blueBackground;
+}
+
+.md-dialog-category md-toolbar {
+    background-color: $cyanBackground;
 }
