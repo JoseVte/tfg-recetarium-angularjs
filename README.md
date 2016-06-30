@@ -49,7 +49,11 @@ http-server -a localhost -p 8000
 
 ## Changelog
 
-#### [![0.11.1](/app/doc/rocket-blue.png) 0.11.1](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.11.1)
+#### [![1.0.0](/doc/rocket-blue.png) 1.0.0](https://github.com/JoseVte/tfg-recetarium/releases/tag/1.0.0)
+
+- Primera release de la aplicación
+
+###### [![0.11.1](/app/doc/release.png) 0.11.1](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.11.1)
 
 - Fix
     - Recargar lista de amigos al borrar uno de ella
