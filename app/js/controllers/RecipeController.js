@@ -437,8 +437,8 @@ recipeController.controller('RecipeAll',
 );
 
 recipeController.controller('RecipeShow',
-    ['$scope', '$rootScope', '$location', '$routeParams', '$sce', '$compile', '$mdDialog', '$translate', '$window', 'RecipeService', 'CommentService', 'CommentProvider', 'NotificationProvider', 'RatingProvider', 'DIFF', 'VISIBILITY', 'NOTIFICATION',
-    function ($scope, $rootScope, $location, $routeParams, $sce, $compile, $mdDialog, $translate, $window, RecipeService, CommentService, CommentProvider, NotificationProvider, RatingProvider, DIFF, VISIBILITY, NOTIFICATION) {
+    ['$scope', '$rootScope', '$location', '$routeParams', '$sce', '$compile', '$mdDialog', '$translate', '$timeout', '$window', 'RecipeService', 'CommentService', 'CommentProvider', 'NotificationProvider', 'RatingProvider', 'DIFF', 'VISIBILITY', 'NOTIFICATION', 
+    function ($scope, $rootScope, $location, $routeParams, $sce, $compile, $mdDialog, $translate, $timeout, $window, RecipeService, CommentService, CommentProvider, NotificationProvider, RatingProvider, DIFF, VISIBILITY, NOTIFICATION) {
         $rootScope.progressBarActivated = true;
         $rootScope.HasBack = true;
         $scope.commentsActived = false;
@@ -462,6 +462,7 @@ recipeController.controller('RecipeShow',
 
                 $rootScope.headerTitle = response.data.title;
                 $rootScope.progressBarActivated = false;
+                $scope.$broadcast('dataloaded');
             } catch (err) {
                 console.error(err);
                 NOTIFICATION.ParseErrorResponse(response, [], $translate, $rootScope, NotificationProvider);
@@ -662,7 +663,7 @@ recipeController.controller('RecipeShow',
         };
 
         $scope.isMine = function(user) {
-            if ($rootScope.globals.user) {
+            if ($rootScope.globals.user && user) {
                 var auth = $rootScope.globals.user;
                 return (auth.id == user.id && auth.email == user.email && auth.username == user.username) || auth.type == 'ADMIN';
             }
@@ -672,6 +673,12 @@ recipeController.controller('RecipeShow',
         $scope.searchByTag = function(tag) {
             $location.path('/recipes').search({tag: tag});
         };
+
+        $scope.$on('dataloaded', function () {
+            $timeout(function () {
+                $('.fancybox-post-load').fancybox();
+            }, 0, false);
+      })
     }]
 );
 
