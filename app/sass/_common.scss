@@ -38,8 +38,25 @@ md-card md-card-title md-card-title-text md-input-container {
     margin-top: 15px;
     margin-bottom: 0px;
 }
-.md-card-image {
-    overflow: auto;
+.md-card-image-container {
+    &.md-card-home {
+        display: block;
+        width: 100%;
+        position: relative;
+        height: 0;
+        padding: 56.25% 0 0 0;
+        overflow: hidden;
+    }
+    .md-card-image {
+        position: absolute;
+        display: block;
+        max-width: 100%;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        margin: auto;
+    }
 }
 md-input-container.md-has-no-icon-left {
     padding-left: 0;

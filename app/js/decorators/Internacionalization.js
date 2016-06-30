@@ -90,6 +90,7 @@ recetarium.config(['$translateProvider', function($translateProvider) {
         'dialog.publish': 'Do you want publish the recipe \'{{ title }}\'?',
         'dialog-comment.header-title': 'Write a comment',
         'dialog-rating.header-title': 'Rate the recipe',
+        'dialog-category.header-title': 'Write the name',
 
         'comment.last-update': 'Last modification',
         'comment.created-at': 'Created',
@@ -125,6 +126,8 @@ recetarium.config(['$translateProvider', function($translateProvider) {
         'form.error-duration': 'The duration should be more than 1 min.',
 
         'error.400.title': 'Wrong data',
+        'error.401.title': 'Unauthorized',
+        'error.403.title': 'Forbidden',
         'error.500.title': 'Something went wrong. Please, try it later.',
 
         'tooltip.image-used-text': 'The image is used in some recipe as main',
@@ -160,6 +163,13 @@ recetarium.config(['$translateProvider', function($translateProvider) {
         'field.username': 'Username',
 
         'conjuntion.and': 'and',
+
+        'pagination.page': 'Page:',
+        'pagination.rows-per-page': 'Rows per page:',
+        'pagination.of': 'of',
+
+        'selected.item': 'row selected',
+        'selected.items': 'rows selected',
 
         'humanized.EASY': 'Easy',
         'humanized.MEDIUM': 'Medium',
@@ -256,6 +266,7 @@ recetarium.config(['$translateProvider', function($translateProvider) {
         'dialog.publish': '¿Quieres publicar la receta \'{{ title }}\'?',
         'dialog-comment.header-title': 'Escribe un comentario',
         'dialog-rating.header-title': 'Puntúa la receta',
+        'dialog-category.header-title': 'Escribe el nombre',
 
         'comment.last-update': 'Ultima modificación el',
         'comment.created-at': 'Creado el',
@@ -291,6 +302,8 @@ recetarium.config(['$translateProvider', function($translateProvider) {
         'form.error-duration': 'La duración debe de ser de más de 1 min.',
 
         'error.400.title': 'Datos incorrectos',
+        'error.401.title': 'No autorizado',
+        'error.403.title': 'Acceso prohibido',
         'error.500.title': 'Ha ocurrido un error. Por favor, intentelo más tarde.',
 
         'tooltip.image-used-text': 'La imagen se usa en alguna receta como principal',
@@ -326,6 +339,13 @@ recetarium.config(['$translateProvider', function($translateProvider) {
         'field.username': 'Nombre del usuario',
 
         'conjuntion.and': 'y',
+
+        'pagination.page': 'Página:',
+        'pagination.rows-per-page': 'Filas por página:',
+        'pagination.of': 'de',
+
+        'selected.item': 'fila seleccionada',
+        'selected.items': 'filas seleccionadas',
 
         'humanized.EASY': 'Fácil',
         'humanized.MEDIUM': 'Media',

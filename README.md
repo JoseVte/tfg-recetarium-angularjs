@@ -49,7 +49,20 @@ http-server -a localhost -p 8000
 
 ## Changelog
 
-#### [![0.10.3](/app/doc/rocket-blue.png) 0.10.3](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.10.3)
+#### [![1.0.0](/doc/rocket-blue.png) 1.0.0](https://github.com/JoseVte/tfg-recetarium/releases/tag/1.0.0)
+
+- Primera release de la aplicación
+
+###### [![0.11.1](/app/doc/release.png) 0.11.1](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.11.1)
+
+- Fix
+    - Recargar lista de amigos al borrar uno de ella
+    - Arreglado el tamaño de las imagenes
+    - Arreglado problema con la busqueda
+    - Mejora del rendimiento de los infinite scroll
+    - Arreglo del header de la pagina principal
+
+###### [![0.10.3](/app/doc/release.png) 0.10.3](https://github.com/JoseVte/tfg-recetarium-angularjs/releases/tag/0.10.3)
 
 - Gestionar las categorias de una receta
 

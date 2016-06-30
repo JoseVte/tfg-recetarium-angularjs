@@ -15,8 +15,8 @@
                     <h3 flex="100" class="text-center">{{ 'dialog-select.title-1' | translate }}</h3>
                     <div ng-repeat="image in images" flex="100" flex-sm="50" flex-md="50" flex-lg="33">
                         <md-card ng-click="toggleImageSelected(image)">
-                            <md-tooltip>{{ image.title }}</md-tooltip>
                             <md-button ng-show="image.selected" class="md-fab md-mini md-selected" aria-label="Selected"><md-icon class="material-icons">done</md-icon></md-button>
+                            <md-tooltip>{{ image.title }}</md-tooltip>
                             <img src="{{ image | srcImage:user }}" class="md-card-image" alt="{{ image.title }}">
                             <md-button ng-click="removeImage(image, $event)" class="md-fab md-mini md-remove" aria-label="Close"><md-icon class="material-icons">close</md-icon></md-button>
                         </md-card>
