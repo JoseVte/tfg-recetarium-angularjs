@@ -14,7 +14,7 @@
 
     <md-toolbar class="md-table-toolbar md-selected" ng-show="selected.length">
         <div class="md-toolbar-tools">
-            <span>{{selected.length}} {{selected.length > 1 ? 'items' : 'item'}} selected</span>
+            <span>{{ selected.length }} {{ (selected.length > 1 ? 'selected.items' : 'selected.item') | translate }}</span>
             <span flex></span>
             <md-button class="md-icon-button" ng-click="delete($event)">
                 <md-icon class="material-icons">delete</md-icon>
@@ -40,6 +40,5 @@
             </tbody>
         </table>
     </md-table-container>
-
-    <md-table-pagination md-limit="pagination.size" md-limit-options="[10, 25, 50]" md-page="pagination.page" md-total="{{ total }}" md-on-paginate="getCategories" md-page-select></md-table-pagination>
+    <md-table-pagination md-limit="pagination.size" md-limit-options="[10, 25, 50]" md-page="pagination.page" md-total="{{ total }}" md-on-paginate="getCategories" md-page-select md-label="{{ labels }}"></md-table-pagination>
 </md-card>

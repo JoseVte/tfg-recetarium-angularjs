@@ -247,6 +247,7 @@ userController.constant('USER_FUNCTIONS', {
             $event.cancelBubble = true;
             $event.returnValue = false;
             FRIENDS_FUNCTIONS.DeleteFriend($rootScope, $translate, UserService, NotificationProvider, NOTIFICATION, $rootScope.globals.user, user, $scope.loadPersonalData);
+            $scope.reloadFriends();
         };
     },
 });

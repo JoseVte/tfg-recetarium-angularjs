@@ -20,13 +20,23 @@
             }
         }
     }
-    .recipe-photo-main {
-        max-height: 150px;
-        max-width: 150px;
-        @media (max-width: $layout-breakpoint-md) {
-            max-height: 100px;
-            max-width: 100px;
-        }
+    .recipe-list-img {
+        position: absolute;
+        display: block;
+        max-width: 100%;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        margin: auto;
+    }
+    .recipe-list-img-container {
+        display: block;
+        width: 100%;
+        position: relative;
+        height: 0;
+        padding: 56.25% 0 0 0;
+        overflow: hidden;
     }
     .user-image {
         max-width: 32px;
