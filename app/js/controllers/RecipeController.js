@@ -666,7 +666,7 @@ recipeController.controller('RecipeShow',
         $scope.isMine = function(user) {
             if ($rootScope.globals.user && user) {
                 var auth = $rootScope.globals.user;
-                return (auth.id == user.id && auth.email == user.email && auth.username == user.username) || auth.type == 'ADMIN';
+                return (auth.id == user.id && auth.email == user.email && auth.username == user.username);
             }
             return false;
         };
