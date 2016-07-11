@@ -437,7 +437,7 @@ recipeController.controller('RecipeAll',
 );
 
 recipeController.controller('RecipeShow',
-    ['$scope', '$rootScope', '$location', '$routeParams', '$sce', '$compile', '$mdDialog', '$translate', '$timeout', '$window', 'RecipeService', 'CommentService', 'CommentProvider', 'NotificationProvider', 'RatingProvider', 'DIFF', 'VISIBILITY', 'NOTIFICATION', 
+    ['$scope', '$rootScope', '$location', '$routeParams', '$sce', '$compile', '$mdDialog', '$translate', '$timeout', '$window', 'RecipeService', 'CommentService', 'CommentProvider', 'NotificationProvider', 'RatingProvider', 'DIFF', 'VISIBILITY', 'NOTIFICATION',
     function ($scope, $rootScope, $location, $routeParams, $sce, $compile, $mdDialog, $translate, $timeout, $window, RecipeService, CommentService, CommentProvider, NotificationProvider, RatingProvider, DIFF, VISIBILITY, NOTIFICATION) {
         $rootScope.progressBarActivated = true;
         $rootScope.HasBack = true;
@@ -463,6 +463,7 @@ recipeController.controller('RecipeShow',
                 $rootScope.headerTitle = response.data.title;
                 $rootScope.progressBarActivated = false;
                 $scope.$broadcast('dataloaded');
+                $rootScope.dataLoaded = true;
             } catch (err) {
                 console.error(err);
                 NOTIFICATION.ParseErrorResponse(response, [], $translate, $rootScope, NotificationProvider);

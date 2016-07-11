@@ -171,6 +171,7 @@ recetarium.run(function ($rootScope, $location, $http, AuthService, Notification
         $rootScope.HasBack = false;
         $rootScope.errorMsg = false;
         $rootScope.progressBarActivated = false;
+        $rootScope.dataLoaded = false;
 
         // Remove the params into URI
         if ($path !== '/recipes') {

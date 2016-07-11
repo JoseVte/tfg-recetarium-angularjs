@@ -1,10 +1,10 @@
 <md-content class="md-padding" layout="row" layout-wrap layout-align="space-around start">
-    <div class="container" ng-show="progressBarActivated">
+    <div class="container" ng-show="progressBarActivated && !dataLoaded">
         <md-progress-circular md-mode="indeterminate" class="{{ loaderTheme }}" md-diameter="70"></md-progress-circular>
     </div>
 </md-content>
 
-<div ng-hide="progressBarActivated || errorMsg || !recipe">
+<div ng-hide="(progressBarActivated || errorMsg) && !dataLoaded"">
     <md-content class="md-padding" layout="column" layout-wrap layout-align="center start">
         <md-card flex class="card-recipe-show">
             <md-card-title class="md-title-page">
@@ -100,7 +100,7 @@
                         <md-tooltip md-direction="top">{{ favorites }} {{ 'field.fav' | translate }}</md-tooltip>
                         <md-icon class="material-icons md-red">{{ fav ? 'favorite' : 'favorite_border' }}</md-icon>
                     </md-button>
-                    <md-button class="md-icon-button" aria-label="Puntuación">
+                    <md-button class="md-icon-button" ng-click="!rated?showRating():null" aria-label="Puntuación">
                         <md-tooltip md-direction="top">{{ recipe.rating.rating }}</md-tooltip>
                         <md-icon class="material-icons md-yellow">{{ getRatingIcon(recipe.rating.rating) }}</md-icon>
                     </md-button>
